@@ -1,0 +1,643 @@
+# RWRS frozen-statement manifest.
+#
+# One entry per frozen declaration.  The bytes between the FROZEN-STATEMENT
+# markers are the contract: a proof attempt may fill in the proof after the end
+# marker, never touch the statement.  `frozen_sha256` is the SHA-256 of exactly
+# those bytes.
+#
+# States: DRAFT_SORRY (statement frozen, proof is a registered `sorry`),
+#         FROZEN (a statement with no proof obligation here, such as a cited
+#           result taken as a hypothesis),
+#         SEALED (a proof exists and its axiom closure is clean).
+
+version: 1
+source_pin:
+  file: paper/rwrs.tex
+  sha256: 54e78969ea3a71e3533a3f0042d53ae3e4ee0d5b04495e2aa97456394e54cae3
+nodes:
+  - id: N-004
+    version: 1
+    kind: theorem
+    source: rwrs.tex:257-259 (prop:iid-stationary)
+    file: RWRS/Frozen/IidStationary.lean
+    export: RWRS.Frozen.iidStationary
+    state: SEALED
+    frozen_sha256: 7d3e130a1991d5cb888d666c110a09b0afb883a8978218b49eecf92256ed1eae
+    provider: RWRS.Frozen.iidStationary
+    approved: "2026-09-06"
+
+  - id: N-006
+    version: 1
+    kind: theorem
+    source: rwrs.tex:278-284 (thm:stationary-toppling)
+    file: RWRS/Frozen/StationaryToppling.lean
+    export: RWRS.Frozen.stationaryToppling
+    state: SEALED
+    frozen_sha256: fb7e57f30ed81ad0000de0f8044b073e603b82944891a75a6eefd67fc9156e63
+    provider: RWRS.Frozen.stationaryToppling
+    approved: "2026-09-06"
+
+  - id: N-009
+    version: 1
+    kind: theorem
+    source: rwrs.tex:377-382 (lem:recursion)
+    file: RWRS/Frozen/Recursion.lean
+    export: RWRS.Frozen.recursion
+    state: SEALED
+    frozen_sha256: 046b3c5d4c3503d1cdea1f64f9d096b2415ed3e05cb297c5d1f54b135f4c8681
+    provider: RWRS.Frozen.recursion
+    approved: "2026-09-06"
+
+  - id: N-016
+    version: 1
+    kind: theorem
+    source: rwrs.tex:554-558 (prop:supercritical)
+    file: RWRS/Frozen/Supercritical.lean
+    export: RWRS.Frozen.supercritical
+    state: SEALED
+    frozen_sha256: 0c18073041c39be7f21cbcf3782c80979463eda137a8f07b954eeeca2499ff49
+    provider: RWRS.Frozen.supercritical
+    approved: "2026-09-06"
+
+  - id: N-017
+    version: 1
+    kind: theorem
+    source: rwrs.tex:600-605 (lem:positive-part)
+    file: RWRS/Frozen/PositivePart.lean
+    export: RWRS.Frozen.positivePart
+    state: SEALED
+    frozen_sha256: 05a9d3dd39e0657f90de379265d21dd0f1c2d4e9bec86ed44c1d316cbf1c41e3
+    provider: RWRS.Frozen.positivePart
+    approved: "2026-09-06"
+
+  - id: N-019
+    version: 1
+    kind: theorem
+    source: rwrs.tex:636-653 (lem:sensitivity)
+    file: RWRS/Frozen/Sensitivity.lean
+    export: RWRS.Frozen.sensitivity
+    state: SEALED
+    frozen_sha256: c1efd16b49c5b23a63fdd2e854908a6ea5d9730b76aaa0ba07ede539adc88bc1
+    provider: RWRS.Frozen.sensitivity
+    approved: "2026-09-06"
+
+  - id: N-025
+    version: 1
+    kind: theorem
+    source: rwrs.tex:1077-1095 (lem:fuk-nagaev)
+    file: RWRS/Frozen/FukNagaev.lean
+    export: RWRS.Frozen.fukNagaev
+    state: SEALED
+    frozen_sha256: af03141319fcb95ec8174207bd4acd061825af999f0f66c05a34ea2a7ee110fc
+    provider: RWRS.Frozen.fukNagaev
+    approved: "2026-09-06"
+
+  - id: X-001
+    version: 1
+    kind: definition
+    source: rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
+    file: RWRS/External/VonBahrEsseen.lean
+    export: RWRS.External.VonBahrEsseen
+    state: FROZEN
+    frozen_sha256: c1a8e0c968c37544924e623622f0ef032019e147bbe568ead70888c61528853c
+    provider: RWRS.External.VonBahrEsseen
+    approved: "2026-09-06"
+
+  - id: X-002
+    version: 1
+    kind: definition
+    source: rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
+    file: RWRS/External/FukNagaevTail.lean
+    export: RWRS.External.FukNagaevTail
+    state: FROZEN
+    frozen_sha256: 2ac53eeb3b5e30cfea3a2eadb424c7399cec97d78bebbc0146fde90af9b8e118
+    provider: RWRS.External.FukNagaevTail
+    approved: "2026-09-06"
+
+  - id: X-003
+    version: 1
+    kind: definition
+    source: rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
+    file: RWRS/External/Bernstein.lean
+    export: RWRS.External.Bernstein
+    state: FROZEN
+    frozen_sha256: 9d79e9577c6ef2898742ff22217d9bd9ae8357091b15056adc4537c676de630a
+    provider: RWRS.External.Bernstein
+    approved: "2026-09-06"
+
+  - id: N-010
+    version: 2
+    kind: theorem
+    source: rwrs.tex:393-400 (thm:RW)
+    file: RWRS/Frozen/RandomWalkRepresentation.lean
+    export: RWRS.Frozen.randomWalkRepresentation
+    state: SEALED
+    frozen_sha256: 08286b28225dc3e7c307456a69945cf95b5023c2cae3053402294d905b6eab0b
+    provider: RWRS.Frozen.randomWalkRepresentation
+    approved: "2026-09-06"
+
+  - id: N-013
+    version: 2
+    kind: theorem
+    source: rwrs.tex:473-478 (cor:RW-infinite)
+    file: RWRS/Frozen/RWInfinite.lean
+    export: RWRS.Frozen.rwInfinite
+    state: SEALED
+    frozen_sha256: e18fa354fc44432c7a37682c5a283528b5ca2d1b756a4ae1e75d83155de3268a
+    provider: RWRS.Frozen.rwInfinite
+    approved: "2026-09-06"
+
+  - id: N-033
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1478-1480 (ex:coboundary)
+    file: RWRS/Frozen/Coboundary.lean
+    export: RWRS.Frozen.coboundary
+    state: SEALED
+    frozen_sha256: 25a5f2b1a5ad43fd56465dcd72e76062db10c92fa10ce61b75c46a8d8fc2772d
+    provider: RWRS.Frozen.coboundary
+    approved: "2026-09-06"
+
+  - id: N-032
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1453-1456 (ex:finite-perturbation)
+    file: RWRS/Frozen/FinitePerturbation.lean
+    export: RWRS.Frozen.finitePerturbation
+    state: SEALED
+    frozen_sha256: 5e16e954b827d3ebc63d6abe289d6c2cd9619e1ac7e7df828d3b40a6cd51a995
+    provider: RWRS.Frozen.finitePerturbation
+    approved: "2026-09-06"
+
+  - id: X-004
+    version: 2
+    kind: definition
+    source: rwrs.tex:144-149 (cited in thm:stab)
+    file: RWRS/External/HeatKernelBoundedDegree.lean
+    export: RWRS.External.HeatKernelBoundedDegree
+    state: FROZEN
+    frozen_sha256: 70d8c7ae745daa53cc866c7d8e47f072c3dd374ef572200a9ab86bb20febf36d
+    provider: RWRS.External.HeatKernelBoundedDegree
+    approved: "2026-09-06"
+
+  - id: X-006
+    version: 2
+    kind: definition
+    source: rwrs.tex:319-322 (cited in lem:ergodic-marked-stationary)
+    file: RWRS/External/HeatKernelVanishing.lean
+    export: RWRS.External.HeatKernelVanishing
+    state: FROZEN
+    frozen_sha256: 592e495d7c5cd81109f1b26a8f9ebbc4ddbd1c94be3eb63c993ffcbf2dfbb059
+    provider: RWRS.External.HeatKernelVanishing
+    approved: "2026-09-06"
+
+  - id: X-008
+    version: 3
+    kind: definition
+    source: rwrs.tex:513-520 (cited in prop:01-law)
+    file: RWRS/External/VoltageFunction.lean
+    export: RWRS.External.VoltageFunction
+    state: FROZEN
+    frozen_sha256: 0cecc9d3eafe59407f1d48411d24c04f808c9adfe051d4b2bb08c2599f1ba094
+    provider: RWRS.External.VoltageFunction
+    approved: "2026-09-06"
+
+  - id: N-014
+    version: 2
+    kind: theorem
+    source: rwrs.tex:491-495 (prop:01-law)
+    file: RWRS/Frozen/ZeroOneLaw.lean
+    export: RWRS.Frozen.zeroOneLaw
+    state: SEALED
+    frozen_sha256: 24b9104f217d22eb15b6a9459b25914dedea28233afda9b478b4b089de1870bd
+    provider: RWRS.Frozen.zeroOneLaw
+    approved: "2026-09-06"
+
+  - id: N-015
+    version: 2
+    kind: theorem
+    source: rwrs.tex:531-536 (lem:clock-no-dom)
+    file: RWRS/Frozen/ClockNoDominance.lean
+    export: RWRS.Frozen.clockNoDominance
+    state: SEALED
+    frozen_sha256: ff90c4498056a18dd28e47a5487d28d3e7ed057a8445bd8f97b58c93865debf8
+    provider: RWRS.Frozen.clockNoDominance
+    approved: "2026-09-06"
+
+  - id: N-023
+    version: 2
+    kind: theorem
+    source: rwrs.tex:997-999 (prop:short-clock)
+    file: RWRS/Frozen/ShortClock.lean
+    export: RWRS.Frozen.shortClock
+    state: SEALED
+    frozen_sha256: f4c173dfbabd25438a35ba5584549b6d9a42da48fdb11a9bc65a77a3e429ff47
+    provider: RWRS.Frozen.shortClock
+    approved: "2026-09-06"
+
+  - id: N-030
+    version: 3
+    kind: theorem
+    source: rwrs.tex:1364-1366 (ex:counterexample)
+    file: RWRS/Frozen/UnboundedDegreeTree.lean
+    export: RWRS.Frozen.unboundedDegreeTree
+    state: SEALED
+    frozen_sha256: 8631b2ae71aa0e59a159701dcfb5151eddd419af7c0434a55156c361f41e5461
+    provider: RWRS.Frozen.unboundedDegreeTree
+    approved: "2026-09-06"
+
+  - id: N-018
+    version: 3
+    kind: theorem
+    source: rwrs.tex:629-632 (lem:no-dominance)
+    file: RWRS/Frozen/NoDominance.lean
+    export: RWRS.Frozen.noDominance
+    state: SEALED
+    frozen_sha256: 3a538f36148495f8e88e0afefd8da312dd6f168ac4b91b5dde32b0476d2d6515
+    provider: RWRS.Frozen.noDominance
+    approved: "2026-09-07"
+
+  - id: N-020
+    version: 4
+    kind: theorem
+    source: rwrs.tex:664-683 (prop:critical)
+    file: RWRS/Frozen/Critical.lean
+    export: RWRS.Frozen.critical
+    state: SEALED
+    frozen_sha256: 64a65ec7ca6877651b65f82c677a810a2c66e47a7fdb00ecfca3587953270d49
+    provider: RWRS.Frozen.critical
+    approved: "2026-09-07"
+
+  - id: N-022
+    version: 2
+    kind: theorem
+    source: rwrs.tex:950-954 (prop:convexity-reduction)
+    file: RWRS/Frozen/ConvexityReduction.lean
+    export: RWRS.Frozen.convexityReduction
+    state: SEALED
+    frozen_sha256: b014d50f9bf4d4cb91e788383dc901fa8aff0b3ba39f3277104a8441106a050c
+    provider: RWRS.Frozen.convexityReduction
+    approved: "2026-09-07"
+
+  - id: X-007
+    version: 3
+    kind: definition
+    source: rwrs.tex:694-699 (cited in prop:critical)
+    file: RWRS/External/EfronStein.lean
+    export: RWRS.External.EfronStein
+    state: FROZEN
+    frozen_sha256: 46a0cf5f4a81fc2f77bdf574c8590da906d39857f2d4611b4ef331624964e0b6
+    provider: RWRS.External.EfronStein
+    approved: "2026-09-07"
+
+  - id: N-026
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1102-1111 (lem:dyadic)
+    file: RWRS/Frozen/Dyadic.lean
+    export: RWRS.Frozen.dyadic
+    state: SEALED
+    frozen_sha256: c96f045c18909ca96fe06fcd8cf43c829bc45731297604453fcb9d8f0dd88e7c
+    provider: RWRS.Frozen.dyadic
+    approved: "2026-09-07"
+
+  - id: N-038
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1740-1747 (lem:rec-geometry)
+    file: RWRS/Frozen/GadgetGeometry.lean
+    export: RWRS.Frozen.gadgetGeometry
+    state: SEALED
+    frozen_sha256: 5ddaea56b282ba195e9fcf636968173ad51a508461776bb69ad147355f42d76f
+    provider: RWRS.Frozen.gadgetGeometry
+    approved: "2026-09-07"
+
+  - id: N-041
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1946-1948 (lem:rec-good)
+    file: RWRS/Frozen/RecGoodEvents.lean
+    export: RWRS.Frozen.recGoodEvents
+    state: SEALED
+    frozen_sha256: 8263e78bc224b6783b9396ef07dc058f402e33228a7ee5cf971000420167d7b5
+    provider: RWRS.Frozen.recGoodEvents
+    approved: "2026-09-07"
+
+  - id: N-040
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1919-1922 (prop:rec-growth)
+    file: RWRS/Frozen/RecVolumeGrowth.lean
+    export: RWRS.Frozen.recVolumeGrowth
+    state: SEALED
+    frozen_sha256: bd40afc025dd4f3442a406b32d2d3e931aac191043039bec52adc6796c692048
+    provider: RWRS.Frozen.recVolumeGrowth
+    approved: "2026-09-07"
+
+  - id: N-034
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1530-1545 (prop:comb-estimates)
+    file: RWRS/Frozen/CombEstimates.lean
+    export: RWRS.Frozen.combEstimates
+    state: SEALED
+    frozen_sha256: 70da02877b4287244a536b3a3725ba062a8a183b09f115f949d1a95719fa46ad
+    provider: RWRS.Frozen.combEstimates
+    approved: "2026-09-07"
+
+  - id: N-039
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1792-1799 (cor:rec-loc)
+    file: RWRS/Frozen/RecLocal.lean
+    export: RWRS.Frozen.recLocal
+    state: SEALED
+    frozen_sha256: 5c445f5d482e4ee03c1e7d29f2b93b2f5e80b1040225c2f9c5862d61beb38396
+    provider: RWRS.Frozen.recLocal
+    approved: "2026-09-07"
+
+  - id: N-036
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1661-1663 (lem:tr-good)
+    file: RWRS/Frozen/TransientGoodPipes.lean
+    export: RWRS.Frozen.transientGoodPipes
+    state: SEALED
+    frozen_sha256: 2df0a0c39bce58ed813eafed78ca7e8ee564907bf81a62708141fe724981bdbf
+    provider: RWRS.Frozen.transientGoodPipes
+    approved: "2026-09-07"
+
+  - id: N-011
+    version: 3
+    kind: theorem
+    source: rwrs.tex:429-438 (prop:finite-vol)
+    file: RWRS/Frozen/FiniteVolume.lean
+    export: RWRS.Frozen.finiteVolume
+    state: SEALED
+    frozen_sha256: c4c952e7100934aecc0075b69f88ecc5784e309054735ab0c774ba5970792e98
+    provider: RWRS.Frozen.finiteVolume
+    approved: "2026-09-07"
+
+  - id: N-012
+    version: 2
+    kind: theorem
+    source: rwrs.tex:448-453 (thm:nested-vol)
+    file: RWRS/Frozen/NestedVolume.lean
+    export: RWRS.Frozen.nestedVolume
+    state: SEALED
+    frozen_sha256: 63721b5390bf8432ec744bf828693afd1423d6240c48f8fb5fe70ad6597a9b58
+    provider: RWRS.Frozen.nestedVolume
+    approved: "2026-09-07"
+
+  - id: N-035
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1575-1577 (thm:transient-nonstab)
+    file: RWRS/Frozen/TransientNonstabilization.lean
+    export: RWRS.Frozen.transientNonstabilization
+    state: SEALED
+    frozen_sha256: 6ca69c98d10805c64cfa258359d50b715d3eed9d414ef1199a2d99fa2bedadc4
+    provider: RWRS.Frozen.transientNonstabilization
+    approved: "2026-09-07"
+
+  - id: N-037
+    version: 3
+    kind: theorem
+    source: rwrs.tex:1700-1708 (thm:recurrent-nonstab)
+    file: RWRS/Frozen/RecurrentNonstabilization.lean
+    export: RWRS.Frozen.recurrentNonstabilization
+    state: SEALED
+    frozen_sha256: eced45e07d7c8ab166cf233aec11b09a0c93e2d01a43f39a98f4571f03107cf6
+    provider: RWRS.Frozen.recurrentNonstabilization
+    approved: "2026-09-07"
+
+  - id: N-024
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1019-1034 (lem:local-time)
+    file: RWRS/Frozen/LocalTime.lean
+    export: RWRS.Frozen.localTimeMoments
+    state: SEALED
+    frozen_sha256: 56e71eaa4cb8bd598a84e214757a074969d907dc89c02764e497270185a8f445
+    provider: RWRS.Frozen.localTimeMoments
+    approved: "2026-09-07"
+
+  - id: N-027
+    version: 3
+    kind: theorem
+    source: rwrs.tex:1124-1142 (lem:good-walk)
+    file: RWRS/Frozen/GoodWalk.lean
+    export: RWRS.Frozen.goodWalkBounds
+    state: SEALED
+    frozen_sha256: a9bfad72287e1a65d658cb1be68796dab2cc67d4b9da87003c5769401fd071bb
+    provider: RWRS.Frozen.goodWalkBounds
+    approved: "2026-09-07"
+
+  - id: N-031
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1385-1398 (lem:moment-sharpness)
+    file: RWRS/Frozen/MomentSharpness.lean
+    export: RWRS.Frozen.momentSharpness
+    state: SEALED
+    frozen_sha256: d79cfdcd2856ee38b62783579263ab1655bec64621c1acce617ead2c91e5dbae
+    provider: RWRS.Frozen.momentSharpness
+    approved: "2026-09-08"
+
+  - id: X-003P
+    version: 1
+    kind: theorem
+    source: rwrs.tex:1096-1098 (Bernstein cited in lem:fuk-nagaev, proved)
+    file: RWRS/External/BernsteinProved.lean
+    export: RWRS.External.bernstein
+    state: SEALED
+    frozen_sha256: a441a36bb3dc4f9d0f846e395cdb3e8bc52639ef21bf0021d032c6c20894ba0e
+    provider: RWRS.External.bernstein
+    approved: "2026-09-08"
+
+  - id: X-008P
+    version: 2
+    kind: theorem
+    source: rwrs.tex:513-520 (voltage function cited in prop:01-law, proved on a transient graph)
+    file: RWRS/External/VoltageFunctionProved.lean
+    export: RWRS.External.voltageFunction
+    state: SEALED
+    frozen_sha256: dcc91d8356cec2129b9a6fd51425ecf8dd3eceaedfebb6f5442417c62dc94a8e
+    provider: RWRS.External.voltageFunction
+    approved: "2026-09-08"
+
+  - id: N-028
+    version: 3
+    kind: theorem
+    source: rwrs.tex:1155-1165 (prop:subcritical)
+    file: RWRS/Frozen/Subcritical.lean
+    export: RWRS.Frozen.subcritical
+    state: SEALED
+    frozen_sha256: 7c19dcd2c450e0299c15b33b0025ed2d8f8026c895717fcac78efad84b5bbe81
+    provider: RWRS.Frozen.subcritical
+    approved: "2026-09-10"
+
+  - id: N-029
+    version: 2
+    kind: theorem
+    source: rwrs.tex:1229-1241 (prop:poly-growth)
+    file: RWRS/Frozen/PolyGrowth.lean
+    export: RWRS.Frozen.polyGrowth
+    state: SEALED
+    frozen_sha256: 4680b5421701fe8e9c525473efe18bf9ff2f310a7cf6020178b7f2c83137c326
+    provider: RWRS.Frozen.polyGrowth
+    approved: "2026-09-10"
+
+  - id: N-003
+    version: 3
+    kind: theorem
+    source: rwrs.tex:131-140 (thm:stab)
+    file: RWRS/Frozen/Stabilization.lean
+    export: RWRS.Frozen.stabilization
+    state: SEALED
+    frozen_sha256: 9134c27a13b123eca571f22c00ffe679425c3430b73ccf9cd362be684503c960
+    provider: RWRS.Frozen.stabilization
+    approved: "2026-09-10"
+
+  - id: N-007
+    version: 5
+    kind: theorem
+    source: rwrs.tex:310-312 (lem:ergodic-marked-stationary)
+    file: RWRS/Frozen/ErgodicMarked.lean
+    export: RWRS.Frozen.ergodicMarked
+    state: SEALED
+    frozen_sha256: e8a88f9c072a316316000e1051d1e82ee8eef7340c23dce462e99d1e0a8b486b
+    provider: RWRS.Frozen.ergodicMarked
+    approved: "2026-09-11"
+
+  - id: X-009
+    version: 3
+    kind: definition
+    source: rwrs.tex:337-342 (cited in lem:01-stationary)
+    file: RWRS/External/ErgodicDecomposition.lean
+    export: RWRS.External.ErgodicDecomposition
+    state: FROZEN
+    frozen_sha256: 4847ceafe2e5925d1fe41ec143c3009d83bb1ca3ccf3c426bc207a141c5ac642
+    provider: RWRS.External.ErgodicDecomposition
+    approved: "2026-09-11"
+
+  - id: N-008
+    version: 3
+    kind: theorem
+    source: rwrs.tex:329-334 (lem:01-stationary)
+    file: RWRS/Frozen/ZeroOneStationary.lean
+    export: RWRS.Frozen.zeroOneStationary
+    state: SEALED
+    frozen_sha256: 3309fd5a19069d96cc18ebc35a80fa243efe85b053f028daf4331017a4a83493
+    provider: RWRS.Frozen.zeroOneStationary
+    approved: "2026-09-11"
+
+  - id: N-005
+    version: 2
+    kind: theorem
+    source: rwrs.tex:268-274 (thm:stationary-phase)
+    file: RWRS/Frozen/StationaryPhase.lean
+    export: RWRS.Frozen.stationaryPhase
+    state: SEALED
+    frozen_sha256: a9385d5ffe947214a0c0eefda6231ed4ed65376cf59d61e1b353892608be34e2
+    provider: RWRS.Frozen.stationaryPhase
+    approved: "2026-09-11"
+
+  - id: N-021
+    version: 2
+    kind: theorem
+    source: rwrs.tex:777-781 (prop:doubly-transient-really-general)
+    file: RWRS/Frozen/DoublyTransient.lean
+    export: RWRS.Frozen.doublyTransient
+    state: SEALED
+    frozen_sha256: 2a84c3e7148b2d00ca87d1de412e312516ed55ea0d982c229444ae0747d2e7da
+    provider: RWRS.Frozen.doublyTransient
+    approved: "2026-09-11"
+
+  - id: N-002
+    version: 2
+    kind: theorem
+    source: rwrs.tex:117-127 (thm:explosion)
+    file: RWRS/Frozen/Explosion.lean
+    export: RWRS.Frozen.explosion
+    state: SEALED
+    frozen_sha256: e7bb0e81bee2b390a8cc086707ca8682ffc153ab7b66a0df56abf3dd1dc2a7a2
+    provider: RWRS.Frozen.explosion
+    approved: "2026-09-11"
+
+  - id: N-001
+    version: 3
+    kind: theorem
+    source: rwrs.tex:94-101 (thm:OS)
+    file: RWRS/Frozen/OptimalStopping.lean
+    export: RWRS.Frozen.optimalStopping
+    state: SEALED
+    frozen_sha256: 827094d80cbcc28d66f9655b3d7993b2ea0b35061eded8736953d3ee3ca8f5b6
+    provider: RWRS.Frozen.optimalStopping
+    approved: "2026-09-11"
+
+  - id: X-005
+    version: 3
+    kind: definition
+    source: rwrs.tex:143-149 (Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4)
+    file: RWRS/External/CarneVaropoulos.lean
+    export: RWRS.External.CarneVaropoulos
+    state: FROZEN
+    frozen_sha256: ec9c95178e28560ce4684ae43920fa129bda21459262d95d46298b34816858c7
+    provider: RWRS.External.CarneVaropoulos
+
+  - id: X-001P
+    version: 1
+    kind: theorem
+    source: rwrs.tex:1096-1098 (von Bahr--Esseen cited in lem:fuk-nagaev, proved)
+    file: RWRS/External/VonBahrEsseenProved.lean
+    export: RWRS.External.vonBahrEsseen
+    state: SEALED
+    frozen_sha256: ec1f64d67dc282cc3b8bf4d8416643c469cb4f9609b5db5ad1366ca34571e031
+    provider: RWRS.External.vonBahrEsseen
+    approved: "2026-09-12"
+
+  - id: X-002P
+    version: 1
+    kind: theorem
+    source: rwrs.tex:1096-1098 (Fuk--Nagaev cited in lem:fuk-nagaev, proved)
+    file: RWRS/External/FukNagaevTailProved.lean
+    export: RWRS.External.fukNagaevTail
+    state: SEALED
+    frozen_sha256: 6fb3df940fa3341ca77b33527eaaadfa35272ec767cd1a943fa84e4367547d6d
+    provider: RWRS.External.fukNagaevTail
+    approved: "2026-09-12"
+
+  - id: X-004P
+    version: 1
+    kind: theorem
+    source: rwrs.tex:144-149 (bounded-degree heat kernel bound, proved on infinite connected graphs)
+    file: RWRS/External/HeatKernelBoundedDegreeProved.lean
+    export: RWRS.External.heatKernelBoundedDegree_of_connected
+    state: SEALED
+    frozen_sha256: 6977101dd0f335c79fe3823559c745c03be0dcb2e2dac4d2637a981b2c70bcc2
+    provider: RWRS.External.heatKernelBoundedDegree_of_connected
+    approved: "2026-09-12"
+
+  - id: X-006P
+    version: 1
+    kind: theorem
+    source: rwrs.tex:319-322 (heat kernel vanishing, proved on infinite connected graphs)
+    file: RWRS/External/HeatKernelVanishingProved.lean
+    export: RWRS.External.heatKernelVanishing_of_connected
+    state: SEALED
+    frozen_sha256: ad39a1794d451bbfc3618ec971a22acd360dc35dfdd8053eea0a5bf3cf18f083
+    provider: RWRS.External.heatKernelVanishing_of_connected
+    approved: "2026-09-12"
+
+  - id: X-007P
+    version: 1
+    kind: theorem
+    source: rwrs.tex:694-699 (Efron--Stein inequality, proved for countable index sets)
+    file: RWRS/External/EfronSteinProved.lean
+    export: RWRS.External.efronStein
+    state: SEALED
+    frozen_sha256: 546c7fd1347f37781abb8cf4c16c60e0ad9004c9da2e9ba057b04a843f881930
+    provider: RWRS.External.efronStein
+    approved: "2026-09-12"
+
