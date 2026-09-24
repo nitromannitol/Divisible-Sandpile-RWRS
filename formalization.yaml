@@ -1,0 +1,254 @@
+version: "v0.3"
+
+project:
+  name: "Divisible-Sandpile-RWRS"
+  authors:
+    - "Ahmed Bou-Rabee"
+  license: "Apache-2.0"
+
+sources:
+  - title: "Divisible sandpiles via random walks in random scenery"
+    authors:
+      - "Ahmed Bou-Rabee"
+      - "Yuval Peres"
+      - "Ecaterina Sava-Huss"
+    id: "arXiv:2604.13968"
+    url: "https://arxiv.org/abs/2604.13968"
+    type: "manuscript"
+    license: ""                 # TODO(author): the license under which the paper is posted
+    author_contacted: "n/a"     # the formalizer is an author of the source
+    prior_work: ""
+
+status:
+  scope: >-
+    A Lean 4 / Mathlib formalization of every labelled theorem, lemma,
+    proposition and corollary of the paper: explosion and stabilization for
+    random walk in random scenery (Theorem 1.1), explosion (Theorem 1.2) and
+    stabilization (Theorem 1.3) of the divisible sandpile with i.i.d. initial
+    masses on infinite connected graphs of bounded degree, the random walk
+    representation of the odometer, the stationary and critical cases, and the
+    sharpness constructions (the tree of pipes and the recurrent graphs of
+    Section 8, moment sharpness, and the locally finite tree on which
+    every integrable law stabilizes).  SCOPE BOUNDARY: nine results the paper
+    cites from the literature are stated as propositions in RWRS/External/.
+    Seven are proved in the repository, mostly through the shared library
+    Lattice-Probability: von Bahr-Esseen, Fuk-Nagaev and Bernstein outright,
+    the bounded-degree heat kernel bound and heat kernel vanishing on infinite
+    connected graphs, Efron-Stein for countable index sets, and the bounded
+    voltage function only on transient graphs.  Two are not proved here: the
+    pointwise Carne-Varopoulos bound and the ergodic decomposition of
+    stationary random networks.  Every theorem whose proof uses a cited result
+    takes it as an explicit hypothesis; ASSUMPTIONS.md lists them with their
+    Lean statements.  Not formalized: the open questions of Section 9, the
+    proof ideas and related work of Sections 1.1 and 1.2, the example and
+    remark environments, and the figures.  The main theorems are stated in
+    full in RWRS/MainTheorems.lean; all three are additionally restated over a
+    Mathlib-only vocabulary for the Lean comparator (Audit/).
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:
+    - "propext"
+    - "Classical.choice"
+    - "Quot.sound"
+  main_results:
+    - declaration: "RWRS.optimalStopping"
+      file: "RWRS/MainTheorems.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Audit/OptimalStopping/comparator.json"
+      literature_dependencies:
+        - "Lyons-Peres, Probability on Trees and Networks, Proposition 2.1 and equation (2.4) (RWRS.External.VoltageFunction), hypothesis; proved in the repository only on transient graphs"
+        - "von Bahr-Esseen 1965 (RWRS.External.VonBahrEsseen), discharged by RWRS.External.vonBahrEsseen"
+        - "Fuk-Nagaev 1971 (RWRS.External.FukNagaevTail), discharged by RWRS.External.fukNagaevTail"
+        - "Grigor'yan, Example 5.14, bounded-degree heat kernel bound (RWRS.External.HeatKernelBoundedDegree), discharged by RWRS.External.heatKernelBoundedDegree_of_connected"
+    - declaration: "RWRS.explosion"
+      file: "RWRS/MainTheorems.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Audit/Explosion/comparator.json"
+      literature_dependencies:
+        - "Lyons-Peres, Probability on Trees and Networks, Proposition 2.1 and equation (2.4) (RWRS.External.VoltageFunction), hypothesis; proved in the repository only on transient graphs"
+    - declaration: "RWRS.stabilization"
+      file: "RWRS/MainTheorems.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Audit/Stabilization/comparator.json"
+      literature_dependencies:
+        - "Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4, pointwise form (RWRS.External.CarneVaropoulos), hypothesis"
+        - "von Bahr-Esseen 1965 (RWRS.External.VonBahrEsseen), discharged by RWRS.External.vonBahrEsseen"
+        - "Fuk-Nagaev 1971 (RWRS.External.FukNagaevTail), discharged by RWRS.External.fukNagaevTail"
+        - "Grigor'yan, Example 5.14, bounded-degree heat kernel bound (RWRS.External.HeatKernelBoundedDegree), discharged by RWRS.External.heatKernelBoundedDegree_of_connected"
+    - declaration: "RWRSAudit.optimalStopping"
+      file: "Audit/OptimalStopping/Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Audit/OptimalStopping/comparator.json"
+      literature_dependencies: ["the same hypothesis as RWRS.optimalStopping, restated over the Mathlib-only vocabulary"]
+    - declaration: "RWRSAudit.explosion"
+      file: "Audit/Explosion/Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Audit/Explosion/comparator.json"
+      literature_dependencies: ["the same hypothesis as RWRS.explosion, restated over the Mathlib-only vocabulary"]
+    - declaration: "RWRSAudit.stabilization"
+      file: "Audit/Stabilization/Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "Audit/Stabilization/comparator.json"
+      literature_dependencies: ["the same hypothesis as RWRS.stabilization, restated over the Mathlib-only vocabulary"]
+
+automation:
+  methods:
+    - method: "agent"
+      models:
+        - "claude-opus (Opus generals; the records do not name the version)"
+        - "claude-opus-5-5"
+        - "gpt-6-astra"
+        - "glm-5.3"
+        - "glm-5.3-flash"
+        - "deepseek-v4.1-flash"
+      framework: >-
+        Claude Code (Anthropic) as the supervising and proving harness, which
+        wrote nearly all of the Lean code; Codex CLI (OpenAI, versions 0.153.4
+        and 0.154.0) for gpt-6-astra; a custom Python driver over a hosted API
+        for the GLM-5.3 general; scripted API fan-outs for glm-5.3-flash and
+        deepseek-v4.1-flash
+      tool_setup: >-
+        Lake builds under leanprover/lean4:v4.32.0, unchanged since the first
+        commit, with Mathlib at revision
+        81a5d257c8e410db227a6665ed08f64fea08e997 and the shared library
+        Lattice-Probability at commit bbe0b90.  Division of labour: Claude
+        Opus generals (Claude Code), launched in shifts from a supervising
+        Claude Code session, wrote the vocabulary, the 41 frozen statements
+        (2026-09-06) and nearly all of the proofs through the seal of
+        Theorems 1.1 and 1.2 (2026-09-11); the records call them Opus generals
+        and do not name the model version.  glm-5.3 ran as an autonomous
+        general through a custom driver (twelve runs, 2026-09-09 to 09-11,
+        about 338 million input and 1.2 million output tokens) and wrote
+        support lemmas for the doubly transient case (prop:doubly-transient),
+        which were committed; glm-5.3 also audited the frozen statements
+        against the paper (audits A1 to A14).  glm-5.3-flash drafted about
+        2,500 compile-filtered proof candidates for short goals, and
+        deepseek-v4.1-flash one batch of eight; accepted candidates were pasted
+        into the tree after checking.  gpt-6-astra (Codex CLI, reasoning max
+        or xhigh) wrote a study of the invariant sigma-algebra question behind
+        lem:ergodic-marked-stationary and lem:01-stationary (2026-09-11), whose
+        recommendation was adopted; ran a comparator-style statement audit
+        (2026-09-12); restated the displacement input of Theorem 1.3 as the
+        pointwise Carne-Varopoulos bound and proved the exit estimates built on
+        it (commits 24fd6b1, 8c52169); and proved the companion theorems for
+        the von Bahr-Esseen, Fuk-Nagaev, bounded-degree heat kernel, heat
+        kernel vanishing and Efron-Stein inputs from Lattice-Probability
+        (merged in 53b79f0).  claude-opus-5-5 wrote RWRS/MainTheorems.lean,
+        the comparator surface Audit/ and this release documentation
+        (2026-09-23).  A frozen-statement manifest (ledger/manifest.yaml) pins
+        each registered statement by the SHA-256 of its text, and the tools/
+        checkers verify the hashes, the axiom closure of every node, a
+        warning-free build, coverage of every labelled statement of the paper,
+        and quantifier order.  The Lean comparator (leanprover/comparator) was
+        run on all three Audit pairs on 2026-09-24 at commit 2cfdd84, and each
+        pair passed with the Lean kernel and with the independent nanoda
+        kernel; results and reproduction steps are in
+        Audit/COMPARATOR_RUNS.md.  The workflow .github/workflows/comparator.yml
+        runs it on request.
+      cost:
+        wall_time: >-
+          about two weeks of calendar time (2026-09-06 to 2026-09-18, 216
+          commits), the paper sealed on 2026-09-11 and the companions on
+          2026-09-12; the comparator surface on 2026-09-23
+        spend_usd: "not tracked (subscription and API accounts)"
+        hardware: "a 20-thread Intel i9-9900X / 125 GB RAM Ubuntu machine"
+      prompting_notes: >-
+        Human-directed agent work, supervised by the author, who decided
+        every statement-level question.  Every statement was
+        pinned before its proof was attempted, and proofs were accepted only
+        through the manifest and axiom gates.
+  spend_usd: "not tracked (subscription and API accounts)"
+  notes: >-
+    All Lean code in this repository was written by the listed models under the
+    supervision of the author.  Every proof is checked by the Lean kernel and
+    Mathlib; the verified library contains no sorry and no custom axiom.  The
+    results the paper cites without proof enter as explicit hypotheses, not
+    axioms.  The Mathlib-only comparator challenge files
+    (Audit/*/Challenge.lean) each contain exactly one intentional
+    statement-level sorry (the theorem body), which is filled by the
+    corresponding Audit/*/Solution.lean.  The shared library
+    Lattice-Probability is a separate formalization by the same author, also
+    written with AI models, not part of this repository.
+
+fidelity:
+  divergences: >-
+    Where a Lean statement is a reading of the paper's wording,
+    CORRESPONDENCE.md records it, including the frozen statements that carry a hypothesis of the
+    paper their proof does not use, and the readings of prop:comb-estimates(d),
+    lem:tr-good and cor:rec-loc.  Rendering conventions (not divergences):
+    quantities the paper allows to be infinite (u_infinity, the Green
+    function, sup_n S_n, the optimal stopping suprema, moments) take values in
+    the extended nonnegative reals, and the extended mean in the extended
+    reals, with the indeterminate case excluded by a hypothesis as in the
+    paper; ball cardinalities are Set.encard; expectations at a bounded
+    horizon are finite first-step averages of the walk; uniform constants are
+    bound before the quantities they must not depend on.  Theorem 1.3 carries
+    the cited displacement input in its pointwise Carne-Varopoulos form, and
+    its part (ii) proves the exit estimate it needs from that bound, a degree
+    bound and volume growth at the origin.  The cited results that are not
+    proved enter as hypotheses whose Lean statements are in ASSUMPTIONS.md;
+    that they render the cited theorems faithfully is a reading, not a check.
+
+review:
+  status: "author-verified"
+  reviewers:
+    - "Ahmed Bou-Rabee"
+  notes: >-
+    Correctness of every proof is guaranteed by the Lean kernel and Mathlib (no
+    sorry, no custom axiom).  The author decided the statement-level
+    questions raised during development.  The statements were additionally
+    audited by GLM-5.3 (audits A1 to A14), by a closure audit run with
+    deepseek-v4.1-flash (26 calls, 2026-09-11), which found no defect, and by
+    an independent comparator-style audit run by gpt-6-astra (2026-09-12).
+    The paper in paper/rwrs.tex is arXiv:2604.13968v1 with the corrections
+    listed in paper/CHANGES_FROM_ARXIV.md.  This is not external peer review.
+
+alignment:
+  namespace: "RWRS"
+  statements:
+    - source: "Theorem 1.1 (thm:OS)"
+      lean: "RWRS.optimalStopping"
+      module: "RWRS.MainTheorems"
+      status: "proved"
+      note: "Certified statement RWRS.Frozen.optimalStopping; von Bahr-Esseen, Fuk-Nagaev and the bounded-degree heat kernel bound discharged. Comparator challenge Audit/OptimalStopping/."
+    - source: "Theorem 1.2 (thm:explosion)"
+      lean: "RWRS.explosion"
+      module: "RWRS.MainTheorems"
+      status: "proved"
+      note: "Certified statement RWRS.Frozen.explosion. Comparator challenge Audit/Explosion/."
+    - source: "Theorem 1.3 (thm:stab)"
+      lean: "RWRS.stabilization"
+      module: "RWRS.MainTheorems"
+      status: "proved"
+      note: "Certified statement RWRS.Frozen.stabilization; von Bahr-Esseen, Fuk-Nagaev and the bounded-degree heat kernel bound discharged. Comparator challenge Audit/Stabilization/."
+    - source: "Every other labelled theorem, lemma, proposition and corollary"
+      lean: "RWRS.Frozen.*"
+      module: "RWRS.Frozen"
+      status: "proved"
+      note: "One registered statement per paper statement; the full map is CORRESPONDENCE.md."
+    - source: "Cited results: von Bahr-Esseen, Fuk-Nagaev, Bernstein, bounded-degree heat kernel bound, heat kernel vanishing, Efron-Stein"
+      lean: "RWRS.External.*"
+      module: "RWRS.External"
+      status: "proved"
+      note: "Companion theorems in RWRS/External/*Proved.lean; the heat kernel ones on infinite connected graphs, Efron-Stein for countable index sets."
+    - source: "Cited result: the bounded voltage function (Lyons-Peres, Proposition 2.1)"
+      lean: "RWRS.External.VoltageFunction"
+      module: "RWRS.External.VoltageFunction"
+      status: "assumed"
+      note: "Proved only on transient graphs (RWRS.External.voltageFunction); an explicit hypothesis of the theorems that use it."
+    - source: "Cited results: pointwise Carne-Varopoulos bound, ergodic decomposition of stationary random networks"
+      lean: "RWRS.External.CarneVaropoulos, RWRS.External.ErgodicDecomposition"
+      module: "RWRS.External"
+      status: "assumed"
+      note: "Explicit hypotheses of the theorems that use them; listed in ASSUMPTIONS.md."
+
+acknowledgements: >-
+  The paper is joint work with Yuval Peres and Ecaterina Sava-Huss.  Built on
+  Lean 4, Mathlib, Lake, the shared library Lattice-Probability, and
+  leanprover/comparator.

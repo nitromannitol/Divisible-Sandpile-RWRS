@@ -1,0 +1,269 @@
+\begin{thebibliography}{34}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Aldous and Lyons(2007)]{AldousLyons07}
+David Aldous and Russell Lyons.
+\newblock Processes on unimodular random networks.
+\newblock \emph{Electron. J. Probab.}, 12:\penalty0 no.\ 54, 1454--1508, 2007.
+\newblock ISSN 1083-6489.
+\newblock \doi{10.1214/EJP.v12-463}.
+\newblock URL \url{https://doi.org/10.1214/EJP.v12-463}.
+
+\bibitem[Bak et~al.(1987)Bak, Tang, and Wiesenfeld]{BTW}
+P.~Bak, C.~Tang, and K.~Wiesenfeld.
+\newblock Self-organized criticality: an explanation of the 1/f noise.
+\newblock \emph{Physical Review Letters}, 59\penalty0 (4):\penalty0 381--384,
+  1987.
+
+\bibitem[Benjamini and Curien(2012)]{BenjaminiCurien12}
+Itai Benjamini and Nicolas Curien.
+\newblock Ergodic theory on stationary random graphs.
+\newblock \emph{Electron. J. Probab.}, 17:\penalty0 no.\ 93, 20, 2012.
+\newblock ISSN 1083-6489.
+\newblock \doi{10.1214/EJP.v17-2401}.
+\newblock URL \url{https://doi.org/10.1214/EJP.v17-2401}.
+
+\bibitem[Bou-Rabee(2021)]{BouRabee-abelian-sandpile}
+Ahmed Bou-Rabee.
+\newblock Convergence of the random {A}belian sandpile.
+\newblock \emph{Ann. Probab.}, 49\penalty0 (6):\penalty0 3168--3196, 2021.
+\newblock ISSN 0091-1798,2168-894X.
+\newblock \doi{10.1214/21-AOP1528}.
+\newblock URL \url{https://doi.org/10.1214/21-AOP1528}.
+
+\bibitem[Bou-Rabee and Gwynne(2024)]{BouRabeeGwynne-IDLA}
+Ahmed Bou-Rabee and Ewain Gwynne.
+\newblock Internal {DLA} on mated-{CRT} maps.
+\newblock \emph{Ann. Probab.}, 52\penalty0 (6):\penalty0 2173--2237, 2024.
+\newblock ISSN 0091-1798,2168-894X.
+\newblock \doi{10.1214/24-aop1693}.
+\newblock URL \url{https://doi.org/10.1214/24-aop1693}.
+
+\bibitem[Bou-Rabee and Gwynne(2025)]{BouRabeeGwynne-harmonic}
+Ahmed Bou-Rabee and Ewain Gwynne.
+\newblock Harmonic balls in {L}iouville quantum gravity.
+\newblock \emph{Proc. Lond. Math. Soc. (3)}, 130\penalty0 (1):\penalty0 Paper
+  No.\ e70018, 82, 2025.
+\newblock ISSN 0024-6115,1460-244X.
+\newblock \doi{10.1112/plms.70018}.
+\newblock URL \url{https://doi.org/10.1112/plms.70018}.
+
+\bibitem[Chiarini et~al.(2021)Chiarini, Jara, and Ruszel]{MR4282689}
+Leandro Chiarini, Milton Jara, and Wioletta~M. Ruszel.
+\newblock Constructing fractional {G}aussian fields from long-range divisible
+  sandpiles on the torus.
+\newblock \emph{Stochastic Process. Appl.}, 140:\penalty0 147--182, 2021.
+\newblock ISSN 0304-4149,1879-209X.
+\newblock \doi{10.1016/j.spa.2021.06.006}.
+\newblock URL \url{https://doi.org/10.1016/j.spa.2021.06.006}.
+
+\bibitem[Cipriani et~al.(2018{\natexlab{a}})Cipriani, Hazra, and
+  Ruszel]{MR3834853}
+Alessandra Cipriani, Rajat~Subhra Hazra, and Wioletta~M. Ruszel.
+\newblock The divisible sandpile with heavy-tailed variables.
+\newblock \emph{Stochastic Process. Appl.}, 128\penalty0 (9):\penalty0
+  3054--3081, 2018{\natexlab{a}}.
+\newblock ISSN 0304-4149,1879-209X.
+\newblock \doi{10.1016/j.spa.2017.10.013}.
+\newblock URL \url{https://doi.org/10.1016/j.spa.2017.10.013}.
+
+\bibitem[Cipriani et~al.(2018{\natexlab{b}})Cipriani, Hazra, and
+  Ruszel]{MR3877548}
+Alessandra Cipriani, Rajat~Subhra Hazra, and Wioletta~M. Ruszel.
+\newblock Scaling limit of the odometer in divisible sandpiles.
+\newblock \emph{Probab. Theory Related Fields}, 172\penalty0 (3-4):\penalty0
+  829--868, 2018{\natexlab{b}}.
+\newblock ISSN 0178-8051,1432-2064.
+\newblock \doi{10.1007/s00440-017-0821-x}.
+\newblock URL \url{https://doi.org/10.1007/s00440-017-0821-x}.
+
+\bibitem[Cipriani et~al.(2020)Cipriani, de~Graaff, and Ruszel]{CdGR20}
+Alessandra Cipriani, Jan de~Graaff, and Wioletta~M. Ruszel.
+\newblock Scaling limits in divisible sandpiles: a {F}ourier multiplier
+  approach.
+\newblock \emph{J. Theoret. Probab.}, 33\penalty0 (4):\penalty0 2061--2088,
+  2020.
+\newblock ISSN 0894-9840.
+\newblock \doi{10.1007/s10959-019-00952-7}.
+\newblock URL \url{https://doi.org/10.1007/s10959-019-00952-7}.
+
+\bibitem[Cybenko(1989)]{Cybenko89}
+George Cybenko.
+\newblock Dynamic load balancing for distributed memory multiprocessors.
+\newblock \emph{J. Parallel Distrib. Comput.}, 7\penalty0 (2):\penalty0
+  279--301, 1989.
+\newblock ISSN 0743-7315.
+\newblock \doi{10.1016/0743-7315(89)90021-X}.
+\newblock URL \url{https://doi.org/10.1016/0743-7315(89)90021-X}.
+
+\bibitem[Efron and Stein(1981)]{EfronStein81}
+Bradley Efron and Charles Stein.
+\newblock The jackknife estimate of variance.
+\newblock \emph{Ann. Statist.}, 9\penalty0 (3):\penalty0 586--596, 1981.
+\newblock \doi{10.1214/aos/1176345462}.
+
+\bibitem[Fr\'ometa and Jara(2018)]{MR3796366}
+Susana Fr\'ometa and Milton Jara.
+\newblock Scaling limit for a long-range divisible sandpile.
+\newblock \emph{SIAM J. Math. Anal.}, 50\penalty0 (3):\penalty0 2317--2361,
+  2018.
+\newblock ISSN 0036-1410,1095-7154.
+\newblock \doi{10.1137/16M1068062}.
+\newblock URL \url{https://doi.org/10.1137/16M1068062}.
+
+\bibitem[Fuk and Nagaev(1971)]{FukNagaev71}
+D.~Kh. Fuk and S.~V. Nagaev.
+\newblock Probability inequalities for sums of independent random variables.
+\newblock \emph{Theory Probab. Appl.}, 16\penalty0 (4):\penalty0 643--660,
+  1971.
+\newblock \doi{10.1137/1116071}.
+
+\bibitem[Grigor'yan(2018)]{Grigoryan}
+Alexander Grigor'yan.
+\newblock \emph{Introduction to Analysis on Graphs}, volume~71 of
+  \emph{University Lecture Series}.
+\newblock American Mathematical Society, 2018.
+
+\bibitem[Huss and Sava(2012)]{HussSava12}
+Wilfried Huss and Ecaterina Sava.
+\newblock Internal aggregation models on comb lattices.
+\newblock \emph{Electron. J. Probab.}, 17:\penalty0 no.\ 30, 21, 2012.
+\newblock ISSN 1083-6489.
+\newblock \doi{10.1214/EJP.v17-1940}.
+\newblock URL \url{https://doi.org/10.1214/EJP.v17-1940}.
+
+\bibitem[Huss and Sava-Huss(2019)]{MR3957187}
+Wilfried Huss and Ecaterina Sava-Huss.
+\newblock Divisible sandpile on {S}ierpinski gasket graphs.
+\newblock \emph{Fractals}, 27\penalty0 (3):\penalty0 1950032, 14, 2019.
+\newblock ISSN 0218-348X,1793-6543.
+\newblock \doi{10.1142/S0218348X19500324}.
+\newblock URL \url{https://doi.org/10.1142/S0218348X19500324}.
+
+\bibitem[J\'{a}r\'{a}i(2018)]{Jarai18}
+Antal~A. J\'{a}r\'{a}i.
+\newblock Sandpile models.
+\newblock \emph{Probab. Surv.}, 15:\penalty0 243--306, 2018.
+\newblock ISSN 1549-5787.
+\newblock \doi{10.1214/14-PS228}.
+\newblock URL \url{https://doi.org/10.1214/14-PS228}.
+
+\bibitem[Johnson and Richey(2025)]{johnson2025odometer}
+Tobias Johnson and Jacob Richey.
+\newblock The odometer in subcritical activated random walk.
+\newblock \emph{arXiv preprint arXiv:2510.05514}, 2025.
+
+\bibitem[Kaiser and Sava-Huss(2024)]{KaiserSH}
+Robin Kaiser and Ecaterina Sava-Huss.
+\newblock Random rotor walks and i.i.d.\ sandpiles on {S}ierpi\'{n}ski graphs.
+\newblock \emph{Statist. Probab. Lett.}, 207:\penalty0 110061, 2024.
+
+\bibitem[Kesten and Spitzer(1979)]{KestenSpitzer79}
+H.~Kesten and F.~Spitzer.
+\newblock A limit theorem related to a new class of self-similar processes.
+\newblock \emph{Z. Wahrsch. Verw. Gebiete}, 50\penalty0 (1):\penalty0 5--25,
+  1979.
+\newblock ISSN 0044-3719.
+\newblock \doi{10.1007/BF00535672}.
+\newblock URL \url{https://doi.org/10.1007/BF00535672}.
+
+\bibitem[Levine and Peres(2009)]{LP09}
+L.~Levine and Y.~Peres.
+\newblock Strong spherical asymptotics for rotor-router aggregation and the
+  divisible sandpile.
+\newblock \emph{Potential Analysis}, 30:\penalty0 1--27, 2009.
+
+\bibitem[Levine and Peres(2010)]{LP10}
+L.~Levine and Y.~Peres.
+\newblock Scaling limits for internal aggregation models with multiple sources.
+\newblock \emph{Journal d'Analyse Math{\'e}matique}, 111\penalty0 (1):\penalty0
+  151--219, 2010.
+
+\bibitem[Levine and Peres(2017)]{LP17}
+Lionel Levine and Yuval Peres.
+\newblock Laplacian growth, sandpiles, and scaling limits.
+\newblock \emph{Bull. Amer. Math. Soc. (N.S.)}, 54\penalty0 (3):\penalty0
+  355--382, 2017.
+\newblock ISSN 0273-0979,1088-9485.
+\newblock \doi{10.1090/bull/1573}.
+\newblock URL \url{https://doi.org/10.1090/bull/1573}.
+
+\bibitem[Levine et~al.(2016)Levine, Murugan, Peres, and Ugurcan]{div-sand-crit}
+Lionel Levine, Mathav Murugan, Yuval Peres, and Baris~Evren Ugurcan.
+\newblock The divisible sandpile at critical density.
+\newblock \emph{Ann. Henri Poincar\'{e}}, 17\penalty0 (7):\penalty0 1677--1711,
+  2016.
+\newblock ISSN 1424-0637.
+\newblock \doi{10.1007/s00023-015-0433-x}.
+\newblock URL \url{https://doi.org/10.1007/s00023-015-0433-x}.
+
+\bibitem[Lyons and Peres(2016)]{LP16}
+R.~Lyons and Y.~Peres.
+\newblock \emph{Probability on Trees and Networks}, volume~42 of
+  \emph{Cambridge Series in Statistical and Probabilistic Mathematics}.
+\newblock Cambridge University Press, 2016.
+
+\bibitem[Nagaev(1979)]{Nagaev79}
+S.~V. Nagaev.
+\newblock Large deviations of sums of independent random variables.
+\newblock \emph{Ann. Probab.}, 7\penalty0 (5):\penalty0 745--789, 1979.
+\newblock \doi{10.1214/aop/1176994938}.
+
+\bibitem[Peskir and Shiryaev(2006)]{PS06}
+Goran Peskir and Albert Shiryaev.
+\newblock \emph{Optimal Stopping and Free-Boundary Problems}.
+\newblock Lectures in Mathematics ETH Z{\"u}rich. Birkh{\"a}user Verlag, Basel,
+  2006.
+
+\bibitem[Petrov(1975)]{Petrov}
+Valentin~V. Petrov.
+\newblock \emph{Sums of Independent Random Variables}.
+\newblock Springer Berlin Heidelberg, 1975.
+\newblock \doi{10.1007/978-3-642-65809-9}.
+\newblock URL \url{https://doi.org/10.1007/978-3-642-65809-9}.
+
+\bibitem[Rabani et~al.(1998)Rabani, Sinclair, and Wanka]{RSW}
+Y.~Rabani, A.~Sinclair, and R.~Wanka.
+\newblock Local divergence of {M}arkov chains and the analysis of iterative
+  load-balancing schemes.
+\newblock In \emph{IEEE Symposium on Foundations of Computer Science}, pages
+  694--705, 1998.
+
+\bibitem[Rolla and Sidoravicius(2012)]{RollaSidoravicius12}
+Leonardo~T. Rolla and Vladas Sidoravicius.
+\newblock Absorbing-state phase transition for driven-dissipative stochastic
+  dynamics on {$\mathbb{Z}$}.
+\newblock \emph{Invent. Math.}, 188\penalty0 (1):\penalty0 127--150, 2012.
+\newblock ISSN 0020-9910.
+\newblock \doi{10.1007/s00222-011-0344-5}.
+\newblock URL \url{https://doi.org/10.1007/s00222-011-0344-5}.
+
+\bibitem[Ruszel(2020)]{survey-ruszel-div-sandpile}
+Wioletta~M. Ruszel.
+\newblock Odometers of divisible sandpile models: scaling limits, i{DLA} and
+  obstacle problems. {A} survey.
+\newblock \emph{Markov Process. Related Fields}, 26\penalty0 (1):\penalty0
+  125--165, 2020.
+\newblock ISSN 1024-2953.
+
+\bibitem[Sidoravicius and Teixeira(2017)]{SidoraviciusTeixeira17}
+Vladas Sidoravicius and Augusto Teixeira.
+\newblock Absorbing-state transition for stochastic sandpiles and activated
+  random walks.
+\newblock \emph{Electron. J. Probab.}, 22:\penalty0 no.\ 33, 35, 2017.
+\newblock ISSN 1083-6489.
+\newblock \doi{10.1214/17-EJP50}.
+\newblock URL \url{https://doi.org/10.1214/17-EJP50}.
+
+\bibitem[von Bahr and Esseen(1965)]{vonBahrEsseen65}
+Bengt von Bahr and Carl-Gustav Esseen.
+\newblock Inequalities for the $r$th absolute moment of a sum of random
+  variables, $1 \leq r \leq 2$.
+\newblock \emph{Ann. Math. Statist.}, 36\penalty0 (1):\penalty0 299--303, 1965.
+\newblock \doi{10.1214/aoms/1177700291}.
+
+\end{thebibliography}

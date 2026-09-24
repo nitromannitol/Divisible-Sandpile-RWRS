@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite it as below."
+title: "Divisible-Sandpile-RWRS: a Lean 4 formalization of Divisible sandpiles via random walks in random scenery"
+abstract: >-
+  A machine-checked Lean 4 / mathlib formalization of the paper "Divisible
+  sandpiles via random walks in random scenery" (Bou-Rabee, Peres and
+  Sava-Huss): explosion and stabilization for random walk in random scenery
+  (Theorem 1.1), explosion of the divisible sandpile with i.i.d. initial masses
+  on infinite bounded-degree graphs for mean above one and at mean one
+  (Theorem 1.2), its stabilization below mean one under a moment condition
+  (Theorem 1.3), and every other labelled statement of the paper, including
+  the sharpness constructions.  Results the paper cites without proof are
+  taken as explicit hypotheses; seven of the nine are proved here, one of them
+  only on transient graphs.  The development contains no sorry and no custom
+  axiom.
+type: software
+authors:
+  - family-names: Bou-Rabee
+    given-names: Ahmed
+keywords:
+  - Lean
+  - mathlib
+  - formal verification
+  - divisible sandpile
+  - random walk in random scenery
+  - optimal stopping
+  - probability
+license: Apache-2.0
+# Add a Zenodo DOI here once an archived release is minted.
+repository-code: "https://github.com/nitromannitol/Divisible-Sandpile-RWRS"
+references:
+  - type: article
+    title: "Divisible sandpiles via random walks in random scenery"
+    authors:
+      - family-names: Bou-Rabee
+        given-names: Ahmed
+      - family-names: Peres
+        given-names: Yuval
+      - family-names: Sava-Huss
+        given-names: Ecaterina
+    url: "https://arxiv.org/abs/2604.13968"
+    identifiers:
+      - type: other
+        value: "arXiv:2604.13968"
+    notes: "The paper formalized by this repository."
