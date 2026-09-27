@@ -1,6 +1,17 @@
 import RWRS.Support.DTStagePartition
 import RWRS.Support.DTStageIdent
 
+/-!
+# Hit-integral rewrite at the stage time
+
+This module packages the pointwise identity of `DTStageIdent` into an integral
+identity: on a stage-`i` hit event the trap potential evaluated at the capped
+rule's stopping site agrees with its value at the deterministic stage-`i`
+site, so the scenery-integral over the hit event may be taken at the stage
+time. This is what lets the per-stage bias bound of `DTStageBound` refer only
+to the fixed stage site.
+-/
+
 open scoped Classical
 open MeasureTheory
 

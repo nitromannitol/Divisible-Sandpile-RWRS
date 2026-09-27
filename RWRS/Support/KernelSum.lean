@@ -12,6 +12,8 @@ open scoped Classical
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
+/-- The `k`-step heat kernel `heat G k x v` vanishes when `v` is not reachable
+from `x` in `k` steps. -/
 theorem heat_eq_zero_of_notMem_reach :
     ∀ (k : ℕ) (x v : V), v ∉ reach G x k → heat G k x v = 0 := by
   intro k
@@ -35,6 +37,9 @@ theorem heat_eq_zero_of_notMem_reach :
       rw [Finset.sum_congr rfl this]
       simp
 
+/-- The `k`-th iterate of the averaging operator `walkOp` against `h` is the
+finite sum of `h` weighted by the `k`-step heat kernel over the reachable set
+`reach G x k`. -/
 theorem walkOp_iterate_eq_sum (h : V → ℝ) :
     ∀ (k : ℕ) (x : V),
       (walkOp G)^[k] h x = ∑ v ∈ reach G x k, heat G k x v * h v := by

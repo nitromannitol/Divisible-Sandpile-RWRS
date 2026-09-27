@@ -18,6 +18,7 @@ open MeasureTheory ProbabilityTheory
 /-- The universal constant of `lem:positive-part`. -/
 noncomputable def RWRS.Support.cStar : ℝ := 1 / (32 * Real.sqrt 2)
 
+/-- The universal constant `cStar` of the positive-part mean bound is positive. -/
 theorem RWRS.Support.cStar_pos : 0 < RWRS.Support.cStar := by
   rw [RWRS.Support.cStar]; positivity
 
@@ -167,6 +168,8 @@ theorem RWRS.Support.positivePart_bound {Ω ι : Type*} [MeasurableSpace Ω] [Fi
   ring
 
 
+/-- The positive-part mean bound `positivePart_bound`, repackaged as an existential
+statement over some universal constant, witnessed here by `cStar`. -/
 theorem RWRS.Support.exists_positivePart :
     ∃ cstar : ℝ, 0 < cstar ∧
       ∀ {Ω ι : Type*} [MeasurableSpace Ω] [Fintype ι] (P : Measure Ω),

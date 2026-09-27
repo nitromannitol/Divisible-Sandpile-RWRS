@@ -1,6 +1,17 @@
 import RWRS.Support.PipeEnergy
 import RWRS.Support.TrGood
 
+/-!
+# Level counts and the pipe flow's energy
+
+`pipeLevelFinset B L n` collects the `B ^ n * (L n + 1)` sites of the tree of pipes whose
+word has length `n`, and `sum_level_le` bounds any nonnegative sum over a finite set of
+sites by the corresponding sum over the levels it meets. Combined with the geometric ratio
+`pipeRatio B α = B ^ (α - 1)` coming from the comb-length growth condition `CombCond`, this
+yields `flowEnergyOn_pipe_le`: the unit flow on the comb-length tree of pipes has total
+energy at most `4 / (1 - B ^ (α - 1))`, uniformly over every finite set of sites.
+-/
+
 namespace RWRS.Support
 
 open scoped Classical
@@ -11,6 +22,7 @@ variable {B : ℕ} {L : ℕ → ℕ}
 noncomputable def pipeLevelFinset (B : ℕ) (L : ℕ → ℕ) (n : ℕ) : Finset (List (Fin B) × ℕ) :=
   (wordsEq B n) ×ˢ Finset.range (L n + 1)
 
+/-- A valid site lies in the level `Finset` at its own word length. -/
 theorem mem_pipeLevelFinset {v : List (Fin B) × ℕ} (hv : PipeValid B L v) :
     v ∈ pipeLevelFinset B L v.1.length := by
   refine Finset.mem_product.2 ⟨mem_wordsEq rfl, Finset.mem_range.2 ?_⟩
@@ -18,10 +30,13 @@ theorem mem_pipeLevelFinset {v : List (Fin B) × ℕ} (hv : PipeValid B L v) :
   · omega
   · omega
 
+/-- The level `Finset` at depth `n` has exactly `B ^ n * (L n + 1)` sites: `B ^ n` words of
+length `n` times `L n + 1` possible pipe positions. -/
 theorem card_pipeLevelFinset (n : ℕ) :
     (pipeLevelFinset B L n).card = B ^ n * (L n + 1) := by
   rw [pipeLevelFinset, Finset.card_product, card_wordsEq, Finset.card_range]
 
+/-- Membership in the level-`n` `Finset` forces the site's word to have length `n`. -/
 theorem length_of_mem_pipeLevelFinset {n : ℕ} {v : List (Fin B) × ℕ}
     (h : v ∈ pipeLevelFinset B L n) : v.1.length = n :=
   length_of_mem_wordsEq (Finset.mem_product.1 h).1
@@ -63,10 +78,14 @@ variable {α : ℝ}
 /-- The ratio `B^{α-1}` of the geometric bound. -/
 noncomputable def pipeRatio (B : ℕ) (α : ℝ) : ℝ := (B : ℝ) ^ α / (B : ℝ)
 
+/-- `pipeRatio B α = B ^ α / B` is positive under `CombCond`, since both `B ^ α` and `B`
+are positive. -/
 theorem pipeRatio_pos (hc : CombCond B α) : 0 < pipeRatio B α := by
   have hB : (2 : ℝ) ≤ (B : ℝ) := by exact_mod_cast hc.1
   exact div_pos (Real.rpow_pos_of_pos (by linarith) _) (by linarith)
 
+/-- `pipeRatio B α < 1` under `CombCond`, since `α < 1` makes `B ^ α` strictly below
+`B ^ 1 = B`. -/
 theorem pipeRatio_lt_one (hc : CombCond B α) : pipeRatio B α < 1 := by
   have hB : (2 : ℝ) ≤ (B : ℝ) := by exact_mod_cast hc.1
   have hB1 : (1 : ℝ) < (B : ℝ) := by linarith
@@ -76,6 +95,9 @@ theorem pipeRatio_lt_one (hc : CombCond B α) : pipeRatio B α < 1 := by
   rw [pipeRatio, div_lt_one (by linarith)]
   exact hlt
 
+/-- Each term of the energy sum at level `n` is bounded by `4 * pipeRatio B α ^ n`,
+combining the level count `B ^ n * (combLen B α n + 1)` with `combLen_le` and the growth
+condition `B ^ α ≥ 4` from `CombCond`. -/
 theorem term_le (hc : CombCond B α) (n : ℕ) :
     ((B ^ n * (combLen B α n + 1) : ℕ) : ℝ) * (2 * (((B : ℝ) ^ n) ^ 2)⁻¹)
       ≤ 4 * (pipeRatio B α) ^ n := by
@@ -97,6 +119,9 @@ theorem term_le (hc : CombCond B α) (n : ℕ) :
   rw [hkey]
   linarith
 
+/-- The partial sums of the energy series are bounded by the geometric series total
+`4 / (1 - pipeRatio B α)`, term-by-term via `term_le` and comparison with the convergent
+geometric sum. -/
 theorem sum_term_le (hc : CombCond B α) (N : ℕ) :
     ∑ n ∈ Finset.range (N + 1),
         ((B ^ n * (combLen B α n + 1) : ℕ) : ℝ) * (2 * (((B : ℝ) ^ n) ^ 2)⁻¹)

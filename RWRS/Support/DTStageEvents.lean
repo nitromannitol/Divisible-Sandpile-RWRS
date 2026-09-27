@@ -50,9 +50,12 @@ def hitEvent (C : ℕ → Finset V) (ε : ℝ) (i : ℕ) : Set (V → ℝ) :=
 def restEvent (C : ℕ → Finset V) (ε : ℝ) (i j : ℕ) : Set (V → ℝ) :=
   trapEvent (C i) ε ∩ {ξ : V → ℝ | ∀ l < i, l ≠ j → ξ ∉ trapEvent (C l) ε}
 
+/-- The hit event at stage `i` implies the block event `trapEvent (C i) ε` at that stage. -/
 theorem hitEvent_subset_trapEvent (C : ℕ → Finset V) (ε : ℝ) (i : ℕ) :
     hitEvent C ε i ⊆ trapEvent (C i) ε := Set.inter_subset_left
 
+/-- `hitEvent C ε i` is measurable, as a finite intersection of the measurable block
+events `trapEvent (C j) ε` and their complements. -/
 theorem measurableSet_hitEvent (C : ℕ → Finset V) (ε : ℝ) (i : ℕ) :
     MeasurableSet (hitEvent (V := V) C ε i) := by
   rw [hitEvent]
@@ -64,6 +67,8 @@ theorem measurableSet_hitEvent (C : ℕ → Finset V) (ε : ℝ) (i : ℕ) :
   rw [h]
   exact MeasurableSet.biInter (Set.to_countable _) fun j _ => (measurableSet_trapEvent _ _).compl
 
+/-- `restEvent C ε i j` is measurable, as a finite intersection of the measurable block
+events `trapEvent (C l) ε` and their complements over the indices `l ≠ j`. -/
 theorem measurableSet_restEvent (C : ℕ → Finset V) (ε : ℝ) (i j : ℕ) :
     MeasurableSet (restEvent (V := V) C ε i j) := by
   classical
@@ -107,6 +112,7 @@ theorem hitEvent_eq_compl_inter_rest (C : ℕ → Finset V) (ε : ℝ) {i j : �
 
 /-! ### What each event reads -/
 
+/-- Membership in `hitEvent C ε i` only depends on the coordinates in `stageSites C i`. -/
 theorem hitEvent_dependsOn (C : ℕ → Finset V) (ε : ℝ) (i : ℕ) (ξ η : V → ℝ)
     (h : ∀ w ∈ ((stageSites C i : Finset V) : Set V), ξ w = η w) :
     ξ ∈ hitEvent C ε i ↔ η ∈ hitEvent C ε i := by
@@ -128,6 +134,8 @@ theorem hitEvent_dependsOn (C : ℕ → Finset V) (ε : ℝ) (i : ℕ) (ξ η : 
     refine ⟨(trapEvent_dependsOn (C i) ε ξ η (hsub i le_rfl)).2 h1, fun j hj hc => ?_⟩
     exact h2 j hj ((trapEvent_dependsOn (C j) ε ξ η (hsub j (by omega))).1 hc)
 
+/-- Membership in `restEvent C ε i j` only depends on the coordinates in
+`stageSitesExcept C i j`. -/
 theorem restEvent_dependsOn (C : ℕ → Finset V) (ε : ℝ) {i j : ℕ} (hji : j < i) (ξ η : V → ℝ)
     (h : ∀ w ∈ ((stageSitesExcept C i j : Finset V) : Set V), ξ w = η w) :
     ξ ∈ restEvent C ε i j ↔ η ∈ restEvent C ε i j := by
@@ -151,6 +159,8 @@ theorem restEvent_dependsOn (C : ℕ → Finset V) (ε : ℝ) {i j : ℕ} (hji :
     refine ⟨(trapEvent_dependsOn (C i) ε ξ η (hsub i le_rfl hij)).2 h1, fun l hl hlj hc => ?_⟩
     exact h2 l hl hlj ((trapEvent_dependsOn (C l) ε ξ η (hsub l (by omega) hlj)).1 hc)
 
+/-- Membership in the complement `(trapEvent D ε)ᶜ` only depends on the coordinates in `D`,
+obtained from `trapEvent_dependsOn` by negating both sides. -/
 theorem compl_trapEvent_dependsOn (D : Finset V) (ε : ℝ) (ξ η : V → ℝ)
     (h : ∀ w ∈ ((D : Finset V) : Set V), ξ w = η w) :
     ξ ∈ (trapEvent D ε)ᶜ ↔ η ∈ (trapEvent D ε)ᶜ := by
@@ -171,6 +181,7 @@ theorem disjoint_block_stageSitesExcept (C : ℕ → Finset V) {i j : ℕ} (hj :
     omega
   exact Finset.disjoint_left.1 (hdisj j hj l hli (Ne.symm hlj)) ha hal
 
+/-- If every stage `j ≤ i` is contained in `K`, then so is the union `stageSites C i`. -/
 theorem stageSites_subset (C : ℕ → Finset V) {K : Finset V} {i : ℕ}
     (hCK : ∀ j ≤ i, C j ⊆ K) : stageSites C i ⊆ K := by
   classical

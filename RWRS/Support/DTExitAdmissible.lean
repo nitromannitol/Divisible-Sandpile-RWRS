@@ -1,6 +1,16 @@
 import RWRS.Support.DTAdmissible
 import LatticeProb.Graph.ExitTime
 
+/-!
+# Exit from the non-admissible set
+
+This module records that the walk almost surely reaches the admissible set:
+for a doubly transient graph, the vertices failing `Admissible G r F` for a
+fixed finite used set `F` form a finite set, and an infinite connected graph
+escapes every finite set almost surely, so the exit time of the
+non-admissible set is finite almost surely.
+-/
+
 namespace RWRS.Support
 
 open scoped ENNReal

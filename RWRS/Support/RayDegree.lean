@@ -1,11 +1,25 @@
 import RWRS.Support.RayBuild
 
+/-!
+# Degree bounds on the ray graph
+
+The ray graph `rayGraph B L m s` attaches, at each ray vertex `i` with `s k = i` for some
+`k`, a copy of the gadget graph rooted there. This module bounds the degree of every gadget
+site by `2B + 3` (`degree_gadget_le`), records that strict monotonicity of `s` lets at most
+one gadget attach at each ray vertex (`card_gadgetAt_le`), and combines these with an
+explicit finite neighbor superset `rayNbrInl` to show the whole ray graph has bounded degree
+`2B + 5` (`boundedDegree_rayGraph`).
+-/
+
 namespace RWRS.Support
 
 open scoped Classical
 
 variable {B : ℕ} {L : ℕ → ℕ} {m s : ℕ → ℕ}
 
+/-- The degree of any gadget site is bounded by `2B + 3`, transferring the ambient
+`pipeGraph` bound `degree_pipeGraph_le` through the injective inclusion of gadget
+neighbors. -/
 theorem degree_gadget_le (M : ℕ) (v : gadgetSites B L M) :
     (gadgetGraph B L M).degree v ≤ 2 * B + 3 := by
   classical
@@ -24,6 +38,8 @@ theorem degree_gadget_le (M : ℕ) (v : gadgetSites B L M) :
 noncomputable def gadgetAt (s : ℕ → ℕ) (i : ℕ) : Finset ℕ :=
   (Finset.range (i + 1)).filter fun k => s k = i
 
+/-- `gadgetAt s i` has at most one element: since `s` is strictly monotone, at most one
+index `k ≤ i` can satisfy `s k = i`. -/
 theorem card_gadgetAt_le (hs : StrictMono s) (i : ℕ) : (gadgetAt s i).card ≤ 1 := by
   refine Finset.card_le_one.2 fun a ha b hb => ?_
   rw [gadgetAt, Finset.mem_filter] at ha hb
@@ -37,6 +53,9 @@ noncomputable def rayNbrInl (B : ℕ) (L : ℕ → ℕ) (m s : ℕ → ℕ) (i :
       ((gadgetGraph B L (m k)).neighborFinset (gadgetRoot B L (m k))).image
         (rayEmb B L m s k)))
 
+/-- Every `rayGraph`-neighbor of the ray vertex `Sum.inl i` lies in the explicit finite set
+`rayNbrInl`: the two ray steps `i ± 1`, or, if a gadget is attached at `i`, a neighbor of its
+embedded root. -/
 theorem nbr_inl_subset' (hs : StrictMono s) (i : ℕ) :
     (rayGraph B L m s).neighborSet (Sum.inl i) ⊆ ↑(rayNbrInl B L m s i) := by
   rintro y (⟨j, h1, h2⟩ | ⟨j, h1, h2⟩ | ⟨k, v, w, hvw, h1, h2⟩)
@@ -61,6 +80,8 @@ theorem nbr_inl_subset' (hs : StrictMono s) (i : ℕ) :
     · rw [rayEmb_of_ne hv] at h1
       exact absurd h1 Sum.inl_ne_inr
 
+/-- A vertex's degree in a locally finite graph is at most `n` whenever its whole neighbor
+set is contained in some `Finset` of size at most `n`. -/
 theorem degree_le_of_subset {W : Type*} {H : SimpleGraph W} (inst : H.LocallyFinite)
     (x : W) (F : Finset W) (hsub : ∀ y, H.Adj x y → y ∈ F) (n : ℕ) (hn : F.card ≤ n) :
     @SimpleGraph.degree _ H x (inst x) ≤ n := by
@@ -73,6 +94,8 @@ theorem degree_le_of_subset {W : Type*} {H : SimpleGraph W} (inst : H.LocallyFin
     _ ≤ F.card := Finset.card_le_card h1
     _ ≤ n := hn
 
+/-- `rayNbrInl B L m s i` has at most `2B + 5` elements: two ray steps plus at most one
+attached gadget's root neighbors, bounded by `degree_gadget_le` and `card_gadgetAt_le`. -/
 theorem card_rayNbrInl_le (hs : StrictMono s) (i : ℕ) :
     (rayNbrInl B L m s i).card ≤ 2 * B + 5 := by
   have hins1 := Finset.card_insert_le (Sum.inl (i + 1) : RayV B L m)
@@ -101,6 +124,9 @@ theorem card_rayNbrInl_le (hs : StrictMono s) (i : ℕ) :
   rw [rayNbrInl]
   omega
 
+/-- The ray graph has degree bounded by `2B + 5` everywhere: at a ray vertex this is
+`card_rayNbrInl_le` via `degree_le_of_subset`, and at a gadget vertex it reduces to the
+gadget's own degree bound `degree_gadget_le`. -/
 theorem boundedDegree_rayGraph (hs : StrictMono s) :
     ∀ x : RayV B L m,
       @SimpleGraph.degree _ (rayGraph B L m s) x (rayLocallyFinite hs x) ≤ 2 * B + 5 := by

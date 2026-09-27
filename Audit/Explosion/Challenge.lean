@@ -25,11 +25,11 @@ proof of the final theorem.
 
 ## Cited results
 
-The paper uses results from the literature without proof.  The repository
-proves this one only on transient graphs (`RWRS.External.voltageFunction`), so
-the theorem takes it as an explicit hypothesis, and this challenge carries the
-same hypothesis, restated in the vocabulary:
-   * `External.VoltageFunction`: Lyons–Peres, Proposition 2.1 and equation (2.4).
+The paper uses results from the literature without proof.  The bounded
+voltage function of Lyons–Peres, Proposition 2.1 and equation (2.4), is proved
+inside the repository on every infinite connected graph, recurrent or transient
+(`RWRS.External.voltageFunction_of_connected`), and is used only inside the
+proof, so it is not a hypothesis of this theorem.
 
 ## Presentation deltas
 
@@ -218,18 +218,9 @@ def BoundedDegree (G : SimpleGraph V) [G.LocallyFinite] (d : ℕ) : Prop :=
 def VolumeGrowthUpper (G : SimpleGraph V) (o : V) (C d_f : ℝ) : Prop :=
   ∀ r : ℕ, 1 ≤ r → (closedBall G o r).encard ≤ ENNReal.ofReal (C * (r : ℝ) ^ d_f)
 
-/-! ## 7. The cited results that remain hypotheses -/
+/-! ## 7. The cited results -/
 
 namespace External
-
-open scoped Classical in
-/-- Lyons–Peres, Proposition 2.1 and equation (2.4), quoted in the proof of
-`prop:01-law` (`rwrs.tex:513-520`), assumed: "The function
-$f(x)=\P_x(T_a<T_b)/(\deg(a)\P_a(T_b<T_a^+))$ satisfies
-$0\leq f\leq\|f\|_\infty<\infty$ and $\Delta f=\delta_b-\delta_a$." -/
-def VoltageFunction {V : Type*} (G : SimpleGraph V) [G.LocallyFinite] : Prop :=
-  ∀ a b : V, a ≠ b → ∃ f : V → ℝ, ∃ M : ℝ, 0 < M ∧ (∀ x, 0 ≤ f x ∧ f x ≤ M) ∧
-    ∀ x : V, laplacian G f x = (if x = b then (1 : ℝ) else 0) - (if x = a then 1 else 0)
 
 /-- The pointwise Carne--Varopoulos bound for simple random walk on a connected,
 nontrivial, locally finite graph with measurable singletons, assumed.  Sources:
@@ -257,7 +248,7 @@ universe u
 /-- Theorem 1.2 (`thm:explosion`). -/
 theorem explosion {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
     [Infinite V] [MeasurableSpace V]
-    (hVF : External.VoltageFunction G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : HasExtMean ν) :
     (1 < extMean ν → iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 0) ∧

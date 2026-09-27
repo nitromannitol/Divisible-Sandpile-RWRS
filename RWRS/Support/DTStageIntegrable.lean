@@ -4,6 +4,16 @@ import RWRS.Support.DTUnconstrained
 import RWRS.Support.DTStageIntegral
 import RWRS.Scenery
 
+/-!
+# Integrability of the trap potential in the scenery
+
+This module records the two integrability facts the stage bounds rely on:
+the killed trap potential at a fixed site is integrable in an i.i.d. scenery
+whose one-site law is integrable, and the same holds for the trap potential
+read at the capped rule's stopping site, since the rule's value is capped by
+the horizon `N` and so ranges over only finitely many trajectory sites.
+-/
+
 open scoped Classical
 open MeasureTheory
 

@@ -10,18 +10,26 @@ namespace RWRS.Support
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
+/-- The averaging operator `walkOp` distributes over a finite sum indexed by
+`k`, by swapping the order of summation. -/
 theorem walkOp_sum (n : ℕ) (g : ℕ → V → ℝ) (x : V) :
     walkOp G (fun y => ∑ k ∈ Finset.range n, g k y) x
       = ∑ k ∈ Finset.range n, walkOp G (g k) x := by
   simp only [walkOp, Finset.sum_div]
   rw [Finset.sum_comm]
 
+/-- `payoff` is monotone in the truncation time when the per-step reward
+`ξ v / deg(v)` is nonnegative at every vertex, since it grows by adding more
+nonnegative terms. -/
 theorem payoff_mono {ξ : V → ℝ} (hξ : ∀ v : V, 0 ≤ ξ v / (G.degree v : ℝ)) {m n : ℕ}
     (hmn : m ≤ n) (X : ℕ → V) : payoff G ξ m X ≤ payoff G ξ n X :=
   Finset.sum_le_sum_of_subset_of_nonneg
     (fun _ hj => Finset.mem_range.mpr (lt_of_lt_of_le (Finset.mem_range.mp hj) hmn))
     (fun j _ _ => hξ (X j))
 
+/-- **The walk average of the full payoff as a Green sum.** The expectation of
+`payoff G ξ n` over the walk is the sum of the first `n` iterates of `walkOp` on
+`ξ / deg`, proved by induction on `n` peeling off the first step. -/
 theorem walkExp_payoff_eq [Infinite V] (hG : G.Connected) (ξ : V → ℝ) :
     ∀ (n : ℕ) (x : V),
       walkExp G n x (payoff G ξ n)
@@ -62,6 +70,10 @@ theorem walkExp_payoff_eq [Infinite V] (hG : G.Connected) (ξ : V → ℝ) :
       simp [Function.iterate_zero_apply]
       ring
 
+/-- When the per-step excess reward is nonnegative, the odometer equals the walk
+expectation of the payoff of `excess σ`, identifying the least-upper-bound
+characterization `odometer_isLUB` of the odometer with its maximizing stopping
+time. -/
 theorem odometer_eq_payoff [Infinite V] (hG : G.Connected) (σ : V → ℝ)
     (hpos : ∀ v : V, 0 ≤ excess σ v / (G.degree v : ℝ)) (n : ℕ) (x : V) :
     odometer G σ n x = walkExp G n x (payoff G (excess σ) n) := by
@@ -73,10 +85,14 @@ theorem odometer_eq_payoff [Infinite V] (hG : G.Connected) (σ : V → ℝ)
   exact walkExp_mono fun X => payoff_mono hpos (hle X) X
 
 open scoped Classical in
+/-- The heat kernel satisfies its defining one-step recursion by definitional
+unfolding of `walkOp`. -/
 theorem heat_succ (k : ℕ) (x y : V) :
     heat G (k + 1) x y = walkOp G (fun z => heat G k z y) x := rfl
 
 open scoped Classical in
+/-- Iterating `walkOp` on a scenery `c` supported at the single vertex `o`
+produces the heat kernel `heat G k x o` scaled by `c`, by induction on `k`. -/
 theorem walkOp_iterate_single (o : V) (c : ℝ) :
     ∀ (k : ℕ) (x : V),
       (walkOp G)^[k] (fun v => if v = o then c else 0) x = heat G k x o * c := by

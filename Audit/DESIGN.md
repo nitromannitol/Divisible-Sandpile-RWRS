@@ -37,9 +37,7 @@ inductive types, and no field-by-field transport is needed.
 `@RWRSAudit.c = @RWRS.c`.
 
 - The non-recursive definitions are identified by `rfl`; the kernel checks
-  each by unfolding both sides.  This includes the classical decidability
-  instance of the `if` in `External.VoltageFunction`, which both sides obtain
-  from `open scoped Classical`.
+  each by unfolding both sides.
 - The three recursive definitions `heat`, `walkExp` and `walkPath` are
   compiled by structural recursion into auxiliary constants that differ
   between the two copies, and `rfl` does not see through them.  They are
@@ -50,8 +48,10 @@ inductive types, and no field-by-field transport is needed.
   `DoublyTransient`, `External.CarneVaropoulos`) are identified by unfolding
   and rewriting with the three inductions.
 
-From these, `voltageFunction` and `carneVaropoulos` turn each cited-result
-hypothesis of the vocabulary into the repository's.
+From these, `carneVaropoulos` turns the one cited-result proposition still
+kept in the vocabulary into the repository's.  The voltage-function
+proposition needs no such bridge: it is proved outright and discharged inside
+the library proofs, and it is no longer part of the vocabulary.
 
 ## 3. Theorem-level bridges
 
@@ -66,12 +66,13 @@ identifications being definitional.
 
 None at the level of the displayed statements: each challenge theorem is the
 statement of the corresponding theorem of `RWRS/MainTheorems.lean` with every
-repository name replaced by its vocabulary copy.  Relative to the frozen
-statements in `RWRS/Frozen/`, `optimalStopping` and `stabilization` omit the
-hypotheses `External.VonBahrEsseen`, `External.FukNagaevTail` and
-`External.HeatKernelBoundedDegree G`, which `RWRS/MainTheorems.lean`
-discharges with the repository's proofs; that is a strengthening, not a
-weakening.  `explosion` is the frozen statement unchanged.
+repository name replaced by its vocabulary copy.  `RWRS/MainTheorems.lean`
+restates its `RWRS/Frozen/` counterpart unchanged in every case: the cited
+inputs `External.VonBahrEsseen`, `External.FukNagaevTail` and
+`External.HeatKernelBoundedDegree G` that the paper's proof of `optimalStopping`
+and `stabilization` quotes are proved outright in `RWRS/External/` and so are
+not hypotheses of the frozen statements themselves.  `explosion` is the frozen
+statement unchanged.
 
 How each statement reads the paper is recorded in the frozen docstrings and
 summarized in [`CORRESPONDENCE.md`](../CORRESPONDENCE.md).  The comparator does
@@ -80,10 +81,13 @@ displayed statement, over definitions that can be read without the library.
 
 ## 5. What the comparator does not certify
 
-- The cited results.  The challenges take them as hypotheses, restated in the
-  vocabulary.  A proof conditional on a proposition does not show that the
-  proposition is a faithful rendering of the cited theorem; that reading is
-  the subject of `ASSUMPTIONS.md` and of `CORRESPONDENCE.md`.
+- The cited results.  No challenge carries one as a hypothesis any longer:
+  the voltage function that `OptimalStopping` and `Explosion` used to carry is
+  proved on every infinite connected graph and discharged inside the proofs,
+  and the pointwise Carne–Varopoulos bound is proved outright and kept in the
+  vocabulary only for provenance.  Whether each proved proposition is a
+  faithful rendering of the cited theorem is still the subject of
+  `ASSUMPTIONS.md` and of `CORRESPONDENCE.md`.
 - The faithfulness of the vocabulary to the paper.  The vocabulary is a copy
   of the repository's definitions, so the comparator shows that nothing in the
   statements depends on the library beyond what the vocabulary displays; a

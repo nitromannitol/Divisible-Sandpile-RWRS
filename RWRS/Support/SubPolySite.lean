@@ -31,17 +31,24 @@ that the mean is the global mean `m`. -/
 noncomputable def siteShift (ρ : Measure ℝ) (M m t z : ℝ) : ℝ :=
   siteVal M t z - siteMean ρ M t + m
 
+/-- `siteVal M t` is measurable, as the minimum of the measurable lower truncation and a
+constant. -/
 theorem measurable_siteVal (M t : ℝ) : Measurable (siteVal M t) :=
   (measurable_lowTrunc M).min measurable_const
 
+/-- `siteShift ρ M m t` is measurable, as `siteVal` shifted by constants. -/
 theorem measurable_siteShift (ρ : Measure ℝ) (M m t : ℝ) : Measurable (siteShift ρ M m t) :=
   ((measurable_siteVal M t).sub measurable_const).add measurable_const
 
+/-- The truncated mass `siteVal M t z` is at least the lower truncation level `-M`. -/
 theorem neg_le_siteVal {M t : ℝ} (ht : -M ≤ t) (z : ℝ) : -M ≤ siteVal M t z :=
   le_min (le_max_right _ _) ht
 
+/-- The truncated mass `siteVal M t z` is at most the site's level `t`. -/
 theorem siteVal_le (M t z : ℝ) : siteVal M t z ≤ t := min_le_right _ _
 
+/-- The truncated mass is bounded in absolute value by `max t M`, combining the two-sided
+bounds `neg_le_siteVal` and `siteVal_le`. -/
 theorem abs_siteVal_le {M t : ℝ} (ht : -M ≤ t) (z : ℝ) :
     |siteVal M t z| ≤ max t M := by
   rw [abs_le]
@@ -61,12 +68,16 @@ theorem integrable_siteVal (ρ : Measure ℝ) [IsProbabilityMeasure ρ] {M t : �
   rw [Real.norm_eq_abs]
   exact abs_siteVal_le ht z
 
+/-- The mean of the truncated mass is at least `-M`, by monotonicity of the integral
+against `neg_le_siteVal`. -/
 theorem neg_le_siteMean (ρ : Measure ℝ) [IsProbabilityMeasure ρ] {M t : ℝ}
     (ht : -M ≤ t) : -M ≤ siteMean ρ M t := by
   have h := integral_mono (integrable_const (-M)) (integrable_siteVal ρ ht)
     (fun z => neg_le_siteVal ht z)
   rwa [integral_const, probReal_univ, one_smul] at h
 
+/-- The mean of the truncated mass is at most the site's level `t`, by monotonicity of the
+integral against `siteVal_le`. -/
 theorem siteMean_le_level (ρ : Measure ℝ) [IsProbabilityMeasure ρ] {M t : ℝ}
     (ht : -M ≤ t) : siteMean ρ M t ≤ t := by
   have h := integral_mono (integrable_siteVal ρ ht) (integrable_const t)
@@ -87,6 +98,8 @@ theorem abs_siteShift_sub_le (ρ : Measure ℝ) [IsProbabilityMeasure ρ] {M m t
   rw [hval, abs_le]
   constructor <;> linarith
 
+/-- Unfolds `siteShift ρ M m t z - m` as the recentring difference
+`siteVal M t z - siteMean ρ M t`. -/
 theorem siteShift_sub (ρ : Measure ℝ) (M m t z : ℝ) :
     siteShift ρ M m t z - m = siteVal M t z - siteMean ρ M t := by
   unfold siteShift; ring
@@ -101,6 +114,8 @@ theorem integral_siteShift_sub (ρ : Measure ℝ) [IsProbabilityMeasure ρ] {M m
   rw [hcong, integral_sub (integrable_siteVal ρ ht) (integrable_const _),
     integral_const, probReal_univ, one_smul, siteMean, sub_self]
 
+/-- The recentred difference `siteShift ρ M m t · - m` is integrable, rewritten via
+`siteShift_sub` as a difference of integrable truncated masses. -/
 theorem integrable_siteShift_sub (ρ : Measure ℝ) [IsProbabilityMeasure ρ] {M m t : ℝ}
     (ht : -M ≤ t) : Integrable (fun z => siteShift ρ M m t z - m) ρ := by
   have hcong : (fun z => siteShift ρ M m t z - m)
@@ -109,6 +124,8 @@ theorem integrable_siteShift_sub (ρ : Measure ℝ) [IsProbabilityMeasure ρ] {M
   rw [hcong]
   exact (integrable_siteVal ρ ht).sub (integrable_const _)
 
+/-- The square of the recentred difference is integrable, bounded by the constant
+`(t + M) ^ 2` via `abs_siteShift_sub_le`. -/
 theorem integrable_sq_siteShift_sub (ρ : Measure ℝ) [IsProbabilityMeasure ρ] {M m t : ℝ}
     (ht : -M ≤ t) :
     Integrable (fun z => (siteShift ρ M m t z - m) ^ 2) ρ := by

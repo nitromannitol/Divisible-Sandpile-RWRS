@@ -80,16 +80,24 @@ theorem ae_supMeanPayoff_top_of_mean [Infinite V] (hG : G.Connected) (x : V)
 
 /-! ### The extended mean -/
 
+/-- The extended norm of a real number splits as its positive and negative
+parts: `‖z‖ₑ = ENNReal.ofReal z + ENNReal.ofReal (-z)`. -/
 theorem enorm_real_eq (z : ℝ) : ‖z‖ₑ = ENNReal.ofReal z + ENNReal.ofReal (-z) := by
   rcases le_total 0 z with h | h
   · rw [ENNReal.ofReal_eq_zero.2 (neg_nonpos.2 h), add_zero, Real.enorm_eq_ofReal h]
   · rw [ENNReal.ofReal_eq_zero.2 h, zero_add, Real.enorm_eq_ofReal_abs, abs_of_nonpos h]
 
+/-- A law with strictly positive extended mean has finite negative part,
+since `extMean` is defined as `posPart - negPart` and could not exceed `0`
+in `EReal` if `negPart` were infinite. -/
 theorem negPart_ne_top {ν : Measure ℝ} (hmean : 0 < extMean ν) : negPart ν ≠ ⊤ := by
   intro hn
   rw [extMean, hn, EReal.coe_ennreal_top, EReal.sub_top] at hmean
   exact not_lt_bot hmean
 
+/-- If both `posPart ν` and `negPart ν` are finite then the identity function
+is integrable for `ν`, since `enorm_real_eq` writes its enorm as their
+lintegrand sum. -/
 theorem integrable_id_of_finite {ν : Measure ℝ} (hp : posPart ν ≠ ⊤) (hn : negPart ν ≠ ⊤) :
     Integrable (fun z : ℝ => z) ν := by
   refine ⟨aestronglyMeasurable_id, ?_⟩
@@ -97,10 +105,14 @@ theorem integrable_id_of_finite {ν : Measure ℝ} (hp : posPart ν ≠ ⊤) (hn
     lintegral_add_left ENNReal.measurable_ofReal]
   exact ENNReal.add_lt_top.2 ⟨hp.lt_top, hn.lt_top⟩
 
+/-- For an integrable identity function, the mean is the difference of the
+`toReal`s of `posPart ν` and `negPart ν`. -/
 theorem integral_id_eq {ν : Measure ℝ} (hint : Integrable (fun z : ℝ => z) ν) :
     ∫ z, z ∂ν = (posPart ν).toReal - (negPart ν).toReal :=
   integral_eq_lintegral_pos_part_sub_lintegral_neg_part hint
 
+/-- With both parts finite, a positive extended mean means the negative
+part's `toReal` is strictly less than the positive part's. -/
 theorem toReal_lt_toReal_of_extMean {ν : Measure ℝ} (hp : posPart ν ≠ ⊤) (hn : negPart ν ≠ ⊤)
     (hmean : 0 < extMean ν) : (negPart ν).toReal < (posPart ν).toReal := by
   have hpe : ((posPart ν).toReal : EReal) = (posPart ν : EReal) := EReal.coe_ennreal_toReal hp
@@ -112,18 +124,24 @@ theorem toReal_lt_toReal_of_extMean {ν : Measure ℝ} (hp : posPart ν ≠ ⊤)
 
 /-! ### Truncation from above -/
 
+/-- The positive part of the law of `z ↦ min z K` pushed forward by `ν` is
+the lintegral, in `ν`, of the positive part of `min z K`. -/
 theorem posPart_map_min (ν : Measure ℝ) (K : ℝ) :
     posPart (ν.map (fun z => min z K)) = ∫⁻ z, ENNReal.ofReal (min z K) ∂ν := by
   rw [posPart]
   exact lintegral_map (f := fun z : ℝ => ENNReal.ofReal z) (g := fun z : ℝ => min z K)
     ENNReal.measurable_ofReal (by fun_prop)
 
+/-- The negative part of the pushed-forward law of `z ↦ min z K` is the
+lintegral, in `ν`, of the negative part of `min z K`. -/
 theorem negPart_map_min (ν : Measure ℝ) (K : ℝ) :
     negPart (ν.map (fun z => min z K)) = ∫⁻ z, ENNReal.ofReal (-(min z K)) ∂ν := by
   rw [negPart]
   exact lintegral_map (f := fun z : ℝ => ENNReal.ofReal (-z)) (g := fun z : ℝ => min z K)
     (by fun_prop) (by fun_prop)
 
+/-- Truncating a probability law from above by `K` bounds the positive part
+of the truncated law by `ENNReal.ofReal K`. -/
 theorem posPart_map_min_le (ν : Measure ℝ) [IsProbabilityMeasure ν] (K : ℝ) :
     posPart (ν.map (fun z => min z K)) ≤ ENNReal.ofReal K := by
   rw [posPart_map_min]
@@ -131,6 +149,8 @@ theorem posPart_map_min_le (ν : Measure ℝ) [IsProbabilityMeasure ν] (K : ℝ
         lintegral_mono fun z => ENNReal.ofReal_le_ofReal (min_le_right _ _)
     _ = ENNReal.ofReal K := by simp
 
+/-- Truncating from above by `K ≥ 0` never increases the negative part: on
+`z ≤ K` truncation does nothing, and on `z > K` it kills a nonnegative value. -/
 theorem negPart_map_min_le (ν : Measure ℝ) {K : ℝ} (hK : 0 ≤ K) :
     negPart (ν.map (fun z => min z K)) ≤ negPart ν := by
   rw [negPart_map_min, negPart]
@@ -140,6 +160,8 @@ theorem negPart_map_min_le (ν : Measure ℝ) {K : ℝ} (hK : 0 ≤ K) :
   · rw [min_eq_right h, ENNReal.ofReal_eq_zero.2 (by linarith)]
     simp
 
+/-- The truncated positive-part lintegrals `∫⁻ z, (min z K)⁺` increase to
+`posPart ν` as `K → ∞` along the naturals, by monotone convergence. -/
 theorem iSup_lintegral_min (ν : Measure ℝ) :
     ⨆ K : ℕ, ∫⁻ z, ENNReal.ofReal (min z (K : ℝ)) ∂ν = posPart ν := by
   have hmeas : ∀ K : ℕ, Measurable fun z : ℝ => ENNReal.ofReal (min z (K : ℝ)) := by
@@ -156,6 +178,11 @@ theorem iSup_lintegral_min (ν : Measure ℝ) :
     · rw [ENNReal.ofReal_eq_zero.2 h]; simp
     · rw [min_eq_left (Nat.le_ceil z)]
 
+/-- **Existence of a good truncation level.** If `posPart ν = ⊤` and
+`negPart ν ≠ ⊤`, some truncation `min z K` has both parts finite and a
+strictly positive mean, by taking `K` large enough that the truncated
+positive part (which increases to `⊤`, by `iSup_lintegral_min`) overtakes the
+untruncated negative part. -/
 theorem exists_truncation (ν : Measure ℝ) [IsProbabilityMeasure ν] (hp : posPart ν = ⊤)
     (hn : negPart ν ≠ ⊤) :
     ∃ K : ℕ, posPart (ν.map (fun z => min z (K : ℝ))) ≠ ⊤ ∧
@@ -184,6 +211,8 @@ theorem exists_truncation (ν : Measure ℝ) [IsProbabilityMeasure ν] (hp : pos
 
 /-! ### The i.i.d. field of a pushed-forward marginal -/
 
+/-- Applying a measurable `f` coordinatewise to an i.i.d. field with law `ν`
+gives the i.i.d. field with law `ν.map f`. -/
 theorem iidLaw_map (ν : Measure ℝ) [IsProbabilityMeasure ν] {f : ℝ → ℝ} (hf : Measurable f) :
     (iidLaw V ν).map (fun (ξ : V → ℝ) (v : V) => f (ξ v)) = iidLaw V (ν.map f) :=
   MeasureTheory.Measure.infinitePi_map_pi (μ := fun _ : V => ν) (f := fun _ : V => f)
@@ -229,6 +258,9 @@ theorem ae_supMeanPayoff_top [Infinite V] (hG : G.Connected) (x : V)
 
 /-! ### The clock on a graph of bounded degree -/
 
+/-- On a graph of degree bounded by `d`, every iterate of the walk operator
+applied to `invDeg` stays at least `1 / d`, by induction using that each
+neighbour's value is already bounded below. -/
 theorem walkOp_iterate_invDeg_ge [Infinite V] (hG : G.Connected) {d : ℕ}
     (hd : BoundedDegree G d) :
     ∀ (k : ℕ) (x : V), 1 / (d : ℝ) ≤ (walkOp G)^[k] (invDeg G) x := by
@@ -251,6 +283,8 @@ theorem walkOp_iterate_invDeg_ge [Infinite V] (hG : G.Connected) {d : ℕ}
         _ ≤ ∑ y ∈ G.neighborFinset x, (walkOp G)^[k] (invDeg G) y :=
             Finset.sum_le_sum fun y _ => ih y
 
+/-- On a graph of degree bounded by `d`, the clock `clock G n x` grows at
+least linearly, `n / d ≤ clock G n x`, summing `walkOp_iterate_invDeg_ge`. -/
 theorem clock_ge_of_boundedDegree [Infinite V] (hG : G.Connected) {d : ℕ}
     (hd : BoundedDegree G d) (n : ℕ) (x : V) : (n : ℝ) / d ≤ clock G n x := by
   rw [clock]
@@ -260,11 +294,16 @@ theorem clock_ge_of_boundedDegree [Infinite V] (hG : G.Connected) {d : ℕ}
     _ ≤ ∑ k ∈ Finset.range n, (walkOp G)^[k] (invDeg G) x :=
         Finset.sum_le_sum fun k _ => walkOp_iterate_invDeg_ge hG hd k x
 
+/-- A degree bound `d` witnessing `BoundedDegree G d` on a connected graph
+must be strictly positive, since some vertex already has positive degree. -/
 theorem boundedDegree_pos [Infinite V] (hG : G.Connected) {d : ℕ} (hd : BoundedDegree G d) :
     0 < d := by
   obtain ⟨x⟩ := (inferInstance : Nonempty V)
   exact lt_of_lt_of_le (degree_pos hG x) (hd x)
 
+/-- **The clock hypothesis `hA` of explosion holds automatically on a graph
+of bounded degree**, since `clock G n x → ∞` follows from the linear lower
+bound `clock_ge_of_boundedDegree`. -/
 theorem tendsto_clock_of_boundedDegree [Infinite V] (hG : G.Connected) {d : ℕ}
     (hd : BoundedDegree G d) (x : V) :
     Tendsto (fun n : ℕ => clock G n x) atTop atTop := by

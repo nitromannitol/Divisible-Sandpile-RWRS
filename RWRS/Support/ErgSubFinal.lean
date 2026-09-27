@@ -17,6 +17,9 @@ open scoped ENNReal
 
 namespace RWRS.Support
 
+/-- The configuration never drops below the initial mark truncated at `1`:
+`min (σ v) 1 ≤ config G σ k v` at every round `k`, by induction using the
+nonnegativity of `emission`. -/
 theorem min_one_le_config {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] {σ : V → ℝ}
     (k : ℕ) (v : V) : min (σ v) 1 ≤ RWRS.config G σ k v := by
   induction k generalizing v with
@@ -29,6 +32,8 @@ theorem min_one_le_config {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] {σ 
       Finset.sum_nonneg fun w _ => emission_nonneg _ w
     linarith
 
+/-- The weighted mass at round `k` is the configuration's value at the root
+times the network's `degWeight`. -/
 theorem netWeightedMassAt_eq_mul (N : RWRS.Net 1) (k : ℕ) :
     RWRS.netWeightedMassAt N k
       = RWRS.config (RWRS.netGraph N) (RWRS.netConfig N) k (RWRS.netRoot N)

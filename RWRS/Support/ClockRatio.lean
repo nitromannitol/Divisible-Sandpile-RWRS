@@ -23,6 +23,8 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
 /-! ### The Green mass of a finite set -/
 
+/-- The finite-time Green time from `x` to `v` vanishes once `v` is not reached
+by `x` within `n` steps, since every heat kernel term in its defining sum is `0`. -/
 theorem greenTime_eq_zero_of_notMem_reach (n : ℕ) (x v : V) (hv : v ∉ reach G x n) :
     greenTime G n x v = 0 := by
   rw [greenTime, meanLocalTime]
@@ -32,6 +34,8 @@ theorem greenTime_eq_zero_of_notMem_reach (n : ℕ) (x v : V) (hv : v ∉ reach 
   rw [Finset.sum_congr rfl this]
   simp
 
+/-- The sum of the finite-time Green times over any finite set of vertices is at
+most the clock `clock G n x`, since the reachable set already carries the full sum. -/
 theorem sum_greenTime_le_clock [Infinite V] (hG : G.Connected) (n : ℕ) (x : V) (F : Finset V) :
     ∑ v ∈ F, greenTime G n x v ≤ clock G n x := by
   classical
@@ -43,6 +47,7 @@ theorem sum_greenTime_le_clock [Infinite V] (hG : G.Connected) (n : ℕ) (x : V)
   exact Finset.sum_le_sum_of_subset_of_nonneg Finset.subset_union_left
     fun v _ _ => greenTime_nonneg n x v
 
+/-- The clock `clock G n x` is nonnegative, the case `F = ∅` of `sum_greenTime_le_clock`. -/
 theorem clock_nonneg [Infinite V] (hG : G.Connected) (n : ℕ) (x : V) : 0 ≤ clock G n x := by
   have := sum_greenTime_le_clock hG n x ∅
   simpa using this
@@ -67,6 +72,8 @@ theorem fluct_le [Infinite V] (hG : G.Connected) (n : ℕ) (x : V) :
 
 /-! ### The diagonal value against the clock -/
 
+/-- In the transient case, once the mean local time at `x` is bounded by `M`, the
+diagonal Green time `greenTime G n x x` is bounded by `M / deg(x)`. -/
 theorem greenTime_diag_le_of_transient [Infinite V] (hG : G.Connected) (x : V) {M : ℝ}
     (hM : ∀ n : ℕ, meanLocalTime G n x x ≤ M) (n : ℕ) :
     greenTime G n x x ≤ M / (G.degree x : ℝ) := by
@@ -126,6 +133,8 @@ theorem tendsto_greenTime_div_clock [Infinite V] (hG : G.Connected) (x : V)
     rw [div_lt_iff₀ hδ] at hn
     nlinarith [hn, hg, hδ]
 
+/-- The `ENNReal` form of `tendsto_greenTime_div_clock`: the supremum of the
+finite-time Green time is also negligible against the clock once the clock diverges. -/
 theorem tendsto_supGreenTime_div_clock [Infinite V] (hG : G.Connected) (x : V)
     (hA : Tendsto (fun n : ℕ => clock G n x) atTop atTop) :
     Tendsto (fun n : ℕ => supGreenTime G n x / ENNReal.ofReal (clock G n x)) atTop (𝓝 0) := by
@@ -137,6 +146,8 @@ theorem tendsto_supGreenTime_div_clock [Infinite V] (hG : G.Connected) (x : V)
   rw [ENNReal.ofReal_div_of_pos hA0]
   exact ENNReal.div_le_div_right (supGreenTime_le hG n x) _
 
+/-- The fluctuation scale `fluct` is negligible against the square of the clock
+once the clock diverges, combining `fluct_le` with `tendsto_supGreenTime_div_clock`. -/
 theorem tendsto_fluct_div_clock_sq [Infinite V] (hG : G.Connected) (x : V)
     (hA : Tendsto (fun n : ℕ => clock G n x) atTop atTop) :
     Tendsto (fun n : ℕ => fluct G n x / (ENNReal.ofReal (clock G n x)) ^ 2) atTop (𝓝 0) := by
@@ -187,6 +198,8 @@ finite-time Green function vanishes off that set, so the sum is the paper's
 noncomputable def sumSq (G : SimpleGraph V) [G.LocallyFinite] (n : ℕ) (o : V) : ℝ :=
   ∑ v ∈ reach G o n, greenTime G n o v ^ 2
 
+/-- The sum of squared finite-time Green times over any finite set of vertices is
+at most `sumSq`, since the reachable set already carries the full sum. -/
 theorem sum_sq_le_sumSq (n : ℕ) (o : V) (F : Finset V) :
     ∑ v ∈ F, greenTime G n o v ^ 2 ≤ sumSq G n o := by
   classical
@@ -199,6 +212,8 @@ theorem sum_sq_le_sumSq (n : ℕ) (o : V) (F : Finset V) :
   exact Finset.sum_le_sum_of_subset_of_nonneg Finset.subset_union_left
     fun v _ _ => by positivity
 
+/-- The `ENNReal` fluctuation scale `fluct` equals `ENNReal.ofReal` of the real
+`ℓ²` sum `sumSq`, since the finite-time Green function vanishes off `reach G o n`. -/
 theorem fluct_eq_ofReal_sumSq (n : ℕ) (o : V) :
     fluct G n o = ENNReal.ofReal (sumSq G n o) := by
   classical
@@ -208,10 +223,14 @@ theorem fluct_eq_ofReal_sumSq (n : ℕ) (o : V) :
     ← ENNReal.ofReal_sum_of_nonneg fun v _ => by positivity]
   rfl
 
+/-- The fluctuation scale `fluct G n o` is always finite, since it equals
+`ENNReal.ofReal (sumSq G n o)` by `fluct_eq_ofReal_sumSq`. -/
 theorem fluct_ne_top (n : ℕ) (o : V) : fluct G n o ≠ ⊤ := by
   rw [fluct_eq_ofReal_sumSq]
   exact ENNReal.ofReal_ne_top
 
+/-- In the recurrent case, `m` vertices already carry `m/4` times the square of the
+diagonal Green time into `sumSq`, the `ℓ²` analogue of `eventually_clock_ge`. -/
 theorem eventually_sumSq_ge [Infinite V] (hG : G.Connected) (o : V) (hrec : green G o o = ⊤)
     (F : Finset V) :
     ∀ᶠ n in atTop, (F.card : ℝ) / 4 * greenTime G n o o ^ 2 ≤ sumSq G n o := by

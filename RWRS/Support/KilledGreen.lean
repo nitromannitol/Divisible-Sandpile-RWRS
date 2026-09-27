@@ -29,6 +29,8 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
 /-! ### The two constructions agree -/
 
+/-- `RWRS.killedHeat` agrees with the shared library's `killedHeat`, by
+induction on the step count using that both satisfy the same recursion. -/
 theorem killedHeat_eq_lib (C : Set V) : ∀ (k : ℕ) (x y : V),
     RWRS.killedHeat G C k x y = LatticeProb.Graph.killedHeat G C k x y := by
   classical
@@ -44,12 +46,16 @@ theorem killedHeat_eq_lib (C : Set V) : ∀ (k : ℕ) (x y : V),
         = if x ∈ C then walkOp G (fun z => LatticeProb.Graph.killedHeat G C k z y) x else 0
       rw [hfun]
 
+/-- `RWRS.killedGreen` agrees with the shared library's `killedGreen`, by
+summing `killedHeat_eq_lib` over the step count. -/
 theorem killedGreen_eq_lib (C : Set V) (x y : V) :
     RWRS.killedGreen G C x y = LatticeProb.Graph.killedGreen G C x y := by
   rw [RWRS.killedGreen, LatticeProb.Graph.killedGreen]
   congr 1
   exact tsum_congr fun k => by rw [killedHeat_eq_lib C k x y]
 
+/-- `RWRS.killedGreenReal` agrees with the shared library's
+`killedGreenReal`, by unfolding both in terms of `killedGreen_eq_lib`. -/
 theorem killedGreenReal_eq_lib (C : Set V) (x y : V) :
     RWRS.killedGreenReal G C x y = LatticeProb.Graph.killedGreenReal G C x y := by
   rw [RWRS.killedGreenReal, LatticeProb.Graph.killedGreenReal, killedGreen_eq_lib]
@@ -58,6 +64,11 @@ theorem killedGreenReal_eq_lib (C : Set V) (x y : V) :
 
 variable (C : Finset V)
 
+/-- **A uniform survival bound below `1` in place of connectivity.** If every
+vertex has a walk to outside `C`, there are `N > 0` and `θ ∈ [0,1)` with
+`survival G C N x ≤ θ` for every `x`, obtained by taking `N` large enough to
+cover, over the finitely many sites of `C`, the individual walks escaping `C`
+that `hesc` supplies. -/
 theorem exists_uniform_survival_le_of_escape
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ C) :
     ∃ (N : ℕ) (θ : ℝ), 0 < N ∧ 0 ≤ θ ∧ θ < 1 ∧ ∀ x : V, survival G C N x ≤ θ := by
@@ -89,6 +100,10 @@ theorem exists_uniform_survival_le_of_escape
     rw [Finset.not_nonempty_iff_eq_empty] at hC
     rw [survival, hC, Finset.sum_empty]
 
+/-- Under the escape hypothesis, the killed heat kernel `killedHeat G C · x v`
+is summable in the step count: at a target `v ∈ C` it is dominated by the
+geometrically decaying survival probability from `exists_uniform_survival_le_of_escape`,
+and at `v ∉ C` it vanishes past step `0`. -/
 theorem summable_killedHeat_of_escape
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ C) (x v : V) :
     Summable (fun k => LatticeProb.Graph.killedHeat G (C : Set V) k x v) := by
@@ -107,6 +122,8 @@ theorem summable_killedHeat_of_escape
     rw [this]
     exact summable_zero
 
+/-- Under the escape hypothesis, `killedGreenReal G C x v` equals the sum of
+the killed heat kernel over all steps, divided by `G.degree v`. -/
 theorem killedGreenReal_eq_tsum_of_escape
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ C) (x v : V) :
     RWRS.killedGreenReal G (C : Set V) x v
@@ -121,6 +138,8 @@ theorem killedGreenReal_eq_tsum_of_escape
     LatticeProb.Graph.killedGreen, h1, ENNReal.toReal_div,
     ENNReal.toReal_ofReal (tsum_nonneg hnn), ENNReal.toReal_natCast]
 
+/-- Under the escape hypothesis, `killedGreenReal G C x v` vanishes at a
+target `v ∉ C`, since the killed heat kernel to `v` vanishes past step `0`. -/
 theorem killedGreenReal_eq_zero_of_not_mem_of_escape
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ C) {v : V} (hv : v ∉ C) (x : V) :
     RWRS.killedGreenReal G (C : Set V) x v = 0 := by
@@ -130,12 +149,17 @@ theorem killedGreenReal_eq_zero_of_not_mem_of_escape
     exact killedHeat_of_target_not_mem (by exact_mod_cast hv) k x
   rw [this, tsum_zero, zero_div]
 
+/-- Under the escape hypothesis, `killedGreenReal G C x v` is nonnegative, as
+a sum of nonnegative heat kernel values divided by a nonnegative degree. -/
 theorem killedGreenReal_nonneg_of_escape
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ C) (x v : V) :
     0 ≤ RWRS.killedGreenReal G (C : Set V) x v := by
   rw [killedGreenReal_eq_tsum_of_escape C hesc x v]
   exact div_nonneg (tsum_nonneg fun k => killedHeat_nonneg _ k x v) (Nat.cast_nonneg _)
 
+/-- **Reversibility of the killed Green function under escape.** The
+symmetry `killedKer_symm` of the killed transition kernel makes
+`killedGreenReal G C x v = killedGreenReal G C v x`. -/
 theorem killedGreenReal_symm_of_escape
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ C) (x v : V) :
     RWRS.killedGreenReal G (C : Set V) x v = RWRS.killedGreenReal G (C : Set V) v x := by
@@ -143,6 +167,9 @@ theorem killedGreenReal_symm_of_escape
     killedGreenReal_eq_tsum_of_escape C hesc v x, ← tsum_div_const, ← tsum_div_const]
   exact tsum_congr fun k => killedKer_symm (G := G) (C : Set V) k x v
 
+/-- Combining symmetry with `killedGreenReal_eq_tsum_of_escape`,
+`killedGreenReal G C x v` also equals the tsum of the heat kernel run from
+`v` to `x`, divided by `G.degree x` instead of `G.degree v`. -/
 theorem killedGreenReal_eq_reversed_of_escape
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ C) (x v : V) :
     RWRS.killedGreenReal G (C : Set V) x v
@@ -150,6 +177,12 @@ theorem killedGreenReal_eq_reversed_of_escape
   rw [killedGreenReal_symm_of_escape C hesc x v,
     killedGreenReal_eq_tsum_of_escape C hesc v x]
 
+/-- **The neighbour-sum recursion for the killed heat kernel's total mass.**
+Summing the tsum of `killedHeat` over the neighbours of `v ∈ C` gives
+`G.degree v` times the tsum at `v` itself, minus its step-`0` value, by the
+one-step recursion `killedHeat_succ` at each fixed step and then summing over
+steps. This is the discrete Laplacian computation `laplacian_killedGreenReal_of_escape`
+specializes. -/
 theorem sum_tsum_killedHeat_of_escape
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ C)
     (hdeg : ∀ v ∈ C, 0 < G.degree v) (x : V) {v : V} (hv : v ∈ C) :

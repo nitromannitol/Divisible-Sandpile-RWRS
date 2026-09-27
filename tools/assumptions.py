@@ -113,8 +113,11 @@ def render():
                 f"The remaining **{len(assumed) - len(withproof)}** are assumed outright.", ""]
         ncond = sum(1 for n in withproof if conditional(comp[pathlib.Path(n["file"]).stem]))
         if ncond:
-            out[-2] += (f" Of the {len(withproof)} proofs, **{ncond}** hold only under hypotheses "
-                        "of their own, shown with them; where those fail, the result is still assumed.")
+            proofs_noun = "proof" if len(withproof) == 1 else "proofs"
+            holds_verb = "holds" if ncond == 1 else "hold"
+            out[-2] += (f" Of the {len(withproof)} {proofs_noun}, **{ncond}** {holds_verb} only under "
+                        "hypotheses of their own, shown with them; where those fail, the result is "
+                        "still assumed.")
     for n in sorted(assumed, key=lambda x: x["id"]):
         c = comp.get(pathlib.Path(n["file"]).stem)
         cond = conditional(c) if c else None

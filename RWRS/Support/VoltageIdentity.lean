@@ -26,10 +26,13 @@ variable [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V]
 /-! ### The walk on path space is the library's -/
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] in
+/-- `RWRS.stepTo` agrees definitionally with the library's `LatticeProb.Graph.stepTo`. -/
 theorem stepTo_eq_lib (x : V) (u : ℝ) :
     RWRS.stepTo G x u = LatticeProb.Graph.stepTo G x u := rfl
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] in
+/-- `RWRS.walkPath` agrees with the library's `LatticeProb.Graph.walkPath` at every step, by
+induction using `stepTo_eq_lib`. -/
 theorem walkPath_eq_lib (x : V) (ω : ℕ → ℝ) :
     ∀ k : ℕ, RWRS.walkPath G x ω k = LatticeProb.Graph.walkPath G x ω k := by
   intro k
@@ -41,6 +44,8 @@ theorem walkPath_eq_lib (x : V) (ω : ℕ → ℝ) :
       rw [stepTo_eq_lib, ih]
 
 omit [MeasurableSingletonClass V] [Countable V] in
+/-- `RWRS.walkLaw` is the library's `LatticeProb.Graph.walkLaw`, since both driver laws and,
+by `walkPath_eq_lib`, both walk paths agree. -/
 theorem walkLaw_eq_lib (x : V) : RWRS.walkLaw G x = LatticeProb.Graph.walkLaw G x := by
   rw [RWRS.walkLaw, LatticeProb.Graph.walkLaw,
     show RWRS.driverLaw = LatticeProb.Graph.driverLaw from rfl]
@@ -50,6 +55,7 @@ theorem walkLaw_eq_lib (x : V) : RWRS.walkLaw G x = LatticeProb.Graph.walkLaw G 
   exact walkPath_eq_lib x ω k
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] in
+/-- `RWRS.exitTime` agrees definitionally with the library's `LatticeProb.Graph.exitTime`. -/
 theorem exitTime_eq_lib (C : Set V) (X : ℕ → V) :
     RWRS.exitTime C X = LatticeProb.Graph.exitTime C X := rfl
 

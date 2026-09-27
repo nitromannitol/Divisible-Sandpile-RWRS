@@ -126,6 +126,8 @@ section Meas2
 
 variable [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V]
 
+/-- The fluctuation is jointly measurable in the scenery and the trajectory, by
+its representation `fluctuation_eq_sum` as a finite sum of measurable terms. -/
 theorem measurable_fluctuation (m : ℝ) (n : ℕ) :
     Measurable fun z : (V → ℝ) × (ℕ → V) => fluctuation G z.1 m n z.2 := by
   simp only [fluctuation_eq_sum]
@@ -136,9 +138,12 @@ end Meas2
 
 /-! ### The dyadic blocks -/
 
+/-- The `k`-th dyadic block `[2^k, 2^(k+1))` is nonempty. -/
 theorem block_nonempty (k : ℕ) : (Finset.Ico (2 ^ k) (2 ^ (k + 1))).Nonempty :=
   Finset.nonempty_Ico.2 (Nat.pow_lt_pow_right one_lt_two (Nat.lt_succ_self k))
 
+/-- The `k`-th dyadic block does not cover all of `ℕ`: `0` always lies outside
+it. -/
 theorem block_compl (k : ℕ) : ∃ n : ℕ, n ∉ Finset.Ico (2 ^ k) (2 ^ (k + 1)) := by
   refine ⟨0, fun h => ?_⟩
   have h1 := (Finset.mem_Ico.1 h).1
@@ -149,6 +154,8 @@ section Meas3
 
 variable [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V]
 
+/-- `dyadicY`, the block maximum of the fluctuation offset by `d`, is jointly
+measurable in the scenery and the trajectory. -/
 theorem measurable_dyadicY (m : ℝ) (d k : ℕ) :
     Measurable fun z : (V → ℝ) × (ℕ → V) => dyadicY G z.1 m d k z.2 := by
   simp only [dyadicY]
@@ -156,6 +163,8 @@ theorem measurable_dyadicY (m : ℝ) (d k : ℕ) :
   exact measurable_iSup_mem_finset _ (block_nonempty k) (block_compl k)
     fun n _ => measurable_fluctuation m n
 
+/-- Raising `dyadicY` to a nonnegative power `q` and coercing into `ℝ≥0∞` is
+jointly measurable in the scenery and the trajectory. -/
 theorem measurable_dyadicY_rpow (m : ℝ) (d k : ℕ) {q : ℝ} (hq : 0 ≤ q) :
     Measurable fun z : (V → ℝ) × (ℕ → V) =>
       ENNReal.ofReal (dyadicY G z.1 m d k z.2 ^ q) := by

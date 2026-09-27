@@ -23,12 +23,14 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] {ρ : Measure ℝ}
 truncation level. -/
 noncomputable def polyCap (M0 β M : ℝ) (R : ℕ) : ℝ := max M0 ((R : ℝ) ^ β) + M
 
+/-- `polyCap` is at least `1`, since it already dominates `M0 ≥ 1`. -/
 theorem one_le_polyCap {M0 β M : ℝ} (hM0 : 1 ≤ M0) (hM : 0 ≤ M) (R : ℕ) :
     1 ≤ polyCap M0 β M R := by
   have h1 : M0 ≤ max M0 ((R : ℝ) ^ β) := le_max_left _ _
   rw [polyCap]
   linarith
 
+/-- `polyCap` is strictly positive, from `one_le_polyCap`. -/
 theorem polyCap_pos {M0 β M : ℝ} (hM0 : 1 ≤ M0) (hM : 0 ≤ M) (R : ℕ) :
     0 < polyCap M0 β M R :=
   lt_of_lt_of_le zero_lt_one (one_le_polyCap hM0 hM R)

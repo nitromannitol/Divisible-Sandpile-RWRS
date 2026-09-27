@@ -26,6 +26,9 @@ variable {V : Type*} [DecidableEq V] {G : SimpleGraph V} [G.LocallyFinite]
 /-! ### The stage sequence -/
 
 open scoped Classical in
+/-- The unconstrained stage sequence: `stageE i` pairs the `ℕ∞`-valued time `T_i` at which
+the `i`-th admissible site is first reached with the `Finset` `F_i` of sites used by the
+traps placed so far, recursed as in the module description. -/
 noncomputable def stageE (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
     (C : V → Finset V) (X : ℕ → V) : ℕ → ℕ∞ × Finset V
   | 0 => (0, ∅)
@@ -36,34 +39,46 @@ noncomputable def stageE (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
       (T, p.2 ∪ C (X T.toNat))
 
 open scoped Classical in
+/-- The `ℕ∞`-valued time `T_i` of stage `i`, the first component of `stageE`. -/
 noncomputable def stageTime (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
     (C : V → Finset V) (X : ℕ → V) (i : ℕ) : ℕ∞ :=
   (stageE G r C X i).1
 
 open scoped Classical in
+/-- The used-sites set `F_i` of stage `i`, the second component of `stageE`. -/
 noncomputable def stageUsed (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
     (C : V → Finset V) (X : ℕ → V) (i : ℕ) : Finset V :=
   (stageE G r C X i).2
 
+/-- The set of times `n` at or after `stageTime i` at which the walk sits at a site
+admissible for the used set `stageUsed i`; its infimum gives `stageTime (i + 1)`. -/
 def stageNext (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ) (C : V → Finset V)
     (X : ℕ → V) (i : ℕ) : Set ℕ :=
   {n : ℕ | stageTime G r C X i ≤ (n : ℕ∞) ∧ Admissible G r (stageUsed G r C X i) (X n)}
 
+/-- Unfolds the recursion: `stageTime (i + 1)` is the infimum of the `ℕ∞`-cast candidate
+times admissible for `stageUsed i` at or after `stageTime i`. -/
 theorem stageTime_succ (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ) (C : V → Finset V)
     (X : ℕ → V) (i : ℕ) :
     stageTime G r C X (i + 1) = sInf {k : ℕ∞ | ∃ n : ℕ, k = (n : ℕ∞) ∧
       stageTime G r C X i ≤ (n : ℕ∞) ∧ Admissible G r (stageUsed G r C X i) (X n)} := rfl
 
+/-- Unfolds the recursion: `stageUsed (i + 1)` adjoins to `stageUsed i` the trap
+`C (X (stageTime (i + 1)))` placed at the new stage's centre. -/
 theorem stageUsed_succ (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ) (C : V → Finset V)
     (X : ℕ → V) (i : ℕ) :
     stageUsed G r C X (i + 1)
       = stageUsed G r C X i ∪ C (X (stageTime G r C X (i + 1)).toNat) := rfl
 
+/-- The stage times are nondecreasing, since `stageTime (i + 1)` is an infimum over times
+already bounded below by `stageTime i`. -/
 theorem stageTime_mono (r : ℕ) (C : V → Finset V) (X : ℕ → V) (i : ℕ) :
     stageTime G r C X i ≤ stageTime G r C X (i + 1) := by
   rw [stageTime_succ]
   refine le_sInf ?_; rintro k ⟨n, rfl, hn, -⟩; exact hn
 
+/-- The `ℕ∞`-infimum of the `ℕ`-cast solutions of `Q` is `⊤` exactly when `Q` holds
+nowhere, the case of a trajectory that never reaches the admissible set. -/
 theorem sInf_cast_eq_top (Q : ℕ → Prop) :
     sInf {k : ℕ∞ | ∃ n : ℕ, k = (n : ℕ∞) ∧ Q n} = ⊤ ↔ ∀ n : ℕ, ¬ Q n := by
   constructor
@@ -77,6 +92,8 @@ theorem sInf_cast_eq_top (Q : ℕ → Prop) :
       Set.eq_empty_iff_forall_notMem.2 (by rintro k ⟨n, rfl, hn⟩; exact h n hn)
     rw [hempty, sInf_empty]
 
+/-- When `Q` has a witness, the `ℕ∞`-infimum of its `ℕ`-cast solutions is the cast of the
+ordinary `ℕ`-infimum `sInf {n | Q n}`. -/
 theorem sInf_cast_eq_cast (Q : ℕ → Prop) (n₀ : ℕ) (h₀ : Q n₀) :
     sInf {k : ℕ∞ | ∃ n : ℕ, k = (n : ℕ∞) ∧ Q n}
       = ((sInf {n : ℕ | Q n} : ℕ) : ℕ∞) := by
@@ -89,6 +106,8 @@ theorem sInf_cast_eq_cast (Q : ℕ → Prop) (n₀ : ℕ) (h₀ : Q n₀) :
       obtain ⟨n, rfl, hn⟩ := hk
       exact Nat.cast_le.2 (Nat.sInf_le (s := {m : ℕ | Q m}) hn))
 
+/-- If the `ℕ∞`-infimum of the `ℕ`-cast solutions of `Q` is at most a finite `k`, then `Q`
+has a witness, ruling out the `⊤` case of `sInf_cast_eq_top`. -/
 theorem exists_mem_of_sInf_cast_le (Q : ℕ → Prop) {k : ℕ}
     (h : sInf {m : ℕ∞ | ∃ n : ℕ, m = (n : ℕ∞) ∧ Q n} ≤ (k : ℕ∞)) :
     ∃ n₀ : ℕ, Q n₀ := by
@@ -99,6 +118,9 @@ theorem exists_mem_of_sInf_cast_le (Q : ℕ → Prop) {k : ℕ}
   rw [htop] at h
   exact absurd (top_le_iff.1 h) (ENat.coe_ne_top k)
 
+/-- **Prefix determinacy of the stage sequence.**  If two trajectories `X, Y` agree up to
+time `k`, then `stageE i` agrees for both trajectories at every stage `i` whose time is
+at most `k`, by induction using `sInf_cast_eq_cast` and `exists_mem_of_sInf_cast_le`. -/
 theorem stageE_prefix (r : ℕ) (C : V → Finset V) {X Y : ℕ → V} {k : ℕ}
     (h : ∀ j ≤ k, X j = Y j) :
     ∀ i, stageTime G r C X i ≤ (k : ℕ∞) → stageE G r C X i = stageE G r C Y i := by

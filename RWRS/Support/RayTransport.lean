@@ -29,11 +29,15 @@ variable {B : ℕ} {L : ℕ → ℕ}
 /-- The extra boundary vertex `([],1)` of the comb. -/
 def pipeExtra (B : ℕ) : List (Fin B) × ℕ := ([], 1)
 
+/-- The extra boundary vertex `pipeExtra` is not itself a valid site of the
+tree of pipes. -/
 theorem not_pipeValid_pipeExtra : ¬ RWRS.PipeValid B L (pipeExtra B) := by
   rintro (h | ⟨h, -⟩)
   · exact absurd h (by simp [pipeExtra])
   · exact h rfl
 
+/-- Without the extra boundary edge, `PipeValidPlus` collapses to plain
+validity `PipeValid`. -/
 theorem pipeValidPlus_false_iff {v : List (Fin B) × ℕ} :
     RWRS.PipeValidPlus B L false v ↔ RWRS.PipeValid B L v := by
   constructor
@@ -42,14 +46,20 @@ theorem pipeValidPlus_false_iff {v : List (Fin B) × ℕ} :
     · exact absurd h (by simp)
   · exact Or.inl
 
+/-- A valid site of the tree of pipes is never the extra boundary vertex
+`pipeExtra`. -/
 theorem ne_pipeExtra_of_valid {v : List (Fin B) × ℕ} (h : RWRS.PipeValid B L v) :
     v ≠ pipeExtra B := fun hc => not_pipeValid_pipeExtra (L := L) (hc ▸ h)
 
+/-- Every edge of the tree of pipes without the extra boundary edge survives
+when that edge is added. -/
 theorem pipe_adj_true_of_false {u v : List (Fin B) × ℕ}
     (h : (RWRS.pipeGraph B L false).Adj u v) : (RWRS.pipeGraph B L true).Adj u v :=
   ⟨Or.inl (pipeValidPlus_false_iff.mp h.1), Or.inl (pipeValidPlus_false_iff.mp h.2.1),
     h.2.2.1, h.2.2.2⟩
 
+/-- An edge between two valid sites in the graph with the extra boundary edge
+is already an edge without it. -/
 theorem pipe_adj_false_of_true {u v : List (Fin B) × ℕ}
     (hu : RWRS.PipeValid B L u) (hv : RWRS.PipeValid B L v)
     (h : (RWRS.pipeGraph B L true).Adj u v) : (RWRS.pipeGraph B L false).Adj u v :=
@@ -103,6 +113,8 @@ theorem neighborFinset_pipe_true_eq {u : List (Fin B) × ℕ} (hu : RWRS.PipeVal
   exact ⟨fun h => pipe_adj_false_of_true hu (pipeValid_of_adj_true hu hune h) h,
     pipe_adj_true_of_false⟩
 
+/-- The root of the tree of pipes is adjacent to the extra boundary vertex
+`pipeExtra`, once that edge is added. -/
 theorem adj_true_root_extra : (RWRS.pipeGraph B L true).Adj (RWRS.pipeRoot B) (pipeExtra B) :=
   ⟨Or.inl pipeValid_pipeRoot, Or.inr ⟨rfl, rfl⟩, by simp [RWRS.pipeRoot, pipeExtra],
     Or.inr (by simp [pipeExtra, RWRS.pipePred, RWRS.pipeRoot])⟩
@@ -125,6 +137,8 @@ theorem neighborFinset_pipe_true_root :
     · exact adj_true_root_extra
     · exact pipe_adj_true_of_false h
 
+/-- The extra boundary vertex `pipeExtra` is not among the root's neighbours
+before that edge is added. -/
 theorem notMem_pipeExtra_false :
     pipeExtra B ∉ (RWRS.pipeGraph B L false).neighborFinset (RWRS.pipeRoot B) := by
   simp only [SimpleGraph.mem_neighborFinset]
@@ -185,6 +199,9 @@ theorem comb_nbr_mem_gadgetSites (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) {n : ℕ} 
           rw [← this]
           exact hu.2.1
 
+/-- **A gadget-closed site's neighbour `Finset` in the ambient graph is the
+image, under the coercion `Subtype.val`, of its neighbour `Finset` in the
+gadget.** -/
 theorem neighborFinset_gadget_image {n : ℕ} (u : RWRS.gadgetSites B L n)
     (hall : ∀ y, (RWRS.pipeGraph B L false).Adj u.1 y → y ∈ RWRS.gadgetSites B L n) :
     (RWRS.pipeGraph B L false).neighborFinset u.1
@@ -256,6 +273,9 @@ theorem neighborFinset_ray_attach (hs : StrictMono s) {k : ℕ} (hsk : 1 ≤ s k
         (rayEmb_root k).symm, rfl⟩)
 
 omit inst in
+/-- A point of the backbone never lies in the image, under `rayEmb`, of the
+root's gadget neighbours: `rayEmb` tags gadget vertices distinctly from
+backbone vertices. -/
 theorem rayPt_notMem_image_gadget {k : ℕ} (i : ℕ) :
     rayPt B L m i ∉ (((RWRS.gadgetGraph B L (m k)).neighborFinset
         (RWRS.gadgetRoot B L (m k))).image (rayEmb B L m s k)) := by

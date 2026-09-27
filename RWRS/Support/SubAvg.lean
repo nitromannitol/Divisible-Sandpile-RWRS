@@ -32,11 +32,15 @@ theorem dependsUpTo_localTimeOn (a b : ℕ) (v : V) (r : ℝ) :
     rw [hXY k (le_of_lt (Finset.mem_Ico.1 hk).2)]
   simp only [hcard]
 
+/-- The local-time power `((localTimeOn a b v X : ℕ) : ℝ) ^ r` is measurable in `X`, since it
+depends only on the positions up to `b` (`dependsUpTo_localTimeOn`). -/
 theorem measurable_localTimeOn_rpow (a b : ℕ) (v : V) (r : ℝ) :
     Measurable (fun X : ℕ → V => ((localTimeOn a b v X : ℕ) : ℝ) ^ r) :=
   LatticeProb.Graph.measurable_of_dependsUpTo (dependsUpTo_localTimeOn a b v r)
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] in
+/-- The local-time power is uniformly bounded by `(b + 1) ^ r`, since the local time itself
+over `[a, b)` never exceeds `b`. -/
 theorem localTimeOn_rpow_le_bound (a b : ℕ) (v : V) {r : ℝ} (hr : 0 ≤ r) (X : ℕ → V) :
     ‖((localTimeOn a b v X : ℕ) : ℝ) ^ r‖ ≤ ((b : ℝ) + 1) ^ r := by
   have hle : ((localTimeOn a b v X : ℕ) : ℝ) ≤ (b : ℝ) + 1 := by

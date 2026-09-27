@@ -17,6 +17,8 @@ open scoped Classical
 
 variable {B : ℕ} {α : ℝ} {m s : ℕ → ℕ}
 
+/-- A site in the first half of a terminal pipe of depth `n ≥ 1` belongs to
+`gadgetSites B (combLen B α) n`. -/
 theorem mem_gadgetSites_of_firstHalf (hc : RWRS.CombCond B α) {n : ℕ} (hn : 1 ≤ n)
     {v : List (Fin B) × ℕ} (hv : v ∈ firstHalfFinset B (RWRS.combLen B α) n) :
     v ∈ RWRS.gadgetSites B (RWRS.combLen B α) n := by
@@ -41,17 +43,24 @@ noncomputable def raySpikeSites (B : ℕ) (α : ℝ) (m s : ℕ → ℕ) (k : �
     Finset (RayV B (RWRS.combLen B α) m) :=
   (gadgetFirstHalf B α m k).image (rayEmb B (RWRS.combLen B α) m s k)
 
+/-- The subtype `gadgetFirstHalf` has the same cardinality as `firstHalfFinset`,
+since every first-half site already lies in `gadgetSites` by
+`mem_gadgetSites_of_firstHalf`. -/
 theorem card_gadgetFirstHalf (hc : RWRS.CombCond B α) {k : ℕ} (hk : 1 ≤ m k) :
     (gadgetFirstHalf B α m k).card = (firstHalfFinset B (RWRS.combLen B α) (m k)).card := by
   rw [gadgetFirstHalf, Finset.card_subtype, Finset.filter_true_of_mem]
   intro v hv
   exact mem_gadgetSites_of_firstHalf hc hk hv
 
+/-- `raySpikeSites` has the same cardinality as `firstHalfFinset`, since the
+ray embedding `rayEmb` is injective. -/
 theorem card_raySpikeSites (hc : RWRS.CombCond B α) {k : ℕ} (hk : 1 ≤ m k) :
     (raySpikeSites B α m s k).card = (firstHalfFinset B (RWRS.combLen B α) (m k)).card := by
   rw [raySpikeSites, Finset.card_image_of_injective _ (rayEmb_injective k),
     card_gadgetFirstHalf hc hk]
 
+/-- A lower bound on the extended cardinality of `raySpikeSites`, transferring
+the bound `card_firstHalfFinset_ge` through `card_raySpikeSites`. -/
 theorem encard_raySpikeSites_ge (hc : RWRS.CombCond B α) {k : ℕ} (hk : 1 ≤ m k) :
     ENNReal.ofReal ((B : ℝ) ^ m k * (RWRS.combLen B α (m k) : ℝ) / 4)
       ≤ ((raySpikeSites B α m s k : Finset (RayV B (RWRS.combLen B α) m)) :
@@ -64,6 +73,8 @@ theorem encard_raySpikeSites_ge (hc : RWRS.CombCond B α) {k : ℕ} (hk : 1 ≤ 
   rw [ENNReal.ofReal_natCast] at h2
   exact h2
 
+/-- A site in `gadgetFirstHalf` is never the gadget root `gadgetRoot`, since
+first-half sites have positive second coordinate while the root's is `0`. -/
 theorem snd_pos_of_mem_raySpikeSites {k : ℕ} {v : RWRS.gadgetSites B (RWRS.combLen B α) (m k)}
     (hv : v ∈ gadgetFirstHalf B α m k) : v ≠ RWRS.gadgetRoot B (RWRS.combLen B α) (m k) := by
   rw [gadgetFirstHalf, Finset.mem_subtype] at hv
@@ -73,6 +84,10 @@ theorem snd_pos_of_mem_raySpikeSites {k : ℕ} {v : RWRS.gadgetSites B (RWRS.com
   simp only [RWRS.gadgetRoot, RWRS.pipeRoot] at h1
   omega
 
+/-- The `raySpikeSites` sets at distinct gadget indices `k` are pairwise
+disjoint, since distinct gadgets in the ray graph meet only at their roots
+(`rayGadget_rayGraph.disjoint`) and no first-half site is a root
+(`snd_pos_of_mem_raySpikeSites`). -/
 theorem pairwise_disjoint_raySpikeSites :
     Pairwise (Function.onFun Disjoint
       (fun k => ((raySpikeSites B α m s k : Finset (RayV B (RWRS.combLen B α) m)) :

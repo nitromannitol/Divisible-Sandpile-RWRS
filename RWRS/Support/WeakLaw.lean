@@ -22,19 +22,25 @@ open scoped ENNReal
 /-- `clamp m M z` is `z` moved into `[m - M, m + M]`. -/
 noncomputable def clamp (m M z : ℝ) : ℝ := max (min z (m + M)) (m - M)
 
+/-- `clamp m M` is measurable, as a max of a min with constants. -/
 @[fun_prop]
 theorem measurable_clamp (m M : ℝ) : Measurable (clamp m M) :=
   (measurable_id.min measurable_const).max measurable_const
 
+/-- `clamp m M z` saturates at the lower endpoint `m - M` once `z` falls below it. -/
 theorem clamp_of_le_lower {m M z : ℝ} (hM : 0 ≤ M) (h : z ≤ m - M) : clamp m M z = m - M := by
   rw [clamp, min_eq_left (by linarith), max_eq_right h]
 
+/-- `clamp m M z` saturates at the upper endpoint `m + M` once `z` rises above it. -/
 theorem clamp_of_upper_le {m M z : ℝ} (hM : 0 ≤ M) (h : m + M ≤ z) : clamp m M z = m + M := by
   rw [clamp, min_eq_right h, max_eq_left (by linarith)]
 
+/-- `clamp m M z` leaves `z` unchanged once it already lies in `[m - M, m + M]`. -/
 theorem clamp_of_mem {m M z : ℝ} (h1 : m - M ≤ z) (h2 : z ≤ m + M) : clamp m M z = z := by
   rw [clamp, min_eq_left h2, max_eq_left h1]
 
+/-- `clamp m M z` stays within `M` of the centre `m`, combining `clamp_of_le_lower`,
+`clamp_of_mem`, and `clamp_of_upper_le`. -/
 theorem abs_clamp_sub_le {m M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |clamp m M z - m| ≤ M := by
   rcases le_total z (m - M) with h1 | h1
   · rw [clamp_of_le_lower hM h1]
@@ -43,6 +49,7 @@ theorem abs_clamp_sub_le {m M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |clamp m M z - m
     · rw [clamp_of_mem h1 h2, abs_le]; constructor <;> linarith
     · rw [clamp_of_upper_le hM h2, show m + M - m = M by ring, abs_of_nonneg hM]
 
+/-- Clamping never increases the distance to `m`: `|z - clamp m M z| ≤ |z - m|`. -/
 theorem abs_sub_clamp_le {m M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |z - clamp m M z| ≤ |z - m| := by
   rcases le_total z (m - M) with h1 | h1
   · rw [clamp_of_le_lower hM h1, abs_of_nonpos (by linarith), abs_of_nonpos (by linarith)]
@@ -53,6 +60,7 @@ theorem abs_sub_clamp_le {m M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |z - clamp m M z
     · rw [clamp_of_upper_le hM h2, abs_of_nonneg (by linarith), abs_of_nonneg (by linarith)]
       linarith
 
+/-- Clamping is the identity once `z` already lies within `M` of `m`. -/
 theorem sub_clamp_eq_zero {m M z : ℝ} (h : |z - m| ≤ M) : z - clamp m M z = 0 := by
   rw [abs_le] at h
   rw [clamp_of_mem (by linarith) (by linarith), sub_self]
@@ -62,14 +70,17 @@ theorem sub_clamp_eq_zero {m M z : ℝ} (h : |z - m| ≤ M) : z - clamp m M z = 
 
 variable {V : Type*}
 
+/-- Evaluation at a fixed coordinate `v` pushes `iidLaw V ν` forward to `ν`. -/
 theorem map_eval_iidLaw (ν : Measure ℝ) [IsProbabilityMeasure ν] (v : V) :
     (iidLaw V ν).map (fun ξ : V → ℝ => ξ v) = ν :=
   MeasureTheory.Measure.infinitePi_map_eval _ v
 
+/-- `iidLaw V ν` is a probability measure, inherited from the product construction. -/
 instance instIsProbabilityMeasureIid (ν : Measure ℝ) [IsProbabilityMeasure ν] :
     IsProbabilityMeasure (iidLaw V ν) := by
   unfold iidLaw; infer_instance
 
+/-- The coordinate projections `(ξ ↦ ξ v)_{v ∈ V}` are independent under `iidLaw V ν`. -/
 theorem iIndepFun_coord (ν : Measure ℝ) [IsProbabilityMeasure ν] :
     iIndepFun (fun (v : V) (ξ : V → ℝ) => ξ v) (iidLaw V ν) := by
   refine (iIndepFun_iff_map_fun_eq_infinitePi_map fun v => measurable_pi_apply v).2 ?_
@@ -77,6 +88,8 @@ theorem iIndepFun_coord (ν : Measure ℝ) [IsProbabilityMeasure ν] :
   simp only [map_eval_iidLaw]
   rfl
 
+/-- The mean of `f` applied to one coordinate under `iidLaw V ν` equals the `ν`-mean of `f`,
+via `map_eval_iidLaw`. -/
 theorem integral_coord (ν : Measure ℝ) [IsProbabilityMeasure ν] (v : V) {f : ℝ → ℝ}
     (hf : AEStronglyMeasurable f ν) :
     ∫ ξ, f (ξ v) ∂(iidLaw V ν) = ∫ z, f z ∂ν := by
@@ -84,6 +97,8 @@ theorem integral_coord (ν : Measure ℝ) [IsProbabilityMeasure ν] (v : V) {f :
   rw [integral_map (measurable_pi_apply v).aemeasurable
     (by rwa [map_eval_iidLaw ν v])]
 
+/-- `ξ ↦ f (ξ v)` is integrable under `iidLaw V ν` whenever `f` is `ν`-integrable, transported
+along `map_eval_iidLaw`. -/
 theorem integrable_coord (ν : Measure ℝ) [IsProbabilityMeasure ν] (v : V) {f : ℝ → ℝ}
     (hf : Integrable f ν) : Integrable (fun ξ : V → ℝ => f (ξ v)) (iidLaw V ν) := by
   rw [show (fun ξ : V → ℝ => f (ξ v)) = f ∘ (fun ξ : V → ℝ => ξ v) from rfl]
@@ -92,6 +107,7 @@ theorem integrable_coord (ν : Measure ℝ) [IsProbabilityMeasure ν] (v : V) {f
   · rw [map_eval_iidLaw ν v]; exact hf
 
 
+/-- A bounded measurable function on a finite measure space is integrable. -/
 theorem integrable_of_bounded {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω} [IsFiniteMeasure P]
     {f : Ω → ℝ} (hf : Measurable f) {C : ℝ} (hC : ∀ ω, |f ω| ≤ C) : Integrable f P :=
   Integrable.mono' (integrable_const C) hf.aestronglyMeasurable
@@ -99,6 +115,9 @@ theorem integrable_of_bounded {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω}
 
 /-! ### The tail, by Markov's inequality -/
 
+/-- **Markov's inequality on the clamp tail**: the probability that the weighted sum of the
+residuals `ξ v - clamp m M (ξ v)` exceeds `t` is at most the weighted mean absolute residual
+over `t`. -/
 theorem measureReal_tail_le (ν : Measure ℝ) [IsProbabilityMeasure ν] (m : ℝ)
     (hint : Integrable (fun z => |z - m|) ν) {M : ℝ} (hM : 0 ≤ M)
     (F : Finset V) (w : V → ℝ) (hw : ∀ v, 0 ≤ w v) {t : ℝ} (ht : 0 < t) :
@@ -146,6 +165,8 @@ theorem measureReal_tail_le (ν : Measure ℝ) [IsProbabilityMeasure ν] (m : �
 
 /-! ### The truncation, by Chebyshev's inequality -/
 
+/-- The mean of `clamp m M z - m` is at most `M` in absolute value, since the clamp itself
+is. -/
 theorem abs_integral_clamp_sub_le (ν : Measure ℝ) [IsProbabilityMeasure ν] (m : ℝ) {M : ℝ}
     (hM : 0 ≤ M) : |∫ z, (clamp m M z - m) ∂ν| ≤ M := by
   have hint : Integrable (fun z => clamp m M z - m) ν :=
@@ -156,6 +177,8 @@ theorem abs_integral_clamp_sub_le (ν : Measure ℝ) [IsProbabilityMeasure ν] (
         refine integral_mono hint.abs (integrable_const M) fun z => abs_clamp_sub_le hM z
     _ = M := by simp
 
+/-- Recentring the clamp by a bias `b` of size at most `M` at most doubles the bound:
+`|clamp m M z - m - b| ≤ 2 * M`. -/
 theorem abs_clamp_sub_sub_le {m M b : ℝ} (hM : 0 ≤ M) (hb : |b| ≤ M) (z : ℝ) :
     |clamp m M z - m - b| ≤ 2 * M := by
   have h1 : |clamp m M z - m| ≤ M := abs_clamp_sub_le hM z
@@ -164,6 +187,9 @@ theorem abs_clamp_sub_sub_le {m M b : ℝ} (hM : 0 ≤ M) (hb : |b| ≤ M) (z : 
   rw [abs_le]
   constructor <;> linarith
 
+/-- **Chebyshev's inequality on the truncated, recentred sum**: its tail probability is
+controlled by `4 * M ^ 2 * (∑ w v ^ 2) / t ^ 2`, via
+`LatticeProb.measureReal_abs_sum_ge_le`. -/
 theorem measureReal_trunc_le (ν : Measure ℝ) [IsProbabilityMeasure ν] (m : ℝ)
     {M : ℝ} (hM : 0 ≤ M) (F : Finset V) (w : V → ℝ) (hw : ∀ v, 0 ≤ w v) {t : ℝ} (ht : 0 < t) :
     (iidLaw V ν).real
@@ -230,6 +256,8 @@ theorem measureReal_trunc_le (ν : Measure ℝ) [IsProbabilityMeasure ν] (m : �
 
 /-! ### The weak law -/
 
+/-- As the clamp radius `M → ∞`, the mean absolute clamp residual `∫ |z - clamp m M z|`
+tends to `0`, by dominated convergence. -/
 theorem tendsto_integral_abs_sub_clamp (ν : Measure ℝ) [IsProbabilityMeasure ν] (m : ℝ)
     (hint : Integrable (fun z => |z - m|) ν) :
     Tendsto (fun M : ℕ => ∫ z, |z - clamp m (M : ℝ) z| ∂ν) atTop (𝓝 0) := by

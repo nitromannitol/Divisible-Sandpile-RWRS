@@ -50,6 +50,7 @@ noncomputable def combGadget (B : ℕ) (L : ℕ → ℕ) (n : ℕ) (w : List (Fi
     Finset (RWRS.gadgetSites B L n) :=
   (combFinset B L n w).subtype (fun v => v ∈ RWRS.gadgetSites B L n)
 
+/-- Membership in `combGadget` matches membership of the underlying pair in `RWRS.combSet`. -/
 theorem mem_combGadget {n : ℕ} {w : List (Fin B)} (v : RWRS.gadgetSites B L n) :
     v ∈ combGadget B L n w ↔ (v : List (Fin B) × ℕ) ∈ RWRS.combSet B L n w := by
   rw [combGadget, Finset.mem_subtype, ← Finset.mem_coe, coe_combFinset]
@@ -65,15 +66,20 @@ noncomputable def recSet (B : ℕ) (L : ℕ → ℕ) (m s : ℕ → ℕ) (hs : S
     (k : ℕ) (w : List (Fin B)) : Finset (RayV B L m) :=
   rayBall B L m s hs (s k - 1) ∪ rayComb B L m s k w
 
+/-- A ray ball of radius at most `s k - 1` is contained in `C_k = recSet`, which already
+contains that ray ball as its first summand. -/
 theorem rayBall_subset_recSet (hs : StrictMono s) (k : ℕ) (w : List (Fin B))
     {i : ℕ} (hi : i ≤ s k - 1) :
     rayBall B L m s hs i ⊆ recSet B L m s hs k w :=
   fun _ hx => Finset.mem_union_left _ (rayBall_mono hs hi hx)
 
+/-- The ray origin lies in every ray ball `rayBall B L m s hs i`. -/
 theorem rayPt_zero_mem_rayBall (hs : StrictMono s) (i : ℕ) :
     rayPt B L m 0 ∈ rayBall B L m s hs i := by
   rw [mem_rayBall]; exact Nat.zero_le _
 
+/-- The ray origin lies in `C_k = recSet B L m s hs k w`, via `rayBall_subset_recSet` and
+`rayPt_zero_mem_rayBall`. -/
 theorem rayPt_zero_mem_recSet (hs : StrictMono s) (k : ℕ) (w : List (Fin B)) :
     rayPt B L m 0 ∈ recSet B L m s hs k w :=
   rayBall_subset_recSet hs k w le_rfl (rayPt_zero_mem_rayBall hs _)
@@ -122,6 +128,8 @@ theorem ray_degree_pos (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (x : RayV B L m) :
   haveI : Nontrivial (RayV B L m) := Infinite.instNontrivial _
   exact degree_pos_of_connected (rayGraph_connected hL) x
 
+/-- The voltage `killedGreenReal` on `C_k`, sourced at the ray origin, is nonnegative
+everywhere, since the ray graph escapes from every finite set. -/
 theorem recVolt_nonneg (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s)
     (k : ℕ) (w : List (Fin B)) (x : RayV B L m) :
     0 ≤ RWRS.killedGreenReal (rayGraph B L m s)
@@ -129,6 +137,8 @@ theorem recVolt_nonneg (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s)
       (rayPt B L m 0) x :=
   killedGreenReal_nonneg_of_escape (recSet B L m s hs k w) (ray_escape hL _) _ _
 
+/-- The voltage on `C_k` vanishes outside `C_k`, since the killed Green's function vanishes off
+the killing set on the escaping ray graph. -/
 theorem recVolt_eq_zero (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s)
     (k : ℕ) (w : List (Fin B)) {x : RayV B L m} (hx : x ∉ recSet B L m s hs k w) :
     RWRS.killedGreenReal (rayGraph B L m s)

@@ -1,6 +1,16 @@
 import RWRS.Support.DTStageHitRew
 import RWRS.Support.DTBias
 
+/-!
+# Per-stage conditional bias bound
+
+This module combines the hit-integral rewrite of `DTStageHitRew` with the
+conditional bias estimate of `DTBias` into the single per-stage bound the
+main bias sum uses: the scenery-integral of the trap potential over stage
+`i`'s hit event is controlled by `-8m` times the hit probability plus a
+`B₀`-type correction term coming from the escape probability `q`.
+-/
+
 open scoped Classical
 open MeasureTheory
 

@@ -60,6 +60,8 @@ noncomputable def goodSite (G : SimpleGraph V) [G.LocallyFinite] (μ m t : ℝ) 
       RWRS.greenTime G n o u * (σ u - μ)) ∈ {y : ℝ | -t ≤ y}}
 
 omit [Infinite V] in
+/-- `goodSite` is measurable, being the intersection of a coordinate half-line
+event and a measurable-weighted-sum half-line event. -/
 theorem measurableSet_goodSite (μ m t : ℝ) (n : ℕ) (o v : V) :
     MeasurableSet (goodSite G μ m t n o v) := by
   refine MeasurableSet.inter ?_ ?_

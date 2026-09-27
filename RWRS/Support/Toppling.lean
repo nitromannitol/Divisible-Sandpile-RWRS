@@ -19,6 +19,8 @@ open scoped ENNReal
 
 /-! ### A countable measurable partition -/
 
+/-- **Measurability from a countable partition.**  If `F` agrees with a measurable `g i` on each
+of countably many measurable sets `A i` covering `α`, then `F` itself is measurable. -/
 theorem measurable_of_countable_partition {α β ι : Type*} [MeasurableSpace α]
     [MeasurableSpace β] [Countable ι] {A : ι → Set α} (hA : ∀ i, MeasurableSet (A i))
     (hcov : ∀ x, ∃ i, x ∈ A i) {F : α → β} {g : ι → α → β} (hg : ∀ i, Measurable (g i))
@@ -42,6 +44,8 @@ theorem measurable_of_countable_partition {α β ι : Type*} [MeasurableSpace α
 /-! ### The neighbour set of a fixed vertex -/
 
 open scoped Classical in
+/-- The set of networks whose root-`r` neighbor finset equals a fixed finset `S` is measurable,
+an intersection over vertices of the measurable adjacency events. -/
 theorem measurableSet_neighborFinset_eq {m : ℕ} (r : ℕ) (S : Finset ℕ) :
     MeasurableSet {N : Net m | (netGraph N).neighborFinset r = S} := by
   have hset : {N : Net m | (netGraph N).neighborFinset r = S}
@@ -66,6 +70,9 @@ theorem measurableSet_neighborFinset_eq {m : ℕ} (r : ℕ) (S : Finset ℕ) :
       ext N; simp [hj]
     rw [this]; exact (measurableSet_adj r j).compl
 
+/-- A sum over the neighbor finset of a fixed vertex `r` of a function `f` measurable in the
+network for each fixed neighbor is itself measurable in the network, via
+`measurable_of_countable_partition` on the possible neighbor finsets. -/
 theorem measurable_neighborSum {m : ℕ} (r : ℕ) {f : Net m → ℕ → ℝ}
     (hf : ∀ y : ℕ, Measurable fun N => f N y) :
     Measurable fun N : Net m => ∑ y ∈ (netGraph N).neighborFinset r, f N y := by
@@ -79,6 +86,8 @@ theorem measurable_neighborSum {m : ℕ} (r : ℕ) {f : Net m → ℕ → ℝ}
   intro S N hN
   rw [show (netGraph N).neighborFinset r = S from hN]
 
+/-- The degree of a fixed vertex `r` is a measurable function of the network, via
+`measurable_of_countable_partition` on the possible neighbor finsets. -/
 theorem measurable_degree {m : ℕ} (r : ℕ) :
     Measurable fun N : Net m => ((netGraph N).degree r : ℝ) := by
   classical
@@ -93,12 +102,16 @@ theorem measurable_degree {m : ℕ} (r : ℕ) :
 
 /-! ### The toppling is a measurable function of the network -/
 
+/-- The initial configuration value at a fixed vertex `v` is a measurable function of the
+network. -/
 theorem measurable_netConfig (v : ℕ) : Measurable fun N : Net 1 => netConfig N v := by
   have hrw : (fun N : Net 1 => netConfig N v) = fun N => N.2.2 v 0 := rfl
   rw [hrw]
   exact (measurable_pi_apply (0 : Fin 1)).comp
     ((measurable_pi_apply v).comp (measurable_snd.comp measurable_snd))
 
+/-- The configuration after `k` toppling rounds at a fixed vertex is a measurable function of
+the network, by induction on `k` using `measurable_neighborSum` for the emission sum. -/
 theorem measurable_configOfNet (k : ℕ) : ∀ v : ℕ,
     Measurable fun N : Net 1 => config (netGraph N) (netConfig N) k v := by
   induction k with
@@ -119,6 +132,8 @@ theorem measurable_configOfNet (k : ℕ) : ∀ v : ℕ,
       rw [hrw]
       exact ((ih v).min measurable_const).add (measurable_neighborSum v hem)
 
+/-- The odometer after `k` rounds at a fixed vertex is a measurable function of the network,
+being a finite sum of measurable emissions. -/
 theorem measurable_odometerNet (k : ℕ) (v : ℕ) :
     Measurable fun N : Net 1 => odometer (netGraph N) (netConfig N) k v := by
   refine Finset.measurable_sum _ fun j _ => ?_
@@ -127,6 +142,7 @@ theorem measurable_odometerNet (k : ℕ) (v : ℕ) :
     (measurable_degree v)
 
 open scoped Classical in
+/-- One step of parallel toppling, `netTopple`, is a measurable function of the network. -/
 theorem measurable_netTopple (k : ℕ) : Measurable fun N : Net 1 => netTopple N k := by
   refine Measurable.prodMk measurable_fst (Measurable.prodMk (measurable_fst.comp measurable_snd) ?_)
   refine measurable_pi_lambda _ fun i => measurable_pi_lambda _ fun j => ?_
@@ -140,6 +156,8 @@ theorem measurable_netTopple (k : ℕ) : Measurable fun N : Net 1 => netTopple N
 
 variable {m : ℕ} {N N' : Net m} {φ : ℕ ≃ ℕ}
 
+/-- Under a network isomorphism `φ`, the neighbor finset of `φ i` in `N'` is the `φ`-image of the
+neighbor finset of `i` in `N`. -/
 theorem netIso_neighborFinset
     (hadj : ∀ i j, (netGraph N).Adj i j ↔ (netGraph N').Adj (φ i) (φ j)) (i : ℕ) :
     (netGraph N').neighborFinset (φ i) = ((netGraph N).neighborFinset i).image φ := by
@@ -154,6 +172,8 @@ theorem netIso_neighborFinset
   · rintro ⟨y, hy, rfl⟩
     exact (hadj i y).mp hy
 
+/-- Under a network isomorphism `φ`, the degree of `φ i` in `N'` equals the degree of `i` in
+`N`, since `φ` is injective. -/
 theorem netIso_degree
     (hadj : ∀ i j, (netGraph N).Adj i j ↔ (netGraph N').Adj (φ i) (φ j)) (i : ℕ) :
     (netGraph N').degree (φ i) = (netGraph N).degree i := by
@@ -161,6 +181,8 @@ theorem netIso_degree
   rw [SimpleGraph.degree, SimpleGraph.degree, netIso_neighborFinset hadj,
     Finset.card_image_of_injective _ φ.injective]
 
+/-- Under a network isomorphism `φ`, a sum over the neighbors of `φ i` in `N'` of a
+`φ`-pulled-back function equals the corresponding sum over the neighbors of `i` in `N`. -/
 theorem netIso_sum
     (hadj : ∀ i j, (netGraph N).Adj i j ↔ (netGraph N').Adj (φ i) (φ j))
     (f f' : ℕ → ℝ) (hff : ∀ y, f' (φ y) = f y) (i : ℕ) :
@@ -170,6 +192,9 @@ theorem netIso_sum
   rw [netIso_neighborFinset hadj, Finset.sum_image fun a _ b _ h => φ.injective h]
   exact Finset.sum_congr rfl fun y _ => hff y
 
+/-- Under a network isomorphism `φ` matching initial configurations `σ, σ'`, the toppled
+configuration at `φ i` in `N'` after any number of rounds equals the toppled configuration at
+`i` in `N`, by induction on the round using `netIso_sum` and `netIso_degree`. -/
 theorem netIso_config
     (hadj : ∀ i j, (netGraph N).Adj i j ↔ (netGraph N').Adj (φ i) (φ j))
     (σ σ' : ℕ → ℝ) (hσ : ∀ i, σ' (φ i) = σ i) :
@@ -187,6 +212,8 @@ theorem netIso_config
       rw [config_succ, config_succ, topple, topple, ih i,
         netIso_sum hadj _ _ hem i]
 
+/-- Under the same isomorphism hypotheses as `netIso_config`, the odometer at `φ i` in `N'`
+equals the odometer at `i` in `N`. -/
 theorem netIso_odometer
     (hadj : ∀ i j, (netGraph N).Adj i j ↔ (netGraph N').Adj (φ i) (φ j))
     (σ σ' : ℕ → ℝ) (hσ : ∀ i, σ' (φ i) = σ i) (k : ℕ) (i : ℕ) :
@@ -194,6 +221,8 @@ theorem netIso_odometer
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [emission, emission, netIso_config hadj σ σ' hσ j i, netIso_degree hadj]
 
+/-- Network isomorphism is preserved by one step of parallel toppling: `NetIso N N'` gives
+`NetIso (netTopple N k) (netTopple N' k)`, via `netIso_config` and `netIso_odometer`. -/
 theorem netIso_netTopple {N N' : Net 1} (h : NetIso N N') (k : ℕ) :
     NetIso (netTopple N k) (netTopple N' k) := by
   classical
@@ -213,9 +242,14 @@ theorem netIso_netTopple {N N' : Net 1} (h : NetIso N N') (k : ℕ) :
 
 /-! ### Rerooting and the toppling -/
 
+/-- Toppling commutes with rerooting: toppling the network rerooted at `y` equals rerooting the
+toppled network at `y`. -/
 theorem netTopple_reroot (N : Net 1) (k : ℕ) (y : ℕ) :
     netTopple (netReroot N y) k = netReroot (netTopple N k) y := rfl
 
+/-- The pushforward of a stationary net law under one step of toppling is again stationary,
+using that toppling is measurable (`measurable_netTopple`) and equivariant under isomorphism
+(`netIso_netTopple`). -/
 theorem isStationaryNet_map_netTopple (P : Measure (Net 1)) (hstat : IsStationaryNet P) (k : ℕ) :
     IsStationaryNet (P.map (fun N => netTopple N k)) := by
   rw [isStationaryNet_iff]
@@ -242,9 +276,11 @@ noncomputable def netInflow (N : Net 1) (j : ℕ) : ℝ :=
       emission (netGraph N) (config (netGraph N) (netConfig N) j) y)
     / ((netGraph N).degree (netRoot N) : ℝ)
 
+/-- The emission at the root is nonnegative. -/
 theorem netEmission_nonneg (N : Net 1) (j : ℕ) : 0 ≤ netEmission N j :=
   div_nonneg (le_max_right _ _) (Nat.cast_nonneg _)
 
+/-- The inflow at the root is nonnegative, being an average of nonnegative emissions. -/
 theorem netInflow_nonneg (N : Net 1) (j : ℕ) : 0 ≤ netInflow N j :=
   div_nonneg (Finset.sum_nonneg fun _y _ => div_nonneg (le_max_right _ _) (Nat.cast_nonneg _))
     (Nat.cast_nonneg _)
@@ -261,6 +297,8 @@ noncomputable def netInflowAt (N : Net 1) (j : ℕ) (r : ℕ) : ℝ :=
     / ((netGraph N).degree r : ℝ)
 
 set_option maxHeartbeats 1000000 in
+/-- The emission at the (varying) root after round `j` is a measurable function of the network,
+read off the measurable two-variable function `netEmissionAt` at the measurable root. -/
 theorem measurable_netEmission (j : ℕ) : Measurable fun N : Net 1 => netEmission N j := by
   have hpair : Measurable fun q : Net 1 × ℕ => netEmissionAt q.1 j q.2 := by
     refine measurable_from_prod_countable_left fun r => ?_
@@ -273,6 +311,8 @@ theorem measurable_netEmission (j : ℕ) : Measurable fun N : Net 1 => netEmissi
   exact hpair.comp (measurable_id.prodMk measurable_netRoot)
 
 set_option maxHeartbeats 1000000 in
+/-- The inflow at the (varying) root after round `j` is a measurable function of the network,
+read off `netInflowAt` at the measurable root. -/
 theorem measurable_netInflow (j : ℕ) : Measurable fun N : Net 1 => netInflow N j := by
   have hem : ∀ y : ℕ, Measurable fun N : Net 1 =>
       emission (netGraph N) (config (netGraph N) (netConfig N) j) y := by
@@ -289,6 +329,9 @@ theorem measurable_netInflow (j : ℕ) : Measurable fun N : Net 1 => netInflow N
   rw [hsplit]
   exact hpair.comp (measurable_id.prodMk measurable_netRoot)
 
+/-- The `ENNReal`-valued root emission after round `j` is invariant under network isomorphism,
+since an isomorphism carries the toppled configuration and the degree at the root along with
+it. -/
 theorem netInvariant_netEmission (j : ℕ) :
     NetInvariant fun N : Net 1 => ENNReal.ofReal (netEmission N j) := by
   rintro N N' ⟨φ, hadj, hroot, hmark⟩
@@ -301,6 +344,8 @@ theorem netInvariant_netEmission (j : ℕ) :
   show ENNReal.ofReal (netEmission N j) = ENNReal.ofReal (netEmission N' j)
   rw [hkey]
 
+/-- The one-step reroot-average of the root emission equals the inflow at the (unrerooted)
+root: averaging the emission over the neighbors is exactly `netInflow`. -/
 theorem rerootAvg_netEmission (N : Net 1) (j : ℕ) (hdeg : 0 < (netGraph N).degree (netRoot N)) :
     rerootAvg (fun M : Net 1 => ENNReal.ofReal (netEmission M j)) N
       = ENNReal.ofReal (netInflow N j) := by
@@ -321,6 +366,8 @@ noncomputable def netMassAt (N : Net 1) (j r : ℕ) : ℝ :=
   config (netGraph N) (netConfig N) j r / ((netGraph N).degree r : ℝ)
 
 set_option maxHeartbeats 1000000 in
+/-- The degree-weighted mass at the (varying) root after round `j` is a measurable function of
+the network. -/
 theorem measurable_netWeightedMassAt (j : ℕ) :
     Measurable fun N : Net 1 => netWeightedMassAt N j := by
   have hpair : Measurable fun q : Net 1 × ℕ => netMassAt q.1 j q.2 := by
@@ -332,23 +379,35 @@ theorem measurable_netWeightedMassAt (j : ℕ) :
   rw [hsplit]
   exact hpair.comp (measurable_id.prodMk measurable_netRoot)
 
+/-- At round `0` the weighted mass at the root is the initial weighted mass
+`netWeightedMass`. -/
 theorem netWeightedMassAt_zero (N : Net 1) : netWeightedMassAt N 0 = netWeightedMass N := rfl
 
+/-- The recursion for the weighted mass: after one more round it is the retained part
+`min(config, 1) / deg` plus the inflow `netInflow`. -/
 theorem netWeightedMassAt_succ (N : Net 1) (j : ℕ) :
     netWeightedMassAt N (j + 1)
       = min (config (netGraph N) (netConfig N) j (netRoot N)) 1
           / ((netGraph N).degree (netRoot N) : ℝ) + netInflow N j := by
   rw [netWeightedMassAt, config_succ, topple, netInflow, add_div]
 
+/-- The elementary decomposition `min a 1 + max (a - 1) 0 = a`, splitting a real number into its
+retained and emitted parts. -/
 theorem min_add_max_sub_one (a : ℝ) : min a 1 + max (a - 1) 0 = a := by
   rcases le_total a 1 with h | h
   · rw [min_eq_left h, max_eq_right (by linarith), add_zero]
   · rw [min_eq_right h, max_eq_left (by linarith)]
     ring
 
+/-- On a good net the root has positive degree, an instance of `degree_pos`. -/
 theorem degree_root_pos {N : Net 1} (h : NetGood N) : 0 < (netGraph N).degree (netRoot N) :=
   degree_pos h (netRoot N)
 
+/-- **Conservation of the degree-weighted mass.**  For a stationary law of good networks with
+integrable initial weighted mass, every round's weighted mass is integrable with the same mean
+as the initial one, by induction using the stationarity of the root emission
+(`netInvariant_netEmission`, `rerootAvg_netEmission`) and the retained/emitted split
+`min_add_max_sub_one`. -/
 theorem massConservation (P : Measure (Net 1)) [IsProbabilityMeasure P]
     (hgood : ∀ᵐ N ∂P, NetGood N) (hstat : IsStationaryNet P)
     (hint : Integrable (fun N => |netWeightedMass N|) P) :

@@ -1,11 +1,12 @@
 /-
-External input: the Fuk--Nagaev inequality, cited in the proof of
+Cited input: the Fuk--Nagaev inequality, cited in the proof of
 `lem:fuk-nagaev` (`rwrs.tex:1096-1098`) as the source of part (b) of that
-lemma.  Assumed here; it enters only as an explicit hypothesis of the result
-whose proof uses it.
+lemma.  Proved outright by the shared library (`LatticeProb.fukNagaev_tail`);
+no hypothesis of any frozen statement carries it any longer.
 -/
 import RWRS.Setting
 import Mathlib.Probability.Independence.Basic
+import LatticeProb.Prob.FukNagaev
 
 open MeasureTheory
 
@@ -24,4 +25,10 @@ def RWRS.External.FukNagaevTail : Prop :=
         ∀ t : ℝ, 0 < t →
           P {ω | t ≤ |∑ i, Y i ω|}
             ≤ ENNReal.ofReal (Cp * Mp / t ^ p + 2 * Real.exp (-c * t ^ 2 / B ^ 2))
+
+/-- The Fuk--Nagaev tail inequality for independent centred summands.
+Cited in `rwrs.tex:1096-1098`; proved by the shared library. -/
+theorem RWRS.External.fukNagaevTail : RWRS.External.FukNagaevTail
 -- FROZEN-STATEMENT-END
+:= by
+  exact LatticeProb.fukNagaev_tail

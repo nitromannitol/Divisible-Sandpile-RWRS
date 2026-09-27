@@ -23,16 +23,24 @@ def netBallSet {m : ℕ} (N : RWRS.Net m) : ℕ → Set ℕ
   | 0 => {RWRS.netRoot N}
   | r + 1 => netBallSet N r ∪ {i | ∃ w ∈ netBallSet N r, (RWRS.netGraph N).Adj w i}
 
+/-- Membership in the radius-`0` ball is equality with the root, unfolding the
+base case of `netBallSet`. -/
 theorem mem_netBallSet_zero {m : ℕ} (N : RWRS.Net m) (i : ℕ) :
     i ∈ netBallSet N 0 ↔ i = RWRS.netRoot N := Iff.rfl
 
+/-- Membership in the radius-`(r + 1)` ball unfolds to membership in the
+radius-`r` ball together with the new neighbour shell. -/
 theorem mem_netBallSet_succ {m : ℕ} (N : RWRS.Net m) (r i : ℕ) :
     i ∈ netBallSet N (r + 1)
       ↔ i ∈ netBallSet N r ∨ ∃ w, w ∈ netBallSet N r ∧ (RWRS.netGraph N).Adj w i := Iff.rfl
 
+/-- `netBallSet` after rerooting at `v` is definitionally the ball of the
+network with only its root component replaced by `v`. -/
 theorem netBallSet_reroot {m : ℕ} (N : RWRS.Net m) (v r : ℕ) :
     netBallSet (RWRS.netReroot N v) r = netBallSet ((N.1, v, N.2.2) : RWRS.Net m) r := rfl
 
+/-- The balls `netBallSet N r` are monotone in `r`, by induction on the
+larger radius. -/
 theorem netBallSet_mono {m : ℕ} (N : RWRS.Net m) {r s : ℕ} (h : r ≤ s) :
     netBallSet N r ⊆ netBallSet N s := by
   induction s with
@@ -43,6 +51,9 @@ theorem netBallSet_mono {m : ℕ} (N : RWRS.Net m) {r s : ℕ} (h : r ≤ s) :
       · have : r = s + 1 := le_antisymm h hge
         subst this; exact subset_rfl
 
+/-- `netBallSet N r` is contained in the graph-distance closed ball of the
+same radius, by induction on `r` using the triangle inequality for `edist`
+at each new shell. -/
 theorem netBallSet_subset_closedBall {m : ℕ} (N : RWRS.Net m) (r : ℕ) :
     netBallSet N r ⊆ RWRS.closedBall (RWRS.netGraph N) (RWRS.netRoot N) r := by
   induction r with
@@ -70,6 +81,9 @@ theorem netBallSet_subset_closedBall {m : ℕ} (N : RWRS.Net m) (r : ℕ) :
         calc (1 : ℕ∞) + (RWRS.netGraph N).edist w (RWRS.netRoot N) ≤ 1 + (r : ℕ∞) := by gcongr
           _ = ((r + 1 : ℕ) : ℕ∞) := by push_cast; ring
 
+/-- Membership of a fixed vertex `i` in `netBallSet N r` is a measurable
+condition on `N`, by induction on `r` using measurability of the root map
+and of adjacency. -/
 theorem measurableSet_mem_netBallSet {m : ℕ} (i r : ℕ) :
     MeasurableSet {N : RWRS.Net m | i ∈ netBallSet N r} := by
   induction r generalizing i with
@@ -94,6 +108,8 @@ theorem measurableSet_mem_netBallSet {m : ℕ} (i r : ℕ) :
       refine (ih i).union (MeasurableSet.iUnion fun w => (ih w).inter ?_)
       exact measurableSet_adj w i
 
+/-- Every vertex `i` joined to the root by a walk `p` lies in the ball
+`netBallSet N p.length`, by induction on the walk. -/
 theorem mem_netBallSet_of_walk {m : ℕ} (N : RWRS.Net m) :
     ∀ {i j : ℕ} (p : (RWRS.netGraph N).Walk i j), j = RWRS.netRoot N →
       i ∈ netBallSet N p.length := by
@@ -104,17 +120,24 @@ theorem mem_netBallSet_of_walk {m : ℕ} (N : RWRS.Net m) :
       intro h
       exact Or.inr ⟨b, ih h, hadj.symm⟩
 
+/-- On a good (connected) network every vertex `i` eventually lies in some
+`netBallSet N r`, being joined to the root by a walk. -/
 theorem exists_mem_netBallSet {m : ℕ} {N : RWRS.Net m} (hN : RWRS.NetGood N) (i : ℕ) :
     ∃ r : ℕ, i ∈ netBallSet N r := by
   obtain ⟨p⟩ := hN.preconnected i (RWRS.netRoot N)
   exact ⟨p.length, mem_netBallSet_of_walk N p rfl⟩
 
+/-- Rerooting a network at `v` makes `v` the new root. -/
 theorem netRoot_reroot {m : ℕ} (N : RWRS.Net m) (v : ℕ) :
     RWRS.netRoot (RWRS.netReroot N v) = v := rfl
 
+/-- Rerooting a network leaves its underlying graph unchanged. -/
 theorem netGraph_reroot {m : ℕ} (N : RWRS.Net m) (v : ℕ) :
     RWRS.netGraph (RWRS.netReroot N v) = RWRS.netGraph N := rfl
 
+/-- If the radius-`r` balls around the root and around a rerooted vertex `v`
+are not disjoint, `v` lies in the closed ball of radius `2r` about the root,
+by the triangle inequality through a common point of the two balls. -/
 theorem mem_closedBall_of_not_disjoint {m : ℕ} (N : RWRS.Net m) (v r : ℕ)
     (h : ¬ Disjoint (netBallSet N r) (netBallSet (RWRS.netReroot N v) r)) :
     v ∈ RWRS.closedBall (RWRS.netGraph N) (RWRS.netRoot N) (2 * r) := by
@@ -135,6 +158,9 @@ theorem mem_closedBall_of_not_disjoint {m : ℕ} (N : RWRS.Net m) (v r : ℕ)
       ≤ (r : ℕ∞) + (r : ℕ∞) := by gcongr
     _ = ((2 * r : ℕ) : ℕ∞) := by push_cast; ring
 
+/-- **`netBallSet` agrees with the graph-distance closed ball.**  One inclusion
+is `netBallSet_subset_closedBall`; the other realizes the distance by a
+shortest walk and applies `mem_netBallSet_of_walk`. -/
 theorem netBallSet_eq_closedBall {m : ℕ} (N : RWRS.Net m) (r : ℕ) :
     netBallSet N r = RWRS.closedBall (RWRS.netGraph N) (RWRS.netRoot N) r := by
   refine Set.Subset.antisymm (netBallSet_subset_closedBall N r) ?_
@@ -149,6 +175,8 @@ theorem netBallSet_eq_closedBall {m : ℕ} (N : RWRS.Net m) (r : ℕ) :
   have hlen' : p.length ≤ r := by exact_mod_cast hlen
   exact netBallSet_mono N hlen' (mem_netBallSet_of_walk N p rfl)
 
+/-- Each `netBallSet N r` is finite, via its identification with the closed
+ball and `finite_closedBall`. -/
 theorem finite_netBallSet {m : ℕ} (N : RWRS.Net m) (r : ℕ) : (netBallSet N r).Finite := by
   rw [netBallSet_eq_closedBall]
   exact finite_closedBall (RWRS.netRoot N) r
@@ -165,15 +193,21 @@ construction invariant under isomorphism. -/
 def netBallX {m : ℕ} (N : RWRS.Net m) (r : ℕ) : Set ℕ :=
   netBallSet N r ∪ {i | r ≠ 0 ∧ ∀ s : ℕ, i ∉ netBallSet N s}
 
+/-- The plain ball `netBallSet N r` is contained in its completion
+`netBallX N r`. -/
 theorem netBallSet_subset_netBallX {m : ℕ} (N : RWRS.Net m) (r : ℕ) :
     netBallSet N r ⊆ netBallX N r := Set.subset_union_left
 
+/-- `netBallX` is monotone in `r`, combining monotonicity of `netBallSet` with
+the fact that the completion condition `r ≠ 0` persists as `r` grows. -/
 theorem netBallX_mono {m : ℕ} (N : RWRS.Net m) {r s : ℕ} (h : r ≤ s) :
     netBallX N r ⊆ netBallX N s := by
   rintro i (hi | ⟨hr, hi⟩)
   · exact Or.inl (netBallSet_mono N h hi)
   · exact Or.inr ⟨by omega, hi⟩
 
+/-- Every vertex lies in some `netBallX N r`: either it already lies in some
+`netBallSet`, or otherwise it qualifies for the radius-`1` completion. -/
 theorem exists_mem_netBallX {m : ℕ} (N : RWRS.Net m) (i : ℕ) : ∃ r : ℕ, i ∈ netBallX N r := by
   by_cases h : ∃ s : ℕ, i ∈ netBallSet N s
   · obtain ⟨s, hs⟩ := h
@@ -181,6 +215,9 @@ theorem exists_mem_netBallX {m : ℕ} (N : RWRS.Net m) (i : ℕ) : ∃ r : ℕ, 
   · push Not at h
     exact ⟨1, Or.inr ⟨one_ne_zero, h⟩⟩
 
+/-- Membership of a fixed vertex `i` in `netBallX N r` is a measurable
+condition on `N`, combining measurability of `netBallSet` membership with
+measurability of the completion condition as a countable intersection. -/
 theorem measurableSet_mem_netBallX {m : ℕ} (i r : ℕ) :
     MeasurableSet {N : RWRS.Net m | i ∈ netBallX N r} := by
   have hset : {N : RWRS.Net m | i ∈ netBallX N r}
@@ -199,6 +236,8 @@ theorem measurableSet_mem_netBallX {m : ℕ} (i r : ℕ) :
     rw [this, Set.inter_univ]
     exact MeasurableSet.iInter fun s => (measurableSet_mem_netBallSet i s).compl
 
+/-- On a good (connected) network `netBallX` reduces to the plain ball
+`netBallSet`, since `exists_mem_netBallSet` rules out any unreached vertex. -/
 theorem netBallX_eq_of_good {m : ℕ} {N : RWRS.Net m} (hN : RWRS.NetGood N) (r : ℕ) :
     netBallX N r = netBallSet N r := by
   refine Set.union_eq_self_of_subset_right ?_
@@ -206,6 +245,9 @@ theorem netBallX_eq_of_good {m : ℕ} {N : RWRS.Net m} (hN : RWRS.NetGood N) (r 
   obtain ⟨s, hs⟩ := exists_mem_netBallSet hN i
   exact absurd hs (hi s)
 
+/-- The non-disjointness criterion `mem_closedBall_of_not_disjoint`, restated
+for the completed balls `netBallX` on good networks, where `netBallX_eq_of_good`
+identifies them with `netBallSet`. -/
 theorem mem_closedBall_of_not_disjoint_netBallX {m : ℕ} {N : RWRS.Net m} (hN : RWRS.NetGood N)
     (v r : ℕ) (h : ¬ Disjoint (netBallX N r) (netBallX (RWRS.netReroot N v) r)) :
     v ∈ RWRS.closedBall (RWRS.netGraph N) (RWRS.netRoot N) (2 * r) := by

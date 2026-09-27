@@ -73,9 +73,24 @@ def unconditional_names() -> list[str]:
                       path.read_text(encoding="utf-8"))
 
 
+def proved_citations(nodes: list[dict]) -> list[dict]:
+    """Cited inputs proved outright and merged into an ordinary SEALED theorem node.
+
+    Such a node's id still names the citation (an `X-` id), but its `kind` is
+    `theorem` and its `state` is `SEALED`: the cited proposition and its proof
+    live together in one frozen block (see `check_manifest.py`), and no
+    hypothesis for it remains in any statement.
+    """
+    return sorted((n for n in nodes
+                   if n["id"].startswith("X-") and not n["id"].endswith("P")
+                   and n["kind"] == "theorem" and n["state"] == "SEALED"),
+                  key=lambda n: n["id"])
+
+
 def status_block(nodes: list[dict]) -> str:
     counts = Counter(n["state"] for n in nodes)
     companions = proved_companions(nodes)
+    proved_cited = proved_citations(nodes)
     draft = [n["id"] for n in nodes if n["state"] == "DRAFT_SORRY"]
     sentence = (
         f"{len(nodes)} registered nodes: {counts['SEALED']} SEALED "
@@ -101,6 +116,10 @@ def status_block(nodes: list[dict]) -> str:
             f"`{nid}` → `{companion['id']}`" for nid, companion in sorted(companions.items())) + ".",
             "Companions discharge a cited input under their own hypotheses;",
             "see [the certificate](CERTIFICATE.md) for their scope."]
+    if proved_cited:
+        body += ["", "Cited inputs proved outright, as ordinary SEALED theorems: " + ", ".join(
+            f"`{n['id']}` (`{n['export']}`)" for n in proved_cited) + ".",
+            "No hypothesis for any of them remains in any frozen statement."]
     names = unconditional_names()
     if names:
         body += ["", "Corollaries with every cited input discharged:", ""]
@@ -112,10 +131,15 @@ def status_block(nodes: list[dict]) -> str:
 
 def external_inputs_block(nodes: list[dict]) -> str:
     inputs = [n for n in nodes if n["kind"] == "definition"]
+    proved_cited = proved_citations(nodes)
+    total = len(inputs) + len(proved_cited)
     rows = [
-        f"The manifest registers {len(inputs)} external propositions. A proposition's",
-        "axiom closure checks its definition; a witness theorem proves the input",
-        "under the witness's stated hypotheses.",
+        f"The manifest registers {total} external propositions, of which "
+        f"{len(proved_cited)} are proved outright and merged into an ordinary",
+        f"SEALED theorem node (kind `theorem`, no separate companion), leaving "
+        f"{len(inputs)} still carried as a `FROZEN` `definition` node.  A",
+        "`FROZEN` proposition's axiom closure checks its definition; a witness",
+        "theorem proves the input under the witness's stated hypotheses.",
         "",
         "| input | proposition | source | proved witness |",
         "|---|---|---|---|",
@@ -125,6 +149,10 @@ def external_inputs_block(nodes: list[dict]) -> str:
         companion = companions.get(n["id"])
         witness = (f"`{companion['export']}` (`{companion['id']}`)" if companion else "—")
         rows.append(f"| `{n['id']}` | `{n['export']}` | {n['source']} | {witness} |")
+    if proved_cited:
+        rows.extend(["", "Proved outright (`kind: theorem`, `state: SEALED`):", ""])
+        for n in proved_cited:
+            rows.append(f"- `{n['id']}` (`{n['export']}`), {n['source']}")
     rows.extend([
         "",
         "`X-005` is the pointwise transition estimate",

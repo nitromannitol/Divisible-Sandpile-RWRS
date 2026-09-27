@@ -11,7 +11,7 @@ import RWRS.Support.SubSeries
 import RWRS.Support.SubTrunc
 import RWRS.Frozen.FukNagaev
 import RWRS.Support.SubStop
-import RWRS.External.BernsteinProved
+import RWRS.External.Bernstein
 
 namespace RWRS.Support
 
@@ -57,7 +57,6 @@ theorem integrable_sq_sub {ν : Measure ℝ} [IsProbabilityMeasure ν] {m p : �
 `sup_n S_n` is finite, uniformly in the starting vertex. -/
 theorem lintegral_supPayoff_rpow_ne_top [Infinite V] [MeasurableSpace V]
     [MeasurableSingletonClass V] [Countable V] (hG : G.Connected)
-    (hVBE : RWRS.External.VonBahrEsseen) (hFNt : RWRS.External.FukNagaevTail)
     (d : ℕ) (hbd : RWRS.BoundedDegree G d) {d_s A : ℝ} (hds : 0 < d_s)
     (hsp : RWRS.SpectralDimensionBound G d_s A)
     (ν : Measure ℝ) [IsProbabilityMeasure ν] (hmean : RWRS.extMean ν < 0)
@@ -134,7 +133,7 @@ theorem lintegral_supPayoff_rpow_ne_top [Infinite V] [MeasurableSpace V]
     rw [integral_id_eq hint, ← h2]
   have hsq : Integrable (fun z : ℝ => (z - m) ^ 2) ρ := integrable_sq_sub hp2.le habs
   obtain ⟨c, Cp, hc, hCp, hFNb⟩ :=
-    (RWRS.Frozen.fukNagaev hVBE hFNt RWRS.External.bernstein).2.1 p hp2.le
+    RWRS.Frozen.fukNagaev.2.1 p hp2.le
   obtain ⟨B, hB, hbound⟩ := exists_supPayoff_moment_bound (G := G) (ν := ρ) hG nn d hFNb
     hbd hdeg hd hds hsp m hmext hmneg hint hm hsq hple habs hc hCp.le hq1 hqp hq2 hη hδ0 hδ1
     he1 he2
@@ -146,7 +145,6 @@ theorem lintegral_supPayoff_rpow_ne_top [Infinite V] [MeasurableSpace V]
 value of the optimal bounded rule is almost surely finite. -/
 theorem ae_supStopValue_ne_top [Infinite V] [MeasurableSpace V]
     [MeasurableSingletonClass V] [Countable V] [DecidableEq V] (hG : G.Connected)
-    (hVBE : RWRS.External.VonBahrEsseen) (hFNt : RWRS.External.FukNagaevTail)
     (d : ℕ) (hbd : RWRS.BoundedDegree G d) {d_s A : ℝ} (hds : 0 < d_s)
     (hsp : RWRS.SpectralDimensionBound G d_s A)
     (ν : Measure ℝ) [IsProbabilityMeasure ν] (hmean : RWRS.extMean ν < 0)
@@ -156,7 +154,7 @@ theorem ae_supStopValue_ne_top [Infinite V] [MeasurableSpace V]
   classical
   haveI : IsProbabilityMeasure (RWRS.walkLaw G x) := by rw [walkLaw_eq_lib]; infer_instance
   haveI : IsProbabilityMeasure (RWRS.iidLaw V ν) := instIsProbabilityMeasureIid ν
-  have h1 := lintegral_supPayoff_rpow_ne_top (G := G) hG hVBE hFNt d hbd hds hsp ν hmean
+  have h1 := lintegral_supPayoff_rpow_ne_top (G := G) hG d hbd hds hsp ν hmean
     hp hmom (q := 1) le_rfl hgt
   have h2 : (∫⁻ z, RWRS.supPayoff G z.1 z.2 ∂(RWRS.jointLaw G ν x)) ≠ ⊤ := by
     refine ne_top_of_le_ne_top h1 ?_

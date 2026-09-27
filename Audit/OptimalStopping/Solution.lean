@@ -27,7 +27,7 @@ universe u
 /-- Theorem 1.1 (`thm:OS`). -/
 theorem optimalStopping {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
     [Infinite V] [MeasurableSpace V] [MeasurableSingletonClass V]
-    (hVF : External.VoltageFunction G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : HasExtMean ν) :
     (0 < extMean ν →
@@ -42,6 +42,6 @@ theorem optimalStopping {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
         (∫⁻ z, supPayoff G z.1 z.2 ^ q ∂(jointLaw G ν x)) ≠ ⊤) := by
   rw [Bridge.supMeanPayoff_eq, Bridge.supStopValue_eq, Bridge.doublyTransient_eq,
     Bridge.jointLaw_eq]
-  exact _root_.RWRS.optimalStopping (Bridge.voltageFunction hVF) hG d hd ν hν hdet
+  exact _root_.RWRS.optimalStopping hG d hd ν hν hdet
 
 end RWRSAudit

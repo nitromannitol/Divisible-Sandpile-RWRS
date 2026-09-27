@@ -18,8 +18,11 @@ compiled by structural recursion into distinct auxiliary constants, so they are
 identified by induction on the time index, and the definitions built on them
 (`green`, `stopValues`, `walkLaw`, `meanPayoff`, `supMeanPayoff`,
 `supStopValue`, `jointLaw`, `DoublyTransient`, `CarneVaropoulos`) by rewriting.
-Nothing is asserted.  The two cited-result propositions of the vocabulary are then the
-repository's, and `voltageFunction`, `carneVaropoulos` transport them.
+Nothing is asserted.  The one cited-result proposition still carried in the
+vocabulary, `External.CarneVaropoulos`, is then the repository's, and
+`carneVaropoulos` transports it.  The voltage-function proposition is no
+longer part of the vocabulary: the repository now proves it outright and
+discharges it inside the proofs, so no bridge for it is needed.
 -/
 
 namespace RWRSAudit.Bridge
@@ -77,9 +80,6 @@ theorem evar_eq : @RWRSAudit.evar = @RWRS.evar := rfl
 theorem BoundedDegree_eq : @RWRSAudit.BoundedDegree = @RWRS.BoundedDegree := rfl
 
 theorem VolumeGrowthUpper_eq : @RWRSAudit.VolumeGrowthUpper = @RWRS.VolumeGrowthUpper := rfl
-
-theorem voltageFunction_eq :
-    @RWRSAudit.External.VoltageFunction = @RWRS.External.VoltageFunction := rfl
 
 /-! ### The recursive definitions, by induction -/
 
@@ -168,12 +168,6 @@ theorem carneVaropoulos_eq :
   simp only [RWRSAudit.External.CarneVaropoulos, RWRS.External.CarneVaropoulos, walkLaw_eq]
 
 /-! ### The cited-result hypotheses -/
-
-/-- The vocabulary's voltage-function hypothesis is the repository's. -/
-theorem voltageFunction {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
-    (h : RWRSAudit.External.VoltageFunction G) : RWRS.External.VoltageFunction G := by
-  rw [← voltageFunction_eq]
-  exact h
 
 /-- The vocabulary's Carne--Varopoulos hypothesis is the repository's. -/
 theorem carneVaropoulos {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] [MeasurableSpace V]

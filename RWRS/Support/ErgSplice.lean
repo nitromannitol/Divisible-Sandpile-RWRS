@@ -23,6 +23,8 @@ of `N` and `η` outside it. -/
 noncomputable def netComb (N : RWRS.Net 0) (r : ℕ) (ξ η : ℕ → ℝ) : ℕ → ℝ :=
   fun i => if i ∈ netBallX N r then ξ i else η i
 
+/-- `netComb` is the general-purpose `LatticeProb.comb` splice specialized to
+the ball `netBallX N r`. -/
 theorem netComb_eq_comb (N : RWRS.Net 0) (r : ℕ) (ξ η : ℕ → ℝ) :
     netComb N r ξ η = LatticeProb.comb (netBallX N r) ξ η := by
   funext i
@@ -30,12 +32,16 @@ theorem netComb_eq_comb (N : RWRS.Net 0) (r : ℕ) (ξ η : ℕ → ℝ) :
   · rw [netComb, if_pos h, LatticeProb.comb_apply_of_mem h]
   · rw [netComb, if_neg h, LatticeProb.comb_apply_of_notMem h]
 
+/-- Inside the ball, `netComb N r ξ η` reads `ξ`. -/
 theorem netComb_of_mem {N : RWRS.Net 0} {r i : ℕ} (h : i ∈ netBallX N r) (ξ η : ℕ → ℝ) :
     netComb N r ξ η i = ξ i := by rw [netComb, if_pos h]
 
+/-- Outside the ball, `netComb N r ξ η` reads `η`. -/
 theorem netComb_of_notMem {N : RWRS.Net 0} {r i : ℕ} (h : i ∉ netBallX N r) (ξ η : ℕ → ℝ) :
     netComb N r ξ η i = η i := by rw [netComb, if_neg h]
 
+/-- Splicing twice at the same ball only remembers the innermost inside value:
+`netComb N r (netComb N r ξ η) η' = netComb N r ξ η'`. -/
 theorem netComb_idem (N : RWRS.Net 0) (r : ℕ) (ξ η η' : ℕ → ℝ) :
     netComb N r (netComb N r ξ η) η' = netComb N r ξ η' := by
   funext i
@@ -56,6 +62,8 @@ theorem measurePreserving_netComb (ν : Measure ℝ) [IsProbabilityMeasure ν] (
   rw [hfun]
   exact h
 
+/-- The splice `netComb` is jointly measurable in the network `N` and the two
+mark fields `ξ`, `η`. -/
 theorem measurable_netComb (r : ℕ) :
     Measurable fun p : RWRS.Net 0 × (ℕ → ℝ) × (ℕ → ℝ) => netComb p.1 r p.2.1 p.2.2 := by
   refine measurable_pi_lambda _ fun i => ?_
@@ -70,6 +78,8 @@ noncomputable def ballAvg (ν : Measure ℝ) (r : ℕ) (h : RWRS.Net 1 → ℝ�
     (N : RWRS.Net 0) (ξ : ℕ → ℝ) : ℝ≥0∞ :=
   ∫⁻ η, h (markMap (N, netComb N r ξ η)) ∂(RWRS.iidLaw ℕ ν)
 
+/-- `ballAvg ν r h` is jointly measurable in the network and the marks, from
+`measurable_netComb` and `measurable_markMap`. -/
 theorem measurable_ballAvg (ν : Measure ℝ) [IsProbabilityMeasure ν] (r : ℕ)
     {h : RWRS.Net 1 → ℝ≥0∞} (hm : Measurable h) :
     Measurable fun p : RWRS.Net 0 × (ℕ → ℝ) => ballAvg ν r h p.1 p.2 := by
@@ -85,6 +95,8 @@ theorem measurable_ballAvg (ν : Measure ℝ) [IsProbabilityMeasure ν] (r : ℕ
       h (markMap (p.1, netComb p.1 r p.2 η))) := hm.comp h3
   exact huc.lintegral_prod_right'
 
+/-- The splice average of a function bounded by `1` is itself bounded by `1`,
+since `iidLaw` is a probability measure. -/
 theorem ballAvg_le_one (ν : Measure ℝ) [IsProbabilityMeasure ν] (r : ℕ)
     {h : RWRS.Net 1 → ℝ≥0∞} (hle : ∀ M, h M ≤ 1) (N : RWRS.Net 0) (ξ : ℕ → ℝ) :
     ballAvg ν r h N ξ ≤ 1 := by
@@ -122,16 +134,21 @@ theorem lintegral_ballAvg (ν : Measure ℝ) [IsProbabilityMeasure ν] (r : ℕ)
 subtraction so that no sign appears. -/
 noncomputable def esub (x y : ℝ≥0∞) : ℝ≥0∞ := (x - y) + (y - x)
 
+/-- `esub` is symmetric: `esub x y = esub y x`. -/
 theorem esub_comm (x y : ℝ≥0∞) : esub x y = esub y x := by
   simp only [esub]; ring
 
+/-- `esub x x = 0`. -/
 @[simp] theorem esub_self (x : ℝ≥0∞) : esub x x = 0 := by simp [esub]
 
+/-- `x ≤ y + esub x y`, so `esub` dominates the truncated subtraction `x - y`. -/
 theorem le_add_esub (x y : ℝ≥0∞) : x ≤ y + esub x y := by
   refine le_trans (le_add_tsub (a := x) (b := y)) ?_
   gcongr
   exact le_self_add
 
+/-- A two-sided additive bound `x ≤ y + d` and `y ≤ x + d` forces `esub x y ≤ d`,
+by splitting on which of `x`, `y` is larger. -/
 theorem esub_le_of_le_add {x y d : ℝ≥0∞} (h1 : x ≤ y + d) (h2 : y ≤ x + d) : esub x y ≤ d := by
   rcases le_total x y with h | h
   · rw [esub, tsub_eq_zero_of_le h, zero_add, tsub_le_iff_left]
@@ -139,6 +156,7 @@ theorem esub_le_of_le_add {x y d : ℝ≥0∞} (h1 : x ≤ y + d) (h2 : y ≤ x 
   · rw [esub, tsub_eq_zero_of_le h, add_zero, tsub_le_iff_left]
     exact h1
 
+/-- `esub` satisfies the triangle inequality: `esub x z ≤ esub x y + esub y z`. -/
 theorem esub_triangle (x y z : ℝ≥0∞) : esub x z ≤ esub x y + esub y z := by
   refine esub_le_of_le_add ?_ ?_
   · calc x ≤ y + esub x y := le_add_esub x y
@@ -148,10 +166,14 @@ theorem esub_triangle (x y z : ℝ≥0∞) : esub x z ≤ esub x y + esub y z :=
       _ ≤ (x + esub y x) + esub z y := by gcongr; exact le_add_esub y x
       _ = x + (esub x y + esub y z) := by rw [esub_comm y x, esub_comm z y]; ring
 
+/-- `esub` is jointly measurable in its two arguments when they are, being built
+from subtraction and addition. -/
 theorem measurable_esub {α : Type*} [MeasurableSpace α] {f g : α → ℝ≥0∞} (hf : Measurable f)
     (hg : Measurable g) : Measurable fun a => esub (f a) (g a) :=
   (hf.sub hg).add (hg.sub hf)
 
+/-- `esub` of two integrals is at most the integral of the pointwise `esub`:
+integration only weakly increases the `esub`-distance. -/
 theorem esub_lintegral_le {α : Type*} [MeasurableSpace α] {μ : Measure α} {f g : α → ℝ≥0∞}
     (hf : Measurable f) (hg : Measurable g) :
     esub (∫⁻ a, f a ∂μ) (∫⁻ a, g a ∂μ) ≤ ∫⁻ a, esub (f a) (g a) ∂μ := by
@@ -165,6 +187,8 @@ theorem esub_lintegral_le {α : Type*} [MeasurableSpace α] {μ : Measure α} {f
       _ = ∫⁻ a, f a ∂μ + ∫⁻ a, esub (f a) (g a) ∂μ := by
           rw [lintegral_congr fun a => esub_comm (g a) (f a)]
 
+/-- The `esub`-distance of two indicator functions is the indicator of their
+symmetric difference `symmDiff S T`. -/
 theorem esub_indicator {α : Type*} (S T : Set α) (a : α) :
     esub (S.indicator (fun _ => (1 : ℝ≥0∞)) a) (T.indicator (fun _ => (1 : ℝ≥0∞)) a)
       = (symmDiff S T).indicator (fun _ => (1 : ℝ≥0∞)) a := by
@@ -178,6 +202,8 @@ some radius around the root of `N`. -/
 def ballLocalSets (N : RWRS.Net 0) : Set (Set (ℕ → ℝ)) :=
   {S | MeasurableSet S ∧ ∃ r : ℕ, ∀ ξ η : ℕ → ℝ, (netComb N r ξ η ∈ S ↔ ξ ∈ S)}
 
+/-- Splicing at a smaller radius `r` after already splicing at a larger radius
+`s ≥ r` changes nothing, since the smaller ball sits inside the larger one. -/
 theorem netComb_netComb_of_le {N : RWRS.Net 0} {r s : ℕ} (hrs : r ≤ s) (ξ η : ℕ → ℝ) :
     netComb N r ξ (netComb N s ξ η) = netComb N s ξ η := by
   funext i
@@ -185,6 +211,8 @@ theorem netComb_netComb_of_le {N : RWRS.Net 0} {r s : ℕ} (hrs : r ≤ s) (ξ �
   · rw [netComb_of_mem h, netComb_of_mem (netBallX_mono N hrs h)]
   · rw [netComb_of_notMem h]
 
+/-- A ball-local set at radius `r` is also ball-local at every larger radius
+`s ≥ r`, via `netComb_netComb_of_le`. -/
 theorem ballLocal_of_le {N : RWRS.Net 0} {S : Set (ℕ → ℝ)} {r : ℕ}
     (hr : ∀ ξ η : ℕ → ℝ, (netComb N r ξ η ∈ S ↔ ξ ∈ S)) {s : ℕ} (hrs : r ≤ s) :
     ∀ ξ η : ℕ → ℝ, (netComb N s ξ η ∈ S ↔ ξ ∈ S) := by
@@ -192,6 +220,8 @@ theorem ballLocal_of_le {N : RWRS.Net 0} {S : Set (ℕ → ℝ)} {r : ℕ}
   have := hr ξ (netComb N s ξ η)
   rwa [netComb_netComb_of_le hrs] at this
 
+/-- The ball-local sets of `N` form a set ring: closed under finite union and
+difference, taking the larger of the two radii each time. -/
 theorem isSetRing_ballLocalSets (N : RWRS.Net 0) : MeasureTheory.IsSetRing (ballLocalSets N) where
   empty_mem := ⟨MeasurableSet.empty, 0, fun _ _ => Iff.rfl⟩
   union_mem := by
@@ -209,6 +239,9 @@ theorem isSetRing_ballLocalSets (N : RWRS.Net 0) : MeasureTheory.IsSetRing (ball
     simp only [Set.mem_sdiff]
     exact and_congr h1 (not_congr h2)
 
+/-- The product σ-algebra on mark fields is generated by the ball-local sets of
+`N`, since every cylinder set depending on coordinate `i` is local at any
+radius whose ball contains `i`. -/
 theorem generateFrom_ballLocalSets (N : RWRS.Net 0) :
     (inferInstance : MeasurableSpace (ℕ → ℝ)) = MeasurableSpace.generateFrom (ballLocalSets N) := by
   refine le_antisymm ?_ (MeasurableSpace.generateFrom_le fun S hS => hS.1)
@@ -219,6 +252,8 @@ theorem generateFrom_ballLocalSets (N : RWRS.Net 0) :
   · exact (measurable_pi_apply i) hB
   · simp only [Set.mem_preimage, netComb_of_mem hr]
 
+/-- The indicator of `A` at `markMap (N, ξ)` equals the indicator of the
+pulled-back event at `ξ`. -/
 theorem indicator_markMap (A : Set (RWRS.Net 1)) (N : RWRS.Net 0) (ξ : ℕ → ℝ) :
     A.indicator (fun _ => (1 : ℝ≥0∞)) (markMap (N, ξ))
       = ((fun ζ : ℕ → ℝ => markMap (N, ζ)) ⁻¹' A).indicator (fun _ => (1 : ℝ≥0∞)) ξ := by
@@ -316,6 +351,8 @@ def prodLocalSets : Set (Set (RWRS.Net 0 × (ℕ → ℝ))) :=
   {T | MeasurableSet T ∧ ∃ r : ℕ, ∀ (N : RWRS.Net 0) (ξ η : ℕ → ℝ),
     ((N, netComb N r ξ η) ∈ T ↔ (N, ξ) ∈ T)}
 
+/-- A local set of network-mark pairs at radius `r` is also local at every
+larger radius `s ≥ r`, via `netComb_netComb_of_le`. -/
 theorem prodLocal_of_le {T : Set (RWRS.Net 0 × (ℕ → ℝ))} {r : ℕ}
     (hr : ∀ (N : RWRS.Net 0) (ξ η : ℕ → ℝ), ((N, netComb N r ξ η) ∈ T ↔ (N, ξ) ∈ T)) {s : ℕ}
     (hrs : r ≤ s) : ∀ (N : RWRS.Net 0) (ξ η : ℕ → ℝ), ((N, netComb N s ξ η) ∈ T ↔ (N, ξ) ∈ T) := by
@@ -323,6 +360,8 @@ theorem prodLocal_of_le {T : Set (RWRS.Net 0 × (ℕ → ℝ))} {r : ℕ}
   have h := hr N ξ (netComb N s ξ η)
   rwa [netComb_netComb_of_le hrs] at h
 
+/-- The local sets of network-mark pairs form a set ring, by the same
+union/difference argument as `isSetRing_ballLocalSets`. -/
 theorem isSetRing_prodLocalSets : MeasureTheory.IsSetRing prodLocalSets where
   empty_mem := ⟨MeasurableSet.empty, 0, fun _ _ _ => Iff.rfl⟩
   union_mem := by
@@ -336,6 +375,9 @@ theorem isSetRing_prodLocalSets : MeasureTheory.IsSetRing prodLocalSets where
     exact and_congr (prodLocal_of_le hrS (le_max_left rS rT) N ξ η)
       (not_congr (prodLocal_of_le hrT (le_max_right rS rT) N ξ η))
 
+/-- The product σ-algebra on `RWRS.Net 0 × (ℕ → ℝ)` is generated by
+`prodLocalSets`, combining the graph coordinate directly with the ball-local
+decomposition of each mark coordinate. -/
 theorem generateFrom_prodLocalSets :
     (inferInstance : MeasurableSpace (RWRS.Net 0 × (ℕ → ℝ)))
       = MeasurableSpace.generateFrom prodLocalSets := by

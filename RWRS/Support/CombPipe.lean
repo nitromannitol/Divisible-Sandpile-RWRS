@@ -27,6 +27,8 @@ noncomputable def pipeDrop (B : ℕ) (L : ℕ → ℕ) (e : Bool) (n : ℕ) (w :
     (u : List (Fin B)) : ℝ :=
   combVoltage B L e n w (u.dropLast, 0) - combVoltage B L e n w (u, 1)
 
+/-- The `pipePred` of site `i + 1` along the pipe with word `u` is the `i`-th site as
+numbered by `pipeAt`. -/
 theorem pipePred_pipeAt {u : List (Fin B)} (i : ℕ) :
     pipePred B L ((u : List (Fin B)), i + 1) = pipeAt B u i := by
   rcases Nat.eq_zero_or_pos i with h | h
@@ -34,10 +36,14 @@ theorem pipePred_pipeAt {u : List (Fin B)} (i : ℕ) :
   · have hi : i ≠ 0 := by omega
     simp [pipePred, pipeAt, hi]
 
+/-- Inside a pipe, `pipeUp` steps from site `i` to site `i + 1` as long as `i + 1` is still
+within the interior sites of the pipe. -/
 theorem pipeUp_lt {u : List (Fin B)} {i : ℕ} (h : i + 1 ≤ L u.length - 1) :
     pipeUp B L ((u : List (Fin B)), i) = (u, i + 1) := by
   simp [pipeUp, h]
 
+/-- Once `i + 1` runs past the last interior site of the pipe, `pipeUp` lands on the far
+endpoint `(u, 0)`. -/
 theorem pipeUp_top {u : List (Fin B)} {i : ℕ} (h : ¬ (i + 1 ≤ L u.length - 1)) :
     pipeUp B L ((u : List (Fin B)), i) = (u, 0) := by
   simp [pipeUp, h]

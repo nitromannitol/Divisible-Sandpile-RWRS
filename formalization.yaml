@@ -31,15 +31,22 @@ status:
     Section 8, moment sharpness, and the locally finite tree on which
     every integrable law stabilizes).  SCOPE BOUNDARY: nine results the paper
     cites from the literature are stated as propositions in RWRS/External/.
-    Seven are proved in the repository, mostly through the shared library
-    Lattice-Probability: von Bahr-Esseen, Fuk-Nagaev and Bernstein outright,
-    the bounded-degree heat kernel bound and heat kernel vanishing on infinite
-    connected graphs, Efron-Stein for countable index sets, and the bounded
-    voltage function only on transient graphs.  Two are not proved here: the
-    pointwise Carne-Varopoulos bound and the ergodic decomposition of
-    stationary random networks.  Every theorem whose proof uses a cited result
-    takes it as an explicit hypothesis; ASSUMPTIONS.md lists them with their
-    Lean statements.  Not formalized: the open questions of Section 9, the
+    Seven are proved outright in the repository, mostly through the shared
+    library Lattice-Probability, in the generality every use site needs:
+    von Bahr-Esseen, Fuk-Nagaev and Bernstein unconditionally, the
+    bounded-degree heat kernel bound and heat kernel vanishing on every
+    infinite connected graph, Efron-Stein for countable index sets, and the
+    pointwise Carne-Varopoulos bound on every connected, nontrivial, locally
+    finite graph; each lives as a single SEALED theorem node together with its
+    proof, and no statement anywhere carries it as a hypothesis.  An eighth,
+    the bounded voltage function, is proved on every infinite connected
+    graph, recurrent or transient (RWRS.External.voltageFunction_of_connected);
+    the theorems that use it still carry it as an explicit hypothesis, which
+    that theorem discharges.  One is not proved here at all: the ergodic
+    decomposition of stationary random networks.  Every theorem whose proof
+    uses it takes it as an explicit hypothesis; ASSUMPTIONS.md lists it with
+    its Lean statement.  Not formalized: the open
+    questions of Section 9, the
     proof ideas and related work of Sections 1.1 and 1.2, the example and
     remark environments, and the figures.  The main theorems are stated in
     full in RWRS/MainTheorems.lean; all three are additionally restated over a
@@ -57,7 +64,7 @@ status:
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       comparator_config: "Audit/OptimalStopping/comparator.json"
       literature_dependencies:
-        - "Lyons-Peres, Probability on Trees and Networks, Proposition 2.1 and equation (2.4) (RWRS.External.VoltageFunction), hypothesis; proved in the repository only on transient graphs"
+        - "Lyons-Peres, Probability on Trees and Networks, Proposition 2.1 and equation (2.4) (RWRS.External.VoltageFunction), hypothesis; discharged on every infinite connected graph by RWRS.External.voltageFunction_of_connected"
         - "von Bahr-Esseen 1965 (RWRS.External.VonBahrEsseen), discharged by RWRS.External.vonBahrEsseen"
         - "Fuk-Nagaev 1971 (RWRS.External.FukNagaevTail), discharged by RWRS.External.fukNagaevTail"
         - "Grigor'yan, Example 5.14, bounded-degree heat kernel bound (RWRS.External.HeatKernelBoundedDegree), discharged by RWRS.External.heatKernelBoundedDegree_of_connected"
@@ -67,14 +74,14 @@ status:
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       comparator_config: "Audit/Explosion/comparator.json"
       literature_dependencies:
-        - "Lyons-Peres, Probability on Trees and Networks, Proposition 2.1 and equation (2.4) (RWRS.External.VoltageFunction), hypothesis; proved in the repository only on transient graphs"
+        - "Lyons-Peres, Probability on Trees and Networks, Proposition 2.1 and equation (2.4) (RWRS.External.VoltageFunction), hypothesis; discharged on every infinite connected graph by RWRS.External.voltageFunction_of_connected"
     - declaration: "RWRS.stabilization"
       file: "RWRS/MainTheorems.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
       comparator_config: "Audit/Stabilization/comparator.json"
       literature_dependencies:
-        - "Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4, pointwise form (RWRS.External.CarneVaropoulos), hypothesis"
+        - "Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4, pointwise form (RWRS.External.CarneVaropoulos), discharged by RWRS.External.carneVaropoulos"
         - "von Bahr-Esseen 1965 (RWRS.External.VonBahrEsseen), discharged by RWRS.External.vonBahrEsseen"
         - "Fuk-Nagaev 1971 (RWRS.External.FukNagaevTail), discharged by RWRS.External.fukNagaevTail"
         - "Grigor'yan, Example 5.14, bounded-degree heat kernel bound (RWRS.External.HeatKernelBoundedDegree), discharged by RWRS.External.heatKernelBoundedDegree_of_connected"
@@ -107,6 +114,9 @@ automation:
         - "glm-5.3"
         - "glm-5.3-flash"
         - "deepseek-v4.1-flash"
+        - "claude-sonnet-5"
+        - "gpt-6-luna"
+        - "gpt-5.6-luna"
       framework: >-
         Claude Code (Anthropic) as the supervising and proving harness, which
         wrote nearly all of the Lean code; Codex CLI (OpenAI, versions 0.153.4
@@ -151,6 +161,12 @@ automation:
         kernel; results and reproduction steps are in
         Audit/COMPARATOR_RUNS.md.  The workflow .github/workflows/comparator.yml
         runs it on request.
+        Final pass (2026-09-26 and 2026-09-27): a claude-opus-5-5 general in
+        Claude Code dispatched claude-sonnet-5 subagents, which proved further
+        cited inputs and removed them as hypotheses, updated the Audit surface
+        and re-ran the comparator; gpt-6-luna and gpt-5.6-luna (Codex CLI) were
+        commissioned for some proofs; the release pins Lattice-Probability at
+        commit 9d44b4d4670df393bb86ac5a4e042f215001cddf.
       cost:
         wall_time: >-
           about two weeks of calendar time (2026-09-06 to 2026-09-18, 216
@@ -226,27 +242,27 @@ alignment:
       lean: "RWRS.stabilization"
       module: "RWRS.MainTheorems"
       status: "proved"
-      note: "Certified statement RWRS.Frozen.stabilization; von Bahr-Esseen, Fuk-Nagaev and the bounded-degree heat kernel bound discharged. Comparator challenge Audit/Stabilization/."
+      note: "Certified statement RWRS.Frozen.stabilization; von Bahr-Esseen, Fuk-Nagaev, the bounded-degree heat kernel bound and the pointwise Carne-Varopoulos bound discharged. Comparator challenge Audit/Stabilization/."
     - source: "Every other labelled theorem, lemma, proposition and corollary"
       lean: "RWRS.Frozen.*"
       module: "RWRS.Frozen"
       status: "proved"
       note: "One registered statement per paper statement; the full map is CORRESPONDENCE.md."
-    - source: "Cited results: von Bahr-Esseen, Fuk-Nagaev, Bernstein, bounded-degree heat kernel bound, heat kernel vanishing, Efron-Stein"
+    - source: "Cited results: von Bahr-Esseen, Fuk-Nagaev, Bernstein, bounded-degree heat kernel bound, heat kernel vanishing, Efron-Stein, pointwise Carne-Varopoulos bound"
       lean: "RWRS.External.*"
       module: "RWRS.External"
       status: "proved"
-      note: "Companion theorems in RWRS/External/*Proved.lean; the heat kernel ones on infinite connected graphs, Efron-Stein for countable index sets."
+      note: "Companion theorems in RWRS/External/*Proved.lean; the heat kernel ones on infinite connected graphs, Efron-Stein for countable index sets, the Carne-Varopoulos bound (RWRS.External.carneVaropoulos) unconditionally on every connected, nontrivial, locally finite graph."
     - source: "Cited result: the bounded voltage function (Lyons-Peres, Proposition 2.1)"
       lean: "RWRS.External.VoltageFunction"
       module: "RWRS.External.VoltageFunction"
-      status: "assumed"
-      note: "Proved only on transient graphs (RWRS.External.voltageFunction); an explicit hypothesis of the theorems that use it."
-    - source: "Cited results: pointwise Carne-Varopoulos bound, ergodic decomposition of stationary random networks"
-      lean: "RWRS.External.CarneVaropoulos, RWRS.External.ErgodicDecomposition"
+      status: "proved"
+      note: "Proved on every infinite connected graph (RWRS.External.voltageFunction_of_connected); used inside the proofs of Theorems 1.1 and 1.2, which do not take it as a hypothesis."
+    - source: "Cited result: ergodic decomposition of stationary random networks"
+      lean: "RWRS.External.ErgodicDecomposition"
       module: "RWRS.External"
       status: "assumed"
-      note: "Explicit hypotheses of the theorems that use them; listed in ASSUMPTIONS.md."
+      note: "An explicit hypothesis of the theorems that use it; listed in ASSUMPTIONS.md."
 
 acknowledgements: >-
   The paper is joint work with Yuval Peres and Ecaterina Sava-Huss.  Built on

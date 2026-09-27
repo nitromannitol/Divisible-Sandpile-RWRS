@@ -11,17 +11,24 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 /-- The trajectory shifted by one step. -/
 def shift (X : ℕ → V) : ℕ → V := fun k => X (k + 1)
 
+/-- `cons x X` starts at `x`. -/
 @[simp] theorem cons_zero (x : V) (X : ℕ → V) : cons x X 0 = x := rfl
 
+/-- After the first step, `cons x X` continues as `X`. -/
 @[simp] theorem cons_succ (x : V) (X : ℕ → V) (k : ℕ) : cons x X (k + 1) = X k := rfl
 
+/-- Shifting `cons x X` by one step recovers `X`. -/
 @[simp] theorem shift_cons (x : V) (X : ℕ → V) : shift (cons x X) = X := rfl
 
+/-- The recursive definition of `walkExp` at horizon `n+1`: the average over
+neighbours `y` of `x` of the `n`-step expectation of `F` prefixed by `cons x`. -/
 theorem walkExp_succ (n : ℕ) (x : V) (F : (ℕ → V) → ℝ) :
     walkExp G (n + 1) x F
       = (∑ y ∈ G.neighborFinset x, walkExp G n y (fun X => F (cons x X))) / G.degree x :=
   rfl
 
+/-- `walkExp G n x F` only depends on the values of `F` on trajectories
+starting at `x`. -/
 theorem walkExp_congr {n : ℕ} {x : V} {F F' : (ℕ → V) → ℝ}
     (h : ∀ X : ℕ → V, X 0 = x → F X = F' X) :
     walkExp G n x F = walkExp G n x F' := by
@@ -33,6 +40,8 @@ theorem walkExp_congr {n : ℕ} {x : V} {F F' : (ℕ → V) → ℝ}
       refine Finset.sum_congr rfl fun y _ => ?_
       exact ih fun X _ => h (cons x X) rfl
 
+/-- `walkExp` of a constant functional is that constant, using connectedness
+to give every vertex positive degree. -/
 theorem walkExp_const [Infinite V] (hG : G.Connected) (n : ℕ) (x : V) (c : ℝ) :
     walkExp G n x (fun _ => c) = c := by
   induction n generalizing x with
@@ -44,6 +53,8 @@ theorem walkExp_const [Infinite V] (hG : G.Connected) (n : ℕ) (x : V) (c : ℝ
       rw [Finset.sum_const, SimpleGraph.card_neighborFinset_eq_degree, nsmul_eq_mul]
       field_simp
 
+/-- `walkExp` is additive in its functional:
+`walkExp G n x (F + F') = walkExp G n x F + walkExp G n x F'`. -/
 theorem walkExp_add (n : ℕ) (x : V) (F F' : (ℕ → V) → ℝ) :
     walkExp G n x (fun X => F X + F' X) = walkExp G n x F + walkExp G n x F' := by
   induction n generalizing x F F' with
@@ -55,6 +66,8 @@ theorem walkExp_add (n : ℕ) (x : V) (F F' : (ℕ → V) → ℝ) :
               + walkExp G n y (fun X => F' (cons x X))) from funext fun y => ih y _ _]
       rw [Finset.sum_add_distrib, add_div]
 
+/-- `walkExp` is monotone in its functional: `F ≤ F'` pointwise gives
+`walkExp G n x F ≤ walkExp G n x F'`. -/
 theorem walkExp_mono {n : ℕ} {x : V} {F F' : (ℕ → V) → ℝ}
     (h : ∀ X : ℕ → V, F X ≤ F' X) :
     walkExp G n x F ≤ walkExp G n x F' := by
@@ -67,24 +80,34 @@ theorem walkExp_mono {n : ℕ} {x : V} {F F' : (ℕ → V) → ℝ}
         Finset.sum_le_sum fun y _ => ih fun X => h (cons x X)
       exact div_le_div_of_nonneg_right hsum (Nat.cast_nonneg _) |>.trans_eq rfl
 
+/-- The payoff over `m+1` steps of `cons x X` splits as the first term
+`ξ x / deg x` plus the remaining payoff over `X`. -/
 theorem payoff_cons (ξ : V → ℝ) (m : ℕ) (x : V) (X : ℕ → V) :
     payoff G ξ (m + 1) (cons x X) = ξ x / G.degree x + payoff G ξ m X := by
   simp only [payoff, Finset.sum_range_succ']
   simp only [cons_zero, cons_succ]
   exact add_comm _ _
 
+/-- The payoff over zero steps is `0`. -/
 theorem payoff_zero (ξ : V → ℝ) (X : ℕ → V) : payoff G ξ 0 X = 0 := rfl
 
 
+/-- A stopping time that vanishes on the constant trajectory at `x` vanishes on
+every trajectory starting at `x`. -/
 theorem stopping_of_zero {τ : (ℕ → V) → ℕ} (hτ : IsStopping τ) {x : V} {X : ℕ → V}
     (hX : X 0 = x) (h0 : τ (fun _ => x) = 0) : τ X = 0 :=
   hτ 0 (fun _ => x) X (fun j hj => by rw [Nat.le_zero.mp hj]; exact hX.symm) h0
 
+/-- A stopping time that is nonzero on the constant trajectory at `x` is
+nonzero on every trajectory starting at `x`. -/
 theorem stopping_ne_zero {τ : (ℕ → V) → ℕ} (hτ : IsStopping τ) {x : V} {X : ℕ → V}
     (hX : X 0 = x) (h0 : τ (fun _ => x) ≠ 0) : τ X ≠ 0 := by
   intro h
   exact h0 (hτ 0 X (fun _ => x) (fun j hj => by rw [Nat.le_zero.mp hj]; exact hX) h)
 
+/-- **Shifting a stopping time by one step.**  If `τ` never stops at time `0`
+on trajectories starting at `x`, then `X' ↦ τ (cons x X') - 1` is again a
+stopping time. -/
 theorem isStopping_shift {τ : (ℕ → V) → ℕ} (hτ : IsStopping τ) (x : V)
     (h0 : ∀ X : ℕ → V, X 0 = x → τ X ≠ 0) :
     IsStopping (fun X' => τ (cons x X') - 1) := by
@@ -102,6 +125,9 @@ theorem isStopping_shift {τ : (ℕ → V) → ℕ} (hτ : IsStopping τ) (x : V
   simp only
   omega
 
+/-- **Prepending one step to a family of stopping times.**  If `τ y` is a
+stopping time for every starting vertex `y`, then `X ↦ 1 + τ (X 1) (shift X)`
+is a stopping time. -/
 theorem isStopping_prepend {τ : V → (ℕ → V) → ℕ} (hτ : ∀ y, IsStopping (τ y)) :
     IsStopping (fun X => 1 + τ (X 1) (shift X)) := by
   intro k X Y hXY hk
@@ -114,6 +140,10 @@ theorem isStopping_prepend {τ : V → (ℕ → V) → ℕ} (hτ : ∀ y, IsStop
   rw [← h1, this]
   omega
 
+/-- **The one-step recursion for the payoff's expectation.**  For a stopping
+time `τ` that never stops at time `0` starting from `x`, the `(n+1)`-step
+expectation of `payoff G ξ (τ ·) ·` splits as the first term `ξ x / deg x`
+plus `walkOp` applied to the shifted `n`-step problem. -/
 theorem walkExp_payoff_succ [Infinite V] (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (x : V)
     {τ : (ℕ → V) → ℕ} (h0 : ∀ X : ℕ → V, X 0 = x → τ X ≠ 0) :
     walkExp G (n + 1) x (fun X => payoff G ξ (τ X) X)

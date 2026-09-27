@@ -19,8 +19,8 @@ Lemma 5.13 of `rwrs.tex`, frozen.  `rwrs.tex:1077-1095` (label
 The constants of (a) and (b) depend only on `p`, so they are bound before the
 probability space, the index set and the variables; the constants of (c) are
 explicit.  Probabilities are compared in `[0,∞]`.  The paper proves the lemma by
-citation, so the three parts are the three cited results, taken here as explicit
-hypotheses.
+citation; the three cited results (von Bahr--Esseen, Fuk--Nagaev, Bernstein)
+are each proved outright in `RWRS/External/`, so no hypothesis remains here.
 -/
 import RWRS.External.VonBahrEsseen
 import RWRS.External.FukNagaevTail
@@ -30,8 +30,7 @@ open MeasureTheory
 open scoped ENNReal
 
 -- FROZEN-STATEMENT-BEGIN
-theorem RWRS.Frozen.fukNagaev (hVBE : RWRS.External.VonBahrEsseen)
-    (hFN : RWRS.External.FukNagaevTail) (hBer : RWRS.External.Bernstein) :
+theorem RWRS.Frozen.fukNagaev :
     (∀ p : ℝ, 1 ≤ p → p ≤ 2 → ∃ Cp : ℝ, 0 < Cp ∧
       ∀ {Ω ι : Type} [MeasurableSpace Ω] [Fintype ι] (P : Measure Ω), IsProbabilityMeasure P →
         ∀ (Y : ι → Ω → ℝ), ProbabilityTheory.iIndepFun Y P → (∀ i, Integrable (Y i) P) →
@@ -59,4 +58,4 @@ theorem RWRS.Frozen.fukNagaev (hVBE : RWRS.External.VonBahrEsseen)
           P {ω | t ≤ |∑ i, Y i ω|}
             ≤ ENNReal.ofReal (2 * Real.exp (-(t ^ 2 / 2) / (B ^ 2 + M * t / 3))))
 -- FROZEN-STATEMENT-END
-:= ⟨hVBE, hFN, hBer⟩
+:= ⟨RWRS.External.vonBahrEsseen, RWRS.External.fukNagaevTail, RWRS.External.bernstein⟩

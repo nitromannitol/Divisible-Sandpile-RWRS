@@ -17,7 +17,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from sync_docs import external_inputs_block, proved_companions, unconditional_names
+from sync_docs import (external_inputs_block, proved_citations, proved_companions,
+                       unconditional_names)
 
 try:
     import yaml
@@ -91,6 +92,7 @@ def build() -> str:
     corollaries = unconditional_names()
     exports = [n["export"] for n in nodes] + corollaries
     companions = proved_companions(nodes)
+    proved_cited = proved_citations(nodes)
     theorems = [n for n in nodes if n["kind"] == "theorem"]
     externals = [n for n in nodes if n["kind"] == "definition"]
 
@@ -142,7 +144,9 @@ def build() -> str:
     A("carried as explicit hypotheses together with each theorem's own hypotheses.")
     A("Separate companion theorems discharge these predicates under the conditions")
     A("listed below; `CORRESPONDENCE.md` records the correspondence with the paper.")
-    A(f"{len(companions)} of the {len(externals)} cited inputs have registered proved companions.")
+    A(f"{len(companions)} of the {len(externals)} still-cited inputs have registered proved")
+    A(f"companions. {len(proved_cited)} further cited inputs are proved outright and merged")
+    A("into an ordinary `SEALED` theorem node, so no hypothesis for them remains anywhere.")
     A("")
     A("## Environment")
     A("")
@@ -205,8 +209,10 @@ def build() -> str:
     A("## External inputs")
     A("")
     A(f"{clean} of {len(theorems)} registered theorem proofs depend on nothing beyond")
-    A("Lean's three classical axioms. The external predicates remain definition")
-    A("nodes in state `FROZEN`; their proved companions are theorem nodes in state `SEALED`.")
+    A("Lean's three classical axioms. The still-cited external predicates remain")
+    A("definition nodes in state `FROZEN`; their proved companions, and the cited")
+    A("inputs proved outright and merged into their own node, are theorem nodes in")
+    A("state `SEALED`.")
     A("")
     A("## Hypotheses of the proved companions")
     A("")
@@ -216,12 +222,6 @@ def build() -> str:
     A("| companion | Lean theorem | hypotheses |")
     A("|---|---|---|")
     scopes = {
-        "X-001P": "none",
-        "X-002P": "none",
-        "X-003P": "none",
-        "X-004P": "locally finite infinite connected graph",
-        "X-006P": "locally finite infinite connected graph; `NetGood N` supplies this for `netGraph N`",
-        "X-007P": "`[Countable V]`; measurability and square integrability are in the predicate",
         "X-008P": "locally finite infinite connected graph with `∀ o, green G o o ≠ ⊤`",
     }
     for companion in sorted(companions.values(), key=lambda n: n["id"]):
@@ -229,6 +229,33 @@ def build() -> str:
         if scope is None:
             raise RuntimeError(f"companion scope is not recorded: {companion['id']}")
         A(f"| `{companion['id']}` | `{companion['export']}` | {scope} |")
+    if proved_cited:
+        A("")
+        A("## Scope of the cited inputs proved outright")
+        A("")
+        A("Each of these is a cited input merged into its own `SEALED` theorem node")
+        A("(no separate companion node, no hypothesis carried anywhere else).")
+        A("")
+        A("| node | Lean theorem | hypotheses |")
+        A("|---|---|---|")
+        cited_scopes = {
+            "X-001": "none",
+            "X-002": "none",
+            "X-003": "none",
+            "X-004": "locally finite infinite connected graph",
+            "X-006": "locally finite infinite connected graph; `NetGood N` supplies "
+                     "this for `netGraph N`",
+            "X-007": "`[Countable V]`; measurability and square integrability are in "
+                     "the predicate",
+            "X-005": "none; connectedness, nontriviality and measurable singletons are "
+                     "in the predicate",
+            "X-008": "locally finite infinite connected graph",
+        }
+        for n in proved_cited:
+            scope = cited_scopes.get(n["id"])
+            if scope is None:
+                raise RuntimeError(f"cited-and-proved scope is not recorded: {n['id']}")
+            A(f"| `{n['id']}` | `{n['export']}` | {scope} |")
     if corollaries:
         A("")
         A("## Corollaries with cited inputs discharged")

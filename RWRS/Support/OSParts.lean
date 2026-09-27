@@ -134,8 +134,8 @@ theorem exists_tendsto_fluct_top_of_not_doublyTransient (hdeg : ∀ v : V, 0 < G
 explodes.**  On a bounded-degree graph either the graph is doubly transient, and
 then the trap selection explodes at every vertex, or it is not, and then the
 fluctuation diverges at some vertex and the critical estimate explodes there. -/
-theorem exists_vertex_explosion [Infinite V] (hES : RWRS.External.EfronStein V)
-    (hVF : RWRS.External.VoltageFunction G) (hG : G.Connected)
+theorem exists_vertex_explosion [Infinite V]
+    (hG : G.Connected)
     (d : ℕ) (hd0 : 0 < d) (hd : RWRS.BoundedDegree G d) :
     ∃ o : V, ∀ ρ : Measure ℝ, IsProbabilityMeasure ρ → RWRS.extMean ρ = 0 →
       0 < RWRS.evar ρ → RWRS.evar ρ < ⊤ →
@@ -147,7 +147,7 @@ theorem exists_vertex_explosion [Infinite V] (hES : RWRS.External.EfronStein V)
       (uniformLocalTrap_of_boundedDegree d hd0 hd hdeg) ρ hρ hmean hvar hsq _
   · obtain ⟨o, hfl⟩ := exists_tendsto_fluct_top_of_not_doublyTransient hdeg hdt
     refine ⟨o, fun ρ hρ hmean hvar hsq => ?_⟩
-    obtain ⟨c₁, c₂, _, _, hcrit⟩ := (RWRS.Frozen.critical hES hVF hG ρ hρ hmean hvar hsq).2
+    obtain ⟨c₁, c₂, _, _, hcrit⟩ := (RWRS.Frozen.critical hG ρ hρ hmean hvar hsq).2
     have hmp := (hcrit o hfl).2
     filter_upwards [hmp] with ξ hξ
     refine top_le_iff.1 ?_
@@ -165,13 +165,13 @@ theorem supStopValue_top_everywhere [Infinite V] (hG : G.Connected) {ξ : V → 
 
 /-- **Every vertex explodes** for a centred scenery of positive finite variance
 on a bounded-degree graph. -/
-theorem explosion_of_mean_zero [Infinite V] (hES : RWRS.External.EfronStein V)
-    (hVF : RWRS.External.VoltageFunction G) (hG : G.Connected)
+theorem explosion_of_mean_zero [Infinite V]
+    (hG : G.Connected)
     (d : ℕ) (hd0 : 0 < d) (hd : RWRS.BoundedDegree G d)
     (ν : Measure ℝ) (hν : IsProbabilityMeasure ν) (hmean : RWRS.extMean ν = 0)
     (hvar : 0 < RWRS.evar ν) (hsq : RWRS.evar ν < ⊤) (x : V) :
     ∀ᵐ ξ ∂(RWRS.iidLaw V ν), RWRS.supStopValue G ξ x = ⊤ := by
-  obtain ⟨o, ho⟩ := exists_vertex_explosion hES hVF hG d hd0 hd
+  obtain ⟨o, ho⟩ := exists_vertex_explosion hG d hd0 hd
   filter_upwards [ho ν hν hmean hvar hsq] with ξ hξ
   exact supStopValue_top_everywhere hG hξ x
 

@@ -4,6 +4,17 @@ import RWRS.Support.Recurrence
 import RWRS.Support.Odometer
 import RWRS.Support.KilledGreen
 
+/-!
+# Transience from resistance bounds
+
+The killed walk on a set `C` agrees with the free walk up to any horizon for which the
+closed ball around the current site stays inside `C`
+(`killedHeat_eq_heat_of_ball`), a comparison driven by the ball-monotonicity step
+`closedBall_mono_of_adj`. Consequently, if the killed Green function at a fixed origin
+`o` stays bounded over every finite escapable set, the mean local time at `o` cannot
+diverge, and the walk is not recurrent (`not_recurrent_of_killedGreen_bound`).
+-/
+
 namespace RWRS.Support
 
 open scoped Classical
@@ -11,6 +22,8 @@ open scoped Classical
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
 omit [G.LocallyFinite] in
+/-- If `x` and `z` are adjacent, the closed ball of radius `k` about `z` is contained in
+the closed ball of radius `k + 1` about `x`, by the triangle inequality for `edist`. -/
 theorem closedBall_mono_of_adj {x z : V} (h : G.Adj x z) (k : ℕ) :
     RWRS.closedBall G z k ⊆ RWRS.closedBall G x (k + 1) := by
   intro v hv

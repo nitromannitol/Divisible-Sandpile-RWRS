@@ -23,3 +23,15 @@ To reproduce one pair, from the repository root:
 COMPARATOR_LANDRUN=<landrun> COMPARATOR_LEAN4EXPORT=<lean4export> \
   lake env <comparator>/.lake/build/bin/comparator Audit/<Pair>/comparator.json
 ```
+
+## Run of 2026-09-27
+
+The statements of Theorems 1.1 and 1.2 no longer take the voltage-function
+hypothesis, so every pair was run again on 2026-09-27, at commit `c7a26b9`, on a
+second local machine (Linux 6.17), with the same tool revisions as above.
+
+| Pair | Lean kernel | Lean and nanoda kernels |
+|---|---|---|
+| `Explosion` | passed (94 s) | passed (118 s) |
+| `OptimalStopping` | passed (117 s) | passed (151 s) |
+| `Stabilization` | passed (105 s) | passed (149 s) |

@@ -20,20 +20,27 @@ open scoped ENNReal
 
 variable {m : ℕ}
 
+/-- Rerooting a good net at any vertex `y` keeps it good, since `NetGood` does not depend on
+the choice of root. -/
 theorem netGood_netReroot {N : RWRS.Net m} (hN : RWRS.NetGood N) (y : ℕ) :
     RWRS.NetGood (RWRS.netReroot N y) := hN
 
+/-- On a good net the root has positive degree in the underlying graph. -/
 theorem degree_netRoot_pos {N : RWRS.Net m} (hN : RWRS.NetGood N) :
     0 < (RWRS.netGraph N).degree (RWRS.netRoot N) := degree_pos hN _
 
+/-- `rerootAvg` is monotone: a pointwise bound `h ≤ h'` gives `rerootAvg h ≤ rerootAvg h'`. -/
 theorem rerootAvg_mono {h h' : RWRS.Net m → ℝ≥0∞} (hle : ∀ N, h N ≤ h' N) (N : RWRS.Net m) :
     rerootAvg h N ≤ rerootAvg h' N := by
   refine ENNReal.div_le_div_right (Finset.sum_le_sum fun y _ => hle _) _
 
+/-- `rerootAvg` commutes with pointwise addition of the two test functions. -/
 theorem rerootAvg_add (h h' : RWRS.Net m → ℝ≥0∞) (N : RWRS.Net m) :
     rerootAvg (fun M => h M + h' M) N = rerootAvg h N + rerootAvg h' N := by
   simp only [rerootAvg, Finset.sum_add_distrib, ENNReal.add_div]
 
+/-- On a good net, `rerootAvg` of a constant function returns that same constant, since the
+neighbor-average of a constant over the (positive, finite) degree is unchanged. -/
 theorem rerootAvg_const (c : ℝ≥0∞) {N : RWRS.Net m} (hN : RWRS.NetGood N) :
     rerootAvg (fun _ => c) N = c := by
   have hd : ((RWRS.netGraph N).degree (RWRS.netRoot N) : ℝ≥0∞) ≠ 0 := by
@@ -43,11 +50,15 @@ theorem rerootAvg_const (c : ℝ≥0∞) {N : RWRS.Net m} (hN : RWRS.NetGood N) 
     nsmul_eq_mul]
   rw [mul_comm, mul_div_assoc, ENNReal.div_self hd hdt, mul_one]
 
+/-- If `h` is bounded by `1` everywhere, its `rerootAvg` at a good net is also at most `1`,
+by combining `rerootAvg_mono` with `rerootAvg_const`. -/
 theorem rerootAvg_le_one {h : RWRS.Net m → ℝ≥0∞} (hle : ∀ N, h N ≤ 1) {N : RWRS.Net m}
     (hN : RWRS.NetGood N) : rerootAvg h N ≤ 1 := by
   refine le_trans (rerootAvg_mono (h' := fun _ => (1 : ℝ≥0∞)) hle N) ?_
   exact le_of_eq (rerootAvg_const 1 hN)
 
+/-- If `h` agrees with its own value after rerooting at every neighbor of the root, then
+`rerootAvg h` at a good net equals `h` at that net, since every term of the average equals `h N`. -/
 theorem rerootAvg_eq_of_reroot {h : RWRS.Net m → ℝ≥0∞}
     (hre : ∀ (N : RWRS.Net m) (y : ℕ), (RWRS.netGraph N).Adj (RWRS.netRoot N) y →
       h N = h (RWRS.netReroot N y)) {N : RWRS.Net m} (hN : RWRS.NetGood N) :
@@ -60,6 +71,9 @@ theorem rerootAvg_eq_of_reroot {h : RWRS.Net m → ℝ≥0∞}
     rw [Finset.sum_congr rfl hc]
   rw [this, rerootAvg_const _ hN]
 
+/-- `rerootAvg` preserves `NetInvariant`: the one-step average of a reroot-invariant function is
+itself reroot-invariant, since a network isomorphism carries the neighbor sum over the root to
+the neighbor sum over the corresponding root. -/
 theorem netInvariant_rerootAvg {h : RWRS.Net m → ℝ≥0∞} (hinv : RWRS.NetInvariant h) :
     RWRS.NetInvariant (rerootAvg h) := by
   rintro N N' ⟨φ, hadj, hroot, hmark⟩
@@ -89,6 +103,8 @@ theorem netInvariant_rerootAvg {h : RWRS.Net m → ℝ≥0∞} (hinv : RWRS.NetI
     Finset.sum_congr rfl hval, SimpleGraph.degree, SimpleGraph.degree, hnb,
     Finset.card_image_of_injective _ φ.injective]
 
+/-- The `n`-th iterate of `rerootAvg` applied to the indicator of `netRoot = v` computes the
+`n`-step simple random walk heat kernel `RWRS.heat` from the root to `v`. -/
 theorem rerootIter_rootIndicator (v : ℕ) :
     ∀ (n : ℕ) (N : RWRS.Net m), RWRS.NetGood N →
       (rerootAvg^[n] fun M : RWRS.Net m => if RWRS.netRoot M = v then (1 : ℝ≥0∞) else 0) N
@@ -127,6 +143,9 @@ theorem rerootIter_rootIndicator (v : ℕ) :
       · rw [← ENNReal.ofReal_sum_of_nonneg (fun y _ => heat_nonneg n y v)]
       · simp
 
+/-- For a stationary net law `P`, the integral of any iterate of `rerootAvg` applied to a
+measurable, reroot-invariant `h` equals the integral of `h` itself, by repeated use of
+`hstat` together with `netInvariant_rerootAvg`. -/
 theorem lintegral_rerootIter {P : Measure (RWRS.Net m)} (hstat : RWRS.IsStationaryNet P) :
     ∀ (n : ℕ) (h : RWRS.Net m → ℝ≥0∞), Measurable h → RWRS.NetInvariant h →
       ∫⁻ N, (rerootAvg^[n] h) N ∂P = ∫⁻ N, h N ∂P := by
@@ -140,6 +159,8 @@ theorem lintegral_rerootIter {P : Measure (RWRS.Net m)} (hstat : RWRS.IsStationa
       rw [hstep, ih (rerootAvg h) (measurable_rerootAvg hm) (netInvariant_rerootAvg hinv)]
       exact (hstat h hm hinv).symm
 
+/-- Monotonicity of `rerootAvg` iterates: a pointwise bound `h ≤ h'` propagates to
+`rerootAvg^[n] h ≤ rerootAvg^[n] h'` for every `n`. -/
 theorem rerootIter_mono : ∀ (n : ℕ) {h h' : RWRS.Net m → ℝ≥0∞}, (∀ N, h N ≤ h' N) →
     ∀ N : RWRS.Net m, (rerootAvg^[n] h) N ≤ (rerootAvg^[n] h') N := by
   intro n
@@ -152,9 +173,12 @@ theorem rerootIter_mono : ∀ (n : ℕ) {h h' : RWRS.Net m → ℝ≥0∞}, (∀
       rw [hstep h, hstep h']
       exact ih (fun M => rerootAvg_mono hle M) N
 
+/-- `rerootAvg` of the identically-zero function is zero. -/
 theorem rerootAvg_zero (N : RWRS.Net m) : rerootAvg (fun _ : RWRS.Net m => (0 : ℝ≥0∞)) N = 0 := by
   simp [rerootAvg]
 
+/-- `rerootAvg` commutes with a finite sum over an index set `s`: averaging term by term agrees
+with averaging the sum, proved by induction on `s` using `rerootAvg_add`. -/
 theorem rerootAvg_finsetSum (s : Finset ℕ) (f : ℕ → RWRS.Net m → ℝ≥0∞) (N : RWRS.Net m) :
     rerootAvg (fun M => ∑ v ∈ s, f v M) N = ∑ v ∈ s, rerootAvg (f v) N := by
   classical
@@ -164,6 +188,8 @@ theorem rerootAvg_finsetSum (s : Finset ℕ) (f : ℕ → RWRS.Net m → ℝ≥0
       simp only [Finset.sum_insert ha]
       rw [rerootAvg_add (f a) (fun M => ∑ v ∈ t, f v M) N, iht]
 
+/-- Iterating `rerootAvg`, like the one-step average `rerootAvg_finsetSum`, commutes with a
+finite sum over an index set `s`. -/
 theorem rerootIter_finsetSum (s : Finset ℕ) :
     ∀ (n : ℕ) (f : ℕ → RWRS.Net m → ℝ≥0∞) (N : RWRS.Net m),
       (rerootAvg^[n] fun M => ∑ v ∈ s, f v M) N = ∑ v ∈ s, (rerootAvg^[n] (f v)) N := by
@@ -180,6 +206,7 @@ theorem rerootIter_finsetSum (s : Finset ℕ) :
       rw [hcomm]
       simpa using ih (fun v => rerootAvg (f v)) N
 
+/-- If `h ≤ 1` everywhere, every iterate `rerootAvg^[n] h` stays bounded by `1` on a good net. -/
 theorem rerootIter_le_one {h : RWRS.Net m → ℝ≥0∞} (hle : ∀ N, h N ≤ 1) :
     ∀ (n : ℕ) (N : RWRS.Net m), RWRS.NetGood N → (rerootAvg^[n] h) N ≤ 1 := by
   intro n

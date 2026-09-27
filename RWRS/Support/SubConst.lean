@@ -27,6 +27,8 @@ noncomputable def gaussBlockConst (c : ℝ) (nn : ℕ) (ν : Measure ℝ) (m α 
     * ∑ s ∈ Finset.range (k + 1), ((2 ^ (k + 1 - s) : ℕ) : ℝ)
         * (((2 ^ s : ℕ) : ℝ) * (2 ^ (k + 1) : ℝ) ^ (α + δ)) ^ nn
 
+/-- The polynomial-term constant `polyBlockConst` of `eq:Mk-tail-Ak` is
+nonnegative, each dyadic-scale summand being a product of nonnegative factors. -/
 theorem polyBlockConst_nonneg {Cp : ℝ} (hCp : 0 ≤ Cp) (ν : Measure ℝ) {m p A d_s : ℝ}
     (hp : 1 ≤ p) (k : ℕ) : 0 ≤ polyBlockConst Cp ν m p A d_s k := by
   have hCM : (0:ℝ) ≤ (RWRS.centeredMoment ν m p).toReal := ENNReal.toReal_nonneg
@@ -36,6 +38,8 @@ theorem polyBlockConst_nonneg {Cp : ℝ} (hCp : 0 ≤ Cp) (ν : Measure ℝ) {m 
   have h3 : (0:ℝ) ≤ momConst ⌈p⌉₊ := (momConst_pos _).le
   positivity
 
+/-- The Gaussian-term constant `gaussBlockConst` of `eq:Mk-tail-Ak` is
+nonnegative, each dyadic-scale summand being a product of nonnegative factors. -/
 theorem gaussBlockConst_nonneg {c : ℝ} (hc : 0 < c) (nn : ℕ) (ν : Measure ℝ) (m α δ : ℝ)
     (k : ℕ) : 0 ≤ gaussBlockConst c nn ν m α δ k := by
   have h1 := gaussCoef_nonneg hc nn ν m
@@ -49,6 +53,7 @@ theorem div_rpow_div_eq {C L u : ℝ} (hL : 0 < L) (hu : 0 < u) (p : ℝ) :
   rw [Real.div_rpow hu.le hL.le]
   field_simp
 
+/-- The natural-number-power form of `div_rpow_div_eq`. -/
 theorem div_pow_div_eq {C L u : ℝ} (hL : 0 < L) (hu : 0 < u) (n : ℕ) :
     C / (u / L) ^ n = C * L ^ n / u ^ n := by
   rw [div_pow]

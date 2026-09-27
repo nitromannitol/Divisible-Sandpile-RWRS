@@ -1,4 +1,11 @@
-/-
+import RWRS.Support.Critical
+import RWRS.Support.Countable
+import RWRS.Support.EfronStein
+import RWRS.External.VoltageFunctionConnected
+
+/-!
+# Proposition 5.6: the critical case
+
 Proposition 5.6 of `rwrs.tex`, frozen.  `rwrs.tex:664-683` (label
 `prop:critical`):
 
@@ -26,10 +33,12 @@ threshold is eventually exceeded.
 
 The proof of (b) ends by upgrading a positive probability of explosion to an
 almost sure one through `prop:01-law`, whose proof quotes the existence of a
-bounded nonnegative solution of `Δf = δ_b - δ_a`; that cited input enters here
-as the explicit hypothesis `hVF`, exactly as it does in `prop:01-law` itself.
+bounded nonnegative solution of `Δf = δ_b - δ_a`; that cited input is proved
+on every infinite connected graph (`RWRS.External.voltageFunction_of_connected`)
+and is discharged inside the proof, as it is in `prop:01-law` itself.
+The Efron--Stein inequality the proof of (a) also quotes is proved outright
+in `RWRS/External/EfronStein.lean`, so it is not a hypothesis here.
 -/
-import RWRS.Support.Critical
 
 open MeasureTheory Filter Topology
 open scoped ENNReal
@@ -37,8 +46,8 @@ open scoped ENNReal
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
 -- FROZEN-STATEMENT-BEGIN
-theorem RWRS.Frozen.critical (hES : RWRS.External.EfronStein V)
-    (hVF : RWRS.External.VoltageFunction G) [Infinite V] (hG : G.Connected)
+theorem RWRS.Frozen.critical
+    [Infinite V] (hG : G.Connected)
     (ν : Measure ℝ) (hν : IsProbabilityMeasure ν) (hmean : RWRS.extMean ν = 0)
     (hvar : 0 < RWRS.evar ν) (hsq : RWRS.evar ν < ⊤) :
     (∀ (o : V) (n : ℕ), 1 ≤ n →
@@ -53,6 +62,10 @@ theorem RWRS.Frozen.critical (hES : RWRS.External.EfronStein V)
         ∀ᵐ ξ ∂(RWRS.iidLaw V ν), RWRS.supMeanPayoff G ξ o = ⊤)
 -- FROZEN-STATEMENT-END
 := by
+  have hVF : RWRS.External.VoltageFunction G :=
+    RWRS.External.voltageFunction_of_connected hG
+  haveI : Countable V := RWRS.Support.countable_of_connected hG
+  have hES : RWRS.External.EfronStein V := RWRS.Support.efronStein V
   constructor
   · intro o n _
     exact RWRS.Support.evariance_value_le hES hG hν hmean hsq n o

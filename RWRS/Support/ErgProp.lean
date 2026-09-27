@@ -17,6 +17,9 @@ namespace RWRS.Support
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
+/-- Once a vertex's mass reaches `1` after `j` rounds it stays at least `1` at
+every later round `k`, since the toppling update never removes more than the
+excess mass above `1`. -/
 theorem one_le_config_of_le {σ : V → ℝ} {v : V} {j k : ℕ} (hjk : j ≤ k)
     (hj : 1 ≤ RWRS.config G σ j v) : 1 ≤ RWRS.config G σ k v := by
   induction k with
@@ -35,6 +38,9 @@ theorem one_le_config_of_le {σ : V → ℝ} {v : V} {j k : ℕ} (hjk : j ≤ k)
       subst hz
       exact hj
 
+/-- A vertex with an infinite odometer reaches mass at least `1` at some round,
+since otherwise its emission would vanish at every round and the odometer would
+stay bounded, contradicting `hv`. -/
 theorem exists_one_le_config {σ : V → ℝ} {v : V}
     (hv : RWRS.odometerLimit G σ v = ⊤) : ∃ j : ℕ, 1 ≤ RWRS.config G σ j v := by
   by_contra hcon
@@ -52,6 +58,8 @@ theorem exists_one_le_config {σ : V → ℝ} {v : V}
   exact absurd hv (by simp)
 
 
+/-- A finite odometer limit at `x` bounds the odometer at every finite round by
+`(odometerLimit G σ x).toReal`. -/
 theorem bddAbove_odometer_of_ne_top {σ : V → ℝ} {x : V}
     (hx : RWRS.odometerLimit G σ x ≠ ⊤) :
     ∃ C : ℝ, ∀ n : ℕ, RWRS.odometer G σ n x ≤ C := by
@@ -61,6 +69,8 @@ theorem bddAbove_odometer_of_ne_top {σ : V → ℝ} {x : V}
   have := ENNReal.toReal_mono hx h1
   rwa [ENNReal.toReal_ofReal (odometer_nonneg σ n x)] at this
 
+/-- An infinite odometer limit at `x` exceeds any given threshold `T` at some
+finite round, the converse direction of `bddAbove_odometer_of_ne_top`. -/
 theorem unbounded_odometer_of_eq_top {σ : V → ℝ} {x : V}
     (hx : RWRS.odometerLimit G σ x = ⊤) (T : ℝ) : ∃ n : ℕ, T ≤ RWRS.odometer G σ n x := by
   by_contra hcon

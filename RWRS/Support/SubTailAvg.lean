@@ -39,6 +39,8 @@ variable [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V]
 noncomputable def localTimeOnSum (a b : ℕ) (r : ℝ) (X : ℕ → V) : ℝ≥0∞ :=
   ∑' v : V, ENNReal.ofReal (((localTimeOn a b v X : ℕ) : ℝ) ^ r)
 
+/-- `localTimeOnSum` is a measurable function of the walk trajectory, as a
+countable sum of the measurable per-vertex local-time powers. -/
 theorem measurable_localTimeOnSum (a b : ℕ) (r : ℝ) :
     Measurable (fun X : ℕ → V => localTimeOnSum a b r X) := by
   refine Measurable.tsum fun v => ?_

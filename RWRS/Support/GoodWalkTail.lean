@@ -31,11 +31,15 @@ theorem dependsUpTo_localTime (n : ℕ) (v : V) (r : ℝ) :
     rw [hXY k (le_of_lt (Finset.mem_range.1 hk))]
   simp only [hcard]
 
+/-- The `r`-th power of the local time at `v` up to time `n` is measurable in the
+trajectory, since `dependsUpTo_localTime` shows it depends only on the first `n` steps. -/
 theorem measurable_localTime_rpow (n : ℕ) (v : V) (r : ℝ) :
     Measurable (fun X : ℕ → V => ((RWRS.localTime n v X : ℕ) : ℝ) ^ r) :=
   LatticeProb.Graph.measurable_of_dependsUpTo (dependsUpTo_localTime n v r)
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] in
+/-- The local time at `v` up to time `n` never exceeds `n`, since it counts visits among
+the `n` steps `0, …, n - 1`. -/
 theorem localTime_le (n : ℕ) (v : V) (X : ℕ → V) : RWRS.localTime n v X ≤ n := by
   rw [RWRS.localTime]
   exact le_trans (Finset.card_filter_le _ _) (le_of_eq (Finset.card_range n))
@@ -82,12 +86,16 @@ theorem lintegral_localTime_rpow [Infinite V] (hG : G.Connected)
 noncomputable def localTimeSum (n : ℕ) (r : ℝ) (X : ℕ → V) : ℝ≥0∞ :=
   ∑' v : V, ENNReal.ofReal (((RWRS.localTime n v X : ℕ) : ℝ) ^ r)
 
+/-- `localTimeSum n r`, the sum over all sites of the `r`-th power of the local time, is
+measurable, being a countable sum of the measurable terms `measurable_localTime_rpow`. -/
 theorem measurable_localTimeSum (n : ℕ) (r : ℝ) :
     Measurable (fun X : ℕ → V => localTimeSum n r X) := by
   refine Measurable.tsum fun v => ?_
   exact (measurable_localTime_rpow (V := V) n v r).ennreal_ofReal
 
 omit [MeasurableSingletonClass V] [Countable V] in
+/-- The good-walk event `goodWalk α δ k` is measurable, as a countable intersection over
+sites `v` of the measurable set where the local time at `v` stays below its threshold. -/
 theorem measurableSet_goodWalk (α δ : ℝ) (k : ℕ) [MeasurableSingletonClass V] [Countable V] :
     MeasurableSet (RWRS.goodWalk (V := V) α δ k) := by
   have hrw : RWRS.goodWalk (V := V) α δ k

@@ -23,9 +23,13 @@ variable {V : Type*} {G : SimpleGraph V}
 noncomputable def polyLevel (G : SimpleGraph V) (o : V) (M0 β : ℝ) (v : V) : ℝ :=
   max M0 (((G.edist v o).toNat : ℝ) ^ β)
 
+/-- The level of any site is at least the floor `M0`, directly from the
+`max` in its definition. -/
 theorem le_polyLevel (G : SimpleGraph V) (o : V) (M0 β : ℝ) (v : V) :
     M0 ≤ polyLevel G o M0 β v := le_max_left _ _
 
+/-- If `-M ≤ M0` then `-M` is a lower bound for the level at every site, via
+`le_polyLevel`. -/
 theorem neg_le_polyLevel {M M0 : ℝ} (hM : -M ≤ M0) (β : ℝ) (o v : V) :
     -M ≤ polyLevel G o M0 β v := le_trans hM (le_polyLevel G o M0 β v)
 
@@ -51,6 +55,8 @@ def polyGood (G : SimpleGraph V) [G.LocallyFinite] (o : V) (α δ : ℝ)
   RWRS.goodWalk α δ k ∩
     {X : ℕ → V | ((2 ^ (k + 1) : ℕ) : ℕ∞) < RWRS.exitTime (RWRS.closedBall G o R) X}
 
+/-- `polyGood` is contained in the local-time good-walk event, being defined
+as its intersection with the displacement event. -/
 theorem polyGood_subset_goodWalk (o : V) (α δ : ℝ) (k R : ℕ) :
     polyGood G o α δ k R ⊆ RWRS.goodWalk (V := V) α δ k := Set.inter_subset_left
 

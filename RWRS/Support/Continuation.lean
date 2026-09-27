@@ -167,6 +167,8 @@ noncomputable def valueBound (G : SimpleGraph V) [G.LocallyFinite]
     (ξ : V → ℝ) (K : Finset V) : ℝ :=
   ∑ y ∈ K, RWRS.valueExit G ξ (K : Set V) y
 
+/-- Every finite-volume value is bounded by `valueBound`: at `y ∈ K` this is a
+single term of the defining sum, and off `K` the value is zero. -/
 theorem valueExit_le_valueBound (hdeg : ∀ v : V, 0 < G.degree v) (ξ : V → ℝ) (K : Finset V)
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ (K : Set V)) (y : V) :
     RWRS.valueExit G ξ (K : Set V) y ≤ valueBound G ξ K := by
@@ -178,6 +180,8 @@ theorem valueExit_le_valueBound (hdeg : ∀ v : V, 0 < G.degree v) (ξ : V → �
   · rw [valueExit_eq_zero_of_notMem_set hdeg ξ K hesc hy]
     exact Finset.sum_nonneg fun z _ => zero_le_valueExit hdeg ξ K hesc z
 
+/-- `valueBound` is nonnegative, as a sum of the nonnegative finite-volume
+values `valueExit`. -/
 theorem zero_le_valueBound (hdeg : ∀ v : V, 0 < G.degree v) (ξ : V → ℝ) (K : Finset V)
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ (K : Set V)) :
     0 ≤ valueBound G ξ K :=

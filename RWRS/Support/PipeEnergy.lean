@@ -1,5 +1,16 @@
 import RWRS.Support.PipeDiv
 
+/-!
+# Energy of the unit flow on the tree of pipes
+
+This module bounds the Dirichlet energy that the unit flow of `PipeDiv`
+carries at each site of the pipe tree. At an interior word site the two edges
+each carry flow `± (B ^ |w|)⁻¹`; at a branch site the incoming edge and the
+`B` outgoing child edges combine to the same order of magnitude; and the root
+is the branch case at word length `0`. Together these give the uniform bound
+`pipeNodeEnergy_le`, `2 / (B ^ |v.1|) ^ 2`, at every valid site `v`.
+-/
+
 namespace RWRS.Support
 
 open scoped Classical
@@ -10,6 +21,8 @@ variable {B : ℕ} {L : ℕ → ℕ}
 noncomputable def pipeNodeEnergy (B : ℕ) (L : ℕ → ℕ) (v : List (Fin B) × ℕ) : ℝ :=
   ∑ y ∈ (pipeGraph B L false).neighborFinset v, pipeFlowAmb B L v y ^ 2
 
+/-- At an interior word site, the flow energy is `2 / (B ^ |w|) ^ 2`: the
+predecessor and successor edges each carry flow `± (B ^ |w|)⁻¹`. -/
 theorem pipeNodeEnergy_interior (hL : ∀ j, 1 ≤ j → 1 ≤ L j)
     {w : List (Fin B)} {i : ℕ} (hw : w ≠ []) (hi : 1 ≤ i) (hiL : i ≤ L w.length - 1) :
     pipeNodeEnergy B L (w, i) = 2 * (((B : ℝ) ^ w.length) ^ 2)⁻¹ := by
@@ -34,6 +47,9 @@ theorem pipeNodeEnergy_interior (hL : ∀ j, 1 ≤ j → 1 ≤ L j)
   rw [h1, h2, neg_sq, inv_pow]
   ring
 
+/-- At a branch site `(u, 0)` with `u` nonempty, the flow energy is at most
+`2 / (B ^ |u|) ^ 2`: the incoming edge carries flow `(B ^ |u|)⁻¹` and the `B`
+outgoing edges to the children each carry a flow smaller by a factor `B`. -/
 theorem pipeNodeEnergy_branch (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j)
     (hB : 1 ≤ B) {u : List (Fin B)} (hu : u ≠ []) :
     pipeNodeEnergy B L (u, 0) ≤ 2 * (((B : ℝ) ^ u.length) ^ 2)⁻¹ := by
@@ -78,6 +94,9 @@ theorem pipeNodeEnergy_branch (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hL2 : ∀ j, 
   rw [hsq]
   linarith
 
+/-- At the root `([], 0)`, the flow energy is at most `2` (matching the
+general bound `pipeNodeEnergy_branch` at word length `0`), since each of the
+`B` outgoing edges carries flow `1 / B`. -/
 theorem pipeNodeEnergy_root (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (hB : 1 ≤ B) :
     pipeNodeEnergy B L (([] : List (Fin B)), 0)
       ≤ 2 * (((B : ℝ) ^ ([] : List (Fin B)).length) ^ 2)⁻¹ := by
@@ -109,6 +128,9 @@ theorem pipeNodeEnergy_root (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (hB : 1 ≤ B) 
   have hinvpos : (0 : ℝ) < ((B : ℝ))⁻¹ := inv_pos.2 hBpos
   nlinarith [mul_le_mul_of_nonneg_left hBR hinvpos.le]
 
+/-- **The uniform energy bound at every valid pipe site.** Combining the root,
+branch, and interior cases, the flow energy at any `PipeValid` site is at
+most `2 / (B ^ |v.1|) ^ 2`. -/
 theorem pipeNodeEnergy_le (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j)
     (hB : 1 ≤ B) {v : List (Fin B) × ℕ} (hv : PipeValid B L v) :
     pipeNodeEnergy B L v ≤ 2 * (((B : ℝ) ^ v.1.length) ^ 2)⁻¹ := by

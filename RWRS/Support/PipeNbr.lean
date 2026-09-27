@@ -81,6 +81,7 @@ theorem pred_eq_iff_of_interior (e : Bool) {w : List (Fin B)} {i : ℕ}
       have hiv : i = L w.length - 1 := by omega
       simp [pipePred, hw, hL2, hiv]
 
+/-- `pipeUp` of an interior site is again a valid-plus site. -/
 theorem pipeValidPlus_pipeUp (e : Bool) {w : List (Fin B)} {i : ℕ}
     (hw : w ≠ []) (hi : 1 ≤ i) :
     PipeValidPlus B L e (pipeUp B L (w, i)) := by
@@ -90,6 +91,7 @@ theorem pipeValidPlus_pipeUp (e : Bool) {w : List (Fin B)} {i : ℕ}
   · simp only [pipeUp, if_neg hup]
     exact Or.inl (Or.inl rfl)
 
+/-- An interior site never equals its own `pipeUp`. -/
 theorem ne_pipeUp {w : List (Fin B)} {i : ℕ} (hi : 1 ≤ i) :
     ((w : List (Fin B)), i) ≠ pipeUp B L (w, i) := by
   by_cases hup : i + 1 ≤ L w.length - 1
@@ -134,6 +136,8 @@ theorem neighborSet_interior (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (e : Bool)
       exact ((pred_eq_iff_of_interior e hw hi hiL
         (pipeValidPlus_pipeUp e hw hi)).2 rfl).symm
 
+/-- At an interior site, the step towards the root (`pipePred`) and the step
+away from it (`pipeUp`) are distinct sites. -/
 theorem pipePred_ne_pipeUp {w : List (Fin B)} {i : ℕ} (hw : w ≠ []) (hi : 1 ≤ i) :
     pipePred B L ((w : List (Fin B)), i) ≠ pipeUp B L (w, i) := by
   have hlen : 1 ≤ w.length := List.length_pos_iff.2 hw
@@ -172,6 +176,8 @@ theorem pipePred_ne_pipeUp {w : List (Fin B)} {i : ℕ} (hw : w ≠ []) (hi : 1 
       omega
 
 open scoped Classical in
+/-- The `Finset` form of `neighborSet_interior`: an interior site's neighbour
+`Finset` is `{pipePred B L (w, i), pipeUp B L (w, i)}`. -/
 theorem neighborFinset_interior (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (e : Bool)
     {w : List (Fin B)} {i : ℕ} (hw : w ≠ []) (hi : 1 ≤ i) (hiL : i ≤ L w.length - 1) :
     (pipeGraph B L e).neighborFinset ((w : List (Fin B)), i)
@@ -201,11 +207,14 @@ noncomputable def combFinset (B : ℕ) (L : ℕ → ℕ) (n : ℕ) (w : List (Fi
     Finset (List (Fin B) × ℕ) := (combSet_finite (B := B) (L := L) n w).toFinset
 
 open scoped Classical in
+/-- As a set, `combFinset` is exactly `combSet`. -/
 theorem coe_combFinset (n : ℕ) (w : List (Fin B)) :
     ((combFinset B L n w : Finset (List (Fin B) × ℕ)) : Set (List (Fin B) × ℕ))
       = combSet B L n w := by
   rw [combFinset, Set.Finite.coe_toFinset]
 
+/-- The root of the tree of pipes belongs to every comb `combSet B L n w` with
+`n ≥ 1`. -/
 theorem pipeRoot_mem_combSet {n : ℕ} (w : List (Fin B)) (hn : 1 ≤ n) :
     pipeRoot B ∈ combSet B L n w :=
   ⟨Or.inl rfl, by simp [pipeRoot], by simp [pipeRoot], Or.inr ⟨by simp [pipeRoot], by

@@ -2,6 +2,17 @@ import RWRS.Support.DTStopMeas
 import LatticeProb.Graph.MarkovAE
 import LatticeProb.Graph.PathSpace
 
+/-!
+# Strong Markov property for indicators
+
+This module restates the strong Markov property for an a.s.-finite stopping
+time `τ` in the `ℝ≥0∞`-lintegral form used by the trap estimates: the
+lintegral of an indicator along the trajectory shifted past `τ` equals the
+iterated lintegral obtained by restarting the walk at the stopped position.
+It is derived from the real-valued `markov_stopping_ae` by converting between
+lintegrals and integrals of bounded indicators.
+-/
+
 open LatticeProb LatticeProb.Graph MeasureTheory
 open scoped ENNReal
 

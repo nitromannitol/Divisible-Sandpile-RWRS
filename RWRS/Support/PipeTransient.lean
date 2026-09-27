@@ -1,6 +1,17 @@
 import RWRS.Support.PipeLevel
 import RWRS.Support.Transience
 
+/-!
+# Transience of the tree of pipes
+
+This module proves that the tree of pipes is transient by Thomson's
+principle: the unit flow that sends current `B ^ (-n)` through every
+level-`n` pipe is a genuine flow away from the root, and its energy is the
+convergent series `∑ L_n / B ^ n`, bounded by `flowEnergyOn_pipe_le`. A
+finite energy bound on the effective resistance forces the killed Green
+function at the root to stay finite, so the walk on the pipe tree escapes.
+-/
+
 namespace RWRS.Support
 
 open scoped Classical

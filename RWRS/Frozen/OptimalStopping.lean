@@ -39,9 +39,7 @@ set_option linter.unusedVariables false in
 -- FROZEN-STATEMENT-BEGIN
 theorem RWRS.Frozen.optimalStopping [Infinite V] [MeasurableSpace V]
     [MeasurableSingletonClass V]
-    (hVBE : RWRS.External.VonBahrEsseen) (hFN : RWRS.External.FukNagaevTail)
-    (hHK : RWRS.External.HeatKernelBoundedDegree G)
-    (hVF : RWRS.External.VoltageFunction G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : RWRS.BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : RWRS.HasExtMean ν) :
     (0 < RWRS.extMean ν →
@@ -59,7 +57,8 @@ theorem RWRS.Frozen.optimalStopping [Infinite V] [MeasurableSpace V]
   classical
   haveI := hν
   haveI : Countable V := RWRS.Support.countable_of_connected hG
-  have hES : RWRS.External.EfronStein V := RWRS.Support.efronStein V
+  have hHK : RWRS.External.HeatKernelBoundedDegree G :=
+    RWRS.External.heatKernelBoundedDegree_of_connected hG
   have hdeg : ∀ v : V, 0 < G.degree v := fun v => RWRS.Support.degree_pos hG v
   have hd0 : 0 < d := lt_of_lt_of_le (hdeg (Classical.arbitrary V)) (hd _)
   refine ⟨?_, ?_, ?_⟩
@@ -69,21 +68,21 @@ theorem RWRS.Frozen.optimalStopping [Infinite V] [MeasurableSpace V]
     constructor
     · intro x
       rcases hcase with ⟨hvar, hsq⟩ | ⟨hnz, hsym⟩
-      · exact RWRS.Support.explosion_of_mean_zero hES hVF hG d hd0 hd ν hν hmean hvar hsq x
-      · obtain ⟨o, ho⟩ := RWRS.Support.exists_vertex_explosion hES hVF hG d hd0 hd
-        have hconv := (RWRS.Frozen.convexityReduction hVF hG ν hν hmean hnz hsym o).1
+      · exact RWRS.Support.explosion_of_mean_zero hG d hd0 hd ν hν hmean hvar hsq x
+      · obtain ⟨o, ho⟩ := RWRS.Support.exists_vertex_explosion hG d hd0 hd
+        have hconv := (RWRS.Frozen.convexityReduction hG ν hν hmean hnz hsym o).1
           (fun ρ hρ h0 hv hs => ho ρ hρ h0 hv hs)
         filter_upwards [hconv] with ξ hξ
         exact RWRS.Support.supStopValue_top_everywhere hG hξ x
     · intro hndt x
       have hfl := RWRS.Support.tendsto_fluct_top_of_not_doublyTransient hG hdeg hndt x
       rcases hcase with ⟨hvar, hsq⟩ | ⟨hnz, hsym⟩
-      · obtain ⟨c₁, c₂, _, _, hcrit⟩ := (RWRS.Frozen.critical hES hVF hG ν hν hmean hvar hsq).2
+      · obtain ⟨c₁, c₂, _, _, hcrit⟩ := (RWRS.Frozen.critical hG ν hν hmean hvar hsq).2
         exact (hcrit x hfl).2
-      · refine (RWRS.Frozen.convexityReduction hVF hG ν hν hmean hnz hsym x).2
+      · refine (RWRS.Frozen.convexityReduction hG ν hν hmean hnz hsym x).2
           (fun ρ hρ h0 hv hs => ?_)
-        obtain ⟨c₁, c₂, _, _, hcrit⟩ := (RWRS.Frozen.critical hES hVF hG ρ hρ h0 hv hs).2
+        obtain ⟨c₁, c₂, _, _, hcrit⟩ := (RWRS.Frozen.critical hG ρ hρ h0 hv hs).2
         exact (hcrit x hfl).2
   · intro hmean p hp hmom q hq1 hq2 x
-    exact RWRS.Support.lintegral_supPayoff_rpow_ne_top_boundedDegree hVBE hFN hHK hG d hd
+    exact RWRS.Support.lintegral_supPayoff_rpow_ne_top_boundedDegree hHK hG d hd
       ν hν hdet hmean p hp hmom q hq1 hq2 x

@@ -16,6 +16,7 @@ open scoped ENNReal Topology
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
+/-- `excess`, subtracting `1` at every coordinate, is measurable. -/
 theorem measurable_excess : Measurable (fun σ : V → ℝ => RWRS.excess σ) :=
   measurable_pi_lambda _ fun v => (measurable_pi_apply v).sub_const 1
 
@@ -57,11 +58,17 @@ theorem measure_stabilizes_eq_zero [Infinite V] (hG : G.Connected) (ν : Measure
 
 variable {ν : Measure ℝ}
 
+/-- Subtracting `1` is measurable. -/
 theorem measurable_sub_one : Measurable (fun z : ℝ => z - 1) := by fun_prop
 
+/-- The negative part of the shifted law is finite whenever `ν`'s negative
+part is, via `negPart_map_sub_one_ne_top`. -/
 theorem negPart_map_ne_top [IsProbabilityMeasure ν] (h : RWRS.negPart ν ≠ ⊤) :
     RWRS.negPart (ν.map (fun z : ℝ => z - 1)) ≠ ⊤ := negPart_map_sub_one_ne_top ν h
 
+/-- The positive part of `ν` is bounded by the positive part of the shifted
+law plus `1`, since shifting `z` to `z - 1` changes `ENNReal.ofReal z` by at
+most `1`. -/
 theorem posPart_le_map_sub_one [IsProbabilityMeasure ν] :
     RWRS.posPart ν ≤ RWRS.posPart (ν.map (fun z : ℝ => z - 1)) + 1 := by
   rw [posPart_map_sub_one]
@@ -76,6 +83,8 @@ theorem posPart_le_map_sub_one [IsProbabilityMeasure ν] :
     _ = (∫⁻ z, ENNReal.ofReal (z - 1) ∂ν) + 1 := by
         rw [lintegral_add_right _ measurable_const, lintegral_const, measure_univ, mul_one]
 
+/-- If `ν` has a finite real extended mean `c`, its positive part is finite: an
+infinite positive part would force `extMean ν` to `⊤`, not a real coercion. -/
 theorem posPart_ne_top_of_extMean_coe {c : ℝ} (h : RWRS.extMean ν = (c : EReal)) :
     RWRS.posPart ν ≠ ⊤ := by
   intro hp
@@ -84,6 +93,8 @@ theorem posPart_ne_top_of_extMean_coe {c : ℝ} (h : RWRS.extMean ν = (c : ERea
   · rw [hn, EReal.coe_ennreal_top] at h; simp at h
   · rw [EReal.top_sub (by simpa using hn)] at h; simp at h
 
+/-- If `ν` has a finite real extended mean `c`, its negative part is finite, by
+the symmetric argument to `posPart_ne_top_of_extMean_coe`. -/
 theorem negPart_ne_top_of_extMean_coe {c : ℝ} (h : RWRS.extMean ν = (c : EReal)) :
     RWRS.negPart ν ≠ ⊤ := by
   intro hn
@@ -92,12 +103,15 @@ theorem negPart_ne_top_of_extMean_coe {c : ℝ} (h : RWRS.extMean ν = (c : ERea
   · rw [hp, EReal.coe_ennreal_top] at h; simp at h
   · rw [EReal.sub_top] at h; simp at h
 
+/-- Shifting a probability measure by `-1` keeps it a probability measure. -/
 theorem isProbabilityMeasure_map_sub_one [IsProbabilityMeasure ν] :
     IsProbabilityMeasure (ν.map (fun z : ℝ => z - 1)) := by
   constructor
   rw [Measure.map_apply measurable_sub_one MeasurableSet.univ]
   simp
 
+/-- If the identity is integrable against `ν`, it is integrable against the
+shifted law `ν.map (· - 1)`, via the change of variables `z ↦ z - 1`. -/
 theorem integrable_map_sub_one [IsProbabilityMeasure ν] (hint : Integrable (fun z : ℝ => z) ν) :
     Integrable (fun z : ℝ => z) (ν.map (fun z : ℝ => z - 1)) := by
   have hmm : AEStronglyMeasurable (fun z : ℝ => z) (ν.map (fun z : ℝ => z - 1)) :=
@@ -105,6 +119,7 @@ theorem integrable_map_sub_one [IsProbabilityMeasure ν] (hint : Integrable (fun
   rw [integrable_map_measure hmm measurable_sub_one.aemeasurable]
   exact hint.sub (integrable_const 1)
 
+/-- The mean of the shifted law is the mean of `ν` minus one. -/
 theorem integral_map_sub_one [IsProbabilityMeasure ν] (hint : Integrable (fun z : ℝ => z) ν) :
     ∫ z, z ∂(ν.map (fun z : ℝ => z - 1)) = (∫ z, z ∂ν) - 1 := by
   have hmm : AEStronglyMeasurable (fun z : ℝ => z) (ν.map (fun z : ℝ => z - 1)) :=
@@ -164,6 +179,10 @@ theorem extMean_map_sub_one_pos [IsProbabilityMeasure ν] (hdet : RWRS.HasExtMea
 
 /-! ### The variance of the shifted law -/
 
+/-- **The extended variance is invariant under shifting by a constant.**  If
+`ν` has finite extended variance, the shifted law `ν.map (· - 1)` has the same
+extended variance, since `evariance` at `z - 1` equals `evariance` at `z`, both
+agreeing with the ordinary shift-invariant `variance`. -/
 theorem evar_map_sub_one [IsProbabilityMeasure ν] (hsq : RWRS.evar ν < ⊤) :
     RWRS.evar (ν.map (fun z : ℝ => z - 1)) = RWRS.evar ν := by
   haveI := isProbabilityMeasure_map_sub_one (ν := ν)

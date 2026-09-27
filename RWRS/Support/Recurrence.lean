@@ -23,6 +23,8 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
 /-! ### The kernel is a probability -/
 
+/-- The heat kernel `heat G k x y`, the `k`-step transition probability, never
+exceeds `1`, by induction on `k`. -/
 theorem heat_le_one [Infinite V] (hG : G.Connected) :
     ∀ (k : ℕ) (x y : V), heat G k x y ≤ 1 := by
   classical
@@ -37,6 +39,8 @@ theorem heat_le_one [Infinite V] (hG : G.Connected) :
         _ = (G.degree x : ℝ) := by
             rw [Finset.sum_const, SimpleGraph.card_neighborFinset_eq_degree, nsmul_eq_mul, mul_one]
 
+/-- `walkOp` fixes the constants: the one-step average of a constant function
+over the neighbours returns that constant. -/
 theorem walkOp_const [Infinite V] (hG : G.Connected) (c : ℝ) (x : V) :
     walkOp G (fun _ => c) x = c := by
   have hd : (0 : ℝ) < (G.degree x : ℝ) := by exact_mod_cast degree_pos hG x
@@ -53,20 +57,29 @@ noncomputable def escapeProb (G : SimpleGraph V) [G.LocallyFinite] (o : V) : ℕ
   | k + 1 => fun x => if x = o then 0 else walkOp G (escapeProb G o k) x
 
 open scoped Classical in
+/-- At time `0`, `escapeProb` unfolds to its defining case split: `0` at `o`
+and `1` elsewhere. -/
 theorem escapeProb_zero (o x : V) : escapeProb G o 0 x = if x = o then 0 else 1 := rfl
 
 open scoped Classical in
+/-- At time `k + 1`, `escapeProb` unfolds to its defining recursion: `0` at `o`
+and the one-step average `walkOp` elsewhere. -/
 theorem escapeProb_succ (o : V) (k : ℕ) (x : V) :
     escapeProb G o (k + 1) x = if x = o then 0 else walkOp G (escapeProb G o k) x := rfl
 
+/-- `escapeProb` vanishes at `o` itself, at every time `k`. -/
 theorem escapeProb_self (o : V) : ∀ k : ℕ, escapeProb G o k o = 0
   | 0 => by classical rw [escapeProb_zero, if_pos rfl]
   | _ + 1 => by classical rw [escapeProb_succ, if_pos rfl]
 
+/-- Away from `o`, `escapeProb` at time `k + 1` is the one-step average
+`walkOp` of `escapeProb` at time `k`. -/
 theorem escapeProb_succ_of_ne {o x : V} (hx : x ≠ o) (k : ℕ) :
     escapeProb G o (k + 1) x = walkOp G (escapeProb G o k) x := by
   classical rw [escapeProb_succ, if_neg hx]
 
+/-- `escapeProb` is nonnegative, by induction on the time using nonnegativity
+of `walkOp`'s averaging sum. -/
 theorem escapeProb_nonneg (o : V) : ∀ (k : ℕ) (x : V), 0 ≤ escapeProb G o k x := by
   classical
   intro k
@@ -79,6 +92,8 @@ theorem escapeProb_nonneg (o : V) : ∀ (k : ℕ) (x : V), 0 ≤ escapeProb G o 
       · exact le_rfl
       · exact div_nonneg (Finset.sum_nonneg fun z _ => ih z) (Nat.cast_nonneg _)
 
+/-- `escapeProb` is bounded above by `1`, by induction on the time, averaging
+values already at most `1`. -/
 theorem escapeProb_le_one [Infinite V] (hG : G.Connected) (o : V) :
     ∀ (k : ℕ) (x : V), escapeProb G o k x ≤ 1 := by
   classical
@@ -97,6 +112,8 @@ theorem escapeProb_le_one [Infinite V] (hG : G.Connected) (o : V) :
               rw [Finset.sum_const, SimpleGraph.card_neighborFinset_eq_degree, nsmul_eq_mul,
                 mul_one]
 
+/-- `escapeProb G o k x` is nonincreasing in `k`: surviving longer without
+hitting `o` is only harder. -/
 theorem escapeProb_antitone [Infinite V] (hG : G.Connected) (o : V) :
     ∀ (k : ℕ) (x : V), escapeProb G o (k + 1) x ≤ escapeProb G o k x := by
   classical
@@ -116,6 +133,8 @@ theorem escapeProb_antitone [Infinite V] (hG : G.Connected) (o : V) :
         exact div_le_div_of_nonneg_right (Finset.sum_le_sum fun z _ => ih z)
           (Nat.cast_nonneg _)
 
+/-- `escapeProb G o · x` is antitone over all pairs of times, obtained from
+the one-step antitonicity `escapeProb_antitone` by induction. -/
 theorem escapeProb_le_of_le [Infinite V] (hG : G.Connected) (o : V) {j J : ℕ} (hjJ : J ≤ j)
     (x : V) : escapeProb G o j x ≤ escapeProb G o J x := by
   induction j with
@@ -132,16 +151,23 @@ time at `o` for the walk started at `x`. -/
 noncomputable def defect (G : SimpleGraph V) [G.LocallyFinite] (o : V) (n : ℕ) (x : V) : ℝ :=
   ∑ j ∈ Finset.range n, escapeProb G o j x * heat G (n - 1 - j) o o
 
+/-- The defect vanishes at time `0`, its defining sum being empty. -/
 theorem defect_zero (o : V) (x : V) : defect G o 0 x = 0 := by simp [defect]
 
+/-- The defect vanishes when evaluated at `o` itself, since `escapeProb`
+already vanishes there. -/
 theorem defect_self (o : V) (n : ℕ) : defect G o n o = 0 := by
   refine Finset.sum_eq_zero fun j _ => ?_
   rw [escapeProb_self, zero_mul]
 
+/-- The defect is nonnegative, as a sum of products of the nonnegative
+`escapeProb` and `heat`. -/
 theorem defect_nonneg (o : V) (n : ℕ) (x : V) : 0 ≤ defect G o n x :=
   Finset.sum_nonneg fun j _ =>
     mul_nonneg (escapeProb_nonneg o j x) (heat_nonneg _ o o)
 
+/-- Away from `o`, the defect at time `n + 1` splits off its first term
+`heat G n o o` and averages the rest by `walkOp`. -/
 theorem defect_succ_of_ne {o x : V} (hx : x ≠ o) (n : ℕ) :
     defect G o (n + 1) x = heat G n o o + walkOp G (fun z => defect G o n z) x := by
   rw [defect, Finset.sum_range_succ' (fun j => escapeProb G o j x * heat G (n + 1 - 1 - j) o o) n]
@@ -160,6 +186,9 @@ theorem defect_succ_of_ne {o x : V} (hx : x ≠ o) (n : ℕ) :
   simp only [defect]
   ring
 
+/-- **The expected local time at `o` from `o` equals the expected local time
+from `x` plus the defect.**  Proved by induction on the time using the
+first-step recursions for `meanLocalTime` and for `defect`. -/
 theorem meanLocalTime_eq_add_defect [Infinite V] (hG : G.Connected) (o : V) :
     ∀ (n : ℕ) (x : V), meanLocalTime G n o o = meanLocalTime G n x o + defect G o n x := by
   intro n
@@ -191,24 +220,36 @@ theorem meanLocalTime_eq_add_defect [Infinite V] (hG : G.Connected) (o : V) :
 noncomputable def escapeLimit (G : SimpleGraph V) [G.LocallyFinite] (o x : V) : ℝ :=
   ⨅ k : ℕ, escapeProb G o k x
 
+/-- The sequence `k ↦ escapeProb G o k x` is bounded below by `0`. -/
 theorem escapeProb_bddBelow (o x : V) : BddBelow (Set.range fun k => escapeProb G o k x) :=
   ⟨0, by rintro _ ⟨k, rfl⟩; exact escapeProb_nonneg o k x⟩
 
+/-- `escapeLimit` is nonnegative, as an infimum of the nonnegative
+`escapeProb`. -/
 theorem escapeLimit_nonneg (o x : V) : 0 ≤ escapeLimit G o x :=
   le_ciInf fun k => escapeProb_nonneg o k x
 
+/-- `escapeLimit` is bounded by every term `escapeProb G o k x` of the
+sequence it is the infimum of. -/
 theorem escapeLimit_le (o x : V) (k : ℕ) : escapeLimit G o x ≤ escapeProb G o k x :=
   ciInf_le (escapeProb_bddBelow o x) k
 
+/-- `escapeProb G o k x` converges, as `k → ∞`, to `escapeLimit G o x`, being
+a bounded antitone sequence converging to its infimum. -/
 theorem tendsto_escapeProb [Infinite V] (hG : G.Connected) (o x : V) :
     Tendsto (fun k => escapeProb G o k x) atTop (𝓝 (escapeLimit G o x)) :=
   tendsto_atTop_ciInf (antitone_nat_of_succ_le fun k => escapeProb_antitone hG o k x)
     (escapeProb_bddBelow o x)
 
+/-- `escapeLimit` vanishes at `o` itself, sandwiched between `0` and the
+vanishing `escapeProb G o 0 o`. -/
 theorem escapeLimit_self (o : V) : escapeLimit G o o = 0 :=
   le_antisymm (by simpa [escapeProb_self] using escapeLimit_le (G := G) o o 0)
     (escapeLimit_nonneg o o)
 
+/-- Away from `o`, `escapeLimit` is harmonic: it equals the one-step average
+`walkOp` of itself, obtained by passing to the limit in the recursion for
+`escapeProb`. -/
 theorem escapeLimit_harmonic [Infinite V] (hG : G.Connected) {o x : V} (hx : x ≠ o) :
     escapeLimit G o x = walkOp G (escapeLimit G o) x := by
   refine tendsto_nhds_unique ((tendsto_escapeProb hG o x).comp (tendsto_add_atTop_nat 1)) ?_
@@ -221,17 +262,25 @@ theorem escapeLimit_harmonic [Infinite V] (hG : G.Connected) {o x : V} (hx : x �
 
 /-! ### The two bounds on the defect -/
 
+/-- Reflecting the summation index turns the sum of `heat G (n - 1 - j) o o`
+over `j < n` into `meanLocalTime G n o o`. -/
 theorem sum_heat_reflect (o : V) (n : ℕ) :
     ∑ j ∈ Finset.range n, heat G (n - 1 - j) o o = meanLocalTime G n o o := by
   rw [meanLocalTime]
   exact Finset.sum_range_reflect (fun j => heat G j o o) n
 
+/-- **A lower bound for the defect**: it is at least `escapeLimit G o x` times
+`meanLocalTime G n o o`, bounding `escapeProb` below by `escapeLimit` term by
+term. -/
 theorem defect_ge (o : V) (n : ℕ) (x : V) :
     escapeLimit G o x * meanLocalTime G n o o ≤ defect G o n x := by
   rw [← sum_heat_reflect (G := G) o n, Finset.mul_sum]
   refine Finset.sum_le_sum fun j _ => ?_
   exact mul_le_mul_of_nonneg_right (escapeLimit_le o x j) (heat_nonneg _ o o)
 
+/-- **An upper bound for the defect**: it is at most `J` plus
+`escapeProb G o J x` times `meanLocalTime G n o o`, splitting the sum at time
+`J` and bounding the early terms by `1` and the late ones by `escapeProb G o J x`. -/
 theorem defect_le [Infinite V] (hG : G.Connected) (o : V) (J n : ℕ) (x : V) :
     defect G o n x ≤ (J : ℝ) + escapeProb G o J x * meanLocalTime G n o o := by
   classical
@@ -270,6 +319,9 @@ theorem defect_le [Infinite V] (hG : G.Connected) (o : V) (J n : ℕ) (x : V) :
 
 /-! ### The dichotomy -/
 
+/-- The expected local time from `x` is at most `1 - escapeLimit G o x` times
+the expected local time from `o`, combining `meanLocalTime_eq_add_defect` with
+the lower bound `defect_ge`. -/
 theorem meanLocalTime_le_of_escapeLimit [Infinite V] (hG : G.Connected) (o : V) (n : ℕ) (x : V) :
     meanLocalTime G n x o ≤ (1 - escapeLimit G o x) * meanLocalTime G n o o := by
   have h := meanLocalTime_eq_add_defect hG o n x
@@ -351,20 +403,29 @@ theorem escapeLimit_eq_zero [Infinite V] (hG : G.Connected) (o : V)
 
 /-! ### The transient and the recurrent alternative -/
 
+/-- The expected local time `meanLocalTime G n o o` is monotone in `n`. -/
 theorem meanLocalTime_monotone (o : V) : Monotone (fun n => meanLocalTime G n o o) :=
   monotone_nat_of_le_succ fun n => meanLocalTime_mono n o o
 
+/-- The expected local time at time `n` is bounded by the total heat sum
+`∑' k, heat G k o o`, coerced into `ℝ≥0∞`. -/
 theorem ofReal_meanLocalTime_le_tsum (o : V) (n : ℕ) :
     ENNReal.ofReal (meanLocalTime G n o o) ≤ ∑' k : ℕ, ENNReal.ofReal (heat G k o o) := by
   rw [meanLocalTime, ENNReal.ofReal_sum_of_nonneg fun k _ => heat_nonneg (G := G) k o o]
   exact ENNReal.sum_le_tsum _
 
+/-- **A transient vertex has bounded expected local time.**  If the Green's
+function at `o` is finite, `meanLocalTime G n o o` is bounded uniformly in `n`
+by the total heat sum. -/
 theorem meanLocalTime_bddAbove_of_transient [Infinite V] (hG : G.Connected) (o : V)
     (h : green G o o ≠ ⊤) : ∃ M : ℝ, ∀ n : ℕ, meanLocalTime G n o o ≤ M := by
   have hs := (green_ne_top_iff hG o o).mp h
   refine ⟨(∑' k : ℕ, ENNReal.ofReal (heat G k o o)).toReal, fun n => ?_⟩
   exact (ENNReal.ofReal_le_iff_le_toReal hs).mp (ofReal_meanLocalTime_le_tsum (G := G) o n)
 
+/-- **A recurrent vertex has unbounded expected local time.**  If the Green's
+function at `o` is infinite, `meanLocalTime G n o o` exceeds any bound `M` for
+some `n`, else the total heat sum would be finite. -/
 theorem meanLocalTime_unbounded_of_recurrent [Infinite V] (hG : G.Connected) (o : V)
     (h : green G o o = ⊤) : ∀ M : ℝ, ∃ n : ℕ, M < meanLocalTime G n o o := by
   intro M
@@ -379,6 +440,8 @@ theorem meanLocalTime_unbounded_of_recurrent [Infinite V] (hG : G.Connected) (o 
     exact hbd n
   exact ((green_ne_top_iff hG o o).mpr (ne_top_of_le_ne_top ENNReal.ofReal_ne_top hsum)) h
 
+/-- At a recurrent vertex, `meanLocalTime G n o o` tends to infinity, via the
+unbounded monotone sequence of `meanLocalTime_unbounded_of_recurrent`. -/
 theorem tendsto_meanLocalTime_of_recurrent [Infinite V] (hG : G.Connected) (o : V)
     (h : green G o o = ⊤) :
     Tendsto (fun n : ℕ => meanLocalTime G n o o) atTop atTop := by

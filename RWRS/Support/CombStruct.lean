@@ -12,6 +12,7 @@ namespace RWRS.Support
 
 variable {B : ℕ} {L : ℕ → ℕ} {n : ℕ} {w : List (Fin B)}
 
+/-- For `1 ≤ j ≤ n = w.length`, the prefix `w.take j` is nonempty. -/
 theorem take_ne_nil (hwn : w.length = n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
     (w.take j) ≠ [] := by
   intro h
@@ -20,13 +21,17 @@ theorem take_ne_nil (hwn : w.length = n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n
   simp at this
   omega
 
+/-- For `j ≤ n = w.length`, the prefix `w.take j` has length exactly `j`. -/
 theorem length_take_eq (hwn : w.length = n) {j : ℕ} (hjn : j ≤ n) :
     (w.take j).length = j := by
   rw [List.length_take, hwn]
   omega
 
+/-- `w.take j` is a prefix of `w`, restating `List.take_prefix` under this
+file's naming for the trunk-word lemmas below. -/
 theorem take_prefix_w (j : ℕ) : (w.take j) <+: w := List.take_prefix j w
 
+/-- Dropping the last element of `w.take j` still leaves a prefix of `w`. -/
 theorem dropLast_take_prefix (j : ℕ) : (w.take j).dropLast <+: w :=
   (List.dropLast_prefix _).trans (take_prefix_w j)
 

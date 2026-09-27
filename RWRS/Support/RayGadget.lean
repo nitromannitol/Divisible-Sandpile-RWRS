@@ -21,6 +21,7 @@ variable {B : ℕ} {L : ℕ → ℕ}
 
 /-! ### The step towards the root -/
 
+/-- Every site `v` of the gadget `H(m)` has depth at most the gadget's radius `R_m`. -/
 theorem pipeDepth_le_gadgetRadius {m : ℕ} {v : List (Fin B) × ℕ}
     (hv : v ∈ gadgetSites B L m) : pipeDepth L v ≤ gadgetRadius L m := by
   obtain ⟨hval, hlen⟩ := hv
@@ -39,6 +40,7 @@ theorem pipeDepth_le_gadgetRadius {m : ℕ} {v : List (Fin B) × ℕ}
     rw [hj] at h2
     omega
 
+/-- Stepping one site towards the root via `pipePred` preserves validity. -/
 theorem pipePred_valid {v : List (Fin B) × ℕ} (hv : PipeValid B L v) :
     PipeValid B L (pipePred B L v) := by
   obtain ⟨w, i⟩ := v
@@ -66,6 +68,7 @@ theorem pipePred_valid {v : List (Fin B) × ℕ} (hv : PipeValid B L v) :
           rw [hpe]
           exact Or.inr ⟨hne, by dsimp only; omega, by dsimp only; omega⟩
 
+/-- Stepping towards the root via `pipePred` never increases the word length. -/
 theorem pipePred_length_le (v : List (Fin B) × ℕ) :
     (pipePred B L v).1.length ≤ v.1.length := by
   obtain ⟨w, i⟩ := v
@@ -82,6 +85,8 @@ theorem pipePred_length_le (v : List (Fin B) × ℕ) :
       · simp [pipePred, hi, List.length_dropLast]
       · simp [pipePred, hi]
 
+/-- **Depth strictly decreases towards the root.**  For any valid site `v` other than the
+root, `pipeDepth` at `pipePred B L v` is strictly less than `pipeDepth` at `v`. -/
 theorem pipeDepth_pred_lt (hL : ∀ j, 1 ≤ j → 1 ≤ L j) {v : List (Fin B) × ℕ}
     (hv : PipeValid B L v) (hne : v ≠ pipeRoot B) :
     pipeDepth L (pipePred B L v) < pipeDepth L v := by
@@ -127,6 +132,8 @@ theorem pipeDepth_pred_lt (hL : ∀ j, 1 ≤ j → 1 ≤ L j) {v : List (Fin B) 
           rw [hk, pipeDepth_succ']
         omega
 
+/-- A valid non-root site is never its own `pipePred`, from the strict depth drop of
+`pipeDepth_pred_lt`. -/
 theorem pipePred_ne_self {v : List (Fin B) × ℕ}
     (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hv : PipeValid B L v) (hne : v ≠ pipeRoot B) :
     pipePred B L v ≠ v := by
@@ -138,12 +145,15 @@ theorem pipePred_ne_self {v : List (Fin B) × ℕ}
 
 /-! ### The depth is realized by a path -/
 
+/-- `k ≤ gadgetRadius L k`, since each of the `k` pipe lengths summed is at least `1`. -/
 theorem le_gadgetRadius_self (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (k : ℕ) :
     k ≤ gadgetRadius L k := by
   have h1 : ∑ j ∈ Finset.Icc 1 k, 1 ≤ ∑ j ∈ Finset.Icc 1 k, L j :=
     Finset.sum_le_sum fun j hj => hL j (Finset.mem_Icc.1 hj).1
   simpa [gadgetRadius, Nat.card_Icc] using h1
 
+/-- A valid site with `pipeDepth` zero must be the root, using `le_gadgetRadius_self` to
+rule out a nonempty word of positive depth. -/
 theorem eq_root_of_pipeDepth_zero (hL : ∀ j, 1 ≤ j → 1 ≤ L j)
     {v : List (Fin B) × ℕ} (hv : PipeValid B L v)
     (h : pipeDepth L v = 0) : v = pipeRoot B := by
@@ -157,9 +167,14 @@ theorem eq_root_of_pipeDepth_zero (hL : ∀ j, 1 ≤ j → 1 ≤ L j)
     rw [pipeDepth, if_neg hne0] at h
     omega
 
+/-- Adjacency in `gadgetGraph B L m` is exactly adjacency in the underlying pipe graph
+(with `e = false`), restricted to gadget sites. -/
 theorem gadgetGraph_adj_iff {m : ℕ} {u v : gadgetSites B L m} :
     (gadgetGraph B L m).Adj u v ↔ (pipeGraph B L false).Adj u v := Iff.rfl
 
+/-- **Depth is realized by a walk.**  Any site within `pipeDepth` at most `n` is joined to
+the gadget's root by a walk of length at most `n`, by induction on `n` stepping through
+`pipePred` and `pipeDepth_pred_lt`. -/
 theorem exists_walk_le_depth (hL : ∀ j, 1 ≤ j → 1 ≤ L j) {m : ℕ} :
     ∀ (n : ℕ) (v : gadgetSites B L m),
       pipeDepth L (v : List (Fin B) × ℕ) ≤ n →
@@ -199,6 +214,8 @@ theorem exists_walk_le_depth (hL : ∀ j, 1 ≤ j → 1 ≤ L j) {m : ℕ} :
         rw [SimpleGraph.Walk.length_concat]
         omega
 
+/-- The graph distance from the gadget's root to a site `v` is at most `pipeDepth L v`,
+via the walk produced by `exists_walk_le_depth`. -/
 theorem edist_root_le_depth (hL : ∀ j, 1 ≤ j → 1 ≤ L j) {m : ℕ}
     (v : gadgetSites B L m) :
     (gadgetGraph B L m).edist (gadgetRoot B L m) v
@@ -250,10 +267,12 @@ theorem encard_depth_le_card (hc : CombCond B α) {m t : ℕ}
 noncomputable def wordsEq (B k : ℕ) : Finset (List (Fin B)) :=
   (Finset.univ : Finset (Fin k → Fin B)).image List.ofFn
 
+/-- There are `B^k` words of length exactly `k`. -/
 theorem card_wordsEq (B k : ℕ) : (wordsEq B k).card = B ^ k := by
   rw [wordsEq, Finset.card_image_of_injective _ List.ofFn_injective, Finset.card_univ]
   simp
 
+/-- Any member of `wordsEq B k` has length exactly `k`. -/
 theorem length_of_mem_wordsEq {B k : ℕ} {w : List (Fin B)} (h : w ∈ wordsEq B k) :
     w.length = k := by
   obtain ⟨f, -, hf⟩ := Finset.mem_image.1 h
@@ -267,6 +286,7 @@ noncomputable def gadgetFinset (B : ℕ) (L : ℕ → ℕ) (m : ℕ) : Finset (L
   (Finset.range m).biUnion fun j => (wordsEq B (j + 1)) ×ˢ Finset.range (L (j + 1))
 
 open scoped Classical in
+/-- `gadgetFinset B L m`, as a set, is contained in `gadgetSites B L m`. -/
 theorem gadgetFinset_subset (B : ℕ) (L : ℕ → ℕ) (m : ℕ) :
     (gadgetFinset B L m : Set (List (Fin B) × ℕ)) ⊆ gadgetSites B L m := by
   intro v hv
@@ -286,6 +306,8 @@ theorem gadgetFinset_subset (B : ℕ) (L : ℕ → ℕ) (m : ℕ) :
     simp at hlen
 
 open scoped Classical in
+/-- The cardinality of `gadgetFinset B L m` is the size sum `∑_{j<m} B^{j+1} L_{j+1}`,
+by disjointness of the words of distinct lengths. -/
 theorem card_gadgetFinset (B : ℕ) (L : ℕ → ℕ) (m : ℕ) :
     (gadgetFinset B L m).card = ∑ j ∈ Finset.range m, B ^ (j + 1) * L (j + 1) := by
   classical
@@ -299,6 +321,8 @@ theorem card_gadgetFinset (B : ℕ) (L : ℕ → ℕ) (m : ℕ) :
     have h2 : v.1.length = j + 1 := length_of_mem_wordsEq hv'.1
     exact hij (by omega)
 
+/-- `gadgetSize B L m`, defined as a sum over `Finset.Icc`, equals the same sum reindexed
+over `Finset.range`, by induction on `m`. -/
 theorem gadgetSize_eq_sum_range (B : ℕ) (L : ℕ → ℕ) (m : ℕ) :
     gadgetSize B L m = ∑ j ∈ Finset.range m, B ^ (j + 1) * L (j + 1) := by
   induction m with
@@ -321,6 +345,8 @@ theorem gadgetSize_le_encard (B : ℕ) (L : ℕ → ℕ) (m : ℕ) :
 
 
 open scoped Classical in
+/-- The converse of `gadgetFinset_subset`: every gadget site other than the root belongs
+to `gadgetFinset`, so the two agree away from the root. -/
 theorem mem_gadgetFinset (hL : ∀ j, 1 ≤ j → 1 ≤ L j) {m : ℕ} {v : List (Fin B) × ℕ}
     (hv : v ∈ gadgetSites B L m) (hne : v ≠ pipeRoot B) : v ∈ gadgetFinset B L m := by
   classical
@@ -385,23 +411,32 @@ def RayDepth (B : ℕ) (L : ℕ → ℕ) (m s : ℕ → ℕ) (ray : ℕ → V)
 variable {G : SimpleGraph V} {o : V} {m s : ℕ → ℕ} {ray : ℕ → V}
   {φ : ∀ k, gadgetSites B L (m k) → V}
 
+/-- Every vertex of a `RayGadget` graph has some `RayDepth`, given by its position on the
+ray or in a gadget through the `cover` property of `RayGadget`. -/
 theorem rayDepth_exists (hRG : RayGadget G o B L m s ray φ) (x : V) :
     ∃ n : ℕ, RayDepth B L m s ray φ x n := by
   rcases hRG.cover x with ⟨i, hi⟩ | ⟨k, v, hv⟩
   · exact ⟨i, Or.inl ⟨i, hi.symm, rfl⟩⟩
   · exact ⟨s k + pipeDepth L (v : List (Fin B) × ℕ), Or.inr ⟨k, v, hv, rfl⟩⟩
 
+/-- The root `o` has `RayDepth` `0`, since it is the ray vertex `ray 0`. -/
 theorem rayDepth_root (hRG : RayGadget G o B L m s ray φ) :
     RayDepth B L m s ray φ o 0 :=
   Or.inl ⟨0, hRG.rayRoot.symm, rfl⟩
 
+/-- The ray vertex `ray i` has `RayDepth` exactly `i`. -/
 theorem rayDepth_ray (_hRG : RayGadget G o B L m s ray φ) (i : ℕ) :
     RayDepth B L m s ray φ (ray i) i := Or.inl ⟨i, rfl, rfl⟩
 
+/-- A gadget site `v` of the `k`-th copy has `RayDepth` equal to `s k` plus its
+`pipeDepth` inside that gadget. -/
 theorem rayDepth_gadget (k : ℕ) (v : gadgetSites B L (m k)) :
     RayDepth B L m s ray φ (φ k v) (s k + pipeDepth L (v : List (Fin B) × ℕ)) :=
   Or.inr ⟨k, v, rfl, rfl⟩
 
+/-- **`RayDepth` is a well-defined function of the vertex.**  The two clauses of `RayDepth`
+agree wherever both apply, using the `RayGadget` axioms that the ray and the gadgets meet
+only at their attachment points. -/
 theorem rayDepth_unique (hRG : RayGadget G o B L m s ray φ) {x : V} {n n' : ℕ}
     (h : RayDepth B L m s ray φ x n) (h' : RayDepth B L m s ray φ x n') : n = n' := by
   have hrt : ∀ j : ℕ,
@@ -437,6 +472,9 @@ theorem rayDepth_unique (hRG : RayGadget G o B L m s ray φ) {x : V} {n n' : ℕ
           rw [← hRG.attach k, ← hRG.attach k', ← hv, hv']
         rw [hnk, hnk', hrt k, hrt k', pipeDepth_root, hRG.rayInj hattach]
 
+/-- **`RayDepth` moves by at most one along an edge.**  Across an edge of the ray, the
+gadget attachment, or a gadget's own internal edges, the depth can increase, but only
+by at most `1`, using `pipeDepth_adj` for the gadget case. -/
 theorem rayDepth_step (hRG : RayGadget G o B L m s ray φ) {x b : V} {n : ℕ}
     (hadj : G.Adj x b) (h : RayDepth B L m s ray φ x n) :
     ∃ n' : ℕ, RayDepth B L m s ray φ b n' ∧ n ≤ n' + 1 := by
@@ -456,6 +494,9 @@ theorem rayDepth_step (hRG : RayGadget G o B L m s ray φ) {x b : V} {n : ℕ}
       pipeDepth_adj (e := false) hvw.symm
     omega
 
+/-- Iterating a one-step depth bound along a walk: any function on vertices whose value is
+unique per vertex and moves by at most `1` along each edge is controlled end-to-end by the
+walk's length, applied abstractly to `RayDepth` via `hstep` and `huniq`. -/
 theorem rayDepth_le_add
     (hstep : ∀ (x b : V) (n : ℕ), G.Adj x b → RayDepth B L m s ray φ x n →
       ∃ n' : ℕ, RayDepth B L m s ray φ b n' ∧ n ≤ n' + 1)
@@ -476,6 +517,8 @@ theorem rayDepth_le_add
       rw [SimpleGraph.Walk.length_cons]
       omega
 
+/-- `RayDepth` at `x` is at most the length of any walk from `x` to the root, specializing
+`rayDepth_le_add` with `rayDepth_root` at the endpoint. -/
 theorem rayDepth_le_walk_length (hRG : RayGadget G o B L m s ray φ) {x : V}
     (p : G.Walk x o) {n : ℕ} (h : RayDepth B L m s ray φ x n) : n ≤ p.length := by
   have := rayDepth_le_add
@@ -483,6 +526,8 @@ theorem rayDepth_le_walk_length (hRG : RayGadget G o B L m s ray φ) {x : V}
     (fun _ _ _ h h' => rayDepth_unique hRG h h') p (rayDepth_root hRG) h
   omega
 
+/-- Any vertex `x` inside the closed ball of radius `r` about `o` has `RayDepth` at most
+`r`, realizing the graph distance from `x` to `o` by a geodesic walk. -/
 theorem rayDepth_le_of_mem_ball (hRG : RayGadget G o B L m s ray φ) {x : V} {r n : ℕ}
     (hx : x ∈ closedBall G o r) (h : RayDepth B L m s ray φ x n) : n ≤ r := by
   have hedist : G.edist x o ≤ (r : ℕ∞) := hx
@@ -514,6 +559,8 @@ open scoped Classical in
 /-- The last gadget the ball of radius `r` can reach. -/
 noncomputable def lastGadget (s : ℕ → ℕ) (r : ℕ) : ℕ := (reachedGadgets s r).sup id
 
+/-- Under the gap separation hypothesis on `s`, the index `j` is at most `s (j + 1)`, by
+induction using each gap's strict inequality. -/
 theorem sep_le_index {L : ℕ → ℕ} {m s : ℕ → ℕ}
     (hsep : ∀ k : ℕ, 2 ≤ k → s (k - 1) + gadgetRadius L (m (k - 1)) < s k) (j : ℕ) :
     j ≤ s (j + 1) := by
@@ -526,6 +573,8 @@ theorem sep_le_index {L : ℕ → ℕ} {m s : ℕ → ℕ}
       rw [hpred] at h
       omega
 
+/-- If `s k ≤ r` then `k ≤ r + 1`: under the separation hypothesis, `s` grows fast enough
+that only finitely many indices can be reached by radius `r`. -/
 theorem index_le_of_le {L : ℕ → ℕ} {m s : ℕ → ℕ}
     (hsep : ∀ k : ℕ, 2 ≤ k → s (k - 1) + gadgetRadius L (m (k - 1)) < s k) {r k : ℕ}
     (h : s k ≤ r) : k ≤ r + 1 := by
@@ -537,6 +586,9 @@ theorem index_le_of_le {L : ℕ → ℕ} {m s : ℕ → ℕ}
     omega
 
 open scoped Classical in
+/-- **The closed ball is covered by the ray prefix and the reached gadgets.**  Every vertex
+of `closedBall G o r` is either a ray vertex `ray i` with `i ≤ r`, or lies in the part of
+some reached gadget within its remaining radius budget, via `rayDepth_le_of_mem_ball`. -/
 theorem closedBall_subset (hRG : RayGadget G o B L m s ray φ)
     (hsep : ∀ k : ℕ, 2 ≤ k → s (k - 1) + gadgetRadius L (m (k - 1)) < s k) (r : ℕ) :
     closedBall G o r ⊆
@@ -561,6 +613,9 @@ theorem closedBall_subset (hRG : RayGadget G o B L m s ray φ)
       · exact ⟨v, ⟨by simp only [Set.mem_setOf_eq]; omega, hroot⟩, hv.symm⟩
 
 open scoped Classical in
+/-- **Counting bound for the closed ball.**  From the covering `closedBall_subset`, the
+ball of radius `r` has at most `r + 1` ray vertices, plus the full sizes of the gadgets
+before the last reached one, plus the reached part of that last gadget. -/
 theorem encard_closedBall_le (hRG : RayGadget G o B L m s ray φ)
     (hsep : ∀ k : ℕ, 2 ≤ k → s (k - 1) + gadgetRadius L (m (k - 1)) < s k)
     (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (r : ℕ) :
@@ -620,6 +675,7 @@ def rayWalk (hRG : RayGadget G o B L m s ray φ) : ∀ i : ℕ, G.Walk o (ray i)
   | 0 => hRG.rayRoot ▸ SimpleGraph.Walk.nil
   | i + 1 => (rayWalk hRG i).concat ((hRG.adj _ _).2 (Or.inl ⟨i, rfl, rfl⟩))
 
+/-- The constructed ray walk `rayWalk hRG i` from `o` to `ray i` has length `i`. -/
 theorem rayWalk_length (hRG : RayGadget G o B L m s ray φ) (i : ℕ) :
     (rayWalk hRG i).length = i := by
   induction i with
@@ -637,6 +693,9 @@ def gadgetHom (hRG : RayGadget G o B L m s ray φ) (k : ℕ) :
   toFun := φ k
   map_rel' := fun {v w} h => (hRG.adj _ _).2 (Or.inr (Or.inr ⟨k, v, w, h, rfl, rfl⟩))
 
+/-- Every site `v` of the `k`-th gadget lies within distance `s k + gadgetRadius L (m k)`
+of the root, concatenating the ray walk to the attachment point with the depth-realizing
+walk inside the gadget, pushed forward by `gadgetHom`. -/
 theorem edist_le_of_mem_gadget (hRG : RayGadget G o B L m s ray φ)
     (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (k : ℕ) (v : ↥(gadgetSites B L (m k))) :
     G.edist (φ k v) o ≤ ((s k + gadgetRadius L (m k) : ℕ) : ℕ∞) := by
@@ -656,6 +715,9 @@ theorem edist_le_of_mem_gadget (hRG : RayGadget G o B L m s ray φ)
             (p.map (gadgetHom hRG k)))).length : ℕ∞) := SimpleGraph.edist_le _
     _ ≤ ((s k + gadgetRadius L (m k) : ℕ) : ℕ∞) := by exact_mod_cast hlen
 
+/-- The size of the `k`-th gadget lower-bounds the closed ball of radius
+`s k + gadgetRadius L (m k)` about the root, since the whole gadget's image under `φ k`
+sits inside that ball by `edist_le_of_mem_gadget`. -/
 theorem gadgetSize_le_encard_closedBall (hRG : RayGadget G o B L m s ray φ)
     (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (k : ℕ) :
     ((gadgetSize B L (m k) : ℕ) : ℕ∞)
@@ -681,6 +743,8 @@ theorem gadgetSize_le_encard_closedBall (hRG : RayGadget G o B L m s ray φ)
 /-! ### The two halves of the volume bound in real form -/
 
 open scoped Classical in
+/-- `gadgetPart` is contained in the sublevel set for depth at most the smaller of the
+remaining radius budget and the gadget's own radius, other than its root. -/
 theorem gadgetPart_subset_depth {m s : ℕ → ℕ} {r k : ℕ} :
     gadgetPart B L m s r k
       ⊆ {v : ↥(gadgetSites B L (m k)) |
@@ -691,6 +755,8 @@ theorem gadgetPart_subset_depth {m s : ℕ → ℕ} {r k : ℕ} :
   exact ⟨le_min hd (pipeDepth_le_gadgetRadius v.2), hne⟩
 
 open scoped Classical in
+/-- If the remaining-radius/gadget-radius minimum is `0`, `gadgetPart` is empty: no
+non-root site can have depth `0`, by `eq_root_of_pipeDepth_zero`. -/
 theorem gadgetPart_eq_empty_of_min_zero (hL : ∀ j, 1 ≤ j → 1 ≤ L j)
     {m s : ℕ → ℕ} {r k : ℕ}
     (h0 : min (r - s k) (gadgetRadius L (m k)) = 0) :
@@ -745,6 +811,8 @@ theorem encard_gadgetPart_le (hc : CombCond B α) {d_f : ℝ} (hdf : d_f = 1 + 1
           ENNReal.ofReal_le_ofReal hstep
 
 open scoped Classical in
+/-- Given the volume growth hypothesis `hvol` on the gadget sizes against `s k ^ d_f`, the
+sum of gadget sizes up to the last reached index is at most `gadgetSize (m 0) + r ^ d_f`. -/
 theorem sum_gadgetSize_le {m s : ℕ → ℕ} {d_f : ℝ} (hdfpos : 0 < d_f)
     (hvol : ∀ k : ℕ, 2 ≤ k →
       (∑ j ∈ Finset.range k, (gadgetSize B L (m j) : ℝ)) ≤ (s k : ℝ) ^ d_f)
@@ -856,10 +924,12 @@ theorem encard_closedBall_le_real (hc : CombCond B α) {d_f : ℝ} (hdf : d_f = 
 
 /-! ### The exponent of `eq:rec-rho` is below one -/
 
+/-- `log B` is positive, since `B ≥ 2`. -/
 theorem log_base_pos (hc : CombCond B α) : 0 < Real.log B := by
   have hB2 : (2 : ℝ) ≤ (B : ℝ) := cast_B_ge hc
   exact Real.log_pos (by linarith)
 
+/-- The exponent `log(combLambda B α) / (α log B)` is positive, since `combLambda B α > 1`. -/
 theorem delta_pos (hc : CombCond B α) :
     0 < Real.log (combLambda B α) / (α * Real.log B) := by
   have hlog := log_base_pos hc
@@ -867,6 +937,8 @@ theorem delta_pos (hc : CombCond B α) :
   have hlam : 1 < combLambda B α := hc.2.2.2.2.2.2
   exact div_pos (Real.log_pos hlam) (by positivity)
 
+/-- The exponent `log(combLambda B α) / (α log B)` is strictly below `1`, from the explicit
+formula `log(combLambda B α) = (2α - 1) log B - log 4` and `α < 1`. -/
 theorem delta_lt_one (hc : CombCond B α) :
     Real.log (combLambda B α) / (α * Real.log B) < 1 := by
   have hlog := log_base_pos hc
@@ -879,6 +951,8 @@ theorem delta_lt_one (hc : CombCond B α) :
   rw [hlam, div_lt_one (by positivity)]
   nlinarith
 
+/-- Any `ρ` below `log(combLambda B α) / (α log B) / (d_f + 1)` is strictly less than `1`,
+combining `delta_pos`, `delta_lt_one`, and `d_f + 1 ≥ 1`. -/
 theorem rho_lt_one (hc : CombCond B α) {d_f ρ : ℝ} (hdf : d_f = 1 + 1 / α)
     (hρ2 : ρ < Real.log (combLambda B α) / (α * Real.log B) / (d_f + 1)) : ρ < 1 := by
   have hα := alpha_pos hc

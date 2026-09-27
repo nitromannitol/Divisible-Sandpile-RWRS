@@ -27,9 +27,13 @@ level `t v` and recentred so that its mean is the global mean `m`. -/
 noncomputable def zetaField (ρ : Measure ℝ) (M m : ℝ) (t ξ : V → ℝ) : V → ℝ :=
   fun v => siteShift ρ M m (t v) (ξ v)
 
+/-- The centred recentred field at `v` unfolds to the centred `siteShift`, by
+definition of `zetaField`. -/
 theorem zetaField_sub (ρ : Measure ℝ) (M m : ℝ) (t ξ : V → ℝ) (v : V) :
     zetaField ρ M m t ξ v - m = siteShift ρ M m (t v) (ξ v) - m := rfl
 
+/-- The recentred field `zetaField ρ M m t` is measurable in `ξ`, from the
+measurability of `siteShift` at each coordinate. -/
 theorem measurable_zetaField (ρ : Measure ℝ) (M m : ℝ) (t : V → ℝ) :
     Measurable fun ξ : V → ℝ => zetaField ρ M m t ξ :=
   measurable_pi_lambda _ fun v => (measurable_siteShift ρ M m (t v)).comp (measurable_pi_apply v)

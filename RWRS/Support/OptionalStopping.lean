@@ -11,6 +11,10 @@ namespace RWRS.Support
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] [Infinite V]
 
+/-- **Optional stopping for the walk average.** For a bounded stopping time
+`τ`, the payoff of the scenery `-laplacian G f` stopped at `τ` plus `f (X τ)`
+has expectation `f x`, by induction on the horizon using the one-step
+Laplacian identity to absorb the first-step term. -/
 theorem walkExp_optional (hG : G.Connected) (f : V → ℝ) :
     ∀ (n : ℕ) (x : V) (τ : (ℕ → V) → ℕ), IsStopping τ → (∀ X, τ X ≤ n) →
       walkExp G n x (fun X =>

@@ -27,11 +27,16 @@ theorem ballAvg_congr (ν : Measure ℝ) (r : ℕ) (h : RWRS.Net 1 → ℝ≥0�
     · rw [netComb_of_notMem hi, netComb_of_notMem hi]
   rw [this]
 
+/-- For a fixed network `M`, the splice average `ballAvg ν r h M` is measurable
+as a function of the marks `ξ`. -/
 theorem measurable_ballAvg_fixed (ν : Measure ℝ) [IsProbabilityMeasure ν] (r : ℕ)
     {h : RWRS.Net 1 → ℝ≥0∞} (hm : Measurable h) (M : RWRS.Net 0) :
     Measurable (ballAvg ν r h M) :=
   (measurable_ballAvg ν r hm).comp ((measurable_const (a := M)).prodMk measurable_id)
 
+/-- The `n`-fold iterated reroot average of `Ψ` and `Ψ'` agree at `N` whenever
+`Ψ` and `Ψ'` agree on every one-step reroot of `N`, by induction on `n`
+unfolding `rerootAvg^[n+1]` one step at a time. -/
 theorem rerootIter_congr_reroot {m : ℕ} {Ψ Ψ' : RWRS.Net m → ℝ≥0∞} :
     ∀ (n : ℕ) (N : RWRS.Net m), (∀ v : ℕ, Ψ (RWRS.netReroot N v) = Ψ' (RWRS.netReroot N v)) →
       (rerootAvg^[n] Ψ) N = (rerootAvg^[n] Ψ') N := by
@@ -51,6 +56,9 @@ theorem rerootIter_congr_reroot {m : ℕ} {Ψ Ψ' : RWRS.Net m → ℝ≥0∞} :
       refine Finset.sum_congr rfl fun y _ => ?_
       exact ih (RWRS.netReroot N y) (fun v => hN v)
 
+/-- The mark integral commutes with a single reroot average: `rerootAvg` is a
+finite sum divided by a constant degree, so integrating termwise gives the same
+result as integrating first. -/
 theorem lintegral_rerootAvg_exchange {m : ℕ} {P : Measure (ℕ → ℝ)} [SFinite P]
     (Ψ : RWRS.Net m → (ℕ → ℝ) → ℝ≥0∞) (hΨ : ∀ M, Measurable (Ψ M)) (N : RWRS.Net m) :
     ∫⁻ ξ, rerootAvg (fun M => Ψ M ξ) N ∂P = rerootAvg (fun M => ∫⁻ ξ, Ψ M ξ ∂P) N := by
@@ -61,6 +69,10 @@ theorem lintegral_rerootAvg_exchange {m : ℕ} {P : Measure (ℕ → ℝ)} [SFin
   congr 1
   exact lintegral_finsetSum _ (fun y _ => hΨ (RWRS.netReroot N y))
 
+/-- **Conditional independence of two splice averages.**  If the radius-`r`
+balls around `N` and around its reroot at `v` are disjoint, the marks integral
+of the product of the two splice averages factors as the product of their
+marks integrals, via the measure-preserving decomposition `netComb`. -/
 theorem lintegral_ballAvg_mul (ν : Measure ℝ) [IsProbabilityMeasure ν] (r : ℕ)
     {h : RWRS.Net 1 → ℝ≥0∞} (hm : Measurable h) (N : RWRS.Net 0) (v : ℕ)
     (hdisj : Disjoint (netBallX N r) (netBallX (RWRS.netReroot N v) r)) :

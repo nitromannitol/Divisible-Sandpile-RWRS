@@ -4,6 +4,18 @@ import RWRS.Support.DTExitAux
 import LatticeProb.Graph.MarkovAE
 import LatticeProb.Graph.ExitTime
 
+/-!
+# Unconstrained stage recursion
+
+Builds the unconstrained stage recursion that explores trap blocks along a trajectory `X`:
+`uncStageStep` advances the pair `(T_i, F_i)` of stage time and used sites by finding the next
+site admissible for `F_i`, and `uncStageState`, `uncTime`, `uncUsed` package the iterated state.
+The stage times are shown to be walk-stopping times (`uncTime_isStopping`), the used set only
+grows (`uncUsed_mono`), the stage centre always lies in the used set but is never itself
+admissible (`uncCentre_mem_used`, `uncCentre_not_admissible`), and the stage increment is bounded
+by the exit time of the non-admissible set (`uncTime_succ_le_exit`).
+-/
+
 open LatticeProb RWRS RWRS.Support
 
 open MeasureTheory
@@ -52,6 +64,8 @@ namespace RWRS.Support
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
 open scoped Classical in
+/-- When a further admissible site exists after stage `i`, the `(i + 1)`-th stage time is the
+least such witness and the used set gains its trap block. -/
 theorem uncTime_succ_of_ex (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
     (C : V → Finset V) (X : ℕ → V) (i : ℕ)
     (hne : (uncStageState G r C X i).1 ≠ ⊤)
@@ -66,6 +80,8 @@ theorem uncTime_succ_of_ex (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
 
 
 open scoped Classical in
+/-- When no further admissible site exists after stage `i`, the `(i + 1)`-th stage time is `⊤`
+and the used set does not grow. -/
 theorem uncTime_succ_of_nex (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
     (C : V → Finset V) (X : ℕ → V) (i : ℕ)
     (h : ¬ ∃ m : ℕ, (uncStageState G r C X i).1.toNat < m ∧
@@ -78,6 +94,8 @@ theorem uncTime_succ_of_nex (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
 
 
 open scoped Classical in
+/-- As long as stage `i`'s time is finite, the next stage time strictly exceeds it, whether or
+not a further admissible site is found. -/
 theorem uncTime_lt (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
     (C : V → Finset V) (X : ℕ → V) (i : ℕ)
     (hfin : (uncStageState G r C X i).1 ≠ ⊤) :

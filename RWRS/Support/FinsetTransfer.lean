@@ -39,6 +39,8 @@ theorem iidLaw_map_equiv (S : Set V) (ν : Measure ℝ) [IsProbabilityMeasure ν
   rw [hfac, ← h3, ← iidLaw_restrict S ν]
   exact (Measure.map_map (MeasurableEquiv.measurable _) (Set.measurable_restrict S)).symm
 
+/-- Reading the marks along the bijection `e : Fin n ≃ S` is a measurable map
+`(V → ℝ) → (Fin n → ℝ)`. -/
 theorem measurable_readAlong (S : Set V) {n : ℕ} (e : Fin n ≃ S) :
     Measurable (fun ξ : V → ℝ => fun j : Fin n => ξ ((e j : S) : V)) :=
   measurable_pi_lambda _ fun _ => measurable_pi_apply _

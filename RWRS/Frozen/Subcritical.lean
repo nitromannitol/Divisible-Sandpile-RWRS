@@ -28,7 +28,8 @@ graph being countable with the discrete structure.
 
 The proof of the proposition applies `lem:fuk-nagaev`, whose own proof cites the
 von Bahr--Esseen inequality and the Fuk--Nagaev inequality from outside the
-paper, so the proposition carries those two as explicit hypotheses.
+paper; both are proved outright in `RWRS/External/`, so neither is a
+hypothesis here.
 -/
 import RWRS.Support.SubFinal
 
@@ -40,7 +41,6 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 set_option linter.unusedVariables false in
 -- FROZEN-STATEMENT-BEGIN
 theorem RWRS.Frozen.subcritical [Infinite V] [MeasurableSpace V] [MeasurableSingletonClass V]
-    (hVBE : RWRS.External.VonBahrEsseen) (hFN : RWRS.External.FukNagaevTail)
     (hG : G.Connected)
     (d : ℕ) (hd : RWRS.BoundedDegree G d) (d_s A : ℝ) (hds : 0 < d_s)
     (hspec : RWRS.SpectralDimensionBound G d_s A)
@@ -56,7 +56,7 @@ theorem RWRS.Frozen.subcritical [Infinite V] [MeasurableSpace V] [MeasurableSing
   haveI := hν
   haveI : Countable V := RWRS.Support.countable_of_connected hG
   haveI : DecidableEq V := Classical.decEq V
-  exact ⟨fun q hq1 hq2 => RWRS.Support.lintegral_supPayoff_rpow_ne_top hG hVBE hFN d hd hds
+  exact ⟨fun q hq1 hq2 => RWRS.Support.lintegral_supPayoff_rpow_ne_top hG d hd hds
       hspec ν hmean hp hmom hq1 hq2,
-    fun hgt x => RWRS.Support.ae_supStopValue_ne_top hG hVBE hFN d hd hds hspec ν hmean hp
+    fun hgt x => RWRS.Support.ae_supStopValue_ne_top hG d hd hds hspec ν hmean hp
       hmom hgt x⟩

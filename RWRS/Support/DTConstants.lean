@@ -1,6 +1,19 @@
 import RWRS.Support.DTTrapFamily
 import RWRS.Support.Truncation
 
+/-!
+# Trap threshold and mass constants
+
+This module produces the two real constants the trap construction needs from
+the scenery law `ν`. First, for any block-size bound `M` there is a threshold
+`ε > 0` small enough that a trap event on a block of size at most `M + 1`
+fires with probability at most `1/2`, by continuity of measure along the
+increasing sets `Set.Ioi (-n)`. Second, if `ν` is centred with positive
+variance then some level `-ε` still carries positive mass, since otherwise
+`ν` would be supported on `[0, ∞)` and, being centred, forced to be a point
+mass at `0`, contradicting the positive variance.
+-/
+
 open MeasureTheory ProbabilityTheory Filter
 open scoped ENNReal
 

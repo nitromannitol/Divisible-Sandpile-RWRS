@@ -138,7 +138,6 @@ theorem volumeGrowthUpper_shift (hG : G.Connected) {o : V} {C d_f : ℝ} (hC : 0
 mass with a finite moment of order `p > 3` stabilizes almost surely. -/
 theorem measure_stabilizes_eq_one_part_one [Infinite V] [MeasurableSpace V]
     [MeasurableSingletonClass V] [Countable V] [DecidableEq V] (hG : G.Connected)
-    (hVBE : RWRS.External.VonBahrEsseen) (hFNt : RWRS.External.FukNagaevTail)
     (d : ℕ) (hbd : RWRS.BoundedDegree G d) {A : ℝ}
     (hsp : RWRS.SpectralDimensionBound G 1 A)
     (ν : Measure ℝ) [IsProbabilityMeasure ν] (hmean : RWRS.extMean ν < 1)
@@ -148,7 +147,7 @@ theorem measure_stabilizes_eq_one_part_one [Infinite V] [MeasurableSpace V]
   have hq2 : (1:ℝ) < (p - 1) / 2 := by
     rw [lt_div_iff₀ (by norm_num : (0:ℝ) < 2)]
     linarith
-  have hbig := lintegral_odometerLimit_rpow_ne_top (G := G) hG hVBE hFNt d hbd hsp ν hmean
+  have hbig := lintegral_odometerLimit_rpow_ne_top (G := G) hG d hbd hsp ν hmean
     hp hmom (q := 1) le_rfl hq2
   refine measure_stabilizes_eq_one_of_lintegral hG (RWRS.iidLaw V ν) fun v => ?_
   refine ne_top_of_le_ne_top hbig ?_

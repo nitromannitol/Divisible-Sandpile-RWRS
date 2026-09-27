@@ -23,6 +23,8 @@ the position `i < 2^{k+1-s}`. -/
 def dyadicIdx (k : ℕ) : Finset (ℕ × ℕ) :=
   (Finset.range (k + 1)).biUnion fun s => (Finset.range (2 ^ (k + 1 - s))).image fun i => (s, i)
 
+/-- A valid scale-position pair `(s, i)`, with `s ≤ k` and `i` in range for that scale, belongs
+to `dyadicIdx k`. -/
 theorem mem_dyadicIdx {k s i : ℕ} (hs : s ≤ k) (hi : i < 2 ^ (k + 1 - s)) :
     (s, i) ∈ dyadicIdx k := by
   refine Finset.mem_biUnion.mpr ⟨s, Finset.mem_range.mpr (by omega), ?_⟩

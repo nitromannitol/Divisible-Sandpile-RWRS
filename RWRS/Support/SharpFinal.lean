@@ -158,6 +158,8 @@ theorem tsum_ball_tail_eq_top {o : V} {c_vol d_f d_w α K : ℝ}
           rw [ENNReal.ofReal_mul (by positivity), ENNReal.ofReal_toReal hmeas]
 
 
+/-- `ENNReal.ofReal` commutes with taking a minimum against `1`, by a case split on whether
+`x ≤ 1`. -/
 theorem ofReal_min_one (x : ℝ) : ENNReal.ofReal (min x 1) = min (ENNReal.ofReal x) 1 := by
   rcases le_total x 1 with h | h
   · rw [min_eq_left h, min_eq_left (by simpa using ENNReal.ofReal_le_ofReal h)]

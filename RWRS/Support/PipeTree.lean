@@ -50,6 +50,8 @@ def pipeNbrList (B : ℕ) (L : ℕ → ℕ) (v : List (Fin B) × ℕ) :
   pipePred B L v :: (v.1, v.2 + 1) :: (v.1, 0) ::
     (List.finRange B).flatMap fun c => [(v.1 ++ [c], 0), (v.1 ++ [c], 1)]
 
+/-- Every neighbor of a site in the tree of pipes appears in the explicit finite
+list `pipeNbrList`, by case analysis on the defining `pipePred` equation. -/
 theorem pipe_nbr_subset (B : ℕ) (L : ℕ → ℕ) (e : Bool) (v : List (Fin B) × ℕ) :
     (pipeGraph B L e).neighborSet v ⊆ {u | u ∈ pipeNbrList B L v} := by
   rintro ⟨w, i⟩ ⟨-, -, hne, hadj⟩
@@ -92,6 +94,8 @@ theorem pipe_nbr_subset (B : ℕ) (L : ℕ → ℕ) (e : Bool) (v : List (Fin B)
           subst h
           exact Or.inl rfl
 
+/-- The tree of pipes is locally finite, its neighbor sets being finite subsets
+of the finite list `pipeNbrList` by `pipe_nbr_subset`. -/
 noncomputable instance pipeLocallyFinite (B : ℕ) (L : ℕ → ℕ) (e : Bool) :
     (pipeGraph B L e).LocallyFinite := fun v =>
   Set.Finite.fintype

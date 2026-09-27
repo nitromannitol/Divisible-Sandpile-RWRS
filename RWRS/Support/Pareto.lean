@@ -36,18 +36,25 @@ uniform on `(0,1]`. -/
 noncomputable def paretoLaw (q : ℝ) : Measure ℝ :=
   (volume.restrict (Set.Ioc (0 : ℝ) 1)).map (fun u => u ^ (-(1 / q)))
 
+/-- `u ↦ u ^ c` is measurable, for any fixed real exponent `c`. -/
 theorem measurable_rpow_const (c : ℝ) : Measurable (fun u : ℝ => u ^ c) :=
   Measurable.pow_const measurable_id c
 
+/-- `volume` restricted to `Ioc 0 1` is a probability measure, since that interval has unit
+length. -/
 instance isProbabilityMeasure_unitInterval :
     IsProbabilityMeasure (volume.restrict (Set.Ioc (0 : ℝ) 1)) := by
   constructor
   rw [Measure.restrict_apply_univ, Real.volume_Ioc]
   simp
 
+/-- `paretoLaw q` is a probability measure, as the pushforward of the unit-interval law under
+a measurable map. -/
 instance isProbabilityMeasure_paretoLaw (q : ℝ) : IsProbabilityMeasure (paretoLaw q) :=
   Measure.isProbabilityMeasure_map (measurable_rpow_const _).aemeasurable
 
+/-- Unfolds `paretoLaw q` as the pushforward of `volume` on `Ioc 0 1` along
+`u ↦ u ^ (-(1 / q))`. -/
 theorem paretoLaw_apply {q : ℝ} {s : Set ℝ} (hs : MeasurableSet s) :
     paretoLaw q s
       = volume ((fun u : ℝ => u ^ (-(1 / q))) ⁻¹' s ∩ Set.Ioc (0 : ℝ) 1) := by
@@ -126,6 +133,8 @@ theorem extMean_eq_integral {ν : Measure ℝ} (hp : RWRS.posPart ν ≠ ⊤)
   rw [integral_id_eq (integrable_id_of_finite hp hn), RWRS.extMean,
     ← EReal.coe_ennreal_toReal hp, ← EReal.coe_ennreal_toReal hn, ← EReal.coe_sub]
 
+/-- The negative part of `paretoLaw q` vanishes, since the law is almost surely at least
+`1`. -/
 theorem negPart_paretoLaw {q : ℝ} (hq : 0 < q) : RWRS.negPart (paretoLaw q) = 0 := by
   rw [RWRS.negPart]
   refine (lintegral_eq_zero_iff' ?_).2 ?_
@@ -134,12 +143,16 @@ theorem negPart_paretoLaw {q : ℝ} (hq : 0 < q) : RWRS.negPart (paretoLaw q) = 
     simp only [Pi.zero_apply]
     exact ENNReal.ofReal_eq_zero.2 (by linarith)
 
+/-- The positive part of `paretoLaw q` is finite for `q > 1`, from the finite first moment
+`lintegral_rpow_paretoLaw_ne_top`. -/
 theorem posPart_paretoLaw_ne_top {q : ℝ} (hq : 1 < q) : RWRS.posPart (paretoLaw q) ≠ ⊤ := by
   have h := lintegral_rpow_paretoLaw_ne_top (q := q) (p := 1) (by linarith) hq
   rw [RWRS.posPart]
   refine ne_of_eq_of_ne (lintegral_congr fun z => ?_) h
   rw [Real.rpow_one]
 
+/-- The identity function is integrable under `paretoLaw q` for `q > 1`, combining
+`posPart_paretoLaw_ne_top` and `negPart_paretoLaw`. -/
 theorem integrable_id_paretoLaw {q : ℝ} (hq : 1 < q) :
     Integrable (fun z : ℝ => z) (paretoLaw q) :=
   integrable_id_of_finite (posPart_paretoLaw_ne_top hq)
@@ -149,6 +162,8 @@ theorem integrable_id_paretoLaw {q : ℝ} (hq : 1 < q) :
 noncomputable def shiftedParetoLaw (q μ : ℝ) : Measure ℝ :=
   (paretoLaw q).map (fun z => z + (μ - ∫ y, y ∂(paretoLaw q)))
 
+/-- `shiftedParetoLaw q μ` is a probability measure, as a shift-pushforward of
+`paretoLaw q`. -/
 instance isProbabilityMeasure_shiftedParetoLaw (q μ : ℝ) :
     IsProbabilityMeasure (shiftedParetoLaw q μ) :=
   Measure.isProbabilityMeasure_map (measurable_id.add_const _).aemeasurable

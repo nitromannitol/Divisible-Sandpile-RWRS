@@ -21,10 +21,13 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 /-- The time `n` rounded down to a multiple of `2 ^ (k - j)`. -/
 def dyTrunc (k n j : ℕ) : ℕ := 2 ^ (k - j) * (n / 2 ^ (k - j))
 
+/-- At `j = k`, `dyTrunc` rounds to `n` itself. -/
 theorem dyTrunc_last (k n : ℕ) : dyTrunc k n k = n := by
   unfold dyTrunc
   simp
 
+/-- At `j = 0`, for `n` in the `k`-th dyadic block, `dyTrunc` rounds down to
+`2 ^ k`. -/
 theorem dyTrunc_zero {k n : ℕ} (h1 : 2 ^ k ≤ n) (h2 : n < 2 ^ (k + 1)) :
     dyTrunc k n 0 = 2 ^ k := by
   unfold dyTrunc
@@ -36,6 +39,7 @@ theorem dyTrunc_zero {k n : ℕ} (h1 : 2 ^ k ≤ n) (h2 : n < 2 ^ (k + 1)) :
       omega
   rw [hdiv, mul_one]
 
+/-- `dyTrunc k n j` never exceeds `n`, being a rounding-down of it. -/
 theorem dyTrunc_le_self (k n j : ℕ) : dyTrunc k n j ≤ n :=
   Nat.mul_div_le n (2 ^ (k - j))
 
@@ -58,6 +62,7 @@ theorem dyTrunc_le_of_le (k n : ℕ) {j j' : ℕ} (h : j ≤ j') :
         rw [← ht']
         exact hle
 
+/-- `dyTrunc k n` is monotone in the index `j`, via `dyTrunc_le_of_le`. -/
 theorem monotone_dyTrunc (k n : ℕ) : Monotone (dyTrunc k n) :=
   fun _ _ h => dyTrunc_le_of_le k n h
 

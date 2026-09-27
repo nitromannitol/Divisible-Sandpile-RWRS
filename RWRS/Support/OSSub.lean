@@ -18,7 +18,6 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 a bounded-degree graph. -/
 theorem lintegral_supPayoff_rpow_ne_top_boundedDegree [Infinite V] [MeasurableSpace V]
     [MeasurableSingletonClass V]
-    (hVBE : RWRS.External.VonBahrEsseen) (hFN : RWRS.External.FukNagaevTail)
     (hHK : RWRS.External.HeatKernelBoundedDegree G)
     (hG : G.Connected) (d : ℕ) (hd : RWRS.BoundedDegree G d)
     (ν : Measure ℝ) (hν : IsProbabilityMeasure ν) (hdet : RWRS.HasExtMean ν)
@@ -32,7 +31,7 @@ theorem lintegral_supPayoff_rpow_ne_top_boundedDegree [Infinite V] [MeasurableSp
   have hqds : q < (p - 1) * min ((1 : ℝ) / 2) 1 := by
     rw [show min ((1 : ℝ) / 2) 1 = 1 / 2 by norm_num]
     linarith
-  have hsub := (RWRS.Frozen.subcritical hVBE hFN hG d hd 1 A one_pos hsp ν hν hdet hmean p
+  have hsub := (RWRS.Frozen.subcritical hG d hd 1 A one_pos hsp ν hν hdet hmean p
     hpds hmom).1 q hq1 hqds
   refine ne_top_of_le_ne_top hsub ?_
   exact le_iSup (fun y : V => ∫⁻ z, RWRS.supPayoff G z.1 z.2 ^ q ∂(RWRS.jointLaw G ν y)) x

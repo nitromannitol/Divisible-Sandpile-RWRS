@@ -25,6 +25,8 @@ open scoped Classical in
 noncomputable def blockExtend (S : Set V) (z : ↥S → ℝ) : V → ℝ :=
   fun w => if h : w ∈ S then z ⟨w, h⟩ else 0
 
+/-- `blockExtend S` is measurable, since on each coordinate it is either a
+coordinate projection of `z` or the constant `0`. -/
 theorem measurable_blockExtend (S : Set V) : Measurable (blockExtend (V := V) S) := by
   classical
   refine measurable_pi_lambda _ fun w => ?_
@@ -32,6 +34,8 @@ theorem measurable_blockExtend (S : Set V) : Measurable (blockExtend (V := V) S)
   · simpa [blockExtend, h] using measurable_pi_apply (⟨w, h⟩ : ↥S)
   · simp [blockExtend, h]
 
+/-- `blockExtend` undoes `S.restrict`: on a coordinate `w ∈ S` it recovers the
+original value `ξ w`. -/
 theorem blockExtend_restrict {S : Set V} (ξ : V → ℝ) {w : V} (hw : w ∈ S) :
     blockExtend S (S.restrict ξ) w = ξ w := by
   classical
@@ -291,16 +295,20 @@ theorem integral_sum_block_le (ν : Measure ℝ) [IsProbabilityMeasure ν]
 /-- The event that the scenery is at most `-ε` at every site of `C`. -/
 def trapEvent (C : Finset V) (ε : ℝ) : Set (V → ℝ) := {ξ : V → ℝ | ∀ v ∈ C, ξ v ≤ -ε}
 
+/-- `trapEvent C ε` is the coordinate box `Set.pi ↑C (fun _ => Set.Iic (-ε))`. -/
 theorem trapEvent_eq_pi (C : Finset V) (ε : ℝ) :
     trapEvent C ε = Set.pi (C : Set V) (fun _ => Set.Iic (-ε)) := by
   ext ξ
   simp [trapEvent, Set.mem_pi]
 
+/-- `trapEvent C ε` is measurable, as the finite product `trapEvent_eq_pi` of
+the measurable half-lines `Set.Iic (-ε)`. -/
 theorem measurableSet_trapEvent (C : Finset V) (ε : ℝ) :
     MeasurableSet (trapEvent (V := V) C ε) := by
   rw [trapEvent_eq_pi]
   exact MeasurableSet.pi (Set.to_countable _) fun i _ => measurableSet_Iic
 
+/-- Membership in `trapEvent C ε` depends only on the coordinates in `C`. -/
 theorem trapEvent_dependsOn (C : Finset V) (ε : ℝ) (ξ η : V → ℝ)
     (h : ∀ w ∈ (C : Set V), ξ w = η w) : ξ ∈ trapEvent C ε ↔ η ∈ trapEvent C ε := by
   constructor

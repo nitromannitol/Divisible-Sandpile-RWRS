@@ -20,6 +20,8 @@ namespace RWRS.Support
 open MeasureTheory
 open scoped ENNReal
 
+/-- **Splits the weighted mass at the root.**  `netWeightedMassAt N k ≤ 1 / deg(ρ) +
+netEmission N k`, from the elementary identity `a ≤ 1 + max (a - 1) 0`. -/
 theorem netWeightedMassAt_le (N : RWRS.Net 1) (k : ℕ) :
     RWRS.netWeightedMassAt N k
       ≤ 1 / ((RWRS.netGraph N).degree (RWRS.netRoot N) : ℝ) + netEmission N k := by
@@ -36,6 +38,8 @@ theorem netWeightedMassAt_le (N : RWRS.Net 1) (k : ℕ) :
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
+/-- **Bounds every emission** under a configuration capped at `M`:
+`emission G (config G σ k) v ≤ M - 1` for every round `k`, by induction on `k`. -/
 theorem emission_config_le [Infinite V] (hG : G.Connected) {σ : V → ℝ} {M : ℝ} (hM : 1 ≤ M)
     (hσ : ∀ v, σ v ≤ M) (k : ℕ) (v : V) :
     RWRS.emission G (RWRS.config G σ k) v ≤ M - 1 := by

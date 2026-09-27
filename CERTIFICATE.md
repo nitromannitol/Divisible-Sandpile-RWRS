@@ -14,7 +14,9 @@ Cited inputs are proposition-valued predicates in `RWRS/External/`,
 carried as explicit hypotheses together with each theorem's own hypotheses.
 Separate companion theorems discharge these predicates under the conditions
 listed below; `CORRESPONDENCE.md` records the correspondence with the paper.
-7 of the 9 cited inputs have registered proved companions.
+0 of the 1 still-cited inputs have registered proved
+companions. 8 further cited inputs are proved outright and merged
+into an ordinary `SEALED` theorem node, so no hypothesis for them remains anywhere.
 
 ## Environment
 
@@ -23,9 +25,9 @@ listed below; `CORRESPONDENCE.md` records the correspondence with the paper.
 | Lean toolchain | `leanprover/lean4:v4.32.0` |
 | Mathlib revision | `81a5d257c8e410db227a6665ed08f64fea08e997` |
 | Paper (`paper/rwrs.tex`) SHA-256 | `809373589ee57976f2eb57cd62a1cb1d94d8e66ac576632be65385e9a06ded6c` |
-| Build | succeeded, 9007 jobs |
+| Build | succeeded, 9006 jobs |
 | Build warnings | 0 |
-| Generated | 2026-09-24 |
+| Generated | 2026-09-27 |
 
 ## Reproducing it
 
@@ -59,66 +61,62 @@ nowhere below.
 | 5 | `N-017` | `RWRS.Frozen.positivePart` | `SEALED` | `lem:positive-part` | classical only |
 | 6 | `N-019` | `RWRS.Frozen.sensitivity` | `SEALED` | `lem:sensitivity` | classical only |
 | 7 | `N-025` | `RWRS.Frozen.fukNagaev` | `SEALED` | `lem:fuk-nagaev` | classical only |
-| 8 | `X-001` | `RWRS.External.VonBahrEsseen` | `FROZEN` | — | proved (companion X-001P, from the Lattice-Probability library) |
-| 9 | `X-002` | `RWRS.External.FukNagaevTail` | `FROZEN` | — | proved (companion X-002P, from the Lattice-Probability library) |
-| 10 | `X-003` | `RWRS.External.Bernstein` | `FROZEN` | — | proved (companion X-003P, from the Lattice-Probability library) |
+| 8 | `X-001` | `RWRS.External.vonBahrEsseen` | `SEALED` | — | classical only |
+| 9 | `X-002` | `RWRS.External.fukNagaevTail` | `SEALED` | — | classical only |
+| 10 | `X-003` | `RWRS.External.bernstein` | `SEALED` | — | classical only |
 | 11 | `N-010` | `RWRS.Frozen.randomWalkRepresentation` | `SEALED` | `thm:RW` | classical only |
 | 12 | `N-013` | `RWRS.Frozen.rwInfinite` | `SEALED` | `cor:RW-infinite` | classical only |
 | 13 | `N-033` | `RWRS.Frozen.coboundary` | `SEALED` | `ex:coboundary` | classical only |
 | 14 | `N-032` | `RWRS.Frozen.finitePerturbation` | `SEALED` | `ex:finite-perturbation` | classical only |
-| 15 | `X-004` | `RWRS.External.HeatKernelBoundedDegree` | `FROZEN` | — | proved (companion X-004P, from the Lattice-Probability library) |
-| 16 | `X-006` | `RWRS.External.HeatKernelVanishing` | `FROZEN` | — | proved (companion X-006P, from the Lattice-Probability library) |
-| 17 | `X-008` | `RWRS.External.VoltageFunction` | `FROZEN` | — | proved (companion X-008P, from the Lattice-Probability library) |
-| 18 | `N-014` | `RWRS.Frozen.zeroOneLaw` | `SEALED` | `prop:01-law` | classical only |
-| 19 | `N-015` | `RWRS.Frozen.clockNoDominance` | `SEALED` | `lem:clock-no-dom` | classical only |
-| 20 | `N-023` | `RWRS.Frozen.shortClock` | `SEALED` | `prop:short-clock` | classical only |
-| 21 | `N-030` | `RWRS.Frozen.unboundedDegreeTree` | `SEALED` | `ex:counterexample` | classical only |
-| 22 | `N-018` | `RWRS.Frozen.noDominance` | `SEALED` | `lem:no-dominance` | classical only |
-| 23 | `N-020` | `RWRS.Frozen.critical` | `SEALED` | `prop:critical` | classical only |
-| 24 | `N-022` | `RWRS.Frozen.convexityReduction` | `SEALED` | `prop:convexity-reduction` | classical only |
-| 25 | `X-007` | `RWRS.External.EfronStein` | `FROZEN` | — | proved (companion X-007P, from the Lattice-Probability library) |
-| 26 | `N-026` | `RWRS.Frozen.dyadic` | `SEALED` | `lem:dyadic` | classical only |
-| 27 | `N-038` | `RWRS.Frozen.gadgetGeometry` | `SEALED` | `lem:rec-geometry` | classical only |
-| 28 | `N-041` | `RWRS.Frozen.recGoodEvents` | `SEALED` | `lem:rec-good` | classical only |
-| 29 | `N-040` | `RWRS.Frozen.recVolumeGrowth` | `SEALED` | `prop:rec-growth` | classical only |
-| 30 | `N-034` | `RWRS.Frozen.combEstimates` | `SEALED` | `prop:comb-estimates` | classical only |
-| 31 | `N-039` | `RWRS.Frozen.recLocal` | `SEALED` | `cor:rec-loc` | classical only |
-| 32 | `N-036` | `RWRS.Frozen.transientGoodPipes` | `SEALED` | `lem:tr-good` | classical only |
-| 33 | `N-011` | `RWRS.Frozen.finiteVolume` | `SEALED` | `prop:finite-vol` | classical only |
-| 34 | `N-012` | `RWRS.Frozen.nestedVolume` | `SEALED` | `thm:nested-vol` | classical only |
-| 35 | `N-035` | `RWRS.Frozen.transientNonstabilization` | `SEALED` | `thm:transient-nonstab` | classical only |
-| 36 | `N-037` | `RWRS.Frozen.recurrentNonstabilization` | `SEALED` | `thm:recurrent-nonstab` | classical only |
-| 37 | `N-024` | `RWRS.Frozen.localTimeMoments` | `SEALED` | `lem:local-time` | classical only |
-| 38 | `N-027` | `RWRS.Frozen.goodWalkBounds` | `SEALED` | `lem:good-walk` | classical only |
-| 39 | `N-031` | `RWRS.Frozen.momentSharpness` | `SEALED` | `lem:moment-sharpness` | classical only |
-| 40 | `X-003P` | `RWRS.External.bernstein` | `SEALED` | — | classical only |
-| 41 | `X-008P` | `RWRS.External.voltageFunction` | `SEALED` | — | classical only |
-| 42 | `N-028` | `RWRS.Frozen.subcritical` | `SEALED` | `prop:subcritical` | classical only |
-| 43 | `N-029` | `RWRS.Frozen.polyGrowth` | `SEALED` | `prop:poly-growth` | classical only |
-| 44 | `N-003` | `RWRS.Frozen.stabilization` | `SEALED` | `thm:stab` | classical only |
-| 45 | `N-007` | `RWRS.Frozen.ergodicMarked` | `SEALED` | `lem:ergodic-marked-stationary` | classical only |
-| 46 | `X-009` | `RWRS.External.ErgodicDecomposition` | `FROZEN` | — | assumed (a cited theorem, stated as a proposition) |
-| 47 | `N-008` | `RWRS.Frozen.zeroOneStationary` | `SEALED` | `lem:01-stationary` | classical only |
-| 48 | `N-005` | `RWRS.Frozen.stationaryPhase` | `SEALED` | `thm:stationary-phase` | classical only |
-| 49 | `N-021` | `RWRS.Frozen.doublyTransient` | `SEALED` | `prop:doubly-transient-really-general` | classical only |
+| 15 | `X-004` | `RWRS.External.heatKernelBoundedDegree_of_connected` | `SEALED` | — | classical only |
+| 16 | `X-006` | `RWRS.External.heatKernelVanishing_of_connected` | `SEALED` | — | classical only |
+| 17 | `N-015` | `RWRS.Frozen.clockNoDominance` | `SEALED` | `lem:clock-no-dom` | classical only |
+| 18 | `N-023` | `RWRS.Frozen.shortClock` | `SEALED` | `prop:short-clock` | classical only |
+| 19 | `N-030` | `RWRS.Frozen.unboundedDegreeTree` | `SEALED` | `ex:counterexample` | classical only |
+| 20 | `N-018` | `RWRS.Frozen.noDominance` | `SEALED` | `lem:no-dominance` | classical only |
+| 21 | `X-007` | `RWRS.External.efronStein` | `SEALED` | — | classical only |
+| 22 | `N-026` | `RWRS.Frozen.dyadic` | `SEALED` | `lem:dyadic` | classical only |
+| 23 | `N-038` | `RWRS.Frozen.gadgetGeometry` | `SEALED` | `lem:rec-geometry` | classical only |
+| 24 | `N-041` | `RWRS.Frozen.recGoodEvents` | `SEALED` | `lem:rec-good` | classical only |
+| 25 | `N-040` | `RWRS.Frozen.recVolumeGrowth` | `SEALED` | `prop:rec-growth` | classical only |
+| 26 | `N-034` | `RWRS.Frozen.combEstimates` | `SEALED` | `prop:comb-estimates` | classical only |
+| 27 | `N-039` | `RWRS.Frozen.recLocal` | `SEALED` | `cor:rec-loc` | classical only |
+| 28 | `N-036` | `RWRS.Frozen.transientGoodPipes` | `SEALED` | `lem:tr-good` | classical only |
+| 29 | `N-011` | `RWRS.Frozen.finiteVolume` | `SEALED` | `prop:finite-vol` | classical only |
+| 30 | `N-012` | `RWRS.Frozen.nestedVolume` | `SEALED` | `thm:nested-vol` | classical only |
+| 31 | `N-035` | `RWRS.Frozen.transientNonstabilization` | `SEALED` | `thm:transient-nonstab` | classical only |
+| 32 | `N-037` | `RWRS.Frozen.recurrentNonstabilization` | `SEALED` | `thm:recurrent-nonstab` | classical only |
+| 33 | `N-024` | `RWRS.Frozen.localTimeMoments` | `SEALED` | `lem:local-time` | classical only |
+| 34 | `N-027` | `RWRS.Frozen.goodWalkBounds` | `SEALED` | `lem:good-walk` | classical only |
+| 35 | `N-031` | `RWRS.Frozen.momentSharpness` | `SEALED` | `lem:moment-sharpness` | classical only |
+| 36 | `X-008P` | `RWRS.External.voltageFunction` | `SEALED` | — | classical only |
+| 37 | `N-028` | `RWRS.Frozen.subcritical` | `SEALED` | `prop:subcritical` | classical only |
+| 38 | `N-029` | `RWRS.Frozen.polyGrowth` | `SEALED` | `prop:poly-growth` | classical only |
+| 39 | `N-007` | `RWRS.Frozen.ergodicMarked` | `SEALED` | `lem:ergodic-marked-stationary` | classical only |
+| 40 | `X-009` | `RWRS.External.ErgodicDecomposition` | `FROZEN` | — | assumed (a cited theorem, stated as a proposition) |
+| 41 | `N-008` | `RWRS.Frozen.zeroOneStationary` | `SEALED` | `lem:01-stationary` | classical only |
+| 42 | `N-005` | `RWRS.Frozen.stationaryPhase` | `SEALED` | `thm:stationary-phase` | classical only |
+| 43 | `N-021` | `RWRS.Frozen.doublyTransient` | `SEALED` | `prop:doubly-transient-really-general` | classical only |
+| 44 | `X-005` | `RWRS.External.carneVaropoulos` | `SEALED` | — | classical only |
+| 45 | `N-003` | `RWRS.Frozen.stabilization` | `SEALED` | `thm:stab` | classical only |
+| 46 | `X-008` | `RWRS.External.voltageFunction_of_connected` | `SEALED` | — | classical only |
+| 47 | `N-014` | `RWRS.Frozen.zeroOneLaw` | `SEALED` | `prop:01-law` | classical only |
+| 48 | `N-020` | `RWRS.Frozen.critical` | `SEALED` | `prop:critical` | classical only |
+| 49 | `N-022` | `RWRS.Frozen.convexityReduction` | `SEALED` | `prop:convexity-reduction` | classical only |
 | 50 | `N-002` | `RWRS.Frozen.explosion` | `SEALED` | `thm:explosion` | classical only |
 | 51 | `N-001` | `RWRS.Frozen.optimalStopping` | `SEALED` | `thm:OS` | classical only |
-| 52 | `X-005` | `RWRS.External.CarneVaropoulos` | `FROZEN` | — | assumed (a cited theorem, stated as a proposition) |
-| 53 | `X-001P` | `RWRS.External.vonBahrEsseen` | `SEALED` | — | classical only |
-| 54 | `X-002P` | `RWRS.External.fukNagaevTail` | `SEALED` | — | classical only |
-| 55 | `X-004P` | `RWRS.External.heatKernelBoundedDegree_of_connected` | `SEALED` | — | classical only |
-| 56 | `X-006P` | `RWRS.External.heatKernelVanishing_of_connected` | `SEALED` | — | classical only |
-| 57 | `X-007P` | `RWRS.External.efronStein` | `SEALED` | — | classical only |
 
-All 48 declarations have axiom closures contained in the three classical
-axioms. The 48 theorem nodes are `SEALED`; the 9 external definitions
+All 50 declarations have axiom closures contained in the three classical
+axioms. The 50 theorem nodes are `SEALED`; the 1 external definitions
 are `FROZEN`. A clean definition does not supply a proof of its proposition.
 
 ## External inputs
 
-48 of 48 registered theorem proofs depend on nothing beyond
-Lean's three classical axioms. The external predicates remain definition
-nodes in state `FROZEN`; their proved companions are theorem nodes in state `SEALED`.
+50 of 50 registered theorem proofs depend on nothing beyond
+Lean's three classical axioms. The still-cited external predicates remain
+definition nodes in state `FROZEN`; their proved companions, and the cited
+inputs proved outright and merged into their own node, are theorem nodes in
+state `SEALED`.
 
 ## Hypotheses of the proved companions
 
@@ -127,42 +125,42 @@ The hypotheses of a frozen theorem determine which companions apply at its use s
 
 | companion | Lean theorem | hypotheses |
 |---|---|---|
-| `X-001P` | `RWRS.External.vonBahrEsseen` | none |
-| `X-002P` | `RWRS.External.fukNagaevTail` | none |
-| `X-003P` | `RWRS.External.bernstein` | none |
-| `X-004P` | `RWRS.External.heatKernelBoundedDegree_of_connected` | locally finite infinite connected graph |
-| `X-006P` | `RWRS.External.heatKernelVanishing_of_connected` | locally finite infinite connected graph; `NetGood N` supplies this for `netGraph N` |
-| `X-007P` | `RWRS.External.efronStein` | `[Countable V]`; measurability and square integrability are in the predicate |
-| `X-008P` | `RWRS.External.voltageFunction` | locally finite infinite connected graph with `∀ o, green G o o ≠ ⊤` |
 
-## Corollaries with cited inputs discharged
+## Scope of the cited inputs proved outright
 
-These corollaries apply the frozen theorems to proved companions and retain
-all their other hypotheses. Their axiom closures are checked with the registered proofs.
+Each of these is a cited input merged into its own `SEALED` theorem node
+(no separate companion node, no hypothesis carried anywhere else).
 
-| Lean theorem | axioms |
-|---|---|
-| `RWRS.fukNagaev_unconditional` | classical only |
-| `RWRS.clockNoDominance_unconditional` | classical only |
-| `RWRS.noDominance_unconditional` | classical only |
-| `RWRS.ergodicMarked_unconditional` | classical only |
-| `RWRS.subcritical_unconditional` | classical only |
+| node | Lean theorem | hypotheses |
+|---|---|---|
+| `X-001` | `RWRS.External.vonBahrEsseen` | none |
+| `X-002` | `RWRS.External.fukNagaevTail` | none |
+| `X-003` | `RWRS.External.bernstein` | none |
+| `X-004` | `RWRS.External.heatKernelBoundedDegree_of_connected` | locally finite infinite connected graph |
+| `X-005` | `RWRS.External.carneVaropoulos` | none; connectedness, nontriviality and measurable singletons are in the predicate |
+| `X-006` | `RWRS.External.heatKernelVanishing_of_connected` | locally finite infinite connected graph; `NetGood N` supplies this for `netGraph N` |
+| `X-007` | `RWRS.External.efronStein` | `[Countable V]`; measurability and square integrability are in the predicate |
+| `X-008` | `RWRS.External.voltageFunction_of_connected` | locally finite infinite connected graph |
 
-The manifest registers 9 external propositions. A proposition's
-axiom closure checks its definition; a witness theorem proves the input
-under the witness's stated hypotheses.
+The manifest registers 9 external propositions, of which 8 are proved outright and merged into an ordinary
+SEALED theorem node (kind `theorem`, no separate companion), leaving 1 still carried as a `FROZEN` `definition` node.  A
+`FROZEN` proposition's axiom closure checks its definition; a witness
+theorem proves the input under the witness's stated hypotheses.
 
 | input | proposition | source | proved witness |
 |---|---|---|---|
-| `X-001` | `RWRS.External.VonBahrEsseen` | rwrs.tex:1096-1098 (cited in lem:fuk-nagaev) | `RWRS.External.vonBahrEsseen` (`X-001P`) |
-| `X-002` | `RWRS.External.FukNagaevTail` | rwrs.tex:1096-1098 (cited in lem:fuk-nagaev) | `RWRS.External.fukNagaevTail` (`X-002P`) |
-| `X-003` | `RWRS.External.Bernstein` | rwrs.tex:1096-1098 (cited in lem:fuk-nagaev) | `RWRS.External.bernstein` (`X-003P`) |
-| `X-004` | `RWRS.External.HeatKernelBoundedDegree` | rwrs.tex:144-149 (cited in thm:stab) | `RWRS.External.heatKernelBoundedDegree_of_connected` (`X-004P`) |
-| `X-006` | `RWRS.External.HeatKernelVanishing` | rwrs.tex:319-322 (cited in lem:ergodic-marked-stationary) | `RWRS.External.heatKernelVanishing_of_connected` (`X-006P`) |
-| `X-008` | `RWRS.External.VoltageFunction` | rwrs.tex:513-520 (cited in prop:01-law) | `RWRS.External.voltageFunction` (`X-008P`) |
-| `X-007` | `RWRS.External.EfronStein` | rwrs.tex:694-699 (cited in prop:critical) | `RWRS.External.efronStein` (`X-007P`) |
 | `X-009` | `RWRS.External.ErgodicDecomposition` | rwrs.tex:337-342 (cited in lem:01-stationary) | — |
-| `X-005` | `RWRS.External.CarneVaropoulos` | rwrs.tex:143-149 (Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4) | — |
+
+Proved outright (`kind: theorem`, `state: SEALED`):
+
+- `X-001` (`RWRS.External.vonBahrEsseen`), rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
+- `X-002` (`RWRS.External.fukNagaevTail`), rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
+- `X-003` (`RWRS.External.bernstein`), rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
+- `X-004` (`RWRS.External.heatKernelBoundedDegree_of_connected`), rwrs.tex:144-149 (cited in thm:stab)
+- `X-005` (`RWRS.External.carneVaropoulos`), rwrs.tex:143-149 (Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4); proved outright by the Chebyshev-Pell route, no longer assumed
+- `X-006` (`RWRS.External.heatKernelVanishing_of_connected`), rwrs.tex:319-322 (cited in lem:ergodic-marked-stationary)
+- `X-007` (`RWRS.External.efronStein`), rwrs.tex:694-699 (cited in prop:critical)
+- `X-008` (`RWRS.External.voltageFunction_of_connected`), rwrs.tex:513-520 (cited in prop:01-law; Lyons-Peres Proposition 2.1 and equation (2.4)); proved on every infinite connected graph, recurrent or transient, no longer assumed
 
 `X-005` is the pointwise transition estimate
 `P_x(X_n = y) ≤ 2 sqrt(deg(y)/deg(x)) exp(-dist(x,y)^2/(2n))`,
@@ -188,25 +186,21 @@ verifies these; the recipe is in `CORRESPONDENCE.md`.
 | `N-016` | `0c18073041c39be7f21cbcf3782c80979463eda137a8f07b954eeeca2499ff49` |
 | `N-017` | `05a9d3dd39e0657f90de379265d21dd0f1c2d4e9bec86ed44c1d316cbf1c41e3` |
 | `N-019` | `c1efd16b49c5b23a63fdd2e854908a6ea5d9730b76aaa0ba07ede539adc88bc1` |
-| `N-025` | `af03141319fcb95ec8174207bd4acd061825af999f0f66c05a34ea2a7ee110fc` |
-| `X-001` | `c1a8e0c968c37544924e623622f0ef032019e147bbe568ead70888c61528853c` |
-| `X-002` | `2ac53eeb3b5e30cfea3a2eadb424c7399cec97d78bebbc0146fde90af9b8e118` |
-| `X-003` | `9d79e9577c6ef2898742ff22217d9bd9ae8357091b15056adc4537c676de630a` |
+| `N-025` | `a936cd5a92ba16bddd1c6b0840add169454129f6740cbf7f8b01944e7367c6d3` |
+| `X-001` | `ab5679578ed797daced6ad56c716cb73adcd4760b6856df12c3a4e563898fc46` |
+| `X-002` | `e4177e6ec97757acb68b0d44553ca3b9899de4f46466195f6e5d70a7c7ce1b34` |
+| `X-003` | `980fb30144cd8580ec61bb79e46e72bc9406a9530d8da32dfc6000245b7a8953` |
 | `N-010` | `08286b28225dc3e7c307456a69945cf95b5023c2cae3053402294d905b6eab0b` |
 | `N-013` | `e18fa354fc44432c7a37682c5a283528b5ca2d1b756a4ae1e75d83155de3268a` |
 | `N-033` | `25a5f2b1a5ad43fd56465dcd72e76062db10c92fa10ce61b75c46a8d8fc2772d` |
 | `N-032` | `5e16e954b827d3ebc63d6abe289d6c2cd9619e1ac7e7df828d3b40a6cd51a995` |
-| `X-004` | `70d8c7ae745daa53cc866c7d8e47f072c3dd374ef572200a9ab86bb20febf36d` |
-| `X-006` | `592e495d7c5cd81109f1b26a8f9ebbc4ddbd1c94be3eb63c993ffcbf2dfbb059` |
-| `X-008` | `0cecc9d3eafe59407f1d48411d24c04f808c9adfe051d4b2bb08c2599f1ba094` |
-| `N-014` | `24b9104f217d22eb15b6a9459b25914dedea28233afda9b478b4b089de1870bd` |
-| `N-015` | `ff90c4498056a18dd28e47a5487d28d3e7ed057a8445bd8f97b58c93865debf8` |
+| `X-004` | `9a22487f62536b4e70d04dc100c93d0957a7397949672e56bb69270919e3fba7` |
+| `X-006` | `a446f51e3fb113a1aba6aa80bb6ee9d1c299bdcb0437ed31ae86aace621401ed` |
+| `N-015` | `fdaff691fa1f676adb7103f218c915ca9003f97a2324f4295af1184bcf949186` |
 | `N-023` | `f4c173dfbabd25438a35ba5584549b6d9a42da48fdb11a9bc65a77a3e429ff47` |
 | `N-030` | `8631b2ae71aa0e59a159701dcfb5151eddd419af7c0434a55156c361f41e5461` |
-| `N-018` | `3a538f36148495f8e88e0afefd8da312dd6f168ac4b91b5dde32b0476d2d6515` |
-| `N-020` | `64a65ec7ca6877651b65f82c677a810a2c66e47a7fdb00ecfca3587953270d49` |
-| `N-022` | `b014d50f9bf4d4cb91e788383dc901fa8aff0b3ba39f3277104a8441106a050c` |
-| `X-007` | `46a0cf5f4a81fc2f77bdf574c8590da906d39857f2d4611b4ef331624964e0b6` |
+| `N-018` | `7d16e63626cf5db527e510b84fd952125389fa031df31dd6c0e204be0fdc874c` |
+| `X-007` | `a60c69f6abe597842d7a5bf4ec48c2a7a4653c2d5758c7c894c4d46ef8f90813` |
 | `N-026` | `c96f045c18909ca96fe06fcd8cf43c829bc45731297604453fcb9d8f0dd88e7c` |
 | `N-038` | `5ddaea56b282ba195e9fcf636968173ad51a508461776bb69ad147355f42d76f` |
 | `N-041` | `8263e78bc224b6783b9396ef07dc058f402e33228a7ee5cf971000420167d7b5` |
@@ -221,24 +215,22 @@ verifies these; the recipe is in `CORRESPONDENCE.md`.
 | `N-024` | `56e71eaa4cb8bd598a84e214757a074969d907dc89c02764e497270185a8f445` |
 | `N-027` | `a9bfad72287e1a65d658cb1be68796dab2cc67d4b9da87003c5769401fd071bb` |
 | `N-031` | `d79cfdcd2856ee38b62783579263ab1655bec64621c1acce617ead2c91e5dbae` |
-| `X-003P` | `a441a36bb3dc4f9d0f846e395cdb3e8bc52639ef21bf0021d032c6c20894ba0e` |
 | `X-008P` | `dcc91d8356cec2129b9a6fd51425ecf8dd3eceaedfebb6f5442417c62dc94a8e` |
-| `N-028` | `7c19dcd2c450e0299c15b33b0025ed2d8f8026c895717fcac78efad84b5bbe81` |
+| `N-028` | `68478080648953835d5484ebce2e8f62f0caa26e0a93b979e01a912d8f49d055` |
 | `N-029` | `4680b5421701fe8e9c525473efe18bf9ff2f310a7cf6020178b7f2c83137c326` |
-| `N-003` | `9134c27a13b123eca571f22c00ffe679425c3430b73ccf9cd362be684503c960` |
-| `N-007` | `e8a88f9c072a316316000e1051d1e82ee8eef7340c23dce462e99d1e0a8b486b` |
+| `N-007` | `4eeaa909c69f8b0d587725616d038d38f2d111a7f72e10b90e5f28bd790b27a2` |
 | `X-009` | `4847ceafe2e5925d1fe41ec143c3009d83bb1ca3ccf3c426bc207a141c5ac642` |
-| `N-008` | `3309fd5a19069d96cc18ebc35a80fa243efe85b053f028daf4331017a4a83493` |
-| `N-005` | `a9385d5ffe947214a0c0eefda6231ed4ed65376cf59d61e1b353892608be34e2` |
+| `N-008` | `b655e0dc97471930577f5dbe84f5b6d81c0b95a8125092658ff9203f4c43a57d` |
+| `N-005` | `c7abf92e97bdbf8ffa74624fbb7e8a9e1b20ccc8ffeb76573b487e8a85ba873a` |
 | `N-021` | `2a84c3e7148b2d00ca87d1de412e312516ed55ea0d982c229444ae0747d2e7da` |
-| `N-002` | `e7bb0e81bee2b390a8cc086707ca8682ffc153ab7b66a0df56abf3dd1dc2a7a2` |
-| `N-001` | `827094d80cbcc28d66f9655b3d7993b2ea0b35061eded8736953d3ee3ca8f5b6` |
-| `X-005` | `ec9c95178e28560ce4684ae43920fa129bda21459262d95d46298b34816858c7` |
-| `X-001P` | `ec1f64d67dc282cc3b8bf4d8416643c469cb4f9609b5db5ad1366ca34571e031` |
-| `X-002P` | `6fb3df940fa3341ca77b33527eaaadfa35272ec767cd1a943fa84e4367547d6d` |
-| `X-004P` | `6977101dd0f335c79fe3823559c745c03be0dcb2e2dac4d2637a981b2c70bcc2` |
-| `X-006P` | `ad39a1794d451bbfc3618ec971a22acd360dc35dfdd8053eea0a5bf3cf18f083` |
-| `X-007P` | `546c7fd1347f37781abb8cf4c16c60e0ad9004c9da2e9ba057b04a843f881930` |
+| `X-005` | `b4c272044b0675d3b8d84587fd5c5112c3a1f4529e74fb31a7304ac00a969143` |
+| `N-003` | `b685fab3fcf88e1a0254354667c38f7c5f209dfc8f73c9c7ab9098f6238dc7b8` |
+| `X-008` | `21130d4a91debd0ebed462deadf233abd94e352fb590fc9358baaa99de6de5ff` |
+| `N-014` | `14263bfcecaced2a16c607b3fbfdc8ebe06d1ffdd4f79e899d685757b135961e` |
+| `N-020` | `648ae96476df023fde65cef2e90d57d653ec0cfad23281238474e4b0acc90336` |
+| `N-022` | `82a5d07b091bbe0c93da553df1acb897aeb50a50b031998ef0ca503274298f2b` |
+| `N-002` | `41a0e1db457a71b7849043c846d280a2ccb3ac96ee7720203c98db8f2e5d995e` |
+| `N-001` | `641b485c20de1154ab59feb9db876b69cad65261c97477e104e926e9d58449fc` |
 
 ## What is not claimed
 

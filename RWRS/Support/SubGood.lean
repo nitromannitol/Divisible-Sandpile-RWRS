@@ -23,6 +23,9 @@ tail of order `2n`. -/
 noncomputable def gaussCoef (c : ℝ) (n : ℕ) (ν : Measure ℝ) (m : ℝ) : ℝ :=
   2 * (Nat.factorial n : ℝ) * ((∫ z, (z - m) ^ 2 ∂ν + 1) / c) ^ n
 
+/-- The Gaussian-remainder coefficient `gaussCoef` is nonnegative, since it is a
+product of the factorial, the shifted second moment plus one, and a `c`-scaled
+power, all nonnegative. -/
 theorem gaussCoef_nonneg {c : ℝ} (hc : 0 < c) (n : ℕ) (ν : Measure ℝ) (m : ℝ) :
     0 ≤ gaussCoef c n ν m := by
   have h : (0:ℝ) ≤ ∫ z, (z - m) ^ 2 ∂ν := integral_nonneg fun z => sq_nonneg _

@@ -7,7 +7,10 @@ Verifies, against ledger/manifest.yaml:
   2. the sha256 of the block's bytes (marker lines excluded) matches the
      manifest;
   3. the block contains exactly one `theorem`, `def`, `abbrev`, or `structure`
-     declaration and its parsed name exactly matches the manifest export;
+     declaration and its parsed name exactly matches the manifest export; a
+     `kind: theorem` node whose id names a cited-and-proved input may instead
+     carry exactly two declarations, a `def` (the cited proposition) then a
+     `theorem` (the witness), matched against the theorem;
   4. every .lean file under RWRS/Frozen/ is owned by exactly one node;
   5. `sorry` occurs in the production tree (RWRS/, RWRS.lean) only inside the
      files of theorem nodes in state DRAFT_SORRY, exactly once per such file,
@@ -337,12 +340,24 @@ def closure_digest(source: str, resolver: DeclarationResolver) -> tuple[str, int
 
 
 def frozen_declaration(block: str, path: Path, errors: list[str]) -> tuple[str, str] | None:
-    """Parse the unique supported declaration keyword and exact name in a block."""
+    """Parse the unique supported declaration keyword and exact name in a block.
+
+    A block normally carries exactly one theorem/def/abbrev/structure
+    declaration.  A cited-and-proved node is the one exception: its block
+    carries exactly two, a `def` (the cited proposition, verbatim) immediately
+    followed by a `theorem` (the witness proving it), so that a single
+    `frozen_sha256` protects both the exact citation and its proof obligation
+    together.  The manifest's export and kind are then matched against the
+    second (theorem) declaration.
+    """
     matches = FROZEN_DECL_RE.findall(strip_block_comments(block))
+    if len(matches) == 2 and matches[0][0] == "def" and matches[1][0] == "theorem":
+        return matches[1]
     if len(matches) != 1:
         errors.append(
             f"{path}: expected exactly one theorem/def/abbrev/structure "
-            f"declaration in frozen block, found {len(matches)}")
+            f"declaration in frozen block (or a def immediately followed by a "
+            f"theorem, for a cited-and-proved node), found {len(matches)}")
         return None
     return matches[0]
 

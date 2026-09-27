@@ -28,6 +28,8 @@ noncomputable def walkExpE (d : ℕ) : ℕ → Site d → ((ℕ → Site d) → 
   | 0, x, f => f (fun _ => x)
   | n + 1, x, f => walkOpE d (fun y => walkExpE d n y (fun Y => f (RWRS.cons x Y))) x
 
+/-- The `[0, ∞]`-valued walk average `walkExpE` stays finite whenever the functional is
+everywhere finite, by induction on the horizon. -/
 theorem walkExpE_ne_top (d : ℕ) [NeZero d] :
     ∀ (n : ℕ) (x : Site d) (f : (ℕ → Site d) → ℝ≥0∞), (∀ X, f X ≠ ⊤) →
       walkExpE d n x f ≠ ⊤ := by
@@ -45,6 +47,8 @@ theorem walkExpE_ne_top (d : ℕ) [NeZero d] :
         simp only [ne_eq, mul_eq_zero, OfNat.ofNat_ne_zero, Nat.cast_eq_zero, false_or]
         omega
 
+/-- Splitting off the first lattice increment `u`: `sitePath x (consNat u ω)` is the path from
+`x` prefixed by `x`, continuing from `x + u`. -/
 theorem sitePath_consNat (x : Site d) (u : Site d) (ω : ℕ → Site d) :
     sitePath x (consNat u ω) = RWRS.cons x (sitePath (x + u) ω) := by
   funext k
@@ -55,6 +59,8 @@ theorem sitePath_consNat (x : Site d) (u : Site d) (ω : ℕ → Site d) :
       simp only [consNat, Nat.rec_zero]
       abel
 
+/-- The integral of `ψ (x + v)` against one increment's law `incLaw d` is the averaging
+operator `walkOpE d ψ x`, via the head-tail decomposition of the increment measure. -/
 theorem lintegral_incLaw_add (d : ℕ) [NeZero d] (ψ : Site d → ℝ≥0∞) (x : Site d) :
     ∫⁻ v, ψ (x + v) ∂(incLaw d) = walkOpE d ψ x := by
   rw [incLaw, instructionLaw, lintegral_smul_measure,
@@ -69,6 +75,8 @@ theorem lintegral_incLaw_add (d : ℕ) [NeZero d] (ψ : Site d → ℝ≥0∞) (
   rw [Finset.sum_congr rfl fun i _ => hstep i, walkOpE, ENNReal.div_eq_inv_mul]
   rfl
 
+/-- `RWRS.cons x` is measurable as a map on trajectories, since each coordinate is either the
+constant `x` or a projection. -/
 theorem measurable_cons (x : Site d) : Measurable (RWRS.cons (V := Site d) x) := by
   refine measurable_pi_lambda _ fun k => ?_
   match k with

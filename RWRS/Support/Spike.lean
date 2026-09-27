@@ -23,6 +23,8 @@ variable {V : Type*}
 
 /-! ### Reading the field on a finite set of sites -/
 
+/-- The event that every site of the finite set `S` stays below `c` is
+measurable, as a finite intersection of coordinate events. -/
 theorem measurableSet_forall_lt (S : Finset V) (c : ℝ) :
     MeasurableSet {Y : V → ℝ | ∀ v ∈ S, Y v < c} := by
   classical
@@ -67,6 +69,9 @@ theorem le_measure_exists_ge (ν : Measure ℝ) [IsProbabilityMeasure ν] (S : F
 
 /-! ### The Pareto marginal -/
 
+/-- For a Pareto marginal with exponent `q`, the probability of staying below a
+level `c ≥ 1` is `1 - c^{-q}`, complementing the defining tail bound
+`IsPareto`. -/
 theorem pareto_Iio (ν : Measure ℝ) [IsProbabilityMeasure ν] {q : ℝ} (hq : 0 < q)
     (hpar : IsPareto ν q) {c : ℝ} (hc : 1 ≤ c) :
     ν (Set.Iio c) = ENNReal.ofReal (1 - c ^ (-q)) := by
@@ -97,6 +102,8 @@ theorem le_measure_spike (ν : Measure ℝ) [IsProbabilityMeasure ν] {q : ℝ} 
 
 /-! ### The exponential bound -/
 
+/-- The standard bound `(1 - p) ^ N ≤ exp (-(N * p))`, from `1 - p ≤ exp (-p)`
+raised to the `N`-th power. -/
 theorem one_sub_pow_le_exp {p : ℝ} (hp1 : p ≤ 1) (N : ℕ) :
     (1 - p) ^ N ≤ Real.exp (-((N : ℝ) * p)) := by
   have h1 : (1 : ℝ) - p ≤ Real.exp (-p) := by

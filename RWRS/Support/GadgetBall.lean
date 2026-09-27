@@ -18,12 +18,17 @@ variable {B : ℕ} {L : ℕ → ℕ}
 
 /-! ### The radius as a function of the level -/
 
+/-- The radius at level `0` is `0`. -/
 theorem gadgetRadius_zero (L : ℕ → ℕ) : gadgetRadius L 0 = 0 := rfl
 
+/-- The radius recursion: `gadgetRadius L (k + 1)` adds the pipe length `L (k + 1)` to
+`gadgetRadius L k`. -/
 theorem gadgetRadius_succ (L : ℕ → ℕ) (k : ℕ) :
     gadgetRadius L (k + 1) = gadgetRadius L k + L (k + 1) := by
   rw [gadgetRadius, gadgetRadius, Finset.sum_Icc_succ_top (Nat.le_add_left 1 k)]
 
+/-- `gadgetRadius L` is monotone in the level: it sums the same nonnegative pipe lengths over a
+growing interval. -/
 theorem gadgetRadius_mono (L : ℕ → ℕ) {j k : ℕ} (h : j ≤ k) :
     gadgetRadius L j ≤ gadgetRadius L k :=
   Finset.sum_le_sum_of_subset (Finset.Icc_subset_Icc_right h)
@@ -35,6 +40,7 @@ the unique path of the tree. -/
 def pipeDepth (L : ℕ → ℕ) (v : List (Fin B) × ℕ) : ℕ :=
   if v.2 = 0 then gadgetRadius L v.1.length else gadgetRadius L (v.1.length - 1) + v.2
 
+/-- The root of the tree of pipes has depth `0`. -/
 theorem pipeDepth_root (L : ℕ → ℕ) :
     pipeDepth L (pipeRoot B) = 0 := by
   simp [pipeDepth, pipeRoot, gadgetRadius_zero]
@@ -47,16 +53,21 @@ theorem gadgetRadius_pred_le_pipeDepth (L : ℕ → ℕ) (v : List (Fin B) × �
   · exact gadgetRadius_mono L (Nat.sub_le _ _)
   · exact Nat.le_add_right _ _
 
+/-- The pipe-position coordinate of a site is at most its depth. -/
 theorem snd_le_pipeDepth (L : ℕ → ℕ) (v : List (Fin B) × ℕ) : v.2 ≤ pipeDepth L v := by
   rw [pipeDepth]
   split
   · next h => omega
   · exact Nat.le_add_left _ _
 
+/-- The depth of a branching site (position `0`) is the radius of the level given by its word
+length. -/
 theorem pipeDepth_zero (L : ℕ → ℕ) (w : List (Fin B)) :
     pipeDepth L (w, 0) = gadgetRadius L w.length := by
   rw [pipeDepth]; simp
 
+/-- The depth of an interior pipe site at position `i + 1` is the radius of the level below its
+word, plus `i + 1`. -/
 theorem pipeDepth_succ' (L : ℕ → ℕ) (w : List (Fin B)) (i : ℕ) :
     pipeDepth L (w, i + 1) = gadgetRadius L (w.length - 1) + (i + 1) := by
   rw [pipeDepth]; simp
@@ -106,6 +117,8 @@ theorem pipeDepth_pred (L : ℕ → ℕ) (v : List (Fin B) × ℕ) :
           rw [hk, pipeDepth_succ']
         omega
 
+/-- Along an edge of `pipeGraph`, depth changes by at most one: whichever endpoint is the
+predecessor of the other, `pipeDepth_pred` bounds the change. -/
 theorem pipeDepth_adj {e : Bool} {u v : List (Fin B) × ℕ}
     (h : (pipeGraph B L e).Adj u v) : pipeDepth L v ≤ pipeDepth L u + 1 := by
   rcases h.2.2.2 with hv | hu
@@ -116,6 +129,8 @@ theorem pipeDepth_adj {e : Bool} {u v : List (Fin B) × ℕ}
 
 /-! ### The depth is a lower bound for the distance to the root -/
 
+/-- The depth of the endpoint of a walk in `gadgetGraph` is bounded by the depth of the start
+plus the walk's length, by induction along the walk using `pipeDepth_adj`. -/
 theorem pipeDepth_le_walk_length {m : ℕ} {u v : gadgetSites B L m}
     (p : (gadgetGraph B L m).Walk u v) :
     pipeDepth L (v : List (Fin B) × ℕ)
@@ -128,6 +143,8 @@ theorem pipeDepth_le_walk_length {m : ℕ} {u v : gadgetSites B L m}
       simp only [SimpleGraph.Walk.length_cons]
       omega
 
+/-- A site of the closed ball of radius `t` around the root has depth at most `t`, obtained
+from `pipeDepth_le_walk_length` on a reversed shortest walk from the site to the root. -/
 theorem pipeDepth_le_of_mem_ball {m t : ℕ} {v : gadgetSites B L m}
     (hv : v ∈ closedBall (gadgetGraph B L m) (gadgetRoot B L m) t) :
     pipeDepth L (v : List (Fin B) × ℕ) ≤ t := by
@@ -151,12 +168,16 @@ theorem pipeDepth_le_of_mem_ball {m t : ℕ} {v : gadgetSites B L m}
 /-- The first level whose radius reaches `t`. -/
 noncomputable def gadgetLevel (L : ℕ → ℕ) (t : ℕ) : ℕ := sInf {k | t ≤ gadgetRadius L k}
 
+/-- `gadgetLevel L t`, the least level whose radius reaches `t`, itself has radius at least
+`t`: this is `Nat.sInf` membership for the defining set. -/
 theorem le_gadgetRadius_gadgetLevel (L : ℕ → ℕ) {t m : ℕ} (h : t ≤ gadgetRadius L m) :
     t ≤ gadgetRadius L (gadgetLevel L t) := by
   have hm : sInf {k | t ≤ gadgetRadius L k} ∈ {k | t ≤ gadgetRadius L k} :=
     Nat.sInf_mem ⟨m, h⟩
   exact hm
 
+/-- Any level strictly below `gadgetLevel L t` has radius strictly less than `t`, by
+minimality of the infimum defining `gadgetLevel`. -/
 theorem gadgetRadius_lt_of_lt_gadgetLevel (L : ℕ → ℕ) {t k : ℕ}
     (h : k < gadgetLevel L t) : gadgetRadius L k < t := by
   by_contra hcon
@@ -195,6 +216,7 @@ noncomputable def wordsLe (B K : ℕ) : Finset (List (Fin B)) :=
     (Finset.univ : Finset (List.Vector (Fin B) k)).image Subtype.val
 
 open scoped Classical in
+/-- A word of length at most `K` belongs to the finite set `wordsLe B K` of all such words. -/
 theorem mem_wordsLe {B K : ℕ} {w : List (Fin B)} (h : w.length ≤ K) :
     w ∈ wordsLe B K := by
   refine Finset.mem_biUnion.2 ⟨w.length, Finset.mem_range.2 (by omega), ?_⟩
@@ -202,6 +224,8 @@ theorem mem_wordsLe {B K : ℕ} {w : List (Fin B)} (h : w.length ≤ K) :
   exact Finset.mem_image.2 ⟨v, Finset.mem_univ v, rfl⟩
 
 open scoped Classical in
+/-- `wordsLe B K` has at most `∑_{k ≤ K} B ^ k` elements, bounding the union over lengths by
+the count `B ^ k` of length-`k` words. -/
 theorem card_wordsLe (B K : ℕ) : (wordsLe B K).card ≤ ∑ k ∈ Finset.range (K + 1), B ^ k := by
   refine le_trans Finset.card_biUnion_le (Finset.sum_le_sum fun k _ => ?_)
   have h1 : ((Finset.univ : Finset (List.Vector (Fin B) k)).image Subtype.val).card
@@ -210,6 +234,8 @@ theorem card_wordsLe (B K : ℕ) : (wordsLe B K).card ≤ ∑ k ∈ Finset.range
     simp [Finset.card_univ]
   omega
 
+/-- For `B ≥ 2`, the geometric sum `∑_{k ≤ K} B ^ k` is at most `2 * B ^ K`, by induction on
+`K`. -/
 theorem sum_pow_range_le {B K : ℕ} (hB : 2 ≤ B) :
     ∑ k ∈ Finset.range (K + 1), B ^ k ≤ 2 * B ^ K := by
   induction K with
@@ -223,6 +249,9 @@ theorem sum_pow_range_le {B K : ℕ} (hB : 2 ≤ B) :
 /-! ### The ball of the gadget -/
 
 open scoped Classical in
+/-- The closed ball of radius `t` around the root of `gadgetGraph` at level `m`, minus the root,
+has extended cardinality at most `(wordsLe ...).card * (t + 1)`, since `word_length_le_of_depth`
+and `snd_le_pipeDepth` place every ball site in a finite word-length-times-position product. -/
 theorem encard_ball_le_card (hc : CombCond B α) {m t : ℕ}
     (htm : t ≤ gadgetRadius (combLen B α) m) :
     (closedBall (gadgetGraph B (combLen B α) m) (gadgetRoot B (combLen B α) m) t
@@ -251,6 +280,8 @@ theorem encard_ball_le_card (hc : CombCond B α) {m t : ℕ}
 
 /-! ### The ball against a power of its radius -/
 
+/-- The identity `((B ^ α) ^ k) ^ (1 / α) = B ^ k`, from the exponent laws for real powers with
+`α ≠ 0`. -/
 theorem base_pow_rpow_inv (hc : CombCond B α) (k : ℕ) :
     (((B : ℝ) ^ α) ^ k) ^ (1 / α) = (B : ℝ) ^ k := by
   have hB0 : (0 : ℝ) ≤ (B : ℝ) := (cast_B_pos hc).le
@@ -259,6 +290,8 @@ theorem base_pow_rpow_inv (hc : CombCond B α) (k : ℕ) :
   rw [← Real.rpow_natCast ((B : ℝ) ^ α) k, ← Real.rpow_mul hB0, ← Real.rpow_mul hB0,
     hexp, Real.rpow_natCast]
 
+/-- If `(B ^ α) ^ k ≤ x` then `B ^ k ≤ x ^ (1 / α)`, obtained by raising both sides to the
+power `1 / α` and simplifying with `base_pow_rpow_inv`. -/
 theorem pow_le_rpow_inv (hc : CombCond B α) {k : ℕ} {x : ℝ}
     (h : ((B : ℝ) ^ α) ^ k ≤ x) : (B : ℝ) ^ k ≤ x ^ (1 / α) := by
   have hαinv : (0 : ℝ) < 1 / α := by have := alpha_pos hc; positivity
@@ -266,6 +299,9 @@ theorem pow_le_rpow_inv (hc : CombCond B α) {k : ℕ} {x : ℝ}
     Real.rpow_le_rpow (pow_nonneg (base_pos hc).le k) h hαinv.le
   rwa [base_pow_rpow_inv hc k] at h1
 
+/-- A bound on `B ^ (gadgetLevel (combLen B α) t + 1)` in terms of `t ^ (1 / α)`, split into the
+cases `gadgetLevel < 2` and `gadgetLevel ≥ 2` using the pipe-length growth bounds
+`combLen_le_gadgetRadius` and `combLen_ge`. -/
 theorem base_level_le (hc : CombCond B α) {t : ℕ} (ht : 1 ≤ t) :
     (B : ℝ) ^ (gadgetLevel (combLen B α) t + 1)
       ≤ (B : ℝ) ^ 2 * (2 * (t : ℝ)) ^ (1 / α) := by
@@ -300,6 +336,8 @@ theorem base_level_le (hc : CombCond B α) {t : ℕ} (ht : 1 ≤ t) :
     rw [hsplit]
     exact mul_le_mul_of_nonneg_left hkey (by positivity)
 
+/-- **The ball-count bound.**  `card_wordsLe` and `base_level_le` combine to bound
+`(wordsLe ...).card * (t + 1)` by a constant multiple of `t ^ d_f` for `d_f = 1 + 1 / α`. -/
 theorem card_bound_real (hc : CombCond B α) {d_f : ℝ} (hdf : d_f = 1 + 1 / α) {t : ℕ}
     (ht : 1 ≤ t) :
     (((wordsLe B (gadgetLevel (combLen B α) t + 1)).card * (t + 1) : ℕ) : ℝ)

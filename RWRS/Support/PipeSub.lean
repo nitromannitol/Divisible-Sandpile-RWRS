@@ -1,5 +1,15 @@
 import RWRS.Support.Comb
 
+/-!
+# The tree of pipes as an induced subgraph
+
+`pipeSites B L` is the set of valid pipe sites and `pipeSub B L` is the subgraph of the
+ambient `pipeGraph` induced on them. This module transfers the basic graph invariants —
+neighbor sets, degree, the walk-averaging operator, and the killed heat kernel and killed
+Green's function — from the ambient graph to the induced one, then uses these transfers to
+show `pipeSub` is connected, has infinitely many sites, and has degree bounded by `2B + 3`.
+-/
+
 namespace RWRS.Support
 
 open scoped ENNReal
@@ -13,6 +23,8 @@ def pipeSites (B : ℕ) (L : ℕ → ℕ) : Set (List (Fin B) × ℕ) := {v | Pi
 abbrev pipeSub (B : ℕ) (L : ℕ → ℕ) : SimpleGraph (pipeSites B L) :=
   (pipeGraph B L false).induce (pipeSites B L)
 
+/-- Adjacency in the induced subgraph `pipeSub` is definitionally adjacency in the ambient
+`pipeGraph`. -/
 theorem pipeSub_adj_iff {u v : pipeSites B L} :
     (pipeSub B L).Adj u v ↔ (pipeGraph B L false).Adj u.1 v.1 := Iff.rfl
 
@@ -23,6 +35,8 @@ theorem mem_pipeSites_of_adj {u v : List (Fin B) × ℕ}
   · exact hv
   · exact absurd he (by simp)
 
+/-- The tree of pipes is locally finite: the neighbor set of a site is the preimage under
+`Subtype.val` of a finite set in the ambient `pipeGraph`. -/
 noncomputable instance pipeSubLocallyFinite (B : ℕ) (L : ℕ → ℕ) :
     (pipeSub B L).LocallyFinite := by
   intro u
@@ -34,6 +48,9 @@ noncomputable instance pipeSubLocallyFinite (B : ℕ) (L : ℕ → ℕ) :
 /-! ### The neighbours, the degree and the walk average -/
 
 open scoped Classical in
+/-- The ambient neighbor `Finset` of `u.1` in `pipeGraph` is the image under `Subtype.val` of
+the neighbor `Finset` of `u` in the induced subgraph `pipeSub`, since adjacency never leaves
+the sites. -/
 theorem neighborFinset_pipeSub_image (u : pipeSites B L) :
     (pipeGraph B L false).neighborFinset u.1
       = Finset.image Subtype.val ((pipeSub B L).neighborFinset u) := by
@@ -47,6 +64,8 @@ theorem neighborFinset_pipeSub_image (u : pipeSites B L) :
     exact hz
 
 open scoped Classical in
+/-- A sum of `f` over the `pipeSub`-neighbors of `u` equals the sum of `f` over the ambient
+`pipeGraph`-neighbors of `u.1`, by reindexing along `neighborFinset_pipeSub_image`. -/
 theorem sum_neighborFinset_pipeSub (u : pipeSites B L) (f : (List (Fin B) × ℕ) → ℝ) :
     ∑ y ∈ (pipeSub B L).neighborFinset u, f y.1
       = ∑ y ∈ (pipeGraph B L false).neighborFinset u.1, f y := by
@@ -54,12 +73,16 @@ theorem sum_neighborFinset_pipeSub (u : pipeSites B L) (f : (List (Fin B) × ℕ
     Finset.sum_image (fun a _ b _ h => Subtype.ext h)]
 
 open scoped Classical in
+/-- The degree of a site in the induced subgraph `pipeSub` equals its degree in the ambient
+`pipeGraph`, since the neighbor sets correspond bijectively via `Subtype.val`. -/
 theorem degree_pipeSub (u : pipeSites B L) :
     (pipeSub B L).degree u = (pipeGraph B L false).degree u.1 := by
   rw [← SimpleGraph.card_neighborFinset_eq_degree, ← SimpleGraph.card_neighborFinset_eq_degree,
     neighborFinset_pipeSub_image u,
     Finset.card_image_of_injective _ Subtype.val_injective]
 
+/-- The averaging walk operator on `pipeSub` agrees with the one on the ambient `pipeGraph`,
+combining `sum_neighborFinset_pipeSub` and `degree_pipeSub`. -/
 theorem walkOp_pipeSub (f : (List (Fin B) × ℕ) → ℝ) (u : pipeSites B L) :
     RWRS.walkOp (pipeSub B L) (fun y => f y.1) u = RWRS.walkOp (pipeGraph B L false) f u.1 := by
   rw [RWRS.walkOp, RWRS.walkOp, sum_neighborFinset_pipeSub, degree_pipeSub]
@@ -69,6 +92,9 @@ def pipeRootSub (B : ℕ) (L : ℕ → ℕ) : pipeSites B L := ⟨pipeRoot B, Or
 
 /-! ### The killed Green function of the tree of pipes -/
 
+/-- The killed heat kernel on the induced graph `pipeSub`, killed on the preimage of `C`,
+equals the ambient killed heat kernel killed on `C`, by induction on the time step using
+`walkOp_pipeSub`. -/
 theorem killedHeat_pipeSub (C : Set (List (Fin B) × ℕ)) :
     ∀ (k : ℕ) (u v : pipeSites B L),
       RWRS.killedHeat (pipeSub B L) (Subtype.val ⁻¹' C) k u v
@@ -100,6 +126,9 @@ theorem killedHeat_pipeSub (C : Set (List (Fin B) × ℕ)) :
       · have hu' : u ∉ Subtype.val ⁻¹' C := hu
         simp only [RWRS.killedHeat, if_neg hu, if_neg hu']
 
+/-- The killed Green's function transfers from `pipeSub` to the ambient graph the same way
+as the heat kernel, summing `killedHeat_pipeSub` over time and dividing by the shared
+degree. -/
 theorem killedGreen_pipeSub (C : Set (List (Fin B) × ℕ)) (u v : pipeSites B L) :
     RWRS.killedGreen (pipeSub B L) (Subtype.val ⁻¹' C) u v
       = RWRS.killedGreen (pipeGraph B L false) C u.1 v.1 := by
@@ -107,6 +136,8 @@ theorem killedGreen_pipeSub (C : Set (List (Fin B) × ℕ)) (u v : pipeSites B L
   congr 1
   exact tsum_congr fun k => by rw [killedHeat_pipeSub C k u v]
 
+/-- The real-valued killed Green's function on `pipeSub` agrees with the ambient one, taking
+`ENNReal.toReal` of `killedGreen_pipeSub`. -/
 theorem killedGreenReal_pipeSub (C : Set (List (Fin B) × ℕ)) (u v : pipeSites B L) :
     RWRS.killedGreenReal (pipeSub B L) (Subtype.val ⁻¹' C) u v
       = RWRS.killedGreenReal (pipeGraph B L false) C u.1 v.1 := by
@@ -115,6 +146,8 @@ theorem killedGreenReal_pipeSub (C : Set (List (Fin B) × ℕ)) (u v : pipeSites
 
 /-! ### Connectivity, infinitude and the degree bound -/
 
+/-- Every site of `pipeDepth` at most `n` is reachable from `pipeRootSub` in the tree of
+pipes, by induction on `n` walking back one step at a time via `pipePred`. -/
 theorem reachable_pipeRootSub (hL : ∀ j, 1 ≤ j → 1 ≤ L j) :
     ∀ (n : ℕ) (v : pipeSites B L), pipeDepth L (v : List (Fin B) × ℕ) ≤ n →
       (pipeSub B L).Reachable (pipeRootSub B L) v := by
@@ -141,6 +174,8 @@ theorem reachable_pipeRootSub (hL : ∀ j, 1 ≤ j → 1 ≤ L j) :
         exact (ih ⟨pipePred B L (v : List (Fin B) × ℕ), humem⟩
           (Nat.lt_succ_iff.1 (lt_of_lt_of_le hdrop hv))).trans hadj.reachable
 
+/-- The tree of pipes `pipeSub` is connected: every site reaches the root by
+`reachable_pipeRootSub`, hence any two sites reach each other. -/
 theorem pipeSub_connected (hL : ∀ j, 1 ≤ j → 1 ≤ L j) : (pipeSub B L).Connected := by
   haveI : Nonempty (pipeSites B L) := ⟨pipeRootSub B L⟩
   refine SimpleGraph.Connected.mk ?_
@@ -149,6 +184,8 @@ theorem pipeSub_connected (hL : ∀ j, 1 ≤ j → 1 ≤ L j) : (pipeSub B L).Co
     (reachable_pipeRootSub hL _ v le_rfl)
 
 
+/-- The site set `pipeSites B L` is infinite whenever `B ≥ 1`: the map sending a word `w` to
+`(w, 0)` is an injection from the infinite type of words. -/
 theorem pipeSites_infinite (hB : 1 ≤ B) : Infinite (pipeSites B L) := by
   haveI : Nonempty (Fin B) := ⟨⟨0, hB⟩⟩
   refine Infinite.of_injective
@@ -158,6 +195,8 @@ theorem pipeSites_infinite (hB : 1 ≤ B) : Infinite (pipeSites B L) := by
   exact (Prod.mk.injEq _ _ _ _ ▸ h1).1
 
 open scoped Classical in
+/-- Every vertex of the ambient `pipeGraph` has degree at most `2 * B + 3`, since its
+neighbors all lie in the explicit list `pipeNbrList` of that length. -/
 theorem degree_pipeGraph_le (e : Bool) (u : List (Fin B) × ℕ) :
     (pipeGraph B L e).degree u ≤ 2 * B + 3 := by
   have hsub : (pipeGraph B L e).neighborFinset u ⊆ (pipeNbrList B L u).toFinset := by
@@ -176,6 +215,8 @@ theorem degree_pipeGraph_le (e : Bool) (u : List (Fin B) × ℕ) :
   omega
 
 open scoped Classical in
+/-- The degree of a vertex in an induced subgraph is at most its degree in the ambient
+locally finite graph `H`, since the induced neighbor set injects into the ambient one. -/
 theorem degree_induce_le {W : Type*} (H : SimpleGraph W) [H.LocallyFinite] (S : Set W)
     (u : S) [Fintype ((H.induce S).neighborSet u)] :
     (H.induce S).degree u ≤ H.degree u.1 := by
@@ -186,6 +227,8 @@ theorem degree_induce_le {W : Type*} (H : SimpleGraph W) [H.LocallyFinite] (S : 
   exact (SimpleGraph.mem_neighborFinset _ _ _).2 hy
 
 open scoped Classical in
+/-- The tree of pipes has bounded degree `2 * B + 3`: transferring to the ambient graph via
+`degree_pipeSub` reduces this to the same neighbor-list bound as `degree_pipeGraph_le`. -/
 theorem boundedDegree_pipeSub : RWRS.BoundedDegree (pipeSub B L) (2 * B + 3) := by
   intro u
   rw [degree_pipeSub]

@@ -50,15 +50,18 @@ theorem heat_diag_le_clockTerm {d_s A : ℝ} (_hds : 0 < d_s)
 /-- The clock of the section. -/
 noncomputable def clockH (A d_s : ℝ) (n : ℕ) : ℝ := max A 1 * clockSum (d_s / 2) n
 
+/-- `clockH A d_s n ≥ 1` for `n ≥ 1`, combining `max A 1 ≥ 1` with `one_le_clockSum`. -/
 theorem one_le_clockH (A d_s : ℝ) {n : ℕ} (hn : 1 ≤ n) : 1 ≤ clockH A d_s n := by
   have h1 : (1 : ℝ) ≤ max A 1 := le_max_right _ _
   have h2 : (1 : ℝ) ≤ clockSum (d_s / 2) n := one_le_clockSum hn
   rw [clockH]
   nlinarith
 
+/-- `clockH A d_s n` is positive for `n ≥ 1`, from `one_le_clockH`. -/
 theorem clockH_pos (A d_s : ℝ) {n : ℕ} (hn : 1 ≤ n) : 0 < clockH A d_s n :=
   lt_of_lt_of_le zero_lt_one (one_le_clockH A d_s hn)
 
+/-- `clockH A d_s` is monotone in `n`, inherited from `clockSum_mono`. -/
 theorem clockH_mono (A d_s : ℝ) {a b : ℕ} (hab : a ≤ b) : clockH A d_s a ≤ clockH A d_s b := by
   refine mul_le_mul_of_nonneg_left (clockSum_mono _ hab) ?_
   exact le_trans zero_le_one (le_max_right _ _)
@@ -126,14 +129,18 @@ theorem walkExp_rpow_le_of_le_one [Infinite V] (hG : G.Connected) {q : ℝ} (hq0
 /-- The constant of the induction, `(j+1)!`. -/
 noncomputable def momConst (j : ℕ) : ℝ := (Nat.factorial (j + 1) : ℝ)
 
+/-- `momConst j = (j + 1)!` is positive. -/
 theorem momConst_pos (j : ℕ) : 0 < momConst j := by
   rw [momConst]
   exact_mod_cast Nat.factorial_pos _
 
+/-- `momConst` is monotone in `j`, since factorials are monotone. -/
 theorem momConst_mono (j : ℕ) : momConst j ≤ momConst (j + 1) := by
   rw [momConst, momConst]
   exact_mod_cast Nat.factorial_le (by omega)
 
+/-- The factorial recursion for the induction constant:
+`momConst (j + 1) = (j + 2) * momConst j`. -/
 theorem momConst_succ (j : ℕ) : momConst (j + 1) = ((j : ℝ) + 2) * momConst j := by
   rw [momConst, momConst, show j + 1 + 1 = (j + 1) + 1 from rfl, Nat.factorial_succ]
   push_cast

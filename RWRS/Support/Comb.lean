@@ -22,9 +22,12 @@ variable {B : ℕ} {L : ℕ → ℕ}
 /-- A bound for the pipe lengths up to level `n`. -/
 noncomputable def maxLen (L : ℕ → ℕ) (n : ℕ) : ℕ := (Finset.range (n + 1)).sup L
 
+/-- Every pipe length up to level `n` is bounded by `maxLen L n`. -/
 theorem le_maxLen (L : ℕ → ℕ) {j n : ℕ} (h : j ≤ n) : L j ≤ maxLen L n :=
   Finset.le_sup (f := L) (Finset.mem_range.2 (by omega))
 
+/-- A site of the comb has trunk-depth at most `n` and second coordinate at most
+`maxLen L n`, unpacking the defining disjunction of `combSet`. -/
 theorem mem_combSet_bounds {n : ℕ} {w : List (Fin B)} {v : List (Fin B) × ℕ}
     (hv : v ∈ combSet B L n w) : v.1.length ≤ n ∧ v.2 ≤ maxLen L n := by
   obtain ⟨hval, hlen, -, -⟩ := hv
@@ -35,6 +38,8 @@ theorem mem_combSet_bounds {n : ℕ} {w : List (Fin B)} {v : List (Fin B) × ℕ
     omega
 
 open scoped Classical in
+/-- The comb sits inside the box of words of length at most `n` paired with
+second coordinates at most `maxLen L n`, from `mem_combSet_bounds`. -/
 theorem combSet_subset (n : ℕ) (w : List (Fin B)) :
     combSet B L n w
       ⊆ (↑((wordsLe B n) ×ˢ Finset.range (maxLen L n + 1)) : Set (List (Fin B) × ℕ)) := by
@@ -61,11 +66,15 @@ theorem combSet_proper {n : ℕ} (w : List (Fin B)) (hw : w.length = n) :
 
 /-! ### Every site walks to the root -/
 
+/-- A valid, non-root site is adjacent in the tree of pipes to its predecessor
+`pipePred B L v`. -/
 theorem pipeGraph_adj_pred (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (e : Bool)
     {v : List (Fin B) × ℕ} (hv : PipeValid B L v) (hne : v ≠ pipeRoot B) :
     (pipeGraph B L e).Adj v (pipePred B L v) :=
   ⟨Or.inl hv, Or.inl (pipePred_valid hv), (pipePred_ne_self hL hv hne).symm, Or.inl rfl⟩
 
+/-- Every valid site of the tree of pipes at depth at most `n` walks to the root,
+by induction on `n` following the chain of predecessors from `pipeGraph_adj_pred`. -/
 theorem exists_walk_to_root (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (e : Bool) :
     ∀ (n : ℕ) (v : List (Fin B) × ℕ), PipeValid B L v → pipeDepth L v ≤ n →
       Nonempty ((pipeGraph B L e).Walk v (pipeRoot B)) := by
@@ -86,6 +95,8 @@ theorem exists_walk_to_root (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (e : Bool) :
 
 /-! ### The comb is escapable -/
 
+/-- **The comb is escapable.** From any site there is a walk in the tree of pipes
+to a site outside the comb, via the root and the excluded far endpoint `(w, 0)`. -/
 theorem escape_combSet (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (e : Bool) {n : ℕ}
     {w : List (Fin B)} (hw : w.length = n) (x : List (Fin B) × ℕ) :
     ∃ (q : List (Fin B) × ℕ) (_ : (pipeGraph B L e).Walk x q), q ∉ combSet B L n w := by
@@ -100,6 +111,8 @@ theorem escape_combSet (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (e : Bool) {n : ℕ}
 
 /-! ### No site of the tree of pipes is isolated -/
 
+/-- The root of the tree of pipes has a neighbor, either the length-one pipe's far
+end or its depth-one child, according to whether `L 1` allows a longer pipe. -/
 theorem exists_adj_root (hB : 1 ≤ B) (e : Bool) :
     ∃ u, (pipeGraph B L e).Adj (pipeRoot B) u := by
   have hc : Nonempty (Fin B) := ⟨⟨0, by omega⟩⟩
@@ -119,6 +132,8 @@ theorem exists_adj_root (hB : 1 ≤ B) (e : Bool) :
       simp [pipePred, pipeRoot, hne, hlen, hL2]
     exact ⟨Or.inl (Or.inl rfl), Or.inl hval, by simp [pipeRoot], Or.inr hpred.symm⟩
 
+/-- **No site of the tree of pipes is isolated.** Every valid site has positive
+degree, via `pipeGraph_adj_pred` off the root and `exists_adj_root` at the root. -/
 theorem degree_pos_of_valid (hB : 1 ≤ B) (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (e : Bool)
     {v : List (Fin B) × ℕ} (hv : PipeValid B L v) : 0 < (pipeGraph B L e).degree v := by
   rw [SimpleGraph.degree_pos_iff_exists_adj]
@@ -127,6 +142,8 @@ theorem degree_pos_of_valid (hB : 1 ≤ B) (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (
     exact exists_adj_root hB e
   · exact ⟨pipePred B L v, pipeGraph_adj_pred hL e hv hz⟩
 
+/-- Every site of the comb has positive degree in the tree of pipes, specializing
+`degree_pos_of_valid` to `combSet` membership. -/
 theorem degree_pos_of_mem_combSet (hB : 1 ≤ B) (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (e : Bool)
     {n : ℕ} {w : List (Fin B)} {v : List (Fin B) × ℕ} (hv : v ∈ combSet B L n w) :
     0 < (pipeGraph B L e).degree v :=

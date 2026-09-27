@@ -25,6 +25,8 @@ variable {V : Type*} [DecidableEq V] {G : SimpleGraph V} [G.LocallyFinite]
 variable [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V]
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] in
+/-- The used set `stageUsed` at stage `i` depends on the walk only through its
+values up to any `k` at or after the stage time, via `stageE_prefix`. -/
 theorem stageUsed_dep (r : ℕ) (C : V → Finset V) (X : ℕ → V) (i k : ℕ)
     (hk : stageTime G r C X i ≤ (k : ℕ∞)) (X' : ℕ → V) (h : ∀ j ≤ k, X j = X' j) :
     stageUsed G r C X i = stageUsed G r C X' i := by

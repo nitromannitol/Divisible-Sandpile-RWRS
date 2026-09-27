@@ -7,7 +7,9 @@ nontrivial, locally finite graph with the discrete measurable structure,
 -/
 import RWRS.Setting
 
--- FROZEN-STATEMENT-BEGIN
+-- Proved outright by `RWRS.External.carneVaropoulos` in
+-- `RWRS/External/CarneVaropoulosProved.lean` (node `X-005`); no longer a
+-- FROZEN hypothesis anywhere in this development.
 /-- The pointwise Carne--Varopoulos bound for simple random walk on a connected,
 nontrivial, locally finite graph with measurable singletons. Sources: Carne
 (1985), Varopoulos (1985), Lyons--Peres, Theorem 13.4 (`rwrs.tex:143-149`). -/
@@ -18,4 +20,3 @@ def RWRS.External.CarneVaropoulos {V : Type*} (G : SimpleGraph V) [G.LocallyFini
       RWRS.walkLaw G x {X : ℕ → V | X n = y} ≤
         ENNReal.ofReal (2 * Real.sqrt ((G.degree y : ℝ) / G.degree x) *
           Real.exp (-((G.dist x y : ℝ) ^ 2) / (2 * n)))
--- FROZEN-STATEMENT-END

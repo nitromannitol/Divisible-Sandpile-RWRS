@@ -16,6 +16,8 @@ open scoped ENNReal
 /-- The value of the layer-cake integral of a shifted polynomial tail. -/
 noncomputable def tailValue (q a K s : ℝ) : ℝ := q * K * a ^ (q - s) * (1 / q + 1 / (s - q))
 
+/-- `tailValue q a K s` is nonnegative for positive `q` and `a`, nonnegative `K`, and exponent
+order `q < s`. -/
 theorem tailValue_nonneg {q a K s : ℝ} (hq : 0 < q) (ha : 0 < a) (hK : 0 ≤ K) (hqs : q < s) :
     0 ≤ tailValue q a K s := by
   have h1 : (0:ℝ) < a ^ (q - s) := Real.rpow_pos_of_pos ha _
@@ -25,6 +27,9 @@ theorem tailValue_nonneg {q a K s : ℝ} (hq : 0 < q) (ha : 0 < a) (hK : 0 ≤ K
   unfold tailValue
   positivity
 
+/-- The `ENNReal` layer-cake sum of the two shifted-tail terms equals
+`ENNReal.ofReal (tailValue q a K s)`, the identity used to combine the polynomial and
+sub-Gaussian block bounds. -/
 theorem ofReal_tail_eq {q a K s : ℝ} (hq : 0 < q) (ha : 0 < a) (hK : 0 ≤ K) (hqs : q < s) :
     ENNReal.ofReal q * (ENNReal.ofReal (a ^ q / q) * ENNReal.ofReal (K / a ^ s)
       + ENNReal.ofReal K * ENNReal.ofReal (a ^ (q - s) / (s - q)))

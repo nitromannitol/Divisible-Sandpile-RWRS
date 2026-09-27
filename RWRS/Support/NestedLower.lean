@@ -27,13 +27,17 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 noncomputable def stepBound (G : SimpleGraph V) [G.LocallyFinite] (ξ : V → ℝ)
     (C : Finset V) : ℝ := ∑ v ∈ C, |ξ v / G.degree v|
 
+/-- `stepBound` is nonnegative, being a sum of absolute values. -/
 theorem stepBound_nonneg (ξ : V → ℝ) (C : Finset V) : 0 ≤ stepBound G ξ C :=
   Finset.sum_nonneg fun _ _ => abs_nonneg _
 
+/-- Each term `|ξ v / deg v|` for `v ∈ C` is bounded by the total `stepBound G ξ C`. -/
 theorem le_stepBound {ξ : V → ℝ} {C : Finset V} {v : V} (hv : v ∈ C) :
     |ξ v / G.degree v| ≤ stepBound G ξ C :=
   Finset.single_le_sum (f := fun u => |ξ u / G.degree u|) (fun _ _ => abs_nonneg _) hv
 
+/-- While the walk stays inside `C` for its first `n` steps, the payoff after `n` steps is
+bounded by `n` times `stepBound G ξ C`. -/
 theorem abs_payoff_le {ξ : V → ℝ} {C : Finset V} {n : ℕ} {X : ℕ → V}
     (hmem : ∀ k, k < n → X k ∈ C) :
     |RWRS.payoff G ξ n X| ≤ (n : ℝ) * stepBound G ξ C := by
@@ -48,6 +52,7 @@ theorem abs_payoff_le {ξ : V → ℝ} {C : Finset V} {n : ℕ} {X : ℕ → V}
 variable [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] [DecidableEq V]
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- Before the truncated exit time `exitTrunc`, the walk stays inside `C`. -/
 theorem mem_of_lt_exitTrunc (C : Finset V) (N : ℕ) (X : ℕ → V) {k : ℕ}
     (hk : k < exitTrunc (C : Set V) N X) : X k ∈ C := by
   classical
@@ -65,6 +70,8 @@ theorem mem_of_lt_exitTrunc (C : Finset V) (N : ℕ) (X : ℕ → V) {k : ℕ}
     exact hmem k le_rfl
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- The payoff evaluated at the truncated exit time depends only on the walk's first `N` steps,
+since `exitTrunc` is itself a stopping time bounded by `N`. -/
 theorem dependsUpTo_payoff_exitTrunc (ξ : V → ℝ) (C : Finset V) (N : ℕ) :
     DependsUpTo N (fun X => RWRS.payoff G ξ (exitTrunc (C : Set V) N X) X) := by
   intro X Y hXY
@@ -82,6 +89,8 @@ theorem dependsUpTo_payoff_exitTrunc (ξ : V → ℝ) (C : Finset V) (N : ℕ) :
   rw [hXY k hkN]
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- The payoff at the truncated exit time is bounded by `N` times `stepBound`, combining
+`abs_payoff_le` with `mem_of_lt_exitTrunc` and the bound `exitTrunc ≤ N`. -/
 theorem abs_payoff_exitTrunc_le (ξ : V → ℝ) (C : Finset V) (N : ℕ) (X : ℕ → V) :
     |RWRS.payoff G ξ (exitTrunc (C : Set V) N X) X| ≤ (N : ℝ) * stepBound G ξ C := by
   have h1 := abs_payoff_le (G := G) (ξ := ξ) (C := C)
@@ -95,6 +104,7 @@ theorem abs_payoff_exitTrunc_le (ξ : V → ℝ) (C : Finset V) (N : ℕ) (X : �
 /-! ### The walk average is the library's -/
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- `RWRS.cons` agrees pointwise with the library's `LatticeProb.Graph.cons`. -/
 theorem cons_eq_lib (x : V) (X : ℕ → V) :
     RWRS.cons x X = LatticeProb.Graph.cons x X := by
   funext k
@@ -103,6 +113,8 @@ theorem cons_eq_lib (x : V) (X : ℕ → V) :
   | succ k => rfl
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- `RWRS.walkExp` agrees with the library's `LatticeProb.Graph.walkExp`, by induction on the
+step count using `cons_eq_lib`. -/
 theorem walkExp_eq_lib : ∀ (n : ℕ) (x : V) (F : (ℕ → V) → ℝ),
     RWRS.walkExp G n x F = LatticeProb.Graph.walkExp G n x F := by
   intro n
@@ -125,6 +137,9 @@ theorem walkExp_eq_lib : ∀ (n : ℕ) (x : V) (F : (ℕ → V) → ℝ),
 
 /-! ### The truncated exit values are stopping values -/
 
+/-- The integral of the payoff at the truncated exit time is one of the values dominated by the
+odometer, `RWRS.stopValues`, witnessed by `exitTrunc` and the library's stopping-time
+expectation identity `LatticeProb.Graph.walkExp_eq_integral`. -/
 theorem integral_payoff_exitTrunc_mem (hdeg : ∀ v : V, 0 < G.degree v)
     (ξ : V → ℝ) (C : Finset V) (N : ℕ) (o : V) :
     (∫ X, RWRS.payoff G ξ (exitTrunc (C : Set V) N X) X ∂(RWRS.walkLaw G o))
@@ -143,6 +158,8 @@ theorem integral_payoff_exitTrunc_mem (hdeg : ∀ v : V, 0 < G.degree v)
 /-! ### The lower half of the nested-volume representation -/
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- When the exit time from `C` is finite, the truncated exit time `exitTrunc` is at most the
+(integer-valued) exit time itself. -/
 theorem exitTrunc_le_exitNat {C : Finset V} {N : ℕ} {X : ℕ → V}
     (hX : LatticeProb.Graph.exitTime (C : Set V) X ≠ ⊤) :
     exitTrunc (C : Set V) N X ≤ (LatticeProb.Graph.exitTime (C : Set V) X).toNat := by

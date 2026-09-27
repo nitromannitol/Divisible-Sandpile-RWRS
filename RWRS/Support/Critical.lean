@@ -109,12 +109,16 @@ section Weighted
 
 variable {V : Type*} {ν : Measure ℝ} [IsProbabilityMeasure ν]
 
+/-- The weighted evaluations `(w i * f (ξ i))_{i ∈ S}` are independent under the i.i.d. law
+`iidLaw V ν`, pulled back along `iIndepFun_coord`. -/
 theorem iIndepFun_weighted (S : Finset V) (w : V → ℝ) {f : ℝ → ℝ} (hf : Measurable f) :
     iIndepFun (fun (i : {x // x ∈ S}) (ξ : V → ℝ) => w i * f (ξ i)) (iidLaw V ν) := by
   have h := (iIndepFun_coord (V := V) ν).comp (fun v (z : ℝ) => w v * f z)
     (fun v => (hf.const_mul (w v)))
   exact h.precomp (g := ((↑) : {x // x ∈ S} → V)) Subtype.val_injective
 
+/-- The weighted coordinate map `ξ ↦ c * f (ξ v)` lies in `L²(iidLaw V ν)` whenever `f ^ 2`
+is `ν`-integrable. -/
 theorem memLp_weighted (v : V) (c : ℝ) {f : ℝ → ℝ} (hf : Measurable f)
     (hf2 : Integrable (fun z => f z ^ 2) ν) :
     MemLp (fun ξ : V → ℝ => c * f (ξ v)) 2 (iidLaw V ν) := by
@@ -127,6 +131,8 @@ theorem memLp_weighted (v : V) (c : ℝ) {f : ℝ → ℝ} (hf : Measurable f)
     rw [this]
     exact h.const_mul _
 
+/-- The mean of the weighted sum `∑ w v * f (ξ v)` vanishes termwise when `f` has `ν`-mean
+zero. -/
 theorem integral_weighted_zero (S : Finset V) (w : V → ℝ) {f : ℝ → ℝ}
     (hf : Integrable f ν) (hf0 : ∫ z, f z ∂ν = 0) :
     ∫ ξ, (∑ v ∈ S, w v * f (ξ v)) ∂(iidLaw V ν) = 0 := by
@@ -134,6 +140,8 @@ theorem integral_weighted_zero (S : Finset V) (w : V → ℝ) {f : ℝ → ℝ}
   refine Finset.sum_eq_zero fun v _ => ?_
   rw [integral_const_mul, integral_coord ν v hf.aestronglyMeasurable, hf0, mul_zero]
 
+/-- The second moment of the weighted sum `∑ w v * f (ξ v)` factors as `(∑ w v ^ 2) · ∫ f ^ 2 dν`,
+via independence and `integral_sq_finsetSum_two`. -/
 theorem integral_weighted_sq (S : Finset V) (w : V → ℝ) {f : ℝ → ℝ} (hf : Measurable f)
     (hf2 : Integrable (fun z => f z ^ 2) ν) (hf0 : ∫ z, f z ∂ν = 0) :
     ∫ ξ, (∑ v ∈ S, w v * f (ξ v)) ^ 2 ∂(iidLaw V ν)
@@ -170,6 +178,8 @@ theorem integral_weighted_sq (S : Finset V) (w : V → ℝ) {f : ℝ → ℝ} (h
   congr 1
   exact Finset.sum_coe_sort S (fun v => w v ^ 2)
 
+/-- The weighted sum `∑_{v ∈ S} w v * f (ξ v)` lies in `L²(iidLaw V ν)`, assembled from
+`memLp_weighted` termwise. -/
 theorem memLp_weighted_sum (S : Finset V) (w : V → ℝ) {f : ℝ → ℝ} (hf : Measurable f)
     (hf2 : Integrable (fun z => f z ^ 2) ν) :
     MemLp (fun ξ : V → ℝ => ∑ v ∈ S, w v * f (ξ v)) 2 (iidLaw V ν) := by
@@ -197,28 +207,36 @@ open scoped Classical in
 noncomputable def greenSupport (G : SimpleGraph V) [G.LocallyFinite] (n : ℕ) (o : V) : Finset V :=
   (reach G o n).filter (fun v => greenTime G n o v ≠ 0)
 
+/-- Membership in `greenSupport` forces a strictly positive Green time at that vertex. -/
 theorem greenTime_pos_of_mem_greenSupport {n : ℕ} {o v : V} (hv : v ∈ greenSupport G n o) :
     0 < greenTime G n o v := by
   classical
   rw [greenSupport, Finset.mem_filter] at hv
   exact lt_of_le_of_ne (greenTime_nonneg n o v) (Ne.symm hv.2)
 
+/-- `greenSupport` is a subset of the reachable set `reach G o n`, being cut out by a filter
+on it. -/
 theorem greenSupport_subset (n : ℕ) (o : V) : greenSupport G n o ⊆ reach G o n := by
   classical
   exact Finset.filter_subset _ _
 
+/-- A reachable vertex outside `greenSupport` has Green time exactly zero. -/
 theorem greenTime_eq_zero_of_notMem_greenSupport {n : ℕ} {o v : V} (hv : v ∈ reach G o n)
     (hnv : v ∉ greenSupport G n o) : greenTime G n o v = 0 := by
   classical
   by_contra h
   exact hnv (Finset.mem_filter.2 ⟨hv, h⟩)
 
+/-- `sumSq` reduces to a sum over `greenSupport`, since vertices outside it contribute
+zero. -/
 theorem sumSq_eq_sum_greenSupport (n : ℕ) (o : V) :
     sumSq G n o = ∑ v ∈ greenSupport G n o, greenTime G n o v ^ 2 := by
   refine (Finset.sum_subset (greenSupport_subset n o) fun v hv hnv => ?_).symm
   rw [greenTime_eq_zero_of_notMem_greenSupport hv hnv]
   ring
 
+/-- `meanPayoff` reduces to a sum over `greenSupport`, since the Green weight vanishes off
+it. -/
 theorem meanPayoff_eq_sum_greenSupport [Infinite V] (hG : G.Connected) (ξ : V → ℝ) (n : ℕ)
     (o : V) :
     meanPayoff G ξ n o = ∑ v ∈ greenSupport G n o, greenTime G n o v * ξ v := by
@@ -226,12 +244,16 @@ theorem meanPayoff_eq_sum_greenSupport [Infinite V] (hG : G.Connected) (ξ : V �
   refine (Finset.sum_subset (greenSupport_subset n o) fun v hv hnv => ?_).symm
   rw [greenTime_eq_zero_of_notMem_greenSupport hv hnv, zero_mul]
 
+/-- Undoes a unit shift: `excess` sends `fun u => ξ u + 1` back to `ξ`. -/
 theorem excess_add_one (ξ : V → ℝ) : excess (fun u => ξ u + 1) = ξ := by
   funext u; rw [excess]; ring
 
+/-- The unit-shift map `ξ ↦ (fun u => ξ u + 1)` is measurable. -/
 theorem measurable_shift : Measurable fun ξ : V → ℝ => (fun u => ξ u + 1) :=
   measurable_pi_lambda _ fun u => (measurable_pi_apply u).add_const 1
 
+/-- `ξ ↦ value G ξ n o` is measurable, since it factors through the shift map `excess_add_one`
+and `measurable_odometer`. -/
 theorem measurable_value [Infinite V] (hG : G.Connected) (n : ℕ) (o : V) :
     Measurable fun ξ : V → ℝ => value G ξ n o := by
   have heq : (fun ξ : V → ℝ => value G ξ n o)
@@ -243,6 +265,8 @@ theorem measurable_value [Infinite V] (hG : G.Connected) (n : ℕ) (o : V) :
   rw [heq]
   exact (measurable_odometer n o).comp measurable_shift
 
+/-- `ξ ↦ meanPayoff G ξ n o` is measurable, factoring through the shift map and
+`measurable_meanPayoff`. -/
 theorem measurable_meanPayoff' [Infinite V] (hG : G.Connected) (n : ℕ) (o : V) :
     Measurable fun ξ : V → ℝ => meanPayoff G ξ n o := by
   have heq : (fun ξ : V → ℝ => meanPayoff G ξ n o)
@@ -253,14 +277,20 @@ theorem measurable_meanPayoff' [Infinite V] (hG : G.Connected) (n : ℕ) (o : V)
   rw [heq]
   exact (measurable_meanPayoff hG n o).comp measurable_shift
 
+/-- The stopping value `value G ξ n o` is nonnegative, as `0` is among its stop values
+(`zero_mem_stopValues`). -/
 theorem value_nonneg [Infinite V] (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (o : V) :
     0 ≤ value G ξ n o :=
   (isLUB_value hG ξ n o).1 (zero_mem_stopValues hG ξ n o)
 
+/-- The deterministic-time mean payoff is at most the value, taking the constant stopping
+time `n` in the defining supremum. -/
 theorem meanPayoff_le_value [Infinite V] (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (o : V) :
     meanPayoff G ξ n o ≤ value G ξ n o := by
   refine (isLUB_value hG ξ n o).1 ⟨fun _ => n, fun _ _ _ _ h => h, fun _ => le_rfl, rfl⟩
 
+/-- Combines `meanPayoff_le_value` and `value_nonneg` to bound the positive part of the mean
+payoff by the value. -/
 theorem max_meanPayoff_le_value [Infinite V] (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (o : V) :
     max (meanPayoff G ξ n o) 0 ≤ value G ξ n o :=
   max_le (meanPayoff_le_value hG ξ n o) (value_nonneg hG ξ n o)
@@ -273,15 +303,21 @@ section MeanBound
 
 variable {V : Type*} {ν : Measure ℝ} [IsProbabilityMeasure ν]
 
+/-- The weighted sum `ξ ↦ ∑_{v ∈ S} w v * f (ξ v)` is measurable, as a finite sum of measurable
+coordinates. -/
 theorem measurable_weighted_sum (S : Finset V) (w : V → ℝ) {f : ℝ → ℝ} (hf : Measurable f) :
     Measurable fun ξ : V → ℝ => ∑ v ∈ S, w v * f (ξ v) :=
   Finset.measurable_sum _ fun v _ => (hf.comp (measurable_pi_apply v)).const_mul (w v)
 
+/-- The weighted sum `ξ ↦ ∑_{v ∈ S} w v * f (ξ v)` is integrable under `iidLaw V ν` when `f`
+is `ν`-integrable. -/
 theorem integrable_weighted_sum (S : Finset V) (w : V → ℝ) {f : ℝ → ℝ}
     (hf : Integrable f ν) :
     Integrable (fun ξ : V → ℝ => ∑ v ∈ S, w v * f (ξ v)) (iidLaw V ν) :=
   integrable_finsetSum _ fun v _ => (integrable_coord ν v hf).const_mul (w v)
 
+/-- The positive part `fun ω => max (g ω) 0` of an integrable function is itself integrable,
+dominated by `|g|`. -/
 theorem integrable_max_zero {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω} {g : Ω → ℝ}
     (hg : Integrable g P) : Integrable (fun ω => max (g ω) 0) P := by
   refine Integrable.mono' hg.abs (hg.aestronglyMeasurable.sup aestronglyMeasurable_const)
@@ -289,6 +325,7 @@ theorem integrable_max_zero {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω} {
   rw [Real.norm_eq_abs, abs_of_nonneg (le_max_right _ _)]
   exact max_le (le_abs_self _) (abs_nonneg _)
 
+/-- The positive-part map is `1`-Lipschitz: `max a 0 - max b 0 ≤ |a - b|`. -/
 theorem max_sub_max_le_abs (a b : ℝ) : max a 0 - max b 0 ≤ |a - b| := by
   have h1 : b - a ≤ |a - b| := by
     rw [abs_sub_comm]; exact le_abs_self _
@@ -308,6 +345,7 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] [Infinite V]
   {ν : Measure ℝ} [IsProbabilityMeasure ν]
 
 omit [Infinite V] in
+/-- The second moment of a scaled coordinate `c * f (ξ v)` factors as `c ^ 2 · ∫ f ^ 2 dν`. -/
 theorem integral_coord_sq (v : V) (c : ℝ) {f : ℝ → ℝ} (_hf : Measurable f)
     (hf2 : Integrable (fun z => f z ^ 2) ν) :
     ∫ ξ, (c * f (ξ v)) ^ 2 ∂(iidLaw V ν) = c ^ 2 * ∫ z, f z ^ 2 ∂ν := by
@@ -461,6 +499,9 @@ theorem integral_max_meanPayoff_ge (hG : G.Connected)
 
 /-! ### The variance bound -/
 
+/-- **The one-site sensitivity bound** of `lem:sensitivity`: resampling the scenery at a
+single vertex `v` moves `value` by at most the Green weight `greenTime G n o v` times the
+change. -/
 theorem abs_value_sub_resample (hG : G.Connected) (ξ : V → ℝ) (v : V) (t : ℝ) (n : ℕ)
     (o : V) :
     |value G ξ n o - value G (resample ξ v t) n o| ≤ greenTime G n o v * |ξ v - t| := by
@@ -470,6 +511,8 @@ theorem abs_value_sub_resample (hG : G.Connected) (ξ : V → ℝ) (v : V) (t : 
   rw [abs_sub_le_iff]
   exact ⟨by linarith, by linarith⟩
 
+/-- Expands `∫ (s - t) ^ 2 dν` as `s ^ 2 + ∫ z ^ 2 dν` as a lower-integral identity, using that
+`ν` has mean zero. -/
 theorem lintegral_sq_sub (h0 : extMean ν = 0) (hsq : evar ν < ⊤) (s : ℝ) :
     ∫⁻ t, ENNReal.ofReal ((s - t) ^ 2) ∂ν
       = ENNReal.ofReal (s ^ 2 + ∫ z, z ^ 2 ∂ν) := by
@@ -493,6 +536,8 @@ theorem lintegral_sq_sub (h0 : extMean ν = 0) (hsq : evar ν < ⊤) (s : ℝ) :
   rw [← hval, ofReal_integral_eq_lintegral_ofReal hi hnn]
 
 omit [Infinite V] in
+/-- The expected resampling energy at a single coordinate equals `2 * evar ν`, combining
+`lintegral_sq_sub` with the marginal law of `ξ v`. -/
 theorem lintegral_resample_energy (h0 : extMean ν = 0) (hsq : evar ν < ⊤) (v : V) :
     ∫⁻ ξ, (∫⁻ t, ENNReal.ofReal ((ξ v - t) ^ 2) ∂ν) ∂(iidLaw V ν) = 2 * evar ν := by
   have hint2 : Integrable (fun z : ℝ => z ^ 2) ν := integrable_sq_of_evar h0 hsq
@@ -611,6 +656,8 @@ theorem evariance_value_le (hES : RWRS.External.EfronStein V) (hG : G.Connected)
 
 /-! ### The domination hypothesis, and the explosion event -/
 
+/-- The domination hypothesis `4M ^ 2 * greenTime ^ 2 ≤ t * sumSq` holds eventually, once
+`sumSq G n o → ∞` outpaces the diagonal Green time squared. -/
 theorem eventually_dom (hG : G.Connected) (o : V) {M t : ℝ} (hM : 0 < M) (ht : 0 < t)
     (hS : Tendsto (fun n : ℕ => sumSq G n o) atTop atTop) :
     ∀ᶠ n : ℕ in atTop, 4 * M ^ 2 * greenTime G n o o ^ 2 ≤ t * sumSq G n o := by
@@ -625,6 +672,8 @@ theorem eventually_dom (hG : G.Connected) (o : V) {M t : ℝ} (hM : 0 < M) (ht :
     _ = t * sumSq G n o := by field_simp
 
 omit [Infinite V] in
+/-- `supMeanPayoff` equals `⊤` as soon as the deterministic-time mean payoffs
+`meanPayoff G ξ n o` are unbounded above. -/
 theorem supMeanPayoff_eq_top_of_unbounded (ξ : V → ℝ) (o : V)
     (h : ∀ C : ℝ, ∃ n : ℕ, C ≤ meanPayoff G ξ n o) : supMeanPayoff G ξ o = ⊤ := by
   rw [supMeanPayoff, iSup_eq_top]
@@ -638,6 +687,8 @@ theorem supMeanPayoff_eq_top_of_unbounded (ξ : V → ℝ) (o : V)
     _ ≤ ENNReal.ofReal (meanPayoff G ξ n o) := ENNReal.ofReal_le_ofReal hn
 
 omit [Infinite V] in
+/-- The square root of `fluct` (as an extended-real power `(2⁻¹ : ℝ)`) equals
+`ENNReal.ofReal (Real.sqrt (sumSq G n o))`. -/
 theorem ofReal_sqrt_sumSq (n : ℕ) (o : V) :
     fluct G n o ^ (2⁻¹ : ℝ) = ENNReal.ofReal (Real.sqrt (sumSq G n o)) := by
   have hSig : (0 : ℝ) ≤ sumSq G n o := by
@@ -647,6 +698,8 @@ theorem ofReal_sqrt_sumSq (n : ℕ) (o : V) :
     show (1 : ℝ) / 2 = (2 : ℝ)⁻¹ by norm_num,
     ENNReal.ofReal_rpow_of_nonneg hSig (by norm_num)]
 
+/-- The explosion event `{ξ | supMeanPayoff G ξ o = ⊤}` is measurable in `ξ`, pulled back
+along the shift from `measurableSet_supMeanPayoff_top`. -/
 theorem measurableSet_supMeanPayoff_top' (hG : G.Connected) (o : V) :
     MeasurableSet {ξ : V → ℝ | supMeanPayoff G ξ o = ⊤} := by
   have heq : {ξ : V → ℝ | supMeanPayoff G ξ o = ⊤}
@@ -657,6 +710,8 @@ theorem measurableSet_supMeanPayoff_top' (hG : G.Connected) (o : V) :
   rw [heq]
   exact measurable_shift (measurableSet_supMeanPayoff_top hG o)
 
+/-- **The zero-one law for explosion.**  The explosion event has `iidLaw`-measure `0` or `1`,
+by exchangeability of the field and the permutation invariance `supMeanPayoff_perm_iff`. -/
 theorem measure_supMeanPayoff_top_zero_or_one (hVF : RWRS.External.VoltageFunction G)
     (hG : G.Connected) (ν : Measure ℝ) [IsProbabilityMeasure ν] (o : V) :
     iidLaw V ν {ξ : V → ℝ | supMeanPayoff G ξ o = ⊤} = 0 ∨
@@ -672,6 +727,8 @@ theorem measure_supMeanPayoff_top_zero_or_one (hVF : RWRS.External.VoltageFuncti
 
 /-! ### The two Paley--Zygmund steps -/
 
+/-- **A Paley--Zygmund tail bound.**  From a mean lower bound `m` and a second-moment bound
+`K * mean ^ 2`, the event `{Z ≥ m / 2}` has probability at least `1 / (4 * K)`. -/
 theorem measureReal_ge_half_mean {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω}
     [IsProbabilityMeasure P] (Z : Ω → ℝ) (hZm : Measurable Z) (hZ0 : ∀ ω, 0 ≤ Z ω)
     (hZ : Integrable Z P) (hZ2 : Integrable (fun ω => Z ω ^ 2) P)
@@ -705,11 +762,14 @@ theorem measureReal_ge_half_mean {Ω : Type*} [MeasurableSpace Ω] {P : Measure 
 /-! ### The value in `L²` -/
 
 omit [Infinite V] in
+/-- `sumSq G n o` is nonnegative, being a sum of squares over `greenSupport`. -/
 theorem sumSq_nonneg (n : ℕ) (o : V) : 0 ≤ sumSq G n o := by
   rw [sumSq_eq_sum_greenSupport]
   exact Finset.sum_nonneg fun v _ => sq_nonneg _
 
 omit [IsProbabilityMeasure ν] in
+/-- `value G ξ n o` lies in `L²(iidLaw V ν)`, from the variance bound `evariance_value_le`
+and finiteness of `evar ν`. -/
 theorem memLp_value (hES : RWRS.External.EfronStein V) (hG : G.Connected)
     (hν : IsProbabilityMeasure ν) (h0 : extMean ν = 0) (hsq : evar ν < ⊤) (n : ℕ) (o : V) :
     MemLp (fun ξ : V → ℝ => value G ξ n o) 2 (iidLaw V ν) := by
@@ -719,6 +779,8 @@ theorem memLp_value (hES : RWRS.External.EfronStein V) (hG : G.Connected)
   exact ENNReal.mul_lt_top hsq (lt_top_iff_ne_top.2 (fluct_ne_top n o))
 
 omit [IsProbabilityMeasure ν] in
+/-- **The real-valued variance bound.**  `variance (value G · n o) ≤ (∫ z ^ 2 dν) * sumSq`,
+the real-number form of `evariance_value_le`. -/
 theorem variance_value_le (hES : RWRS.External.EfronStein V) (hG : G.Connected)
     (hν : IsProbabilityMeasure ν) (h0 : extMean ν = 0) (hsq : evar ν < ⊤) (n : ℕ) (o : V) :
     variance (fun ξ : V → ℝ => value G ξ n o) (iidLaw V ν)
@@ -736,6 +798,8 @@ theorem variance_value_le (hES : RWRS.External.EfronStein V) (hG : G.Connected)
 /-! ### The explosion bound -/
 
 omit [Infinite V] in
+/-- `sumSq G n o → ∞` whenever `fluct G n o → ⊤`, since the two agree via
+`fluct_eq_ofReal_sumSq`. -/
 theorem tendsto_sumSq_of_tendsto_fluct {o : V}
     (hSigma : Tendsto (fun n : ℕ => fluct G n o) atTop (𝓝 ⊤)) :
     Tendsto (fun n : ℕ => sumSq G n o) atTop atTop := by
@@ -747,6 +811,8 @@ theorem tendsto_sumSq_of_tendsto_fluct {o : V}
     rw [← fluct_eq_ofReal_sumSq]; exact hn
   exact ((le_max_left C 0).trans ((ENNReal.ofReal_lt_ofReal_iff_of_nonneg hC).1 hn').le)
 
+/-- `meanPayoff G ξ n o` is integrable under `iidLaw V ν`, as a finite weighted sum of
+integrable coordinates. -/
 theorem integrable_meanPayoff (hG : G.Connected) (hint : Integrable (fun z : ℝ => z) ν)
     (n : ℕ) (o : V) :
     Integrable (fun ξ : V → ℝ => meanPayoff G ξ n o) (iidLaw V ν) := by

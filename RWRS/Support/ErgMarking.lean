@@ -176,6 +176,8 @@ given the graph and the root. -/
 noncomputable def markProb (ν : Measure ℝ) (A : Set (RWRS.Net 1)) (N : RWRS.Net 0) : ℝ :=
   (markAvg ν (A.indicator (fun _ => (1 : ℝ≥0∞))) N).toReal
 
+/-- The mark average of an indicator function is at most `1`, since it is dominated by the
+total mass of the i.i.d. mark law. -/
 theorem markAvg_indicator_le_one (ν : Measure ℝ) [IsProbabilityMeasure ν]
     (A : Set (RWRS.Net 1)) (N : RWRS.Net 0) :
     markAvg ν (A.indicator (fun _ => (1 : ℝ≥0∞))) N ≤ 1 := by
@@ -187,19 +189,25 @@ theorem markAvg_indicator_le_one (ν : Measure ℝ) [IsProbabilityMeasure ν]
   rw [lintegral_const, measure_univ, mul_one] at h1
   exact h1
 
+/-- `markProb` is nonnegative, being the real cast of an `ℝ≥0∞`-valued average. -/
 theorem markProb_nonneg (ν : Measure ℝ) (A : Set (RWRS.Net 1)) (N : RWRS.Net 0) :
     0 ≤ markProb ν A N := ENNReal.toReal_nonneg
 
+/-- `markProb ν A N` is at most `1`, transferring `markAvg_indicator_le_one` to the real
+cast. -/
 theorem markProb_le_one (ν : Measure ℝ) [IsProbabilityMeasure ν] (A : Set (RWRS.Net 1))
     (N : RWRS.Net 0) : markProb ν A N ≤ 1 := by
   rw [markProb]
   exact ENNReal.toReal_le_of_le_ofReal zero_le_one
     (by rw [ENNReal.ofReal_one]; exact markAvg_indicator_le_one ν A N)
 
+/-- `markProb ν A` is a measurable function of the underlying rooted graph `N`. -/
 theorem measurable_markProb (ν : Measure ℝ) [IsProbabilityMeasure ν] {A : Set (RWRS.Net 1)}
     (hA : MeasurableSet A) : Measurable (markProb ν A) :=
   (measurable_markAvg ν ((measurable_const).indicator hA)).ennreal_toReal
 
+/-- `markProb ν A` is invariant under isomorphism of rooted graphs, when the mark event `A`
+is `NetInvariantSet`. -/
 theorem markProb_invariant (ν : Measure ℝ) [IsProbabilityMeasure ν] {A : Set (RWRS.Net 1)}
     (hA : MeasurableSet A) (hiso : RWRS.NetInvariantSet A) :
     ∀ N N', RWRS.NetIso N N' → markProb ν A N = markProb ν A N' := by
@@ -212,6 +220,8 @@ theorem markProb_invariant (ν : Measure ℝ) [IsProbabilityMeasure ν] {A : Set
         Set.indicator_of_notMem (fun hc => hmem ((hiso M M' hM).2 hc))]
   rw [markProb, markProb, markAvg_invariant ν ((measurable_const).indicator hA) hinv N N' h]
 
+/-- `markProb ν A` is unchanged after rerooting at a neighbour `y`, when the mark event `A`
+is `RerootInvariant`. -/
 theorem markProb_reroot (ν : Measure ℝ) [IsProbabilityMeasure ν] {A : Set (RWRS.Net 1)}
     (hre : RWRS.RerootInvariant A) (N : RWRS.Net 0) (y : ℕ)
     (hadj : (RWRS.netGraph N).Adj (RWRS.netRoot N) y) :

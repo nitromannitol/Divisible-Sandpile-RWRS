@@ -25,6 +25,8 @@ noncomputable def degWeightAt (N : RWRS.Net 0) (r : ℕ) : ℝ :=
   (((RWRS.netGraph N).degree r : ℝ))⁻¹
 
 set_option maxHeartbeats 1000000 in
+/-- `degWeight` is measurable, factoring it through the countable-left product
+measurability of the named-vertex degree weight `degWeightAt`. -/
 theorem measurable_degWeight : Measurable degWeight := by
   have hpair : Measurable fun q : RWRS.Net 0 × ℕ => degWeightAt q.1 q.2 := by
     refine measurable_from_prod_countable_left fun r => ?_
@@ -36,9 +38,12 @@ theorem measurable_degWeight : Measurable degWeight := by
   rw [hsplit]
   exact hpair.comp (measurable_id.prodMk measurable_netRoot)
 
+/-- `degWeight` is nonnegative, being a reciprocal of a natural number cast. -/
 theorem degWeight_nonneg (N : RWRS.Net 0) : 0 ≤ degWeight N :=
   inv_nonneg.mpr (Nat.cast_nonneg _)
 
+/-- `degWeight` is at most `1`, since it is the reciprocal of a degree that is
+either `0` (giving weight `0`) or at least `1`. -/
 theorem degWeight_le_one (N : RWRS.Net 0) : degWeight N ≤ 1 := by
   rcases Nat.eq_zero_or_pos ((RWRS.netGraph N).degree (RWRS.netRoot N)) with h | h
   · rw [degWeight, h]; simp
@@ -46,6 +51,8 @@ theorem degWeight_le_one (N : RWRS.Net 0) : degWeight N ≤ 1 := by
     right
     exact_mod_cast h
 
+/-- `degWeight` is integrable against any probability measure, dominated by the
+constant `1` via `degWeight_nonneg` and `degWeight_le_one`. -/
 theorem integrable_degWeight (Q : Measure (RWRS.Net 0)) [IsProbabilityMeasure Q] :
     Integrable degWeight Q :=
   (integrable_const (1 : ℝ)).mono' measurable_degWeight.aestronglyMeasurable

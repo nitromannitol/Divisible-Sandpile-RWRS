@@ -10,6 +10,8 @@ namespace RWRS.Support
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] [Infinite V]
 
+/-- `0` is always among the stopping values: the constant stopping time `0`
+achieves it. -/
 theorem zero_mem_stopValues (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (x : V) :
     (0 : ℝ) ∈ stopValues G ξ n x := by
   refine ⟨fun _ => 0, fun _ _ _ _ h => h, fun _ => Nat.zero_le _, ?_⟩
@@ -17,6 +19,7 @@ theorem zero_mem_stopValues (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (x : V
     walkExp_const hG]
 
 omit [Infinite V] in
+/-- `scenery` unfolds to the excess divided by the degree. -/
 theorem scenery_eq (σ : V → ℝ) (x : V) :
     excess σ x / (G.degree x : ℝ) = scenery G σ x := rfl
 
@@ -103,16 +106,21 @@ theorem odometer_isLUB (hG : G.Connected) (σ : V → ℝ) :
           exact zero_mem_stopValues hG (excess σ) (n + 1) x
 
 
+/-- **The odometer is the least upper bound of the stopping values.**  Immediate
+from the two halves of `odometer_isLUB`. -/
 theorem isLUB_odometer (hG : G.Connected) (σ : V → ℝ) (n : ℕ) (x : V) :
     IsLUB (stopValues G (excess σ) n x) (odometer G σ n x) :=
   ⟨fun _ ha => (odometer_isLUB hG σ n x).1 _ ha,
     fun _ hb => hb (odometer_isLUB hG σ n x).2⟩
 
+/-- The optimal-stopping `value` of the excess equals the odometer, since
+`isLUB_odometer` identifies the odometer as the supremum defining `value`. -/
 theorem value_eq (hG : G.Connected) (σ : V → ℝ) (n : ℕ) (x : V) :
     value G (excess σ) n x = odometer G σ n x :=
   (isLUB_odometer hG σ n x).csSup_eq ⟨_, (odometer_isLUB hG σ n x).2⟩
 
 omit [Infinite V] in
+/-- The odometer vanishes at time `0`. -/
 theorem odometer_zero (σ : V → ℝ) (z : V) : odometer G σ 0 z = 0 := rfl
 
 /-- The set the optimal stopping time minimizes over. -/
@@ -120,13 +128,19 @@ def stopSet (G : SimpleGraph V) [G.LocallyFinite] (ξ : V → ℝ) (n : ℕ) (X 
   {k : ℕ | k ≤ n ∧ value G ξ (n - k) (X k) = 0}
 
 omit [Infinite V] in
+/-- `optimalStop` unfolds to the infimum of `stopSet`, the times at which the
+residual value already vanishes. -/
 theorem optimalStop_eq_sInf (ξ : V → ℝ) (n : ℕ) (X : ℕ → V) :
     optimalStop G ξ n X = sInf (stopSet G ξ n X) := rfl
 
+/-- `stopSet G (excess σ) n X` is nonempty: the full horizon `n` always
+qualifies, since the value at residual time `0` is `0`. -/
 theorem stopSet_nonempty (hG : G.Connected) (σ : V → ℝ) (n : ℕ) (X : ℕ → V) :
     (stopSet G (excess σ) n X).Nonempty :=
   ⟨n, le_rfl, by rw [Nat.sub_self, value_eq hG, odometer_zero]⟩
 
+/-- `optimalStop` is a genuine stopping time: whether `k` is the least element
+of `stopSet` up to time `k` depends only on the walk's values up to `k`. -/
 theorem isStopping_optimalStop (hG : G.Connected) (σ : V → ℝ) (n : ℕ) :
     IsStopping (optimalStop G (excess σ) n) := by
   intro k X Y hXY hk
@@ -142,15 +156,20 @@ theorem isStopping_optimalStop (hG : G.Connected) (σ : V → ℝ) (n : ℕ) :
   have hm := Nat.sInf_mem (stopSet_nonempty hG σ n Y)
   exact hlt _ hcon ⟨hm.1, by rw [hXY _ hcon.le]; exact hm.2⟩
 
+/-- At horizon `0`, `optimalStop` is `0`. -/
 theorem optimalStop_zero (hG : G.Connected) (σ : V → ℝ) (X : ℕ → V) :
     optimalStop G (excess σ) 0 X = 0 :=
   Nat.eq_zero_of_le_zero
     (Nat.sInf_le ⟨le_rfl, by rw [Nat.zero_sub, value_eq hG, odometer_zero]⟩)
 
+/-- `optimalStop` never exceeds the horizon `n`. -/
 theorem optimalStop_le (hG : G.Connected) (σ : V → ℝ) (n : ℕ) (X : ℕ → V) :
     optimalStop G (excess σ) n X ≤ n :=
   Nat.sInf_le ⟨le_rfl, by rw [Nat.sub_self, value_eq hG, odometer_zero]⟩
 
+/-- **`optimalStop` steps back by one after a first step that does not already
+stop.**  If the value at `x` is nonzero, prepending `x` to `X'` shifts
+`optimalStop` for the tail `X'` by exactly `1`. -/
 theorem optimalStop_cons (hG : G.Connected) (σ : V → ℝ) (n : ℕ) (x : V)
     (hne : value G (excess σ) (n + 1) x ≠ 0) (X' : ℕ → V) :
     optimalStop G (excess σ) (n + 1) (cons x X') = optimalStop G (excess σ) n X' + 1 := by
@@ -180,6 +199,9 @@ theorem optimalStop_cons (hG : G.Connected) (σ : V → ℝ) (n : ℕ) (x : V)
   omega
 
 
+/-- **`optimalStop` achieves the odometer.**  The expected payoff up to
+`optimalStop` equals the odometer, by induction on the horizon using the
+recursion for `odometer` and the correspondence `optimalStop_cons`. -/
 theorem walkExp_optimalStop (hG : G.Connected) (σ : V → ℝ) :
     ∀ (n : ℕ) (x : V),
       walkExp G n x (fun X => payoff G (excess σ) (optimalStop G (excess σ) n X) X)

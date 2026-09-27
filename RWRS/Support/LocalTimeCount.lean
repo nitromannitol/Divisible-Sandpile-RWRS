@@ -48,9 +48,12 @@ theorem tailTime_eq_localTime (k n : ℕ) (v : V) (X : ℕ → V) :
 noncomputable def visitSet (n : ℕ) (v : V) (X : ℕ → V) : Finset ℕ :=
   (Finset.range n).filter (fun k => X k = v)
 
+/-- `visitSet` counts exactly the local time at `v` up to time `n`. -/
 theorem card_visitSet (n : ℕ) (v : V) (X : ℕ → V) :
     (visitSet n v X).card = RWRS.localTime n v X := rfl
 
+/-- At a visit `k` to `v` before time `n`, at least one visit (`k` itself) remains in
+`[k, n)`. -/
 theorem one_le_tailTime {n k : ℕ} {v : V} {X : ℕ → V} (hk : k ∈ visitSet n v X) :
     1 ≤ tailTime k n v X := by
   classical
@@ -59,6 +62,7 @@ theorem one_le_tailTime {n k : ℕ} {v : V} {X : ℕ → V} (hk : k ∈ visitSet
   rw [Finset.mem_filter, Finset.mem_Ico]
   exact ⟨⟨le_rfl, hk.1⟩, hk.2⟩
 
+/-- The visits remaining in the window `[k, n)` are at most the total local time up to `n`. -/
 theorem tailTime_le (k n : ℕ) (v : V) (X : ℕ → V) :
     tailTime k n v X ≤ RWRS.localTime n v X := by
   classical

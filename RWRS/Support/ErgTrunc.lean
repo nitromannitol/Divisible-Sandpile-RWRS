@@ -75,15 +75,20 @@ theorem tendsto_emission_of_stabilizes {σ : V → ℝ} (hstab : RWRS.Stabilizes
 def truncMarks (M : ℝ) (N : RWRS.Net 1) : RWRS.Net 1 :=
   (N.1, N.2.1, fun i j => min (N.2.2 i j) M)
 
+/-- `truncMarks M` is measurable, being built from the measurable pointwise
+minimum with the constant `M`. -/
 theorem measurable_truncMarks (M : ℝ) : Measurable (truncMarks M) := by
   refine measurable_fst.prodMk ((measurable_fst.comp measurable_snd).prodMk ?_)
   refine measurable_pi_lambda _ fun i => measurable_pi_lambda _ fun j => ?_
   exact ((measurable_pi_apply j).comp ((measurable_pi_apply i).comp
     (measurable_snd.comp measurable_snd))).min measurable_const
 
+/-- Truncating the marks of a network leaves its underlying graph unchanged. -/
 theorem netGraph_truncMarks (M : ℝ) (N : RWRS.Net 1) :
     RWRS.netGraph (truncMarks M N) = RWRS.netGraph N := rfl
 
+/-- The initial configuration of a mark-truncated network is the original
+configuration truncated at `M`. -/
 theorem netConfig_truncMarks (M : ℝ) (N : RWRS.Net 1) (v : ℕ) :
     RWRS.netConfig (truncMarks M N) v = min (RWRS.netConfig N v) M := rfl
 

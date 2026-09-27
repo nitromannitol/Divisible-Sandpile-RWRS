@@ -54,10 +54,13 @@ theorem closedBall_subset_reach (o : V) :
 noncomputable def ballFinset (G : SimpleGraph V) [G.LocallyFinite] (o : V) (r : ℕ) : Finset V :=
   (finite_closedBall (G := G) o r).toFinset
 
+/-- Membership in `ballFinset` is membership in the closed ball `closedBall`. -/
 theorem mem_ballFinset {o v : V} {r : ℕ} :
     v ∈ ballFinset G o r ↔ v ∈ RWRS.closedBall G o r := by
   rw [ballFinset, Set.Finite.mem_toFinset]
 
+/-- The `Finset` ball `ballFinset` is reached within its radius, via
+`closedBall_subset_reach`. -/
 theorem ballFinset_subset_reach (o : V) (r : ℕ) : ballFinset G o r ⊆ reach G o r := by
   intro v hv
   exact closedBall_subset_reach (G := G) o r (mem_ballFinset.1 hv)

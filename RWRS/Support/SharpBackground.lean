@@ -28,9 +28,12 @@ noncomputable def tailPart (μ M : ℝ) (z : ℝ) : ℝ := if M ≤ |z - μ| the
 /-- The bounded part of the centred marginal at level `M`. -/
 noncomputable def bddPart (μ M : ℝ) (z : ℝ) : ℝ := (z - μ) - tailPart μ M z
 
+/-- The tail and bounded parts recombine to the centred value:
+`tailPart μ M z + bddPart μ M z = z - μ`. -/
 theorem tailPart_add_bddPart (μ M z : ℝ) : tailPart μ M z + bddPart μ M z = z - μ := by
   rw [bddPart]; ring
 
+/-- The bounded part is capped at `M` in absolute value. -/
 theorem abs_bddPart_le {M : ℝ} (hM : 0 ≤ M) (μ z : ℝ) : |bddPart μ M z| ≤ M := by
   rw [bddPart, tailPart]
   by_cases h : M ≤ |z - μ|
@@ -39,18 +42,23 @@ theorem abs_bddPart_le {M : ℝ} (hM : 0 ≤ M) (μ z : ℝ) : |bddPart μ M z| 
   · simp only [h, if_false, sub_zero]
     exact le_of_lt (lt_of_not_ge h)
 
+/-- The tail part is dominated by the full centred value in absolute value. -/
 theorem abs_tailPart_le (μ M z : ℝ) : |tailPart μ M z| ≤ |z - μ| := by
   rw [tailPart]
   by_cases h : M ≤ |z - μ| <;> simp [h, abs_nonneg]
 
+/-- `tailPart μ M` is measurable. -/
 theorem measurable_tailPart (μ M : ℝ) : Measurable (tailPart μ M) := by
   classical
   refine Measurable.ite ?_ (measurable_id.sub_const μ) measurable_const
   exact measurableSet_le measurable_const (by fun_prop)
 
+/-- `bddPart μ M` is measurable, as the difference of the centred value and the tail part. -/
 theorem measurable_bddPart (μ M : ℝ) : Measurable (bddPart μ M) :=
   (measurable_id.sub_const μ).sub (measurable_tailPart μ M)
 
+/-- `tailPart μ M` is integrable whenever the centred value `z - μ` is, dominated by
+`abs_tailPart_le`. -/
 theorem integrable_tailPart {ν : Measure ℝ} [IsProbabilityMeasure ν] (μ M : ℝ)
     (hint : Integrable (fun z => z - μ) ν) : Integrable (tailPart μ M) ν := by
   refine Integrable.mono' hint.abs (measurable_tailPart μ M).aestronglyMeasurable
@@ -58,6 +66,8 @@ theorem integrable_tailPart {ν : Measure ℝ} [IsProbabilityMeasure ν] (μ M :
   rw [Real.norm_eq_abs]
   exact abs_tailPart_le μ M z
 
+/-- `bddPart μ M` is integrable whenever `z - μ` is, as the difference
+`(z - μ) - tailPart μ M z`. -/
 theorem integrable_bddPart {ν : Measure ℝ} [IsProbabilityMeasure ν] (μ M : ℝ)
     (hint : Integrable (fun z => z - μ) ν) : Integrable (bddPart μ M) ν :=
   hint.sub (integrable_tailPart μ M hint)
@@ -66,15 +76,20 @@ theorem integrable_bddPart {ν : Measure ℝ} [IsProbabilityMeasure ν] (μ M : 
 noncomputable def ctrPart (ν : Measure ℝ) (μ M : ℝ) (z : ℝ) : ℝ :=
   bddPart μ M z - ∫ y, bddPart μ M y ∂ν
 
+/-- `ctrPart ν μ M` is measurable, as a constant shift of `bddPart`. -/
 theorem measurable_ctrPart (ν : Measure ℝ) (μ M : ℝ) : Measurable (ctrPart ν μ M) :=
   (measurable_bddPart μ M).sub_const _
 
+/-- `ctrPart ν μ M` has `ν`-mean zero by construction, subtracting off the mean of
+`bddPart`. -/
 theorem integral_ctrPart {ν : Measure ℝ} [IsProbabilityMeasure ν] (μ M : ℝ)
     (hint : Integrable (fun z => z - μ) ν) : ∫ z, ctrPart ν μ M z ∂ν = 0 := by
   simp only [ctrPart]
   rw [integral_sub (integrable_bddPart μ M hint) (integrable_const _), integral_const]
   simp
 
+/-- **The recentred bounded part has size at most `2M`**, combining the bound on `bddPart`
+with the triangle inequality against its own mean, itself bounded via `abs_bddPart_le`. -/
 theorem abs_ctrPart_le {ν : Measure ℝ} [IsProbabilityMeasure ν] {M : ℝ} (hM : 0 ≤ M) (μ : ℝ)
     (hint : Integrable (fun z => z - μ) ν) (z : ℝ) : |ctrPart ν μ M z| ≤ 2 * M := by
   have hc : |∫ y, bddPart μ M y ∂ν| ≤ M := by
@@ -102,6 +117,9 @@ theorem abs_integral_bddPart_le {ν : Measure ℝ} [IsProbabilityMeasure ν] {μ
   rw [hsplit, abs_neg]
   exact abs_integral_le_integral_abs
 
+/-- **Chooses a truncation level `M`** making the mean absolute tail part
+`∫ |tailPart μ M|` as small as `ε`, via uniform integrability of `z - μ`
+(`MemLp.integral_indicator_norm_ge_nonneg_le`). -/
 theorem exists_tailPart_le {ν : Measure ℝ} [IsProbabilityMeasure ν] (μ : ℝ)
     (hint : Integrable (fun z => z - μ) ν) {ε : ℝ} (hε : 0 < ε) :
     ∃ M : ℝ, 0 ≤ M ∧ ∫ z, |tailPart μ M z| ∂ν ≤ ε := by

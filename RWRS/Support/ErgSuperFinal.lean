@@ -22,6 +22,8 @@ open scoped ENNReal
 
 namespace RWRS.Support
 
+/-- Good-net-ness is almost sure under the i.i.d. marking law `markIid Q ν`, since forgetting
+marks is quasi-measure-preserving back to `Q`, where it already holds almost surely. -/
 theorem ae_netGood_markIid (Q : Measure (RWRS.Net 0)) [IsProbabilityMeasure Q]
     (ν : Measure ℝ) [IsProbabilityMeasure ν] (hgood : ∀ᵐ N ∂Q, RWRS.NetGood N) :
     ∀ᵐ N ∂(RWRS.markIid Q ν), RWRS.NetGood N := by
@@ -29,6 +31,9 @@ theorem ae_netGood_markIid (Q : Measure (RWRS.Net 0)) [IsProbabilityMeasure Q]
     ⟨measurable_forgetMarks, by rw [map_forgetMarks_markIid Q ν]⟩
   exact hqmp.ae hgood
 
+/-- Integrating the degree weight after forgetting marks against `markIid Q ν` equals
+integrating it directly against `Q`, since `forgetMarks` pushes `markIid Q ν` forward to
+`Q`. -/
 theorem integral_degWeight_markIid (Q : Measure (RWRS.Net 0)) [IsProbabilityMeasure Q]
     (ν : Measure ℝ) [IsProbabilityMeasure ν] :
     (∫ N : RWRS.Net 1, degWeight (RWRS.forgetMarks N) ∂(RWRS.markIid Q ν))

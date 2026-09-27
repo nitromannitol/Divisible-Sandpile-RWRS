@@ -25,7 +25,7 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 set_option linter.unusedVariables false in
 -- FROZEN-STATEMENT-BEGIN
 theorem RWRS.Frozen.explosion [Infinite V] [MeasurableSpace V]
-    (hVF : RWRS.External.VoltageFunction G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : RWRS.BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : RWRS.HasExtMean ν) :
     (1 < RWRS.extMean ν → RWRS.iidLaw V ν {σ : V → ℝ | RWRS.Stabilizes G σ} = 0) ∧
@@ -40,7 +40,6 @@ theorem RWRS.Frozen.explosion [Infinite V] [MeasurableSpace V]
   haveI : Countable V := RWRS.Support.countable_of_connected hG
   haveI : IsProbabilityMeasure (ν.map (fun z : ℝ => z - 1)) :=
     RWRS.Support.isProbabilityMeasure_map_sub_one
-  have hES : RWRS.External.EfronStein V := RWRS.Support.efronStein V
   have hdeg : ∀ v : V, 0 < G.degree v := fun v => RWRS.Support.degree_pos hG v
   have hd0 : 0 < d := lt_of_lt_of_le (hdeg (Classical.arbitrary V)) (hd _)
   constructor
@@ -62,10 +61,10 @@ theorem RWRS.Frozen.explosion [Infinite V] [MeasurableSpace V]
       RWRS.Support.extMean_map_sub_one_eq_zero hmean
     rcases hcase with ⟨hvar, hsq⟩ | ⟨hnz, hsym⟩
     · have hev := RWRS.Support.evar_map_sub_one hsq
-      exact RWRS.Support.explosion_of_mean_zero hES hVF hG d hd0 hd _ inferInstance hmean'
+      exact RWRS.Support.explosion_of_mean_zero hG d hd0 hd _ inferInstance hmean'
         (by rw [hev]; exact hvar) (by rw [hev]; exact hsq) _
-    · obtain ⟨o, ho⟩ := RWRS.Support.exists_vertex_explosion hES hVF hG d hd0 hd
-      have hconv := (RWRS.Frozen.convexityReduction hVF hG _ inferInstance hmean'
+    · obtain ⟨o, ho⟩ := RWRS.Support.exists_vertex_explosion hG d hd0 hd
+      have hconv := (RWRS.Frozen.convexityReduction hG _ inferInstance hmean'
         (RWRS.Support.map_sub_one_ne_dirac hnz) hsym o).1
         (fun ρ hρ h0 hv hs => ho ρ hρ h0 hv hs)
       filter_upwards [hconv] with ξ hξ

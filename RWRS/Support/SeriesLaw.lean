@@ -1,6 +1,18 @@
 import RWRS.Support.Transience
 import LatticeProb.Network.Series
 
+/-!
+# Killed Green function bounds
+
+Compares the walk killed on hitting a set `C` to the free walk: the killed heat kernel and
+Green function are dominated pointwise by their unkilled counterparts (`killedHeat_le_heat`,
+`killedGreen_le_green`). An unbounded killed Green function at the source over escapable
+finite sets then forces recurrence (`recurrent_of_killedGreen_unbounded`). The last theorem
+instantiates the Nash-Williams series law `LatticeProb.Network.nashWilliams_nested` along a
+chain of vertex sets truncated to a finite horizon `L`, as needed when the chain exhausts an
+infinite graph.
+-/
+
 namespace RWRS.Support
 
 open scoped Classical
@@ -8,6 +20,8 @@ open LatticeProb.Network LatticeProb.Graph
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
+/-- The killed heat kernel is dominated by the unkilled heat kernel at every time, by
+induction on the number of steps. -/
 theorem killedHeat_le_heat (C : Set V) :
     ∀ (k : ℕ) (x y : V), RWRS.killedHeat G C k x y ≤ RWRS.heat G k x y := by
   intro k
@@ -29,6 +43,8 @@ theorem killedHeat_le_heat (C : Set V) :
       · simp only [RWRS.killedHeat, if_neg hx]
         exact RWRS.Support.heat_nonneg (k + 1) x y
 
+/-- The killed Green function is dominated by the Green function, summing
+`killedHeat_le_heat` over time. -/
 theorem killedGreen_le_green (C : Set V) (x y : V) :
     RWRS.killedGreen G C x y ≤ RWRS.green G x y := by
   rw [RWRS.killedGreen, RWRS.green]

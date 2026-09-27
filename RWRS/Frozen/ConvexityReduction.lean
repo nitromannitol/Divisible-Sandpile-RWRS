@@ -1,4 +1,9 @@
-/-
+import RWRS.Support.Convexity
+import RWRS.External.VoltageFunctionConnected
+
+/-!
+# Proposition 5.10: the convexity reduction
+
 Proposition 5.10 of `rwrs.tex`, frozen.  `rwrs.tex:950-954` (label
 `prop:convexity-reduction`):
 
@@ -14,10 +19,10 @@ together with mean zero is `evar ρ < ∞`.
 
 The reduction ends by upgrading a probability at least one half of explosion to
 an almost sure one through `prop:01-law`, whose proof quotes the existence of a
-bounded nonnegative solution of `Δf = δ_b - δ_a`; that cited input enters here
-as the explicit hypothesis `hVF`, exactly as it does in `prop:01-law` itself.
+bounded nonnegative solution of `Δf = δ_b - δ_a`; that cited input is proved
+on every infinite connected graph (`RWRS.External.voltageFunction_of_connected`)
+and is discharged inside the proof, as it is in `prop:01-law` itself.
 -/
-import RWRS.Support.Convexity
 
 open MeasureTheory
 open scoped ENNReal
@@ -29,7 +34,7 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 -- referred to.
 set_option linter.unusedVariables false in
 -- FROZEN-STATEMENT-BEGIN
-theorem RWRS.Frozen.convexityReduction (hVF : RWRS.External.VoltageFunction G)
+theorem RWRS.Frozen.convexityReduction
     [Infinite V] (hG : G.Connected)
     (ν : Measure ℝ) (hν : IsProbabilityMeasure ν) (hmean : RWRS.extMean ν = 0)
     (hnz : ν ≠ Measure.dirac 0) (hsym : RWRS.IsSymmetric ν) (o : V) :
@@ -41,6 +46,8 @@ theorem RWRS.Frozen.convexityReduction (hVF : RWRS.External.VoltageFunction G)
       ∀ᵐ ξ ∂(RWRS.iidLaw V ν), RWRS.supMeanPayoff G ξ o = ⊤)
 -- FROZEN-STATEMENT-END
 := by
+  have hVF : RWRS.External.VoltageFunction G :=
+    RWRS.External.voltageFunction_of_connected hG
   haveI := hν
   refine ⟨fun hhyp => ?_, fun hhyp => ?_⟩
   · exact RWRS.Support.convexity_reduction_aux ν hnz hsym

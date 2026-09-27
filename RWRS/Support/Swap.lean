@@ -19,12 +19,15 @@ open scoped Classical
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] [Infinite V]
 
 omit [Infinite V] in
+/-- The payoff is additive: the payoff of a sum of two sceneries is the sum of the two
+payoffs. -/
 theorem payoff_add (ξ η : V → ℝ) (m : ℕ) (X : ℕ → V) :
     payoff G (fun v => ξ v + η v) m X = payoff G ξ m X + payoff G η m X := by
   simp only [payoff, ← Finset.sum_add_distrib]
   exact Finset.sum_congr rfl fun k _ => by ring
 
 omit [Infinite V] in
+/-- The Laplacian commutes with a finite weighted sum of functions in its second argument. -/
 theorem laplacian_finsetSum (S : Finset V) (c : V → ℝ) (f : V → V → ℝ) (x : V) :
     laplacian G (fun w => ∑ v ∈ S, c v * f v w) x
       = ∑ v ∈ S, c v * laplacian G (f v) x := by
@@ -99,11 +102,14 @@ theorem exists_potential (hVF : RWRS.External.VoltageFunction G)
       ring
 
 omit [Infinite V] in
+/-- The payoff is odd: negating the scenery negates the payoff. -/
 theorem payoff_neg (ξ : V → ℝ) (m : ℕ) (X : ℕ → V) :
     payoff G (fun v => -ξ v) m X = -payoff G ξ m X := by
   simp only [payoff, ← Finset.sum_neg_distrib]
   exact Finset.sum_congr rfl fun k _ => by ring
 
+/-- A bounded functional `H` of the walk, `|H| ≤ C`, has walk expectation `walkExp` also
+bounded by `C`, sandwiching it between the constant expectations `±C`. -/
 theorem walkExp_abs_le (hG : G.Connected) {C : ℝ} {H : (ℕ → V) → ℝ}
     (hH : ∀ X, |H X| ≤ C) (n : ℕ) (x : V) : |walkExp G n x H| ≤ C := by
   have h1 : walkExp G n x H ≤ C := by
@@ -173,6 +179,8 @@ theorem perm_stop_bound (hVF : RWRS.External.VoltageFunction G) (hG : G.Connecte
   linarith
 
 omit [Infinite V] in
+/-- The set of points moved by the inverse permutation `π.symm` is finite whenever the set
+moved by `π` is, since the two sets coincide. -/
 theorem perm_symm_finite {π : Equiv.Perm V} (hfin : {i : V | π i ≠ i}.Finite) :
     {i : V | π.symm i ≠ i}.Finite := by
   have : {i : V | π.symm i ≠ i} = {i : V | π i ≠ i} := by
@@ -220,6 +228,9 @@ theorem perm_sup_le (hVF : RWRS.External.VoltageFunction G) (hG : G.Connected)
     gcongr
     exact le_iSup (fun m => ENNReal.ofReal (meanPayoff G (excess σ) m x)) n
 
+/-- **Stabilization is exchangeable.**  Rearranging the masses by a permutation of finitely
+many vertices does not change whether the walk stabilizes, via the two-sided bound
+`perm_sup_le` applied to `π` and `π.symm` together with `RWRS.Frozen.rwInfinite`. -/
 theorem stabilizes_perm_iff (hVF : RWRS.External.VoltageFunction G) (hG : G.Connected)
     (σ : V → ℝ) (π : Equiv.Perm V) (hfin : {i : V | π i ≠ i}.Finite) :
     Stabilizes G (fun v => σ (π v)) ↔ Stabilizes G σ := by
@@ -242,6 +253,8 @@ theorem stabilizes_perm_iff (hVF : RWRS.External.VoltageFunction G) (hG : G.Conn
     rw [← RWRS.Frozen.rwInfinite hG σ v]
     exact ENNReal.add_ne_top.mpr ⟨hst v, ENNReal.ofReal_ne_top⟩
 
+/-- The mean payoff being infinite at `o` is likewise exchangeable under a finite permutation of
+the masses, by the same two-sided bound `perm_sup_le`. -/
 theorem supMeanPayoff_perm_iff (hVF : RWRS.External.VoltageFunction G) (hG : G.Connected)
     (σ : V → ℝ) (π : Equiv.Perm V) (hfin : {i : V | π i ≠ i}.Finite) (o : V) :
     supMeanPayoff G (excess fun v => σ (π v)) o = ⊤ ↔ supMeanPayoff G (excess σ) o = ⊤ := by

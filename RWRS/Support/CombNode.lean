@@ -19,10 +19,14 @@ variable {B : ℕ} {L : ℕ → ℕ}
 
 /-! ### The step towards the root from a child -/
 
+/-- The predecessor of the first interior site of the child pipe `u ++ [c]` is
+the branch vertex `u`. -/
 theorem pipePred_child (c : Fin B) (u : List (Fin B)) :
     pipePred B L (u ++ [c], 1) = (u, 0) := by
   simp [pipePred]
 
+/-- The first interior site of the child pipe `u ++ [c]` is a valid pipe site,
+using `L ≥ 2` on nonempty index lists. -/
 theorem pipeValid_child (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (c : Fin B) (u : List (Fin B)) :
     PipeValid B L (u ++ [c], 1) := by
   have hlen : 1 ≤ (u ++ [c]).length := by simp
@@ -31,12 +35,16 @@ theorem pipeValid_child (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (c : Fin B) (u : Li
   show (1 : ℕ) ≤ L (u ++ [c]).length - 1
   omega
 
+/-- The last interior site `(u, L u.length - 1)` of the pipe leading to the
+branch vertex `u` is a valid pipe site. -/
 theorem pipeValid_pred_branch (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) {u : List (Fin B)} (hu : u ≠ []) :
     PipeValid B L (u, L u.length - 1) := by
   have hlen : 1 ≤ u.length := List.length_pos_iff.2 hu
   have := hL2 u.length hlen
   exact Or.inr ⟨hu, by omega, le_rfl⟩
 
+/-- The predecessor of the branch vertex `u` is the last interior site of its
+parent pipe. -/
 theorem pipePred_branch (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) {u : List (Fin B)} (hu : u ≠ []) :
     pipePred B L (u, 0) = (u, L u.length - 1) := by
   have hlen : 1 ≤ u.length := List.length_pos_iff.2 hu
@@ -45,6 +53,9 @@ theorem pipePred_branch (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) {u : List (Fin B)} 
 
 /-! ### The neighbours of a branching vertex -/
 
+/-- The neighbour set of a branching vertex `(u,0)` with `u ≠ []` is exactly the
+last interior site of its parent pipe together with the first interior site of
+each of its `B` child pipes. -/
 theorem neighborSet_branch (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool)
     {u : List (Fin B)} (hu : u ≠ []) :
     (pipeGraph B L e).neighborSet ((u : List (Fin B)), 0)
@@ -107,6 +118,9 @@ theorem neighborSet_branch (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool)
       intro hcontra
       exact absurd (congrArg Prod.snd hcontra) (by simp)
 
+/-- The neighbour set of the root `([],0)` is the first interior site of each of
+its `B` child pipes, together with the extra boundary vertex `([],1)` when the
+flag `e` holds. -/
 theorem neighborSet_root (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) :
     (pipeGraph B L e).neighborSet (([] : List (Fin B)), 0)
       = {v | (∃ c : Fin B, v = ([c], 1)) ∨ (e = true ∧ v = ([], 1))} := by
@@ -170,6 +184,8 @@ theorem neighborSet_root (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) :
 /-! ### The Laplacian at a branching vertex -/
 
 open scoped Classical in
+/-- The neighbour set of a branching vertex `(u,0)` as a `Finset`: the parent's
+last interior site inserted into the image of the child map over `Fin B`. -/
 theorem neighborFinset_branch (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool)
     {u : List (Fin B)} (hu : u ≠ []) :
     (pipeGraph B L e).neighborFinset ((u : List (Fin B)), 0)
@@ -181,6 +197,8 @@ theorem neighborFinset_branch (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool)
     neighborSet_branch hL2 e hu]
   simp [Finset.mem_insert, Finset.mem_image, eq_comm]
 
+/-- The parent's last interior site `(u, L u.length - 1)` never lands in the
+image of the child-pipe map, since child sites have length `u.length + 1`. -/
 theorem branch_not_mem_image {u : List (Fin B)} :
     ((u : List (Fin B)), L u.length - 1)
       ∉ (Finset.univ : Finset (Fin B)).image fun c => ((u ++ [c] : List (Fin B)), 1) := by
@@ -190,6 +208,8 @@ theorem branch_not_mem_image {u : List (Fin B)} :
   have := congrArg (fun p => p.1.length) hc
   simp at this
 
+/-- The child-pipe map `c ↦ (u ++ [c], 1)` is injective, since appending `c` to
+`u` determines `c`. -/
 theorem child_injective (u : List (Fin B)) :
     Function.Injective fun c : Fin B => ((u ++ [c] : List (Fin B)), 1) := by
   intro c d h
@@ -210,6 +230,8 @@ theorem laplacian_branch (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool)
     Finset.sum_image (fun c _ d _ h => child_injective u h)]
 
 open scoped Classical in
+/-- The neighbour set of the root as a `Finset`: the image of the child map
+over `Fin B`, together with the singleton boundary vertex when `e` holds. -/
 theorem neighborFinset_root (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) :
     (pipeGraph B L e).neighborFinset (([] : List (Fin B)), 0)
       = ((Finset.univ : Finset (Fin B)).image fun c => (([c] : List (Fin B)), 1))
@@ -222,6 +244,7 @@ theorem neighborFinset_root (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) :
   | false => simp [Finset.mem_image, eq_comm]
   | true => simp [Finset.mem_image, eq_comm]; tauto
 
+/-- The root's child-pipe map `c ↦ ([c], 1)` is injective. -/
 theorem root_child_injective :
     Function.Injective fun c : Fin B => (([c] : List (Fin B)), 1) := by
   intro c d h

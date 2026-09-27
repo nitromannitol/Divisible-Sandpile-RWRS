@@ -17,6 +17,7 @@ open MeasureTheory
 open scoped ENNReal
 
 
+/-- The mark at the root of a marked net is a measurable function of the net. -/
 theorem measurable_netConfig_root :
     Measurable fun M : RWRS.Net 1 => RWRS.netConfig M (RWRS.netRoot M) := by
   have hpair : Measurable fun q : RWRS.Net 1 × ℕ => RWRS.netConfig q.1 q.2 :=
@@ -25,6 +26,9 @@ theorem measurable_netConfig_root :
         ((measurable_pi_apply r).comp (measurable_snd.comp measurable_snd))
   exact hpair.comp (measurable_id.prodMk measurable_netRoot)
 
+/-- Bochner-integrability companion to `integral_markIid_mark_mul`: the product of `f` applied
+to the root mark and `w` applied to the underlying rooted graph is integrable for `markIid Q ν`
+whenever `f` is integrable for `ν` and `w` is integrable for `Q`. -/
 theorem integrable_markIid_mark_mul (Q : Measure (RWRS.Net 0)) [IsProbabilityMeasure Q]
     (ν : Measure ℝ) [IsProbabilityMeasure ν] {f : ℝ → ℝ} (hf : Measurable f)
     {w : RWRS.Net 0 → ℝ} (hw : Measurable w) (hfi : Integrable f ν) (hwi : Integrable w Q) :

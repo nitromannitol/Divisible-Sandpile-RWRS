@@ -23,20 +23,23 @@ graph, the parallel toppling procedure with its odometer `u_n` and limit
 `S_n` and bounded stopping times, the law of simple random walk on path space,
 the i.i.d. scenery with its extended mean, positive moments, variance and
 symmetry, the two optimal stopping suprema, the joint law of scenery and walk,
-double transience, a degree bound, polynomial volume growth, and the two cited
-results that remain hypotheses.
+double transience, a degree bound, polynomial volume growth, and the one cited
+result kept in the vocabulary, the pointwise Carne–Varopoulos bound, proved
+outright and kept only for provenance.  The voltage function that
+`OptimalStopping` and `Explosion` used to carry as a hypothesis is now proved
+on every infinite connected graph and discharged inside the proofs, so it is
+no longer part of the vocabulary.
 
 ## What Is Checked
 
-The theorems are conditional on results the paper cites without proof, and so
-are the challenges: each carries, as an explicit hypothesis, the cited result
-its library theorem uses and this repository does not prove in the needed
-generality, restated in the vocabulary.
+All three theorems are unconditional: every result the paper cites without
+proof is proved outright inside the repository, and no challenge carries one
+as a hypothesis.
 
-| Directory | Cited result carried as a hypothesis |
+| Directory | Cited result once carried as a hypothesis |
 | --- | --- |
-| `OptimalStopping/`, `Explosion/` | `External.VoltageFunction G` (Lyons–Peres, Proposition 2.1 and equation (2.4)); proved in the repository only on transient graphs |
-| `Stabilization/` | `External.CarneVaropoulos G` (Carne, Varopoulos, Lyons–Peres Theorem 13.4, pointwise form); not proved in the repository |
+| `OptimalStopping/`, `Explosion/` | `External.VoltageFunction G` (Lyons–Peres, Proposition 2.1 and equation (2.4)), proved on every infinite connected graph, recurrent or transient (`RWRS.External.voltageFunction_of_connected`), and discharged inside the proofs; no longer part of the vocabulary |
+| `Stabilization/` | `External.CarneVaropoulos G` (Carne, Varopoulos, Lyons–Peres Theorem 13.4, pointwise form), proved outright; kept in the vocabulary only for provenance |
 
 The frozen statements `RWRS.Frozen.optimalStopping` and
 `RWRS.Frozen.stabilization` also take the von Bahr–Esseen inequality, the
@@ -76,7 +79,6 @@ in this repository's own vocabulary, which is built on Mathlib alone.
 | `cons`, `walkExp`, `IsStopping`, `payoff`, `stopValues`, `stepLaw`, `driverLaw`, `stepTo`, `walkPath`, `walkLaw`, `supPayoff` | `RWRS/Walk.lean` |
 | `iidLaw`, `posPart`, `negPart`, `extMean`, `HasExtMean`, `posMoment`, `IsSymmetric`, `evar` | `RWRS/Scenery.lean` |
 | `meanPayoff`, `supMeanPayoff`, `supStopValue`, `jointLaw`, `DoublyTransient`, `BoundedDegree`, `VolumeGrowthUpper` | `RWRS/Setting.lean` |
-| `External.VoltageFunction` | `RWRS/External/VoltageFunction.lean` |
 | `External.CarneVaropoulos` | `RWRS/External/CarneVaropoulos.lean` |
 
 ## Solutions
@@ -126,8 +128,9 @@ challenge statement and depends only on `propext`, `Classical.choice` and
 
 **Status.**  All three solutions build, and the statement regression and the
 axiom prints pass locally.  `leanprover/comparator` was run on all three
-pairs on 2026-09-24 at commit `2cfdd84`, and each pair passed with the Lean
-kernel and with the independent nanoda kernel.  Results and reproduction
-steps are in [`COMPARATOR_RUNS.md`](COMPARATOR_RUNS.md).  The workflow
+pairs on 2026-09-27 at commit `c7a26b9`, against the current statements, and
+each pair passed with the Lean kernel and with the independent nanoda kernel;
+see [`COMPARATOR_RUNS.md`](COMPARATOR_RUNS.md) for the recorded runs.  The
+workflow
 [`.github/workflows/comparator.yml`](../.github/workflows/comparator.yml)
 runs it on request.

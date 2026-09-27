@@ -20,22 +20,29 @@ noncomputable def clockTerm (β : ℝ) (k : ℕ) : ℝ := (max (k : ℝ) 1) ^ (-
 /-- The clock `∑_{k<n} (k ∨ 1)^{-β}`. -/
 noncomputable def clockSum (β : ℝ) (n : ℕ) : ℝ := ∑ k ∈ Finset.range n, clockTerm β k
 
+/-- Every term of the clock, `(k ∨ 1) ^ (-β)`, is strictly positive. -/
 theorem clockTerm_pos (β : ℝ) (k : ℕ) : 0 < clockTerm β k :=
   Real.rpow_pos_of_pos (lt_of_lt_of_le zero_lt_one (le_max_right _ _)) _
 
+/-- The clock `clockSum β n` is nonnegative, as a sum of positive terms. -/
 theorem clockSum_nonneg (β : ℝ) (n : ℕ) : 0 ≤ clockSum β n :=
   Finset.sum_nonneg fun k _ => (clockTerm_pos β k).le
 
+/-- The clock `clockSum β n` is monotone in `n`, since it is a sum over
+`Finset.range n` of nonnegative terms. -/
 theorem clockSum_mono (β : ℝ) {a b : ℕ} (hab : a ≤ b) : clockSum β a ≤ clockSum β b :=
   Finset.sum_le_sum_of_subset_of_nonneg
     (fun _ hx => Finset.mem_range.2 (lt_of_lt_of_le (Finset.mem_range.1 hx) hab))
     fun k _ _ => (clockTerm_pos β k).le
 
+/-- For `n ≥ 1` the clock is at least `1`, since its first term equals `1`
+and later terms add a nonnegative amount, by `clockSum_mono`. -/
 theorem one_le_clockSum {β : ℝ} {n : ℕ} (hn : 1 ≤ n) : 1 ≤ clockSum β n := by
   refine le_trans (le_of_eq ?_) (clockSum_mono β hn)
   rw [clockSum, Finset.sum_range_one, clockTerm]
   simp
 
+/-- For `n ≥ 1` the clock is strictly positive, from `one_le_clockSum`. -/
 theorem clockSum_pos {β : ℝ} {n : ℕ} (hn : 1 ≤ n) : 0 < clockSum β n :=
   lt_of_lt_of_le zero_lt_one (one_le_clockSum hn)
 
@@ -116,6 +123,8 @@ theorem clockSum_le_of_lt_one {β : ℝ} (hβ0 : 0 ≤ β) (hβ : β < 1) {n : �
 
 /-! ### At the critical exponent -/
 
+/-- The reciprocal `1 / (n + 1)` bounds the log increment `log(n+1) - log n`
+below, from the elementary bound `log x ≤ x - 1` applied to `n / (n + 1)`. -/
 theorem one_div_le_log_diff {n : ℕ} (hn : 1 ≤ n) :
     1 / ((n : ℝ) + 1) ≤ Real.log ((n : ℝ) + 1) - Real.log (n : ℝ) := by
   have hnpos : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn

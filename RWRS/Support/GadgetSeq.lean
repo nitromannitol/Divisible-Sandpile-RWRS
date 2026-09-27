@@ -25,6 +25,9 @@ variable {d_f ρ δ c_loc : ℝ} (hc : CombCond B α) (hdf : 0 < d_f) (hρ : 0 <
 noncomputable def nextGadget (M0 : ℕ) (S : ℝ) (k : ℕ) : ℕ :=
   (exists_next_gadget hc hdf hρ hcloc hρδ M0 S k).choose
 
+/-- The defining property of `nextGadget`: a strictly larger depth for which
+the three conditions `eq:rec-cond-sep`, `eq:rec-cond-vol` and `eq:rec-cond-div`
+of `sec:recurrent-nonstab` all hold. -/
 theorem nextGadget_spec (M0 : ℕ) (S : ℝ) (k : ℕ) :
     M0 < nextGadget hc hdf hρ hcloc hρδ M0 S k ∧
       ⌈(gadgetRadius (combLen B α) M0 : ℝ) ^ ρ⌉₊ + gadgetRadius (combLen B α) M0
@@ -52,6 +55,8 @@ noncomputable def mSeq (k : ℕ) : ℕ := (gadgetSeq hc hdf hρ hcloc hρδ k).1
 noncomputable def sSeq (k : ℕ) : ℕ :=
   ⌈(gadgetRadius (combLen B α) (mSeq hc hdf hρ hcloc hρδ k) : ℝ) ^ ρ⌉₊
 
+/-- The running-total component of `gadgetSeq k` is the sum of the gadget sizes
+at depths `mSeq 0, …, mSeq k`. -/
 theorem gadgetSeq_snd (k : ℕ) :
     (gadgetSeq hc hdf hρ hcloc hρδ k).2
       = ∑ j ∈ Finset.range (k + 1),
@@ -62,24 +67,32 @@ theorem gadgetSeq_snd (k : ℕ) :
       rw [Finset.sum_range_succ, ← ih]
       rfl
 
+/-- Consecutive gadget depths strictly increase, from the first clause of
+`nextGadget_spec`. -/
 theorem mSeq_lt_succ (k : ℕ) :
     mSeq hc hdf hρ hcloc hρδ k < mSeq hc hdf hρ hcloc hρδ (k + 1) :=
   (nextGadget_spec hc hdf hρ hcloc hρδ _ _ _).1
 
+/-- `mSeq` is strictly monotone, from `mSeq_lt_succ`. -/
 theorem mSeq_strictMono : StrictMono (mSeq hc hdf hρ hcloc hρδ) :=
   strictMono_nat_of_lt_succ (mSeq_lt_succ hc hdf hρ hcloc hρδ)
 
+/-- Consecutive gadget attachment points are separated by more than the radius
+of the earlier gadget, from the second clause of `nextGadget_spec`. -/
 theorem sSeq_sep (k : ℕ) :
     sSeq hc hdf hρ hcloc hρδ k
         + gadgetRadius (combLen B α) (mSeq hc hdf hρ hcloc hρδ k)
       < sSeq hc hdf hρ hcloc hρδ (k + 1) :=
   (nextGadget_spec hc hdf hρ hcloc hρδ _ _ _).2.1
 
+/-- `sSeq` is strictly monotone, from `sSeq_sep`. -/
 theorem sSeq_strictMono : StrictMono (sSeq hc hdf hρ hcloc hρδ) := by
   refine strictMono_nat_of_lt_succ fun k => ?_
   have := sSeq_sep hc hdf hρ hcloc hρδ k
   omega
 
+/-- The volume bound `eq:rec-cond-vol`: the cumulative gadget size up to depth
+`k` is at most `sSeq (k+1) ^ d_f`, from the third clause of `nextGadget_spec`. -/
 theorem sSeq_vol (k : ℕ) :
     (∑ j ∈ Finset.range (k + 1),
         (gadgetSize B (combLen B α) (mSeq hc hdf hρ hcloc hρδ j) : ℝ))
@@ -88,6 +101,8 @@ theorem sSeq_vol (k : ℕ) :
   exact (nextGadget_spec hc hdf hρ hcloc hρδ
     (gadgetSeq hc hdf hρ hcloc hρδ k).1 (gadgetSeq hc hdf hρ hcloc hρδ k).2 (k + 1)).2.2.1
 
+/-- The divergence bound `eq:rec-cond-div` at step `k+1`, from the fourth
+clause of `nextGadget_spec`. -/
 theorem sSeq_div (k : ℕ) :
     ((sSeq hc hdf hρ hcloc hρδ (k + 1) : ℝ) + 1) ^ (d_f + 1) * (((k + 1 : ℕ) : ℝ))
       ≤ c_loc * (gadgetRadius (combLen B α) (mSeq hc hdf hρ hcloc hρδ (k + 1)) : ℝ) ^ δ :=

@@ -258,6 +258,8 @@ theorem connected_induce_closedBall (y : V) (R : ℕ) :
   haveI : Nonempty ↥(RWRS.closedBall G y R) := ⟨⟨y, hy⟩⟩
   exact ⟨hpre⟩
 
+/-- The `Finset` ball `ballFinset` coerces to the same set as the metric ball
+`RWRS.closedBall`. -/
 theorem coe_ballFinset (y : V) (R : ℕ) :
     ((ballFinset G y R : Finset V) : Set V) = RWRS.closedBall G y R := by
   ext v

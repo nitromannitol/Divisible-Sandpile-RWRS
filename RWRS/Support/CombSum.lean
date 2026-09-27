@@ -16,11 +16,15 @@ variable {B : ℕ} {L : ℕ → ℕ} {n : ℕ} {w : List (Fin B)}
 
 /-! ### Sites of the comb -/
 
+/-- Every interior site `1 ≤ i ≤ L_{|v|} - 1` of the pipe with a nonempty word `v` that
+extends into `w` belongs to `combSet`. -/
 theorem combSet_interior_mem {v : List (Fin B)} (hvne : v ≠ [])
     (hvlen : v.length ≤ n) (hpre : v.dropLast <+: w) :
     ∀ i, 1 ≤ i → i ≤ L v.length - 1 → ((v : List (Fin B)), i) ∈ combSet B L n w :=
   fun _ hi hiL => ⟨Or.inr ⟨hvne, hi, hiL⟩, hvlen, hpre, Or.inl hi⟩
 
+/-- For any `u ∈ combSet`, the parent word `u.1.dropLast` is the length-`(|u.1| - 1)` prefix
+of `w`, extracted from the prefix condition packed into `combSet` membership. -/
 theorem dropLast_eq_take_of_mem {u : List (Fin B) × ℕ} (hu : u ∈ combSet B L n w) :
     u.1.dropLast = w.take (u.1.length - 1) := by
   obtain ⟨-, -, hpre, -⟩ := hu
@@ -28,6 +32,8 @@ theorem dropLast_eq_take_of_mem {u : List (Fin B) × ℕ} (hu : u ∈ combSet B 
   rw [List.length_dropLast] at this
   exact this
 
+/-- A branching site `u` of `combSet` (one with `u.2 = 0`) has word `u.1` equal to the
+prefix `w.take u.1.length`, and that length is strictly below `n`. -/
 theorem branch_of_snd_zero {u : List (Fin B) × ℕ} (hu : u ∈ combSet B L n w)
     (h0 : u.2 = 0) : u.1 = w.take u.1.length ∧ u.1.length < n := by
   obtain ⟨-, -, -, hlast⟩ := hu
@@ -37,6 +43,8 @@ theorem branch_of_snd_zero {u : List (Fin B) × ℕ} (hu : u ∈ combSet B L n w
 
 /-! ### The voltage at level `j` is at most `V_{j-1}` -/
 
+/-- The voltage at any site of level `j` is at most `V_{j-1}`, since it decreases
+monotonically along a pipe away from the branch vertex `b_{j-1}`. -/
 theorem combVoltage_le_level (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool)
     (hwn : w.length = n) (hn : 1 ≤ n) {j : ℕ} (hjn : j ≤ n)
     {u : List (Fin B) × ℕ} (hu : u ∈ combSet B L n w) (hlen : u.1.length = j) :
@@ -106,6 +114,9 @@ theorem combVoltage_le_level (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j)
 /-! ### There are at most `(B+1) L_j` sites at level `j` -/
 
 open scoped Classical in
+/-- At most `(B + 1) L_j` sites of `combFinset` sit at level `j`: there are at most `B + 1`
+words of that length (the empty word and the `B` children of the branch vertex) and at
+most `L_j` sites on each. -/
 theorem card_level_le (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (hL0 : 1 ≤ L 0) (j : ℕ) :
     ((combFinset B L n w).filter (fun u => u.1.length = j)).card ≤ (B + 1) * L j := by
   classical

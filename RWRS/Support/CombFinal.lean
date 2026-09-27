@@ -14,12 +14,14 @@ namespace RWRS.Support
 
 variable {B : ℕ} {α : ℝ} {n : ℕ} {w : List (Fin B)}
 
+/-- The comb pipe length at level `0` is `1`. -/
 theorem combLen_zero (B : ℕ) (α : ℝ) : combLen B α 0 = 1 := by
   rw [combLen]
   norm_num
 
 /-! ### Reindexing a geometric sum -/
 
+/-- Reindexes `∑_{j ∈ Icc 1 m} r ^ (m - j)` as the geometric sum `∑_{k < m} r ^ k`. -/
 theorem sum_Icc_reflect (r : ℝ) (m : ℕ) :
     ∑ j ∈ Finset.Icc 1 m, r ^ (m - j) = ∑ k ∈ Finset.range m, r ^ k := by
   have hIcc : Finset.Icc 1 m = (Finset.range m).image (· + 1) := by
@@ -37,6 +39,8 @@ theorem sum_Icc_reflect (r : ℝ) (m : ℕ) :
 
 /-! ### The level terms are geometric -/
 
+/-- The level-`j` term `I_j L_j^2` is dominated by the level-`n` term times a geometric
+factor `(2B/(B^α)^2)^{n-j}`, using the pipe-length bounds from `CombCond`. -/
 theorem level_term_le (hc : CombCond B α) (e : Bool) (hwn : w.length = n) (hn : 1 ≤ n)
     {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
     combI B (combLen B α) e n w j * (combLen B α j : ℝ) ^ 2
@@ -88,6 +92,8 @@ theorem level_term_le (hc : CombCond B α) (e : Bool) (hwn : w.length = n) (hn :
 noncomputable def combConst (B : ℕ) (α : ℝ) : ℝ :=
   16 * ((B : ℝ) + 1) / (1 - 2 * (B : ℝ) / ((B : ℝ) ^ α) ^ 2)
 
+/-- `combConst B α` is positive whenever `CombCond B α` holds, using that the geometric
+ratio `2B/(B^α)^2` is strictly less than `1`. -/
 theorem combConst_pos (hc : CombCond B α) : 0 < combConst B α := by
   have h1 := combRatio_lt_one hc
   have h2 := cast_B_pos hc
@@ -95,6 +101,9 @@ theorem combConst_pos (hc : CombCond B α) : 0 < combConst B α := by
   apply div_pos (by linarith) (by linarith)
 
 open scoped Classical in
+/-- **Part (c).** The total voltage mass over `combFinset` is bounded by `combConst B α`
+times the level-`n` term `I_n L_n^2`, summing the geometric bound `level_term_le` over
+all levels `1 ≤ j ≤ n`. -/
 theorem comb_mass_const (hc : CombCond B α) (e : Bool) (hwn : w.length = n) (hn : 1 ≤ n) :
     ∑ u ∈ combFinset B (combLen B α) n w, combVoltage B (combLen B α) e n w u
       ≤ combConst B α * combI B (combLen B α) e n w n * (combLen B α n : ℝ) ^ 2 := by
@@ -156,6 +165,9 @@ theorem comb_mass_const (hc : CombCond B α) (e : Bool) (hwn : w.length = n) (hn
 
 /-! ### Part (e) -/
 
+/-- **Part (e).** The level-`n` term `I_n L_n^2` is bounded below by `combLambda B α ^ n / 4`,
+combining the lower pipe-length bound `combLen_ge` with the corresponding lower bound on
+`combI`. -/
 theorem comb_growth (hc : CombCond B α) (e : Bool) (hwn : w.length = n) (hn : 1 ≤ n) :
     combLambda B α ^ n / 4
       ≤ combI B (combLen B α) e n w n * (combLen B α n : ℝ) ^ 2 := by

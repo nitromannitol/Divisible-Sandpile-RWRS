@@ -10,6 +10,9 @@ open MeasureTheory
 
 namespace RWRS.Support
 
+/-- **The Paley--Zygmund inequality.**  For a nonnegative `Z` with a finite second moment,
+`(1 - θ) ^ 2 * mean ^ 2 ≤ (second moment) * P {Z ≥ θ * mean}`, proved via Cauchy--Schwarz
+against the indicator of that event. -/
 theorem paley_zygmund {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω}
     [IsProbabilityMeasure P] (Z : Ω → ℝ) (hZ0 : ∀ ω, 0 ≤ Z ω)
     (hZ : Integrable Z P) (hZ2 : Integrable (fun ω => Z ω ^ 2) P)

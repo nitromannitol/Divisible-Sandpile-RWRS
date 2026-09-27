@@ -15,13 +15,14 @@ when `σ` is.
 -/
 import RWRS.Support.Swap
 import LatticeProb.Prob.HewittSavage
+import RWRS.External.VoltageFunctionConnected
 
 open MeasureTheory
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
 -- FROZEN-STATEMENT-BEGIN
-theorem RWRS.Frozen.zeroOneLaw (hVF : RWRS.External.VoltageFunction G)
+theorem RWRS.Frozen.zeroOneLaw
     [Infinite V] [MeasurableSpace V] (hG : G.Connected)
     (ν : Measure ℝ) (hν : IsProbabilityMeasure ν) (o : V) :
     (RWRS.iidLaw V ν {σ : V → ℝ | RWRS.Stabilizes G σ} = 0 ∨
@@ -30,6 +31,8 @@ theorem RWRS.Frozen.zeroOneLaw (hVF : RWRS.External.VoltageFunction G)
         RWRS.iidLaw V ν {σ : V → ℝ | RWRS.supMeanPayoff G (RWRS.excess σ) o = ⊤} = 1)
 -- FROZEN-STATEMENT-END
 := by
+  have hVF : RWRS.External.VoltageFunction G :=
+    RWRS.External.voltageFunction_of_connected hG
   classical
   haveI := hν
   constructor

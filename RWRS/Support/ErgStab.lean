@@ -33,6 +33,8 @@ theorem measurableSet_stabilizesNet :
   exact MeasurableSet.iInter fun v => (measurable_odometerLimitNet v)
     (MeasurableSet.compl (measurableSet_singleton (⊤ : ℝ≥0∞)))
 
+/-- Network isomorphism is symmetric: the inverse of the witnessing equivalence witnesses
+`NetIso N' N`. -/
 theorem netIso_symm {m : ℕ} {N N' : RWRS.Net m} (h : RWRS.NetIso N N') : RWRS.NetIso N' N := by
   obtain ⟨φ, hadj, hroot, hmark⟩ := h
   refine ⟨φ.symm, ?_, ?_, ?_⟩

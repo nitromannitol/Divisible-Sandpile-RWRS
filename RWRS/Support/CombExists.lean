@@ -1,10 +1,23 @@
 import RWRS.Support.PipeTree
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 
+/-!
+# Existence of the combinatorial parameters
+
+This module supplies the existence statements needed to instantiate the
+combinatorial conditions `CombCond` of `sec:transient-nonstab`: for every
+exponent `α ∈ (1/2, 1)` a large enough block count `B` satisfies `CombCond B
+α`, and for every `p < 3` there is a pair `(q, α)` in the admissible range
+`max(p,1) < q < 3`, `1/2 < α < min(1, 1/(q-1))`. Both proofs reduce to the
+growth of `B ↦ B ^ c` for a positive exponent `c`.
+-/
+
 namespace RWRS.Support
 
 open Filter
 
+/-- For `c > 0`, `B ^ c` eventually dominates any fixed real bound `M` as
+`B → ∞`, since `x ↦ x ^ c` tends to infinity. -/
 theorem eventually_le_rpow_natCast {c : ℝ} (hc : 0 < c) (M : ℝ) :
     ∀ᶠ B : ℕ in atTop, M ≤ (B : ℝ) ^ c := by
   have h : Tendsto (fun B : ℕ => (B : ℝ) ^ c) atTop atTop :=

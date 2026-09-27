@@ -132,6 +132,8 @@ noncomputable def activeComp (G : SimpleGraph V) [G.LocallyFinite]
   K.filter (fun z => z ∈ RWRS.compIn G (RWRS.activeSet G ξ (K : Set V)) o)
 
 omit [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- As a set, `activeComp` is exactly the connected component of `o` in the
+active set `RWRS.activeSet`. -/
 theorem coe_activeComp (ξ : V → ℝ) (K : Finset V) (o : V) :
     (activeComp G ξ K o : Set V) = RWRS.compIn G (RWRS.activeSet G ξ (K : Set V)) o := by
   classical
@@ -143,11 +145,14 @@ theorem coe_activeComp (ξ : V → ℝ) (K : Finset V) (o : V) :
     exact ⟨by exact_mod_cast (compIn_subset _ _ h).1, h⟩
 
 omit [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- `activeComp G ξ K o` is contained in `K`, being defined as a filter of `K`. -/
 theorem activeComp_subset (ξ : V → ℝ) (K : Finset V) (o : V) : activeComp G ξ K o ⊆ K := by
   classical
   exact Finset.filter_subset _ _
 
 omit [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- The source `o` belongs to its own active component whenever it lies in the
+active set `RWRS.activeSet`. -/
 theorem mem_activeComp (ξ : V → ℝ) (K : Finset V) {o : V}
     (ho : o ∈ RWRS.activeSet G ξ (K : Set V)) : o ∈ activeComp G ξ K o := by
   have : o ∈ (activeComp G ξ K o : Set V) := by
@@ -155,12 +160,17 @@ theorem mem_activeComp (ξ : V → ℝ) (K : Finset V) {o : V}
   exact_mod_cast this
 
 omit [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- Every vertex of the active component has positive finite-volume value. -/
 theorem activeComp_pos (ξ : V → ℝ) (K : Finset V) (o : V) {x : V}
     (hx : x ∈ activeComp G ξ K o) : 0 < RWRS.valueExit G ξ (K : Set V) x := by
   have hx' : x ∈ (activeComp G ξ K o : Set V) := by exact_mod_cast hx
   rw [coe_activeComp] at hx'
   exact (compIn_subset _ _ hx').2
 
+/-- **The active component's boundary has value zero.**  If `x` lies in the
+active component and `y` is adjacent to `x` but outside it, then either `y` is
+outside `K` (value zero directly) or a positive value at `y` would have placed
+it in the component, a contradiction. -/
 theorem activeComp_bdry (hdeg : ∀ v : V, 0 < G.degree v) (ξ : V → ℝ) (K : Finset V)
     (hesc : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ (K : Set V)) (o : V) {x y : V}
     (hx : x ∈ activeComp G ξ K o) (hadj : G.Adj x y) (hy : y ∉ activeComp G ξ K o) :
@@ -179,6 +189,8 @@ theorem activeComp_bdry (hdeg : ∀ v : V, 0 < G.degree v) (ξ : V → ℝ) (K :
   · exact valueExit_eq_zero_of_notMem_set hdeg ξ K hesc hyK
 
 omit [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- The active component, induced as a subgraph, is connected, being the
+connected component of `o` in `RWRS.activeSet`. -/
 theorem connected_activeComp (ξ : V → ℝ) (K : Finset V) {o : V}
     (ho : o ∈ RWRS.activeSet G ξ (K : Set V)) :
     (G.induce (activeComp G ξ K o : Set V)).Connected := by

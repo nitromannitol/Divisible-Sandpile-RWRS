@@ -1,11 +1,23 @@
 import RWRS.Support.PipeFlowBase
 
+/-!
+# Divergence of the unit pipe flow
+
+The unit flow `pipeFlow` on the tree of pipes carries one unit of current into the root and
+splits it equally among the `B` child pipes at every branching vertex. This module computes
+`LatticeProb.Network.divergence` of that flow at an interior, branch and root site in turn,
+and assembles the three cases into the single fact that the divergence is `1` at the root
+and `0` everywhere else.
+-/
+
 namespace RWRS.Support
 
 open scoped Classical
 
 variable {B : ℕ} {L : ℕ → ℕ}
 
+/-- Moving up one step along a pipe (`pipeUp`) never changes the word component of the
+site. -/
 theorem pipeUp_fst (v : List (Fin B) × ℕ) : (pipeUp B L v).1 = v.1 := by
   unfold pipeUp; split <;> rfl
 
@@ -35,6 +47,8 @@ theorem sum_pipeFlowAmb_interior (hL : ∀ j, 1 ≤ j → 1 ≤ L j)
   rw [h1, h2]
   ring
 
+/-- The divergence of the unit flow vanishes at a branch vertex: the incoming flow along
+the parent pipe exactly balances the equal split among the `B` child pipes. -/
 theorem sum_pipeFlowAmb_branch (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j)
     (hB : 1 ≤ B) {u : List (Fin B)} (hu : u ≠ []) :
     ∑ y ∈ (pipeGraph B L false).neighborFinset ((u : List (Fin B)), 0),
@@ -68,6 +82,8 @@ theorem sum_pipeFlowAmb_branch (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hL2 : ∀ j,
   field_simp
   ring
 
+/-- At the root the unit flow's divergence is `1`: the flow into each of the `B` child
+pipes sums to the full unit injected there. -/
 theorem sum_pipeFlowAmb_root (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j)
     (hB : 1 ≤ B) :
     ∑ y ∈ (pipeGraph B L false).neighborFinset (([] : List (Fin B)), 0),
@@ -125,11 +141,15 @@ theorem divergence_pipeFlow (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hL2 : ∀ j, 1 
     · simp only at hw hi hiL
       exact sum_pipeFlowAmb_interior hL hw hi hiL
 
+/-- The unit flow's divergence at `pipeRootSub B L` is `1`, the root case of
+`divergence_pipeFlow`. -/
 theorem divergence_pipeFlow_root (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j)
     (hB : 1 ≤ B) :
     LatticeProb.Network.divergence (pipeSub B L) (pipeFlow B L) (pipeRootSub B L) = 1 := by
   rw [divergence_pipeFlow hL hL2 hB, if_pos rfl]
 
+/-- Away from the root the unit flow's divergence vanishes, the non-root case of
+`divergence_pipeFlow`. -/
 theorem divergence_pipeFlow_of_ne (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j)
     (hB : 1 ≤ B) {x : pipeSites B L} (hx : x ≠ pipeRootSub B L) :
     LatticeProb.Network.divergence (pipeSub B L) (pipeFlow B L) x = 0 := by

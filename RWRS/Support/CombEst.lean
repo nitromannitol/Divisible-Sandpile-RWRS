@@ -15,12 +15,14 @@ namespace RWRS.Support
 
 variable {B : ℕ} {L : ℕ → ℕ} {n : ℕ} {w : List (Fin B)}
 
+/-- The real cast of a pipe length `L j` is positive, given the lower bound `2 ≤ L j`. -/
 theorem combLen_cast_pos (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) {j : ℕ} (hj : 1 ≤ j) :
     (0 : ℝ) < (L j : ℝ) := by
   have := hL2 j hj
   have : 0 < L j := by omega
   exact_mod_cast this
 
+/-- The comb voltage `combV` at any level is nonnegative, restating `combVoltage_nonneg`. -/
 theorem combV_nonneg (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (j : ℕ) :
     0 ≤ combV B L e n w j := combVoltage_nonneg hL2 e hwn _
 

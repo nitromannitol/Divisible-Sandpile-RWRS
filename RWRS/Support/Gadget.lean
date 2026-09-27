@@ -19,17 +19,22 @@ variable {B : ℕ} {α : ℝ}
 
 /-! ### The base `b = B^α` -/
 
+/-- Casts the standing hypothesis `2 ≤ B` of `CombCond` to `ℝ`. -/
 theorem cast_B_ge (hc : CombCond B α) : (2 : ℝ) ≤ (B : ℝ) := by
   exact_mod_cast hc.1
 
+/-- `(B : ℝ)` is positive under `CombCond`. -/
 theorem cast_B_pos (hc : CombCond B α) : (0 : ℝ) < (B : ℝ) := by
   have := cast_B_ge hc; linarith
 
+/-- Extracts the standing hypothesis `4 ≤ B^α` from `CombCond`. -/
 theorem base_ge (hc : CombCond B α) : (4 : ℝ) ≤ (B : ℝ) ^ α := hc.2.2.2.1
 
+/-- The base `B^α` is positive, from the lower bound `base_ge`. -/
 theorem base_pos (hc : CombCond B α) : (0 : ℝ) < (B : ℝ) ^ α := by
   have := base_ge hc; linarith
 
+/-- `α` is positive under `CombCond`. -/
 theorem alpha_pos (hc : CombCond B α) : 0 < α := lt_trans (by norm_num) hc.2.1
 
 /-- `B^{αj}` written as the `j`-th power of `B^α`. -/
@@ -37,6 +42,7 @@ theorem base_pow (hc : CombCond B α) (j : ℕ) :
     ((B : ℝ) ^ α) ^ j = (B : ℝ) ^ (α * (j : ℝ)) := by
   rw [← Real.rpow_natCast ((B : ℝ) ^ α) j, ← Real.rpow_mul (le_of_lt (cast_B_pos hc))]
 
+/-- The `j`-th power `(B^α)^j` is at least `4` for `j ≥ 1`, from `base_ge` and `4 ≤ 4^j`. -/
 theorem base_pow_ge (hc : CombCond B α) {j : ℕ} (hj : 1 ≤ j) :
     (4 : ℝ) ≤ ((B : ℝ) ^ α) ^ j := by
   have h1 : (4 : ℝ) ^ j ≤ ((B : ℝ) ^ α) ^ j :=
@@ -46,11 +52,14 @@ theorem base_pow_ge (hc : CombCond B α) {j : ℕ} (hj : 1 ≤ j) :
 
 /-! ### The pipe lengths -/
 
+/-- The pipe length `L_j = ⌊B^{αj}⌋` is at most `(B^α)^j`, the defining floor bound. -/
 theorem combLen_le (hc : CombCond B α) (j : ℕ) :
     (combLen B α j : ℝ) ≤ ((B : ℝ) ^ α) ^ j := by
   rw [base_pow hc, combLen]
   exact Nat.floor_le (le_of_lt (Real.rpow_pos_of_pos (cast_B_pos hc) _))
 
+/-- The pipe length `L_j` is at least `(B^α)^j / 2` for `j ≥ 1`, from `base_pow_ge` and the
+floor bound `⌊x⌋ + 1 > x`. -/
 theorem combLen_ge (hc : CombCond B α) {j : ℕ} (hj : 1 ≤ j) :
     ((B : ℝ) ^ α) ^ j / 2 ≤ (combLen B α j : ℝ) := by
   have h4 := base_pow_ge hc hj
@@ -69,6 +78,8 @@ theorem combLen_pos' (hc : CombCond B α) (j : ℕ) : 0 < combLen B α j := by
   rw [combLen]
   exact Nat.le_floor (by exact_mod_cast h1)
 
+/-- The pipe length `L_j` is positive for `j ≥ 1`, combining `combLen_ge` and
+`base_pow_ge`. -/
 theorem combLen_pos (hc : CombCond B α) {j : ℕ} (hj : 1 ≤ j) : 0 < combLen B α j := by
   have h := combLen_ge hc hj
   have h4 := base_pow_ge hc hj
@@ -77,11 +88,14 @@ theorem combLen_pos (hc : CombCond B α) {j : ℕ} (hj : 1 ≤ j) : 0 < combLen 
 
 /-! ### The radius -/
 
+/-- The single term `L_m` is at most the full radius sum `gadgetRadius (combLen B α) m`. -/
 theorem combLen_le_gadgetRadius {m : ℕ} (hm : 1 ≤ m) :
     combLen B α m ≤ gadgetRadius (combLen B α) m :=
   Finset.single_le_sum (f := fun j => combLen B α j) (fun _ _ => Nat.zero_le _)
     (Finset.mem_Icc.2 ⟨hm, le_rfl⟩)
 
+/-- The geometric sum `∑_{j=1}^{m} (B^α)^j` is bounded by `(B^α)^{m+1}/(B^α - 1)`, proved
+by induction on `m` using `B^α > 1`. -/
 theorem sum_pow_Icc_le (hc : CombCond B α) (m : ℕ) :
     (∑ j ∈ Finset.Icc 1 m, ((B : ℝ) ^ α) ^ j)
       ≤ ((B : ℝ) ^ α) ^ (m + 1) / ((B : ℝ) ^ α - 1) := by
@@ -100,6 +114,8 @@ theorem sum_pow_Icc_le (hc : CombCond B α) (m : ℕ) :
         ring
       linarith [ih, hgoal]
 
+/-- The radius `gadgetRadius (combLen B α) m` is at most `2/(1 - B^{-α})` times the
+last term `L_m`, combining the geometric bound `sum_pow_Icc_le` with `combLen_ge`. -/
 theorem gadgetRadius_le (hc : CombCond B α) {m : ℕ} (hm : 1 ≤ m) :
     (gadgetRadius (combLen B α) m : ℝ)
       ≤ 2 / (1 - (B : ℝ) ^ (-α)) * (combLen B α m : ℝ) := by
@@ -131,11 +147,14 @@ theorem gadgetRadius_le (hc : CombCond B α) {m : ℕ} (hm : 1 ≤ m) :
 
 /-! ### The size -/
 
+/-- The single term `B^m L_m` is at most the full size sum `gadgetSize B (combLen B α) m`. -/
 theorem gadgetSize_ge {m : ℕ} (hm : 1 ≤ m) :
     B ^ m * combLen B α m ≤ gadgetSize B (combLen B α) m :=
   Finset.single_le_sum (f := fun j => B ^ j * combLen B α j) (fun _ _ => Nat.zero_le _)
     (Finset.mem_Icc.2 ⟨hm, le_rfl⟩)
 
+/-- Consecutive size terms at least double: `2 B^{j-1} L_{j-1} ≤ B^j L_j` for `j ≥ 2`,
+using `4 ≤ B B^α` and the two-sided bounds `combLen_le`/`combLen_ge`. -/
 theorem gadgetSize_step (hc : CombCond B α) {j : ℕ} (hj : 2 ≤ j) :
     2 * ((B : ℝ) ^ (j - 1) * (combLen B α (j - 1) : ℝ))
       ≤ (B : ℝ) ^ j * (combLen B α j : ℝ) := by
@@ -163,6 +182,8 @@ theorem gadgetSize_step (hc : CombCond B α) {j : ℕ} (hj : 2 ≤ j) :
         rw [show (B : ℝ) ^ (i + 1) = (B : ℝ) * (B : ℝ) ^ i by ring]
         exact mul_le_mul_of_nonneg_left hL (by positivity)
 
+/-- The size `gadgetSize B (combLen B α) m` is at most `2 B^m L_m`, by induction using the
+doubling step `gadgetSize_step` to dominate all earlier terms by the last one. -/
 theorem gadgetSize_le (hc : CombCond B α) {m : ℕ} (hm : 1 ≤ m) :
     (gadgetSize B (combLen B α) m : ℝ) ≤ 2 * ((B : ℝ) ^ m * (combLen B α m : ℝ)) := by
   induction m with
@@ -196,6 +217,7 @@ theorem base_pow_rpow (hc : CombCond B α) {d_f : ℝ} (hdf : d_f = 1 + 1 / α) 
     hexp, Real.rpow_add (cast_B_pos hc), Real.rpow_natCast, Real.rpow_mul hB0,
     Real.rpow_natCast]
 
+/-- The fractal dimension `d_f = 1 + 1/α` is positive, since `α > 0`. -/
 theorem df_pos (hc : CombCond B α) {d_f : ℝ} (hdf : d_f = 1 + 1 / α) : 0 < d_f := by
   have := alpha_pos hc
   rw [hdf]

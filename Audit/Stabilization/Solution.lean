@@ -26,7 +26,7 @@ universe u
 /-- Theorem 1.3 (`thm:stab`). -/
 theorem stabilization {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
     [Infinite V] [MeasurableSpace V] [MeasurableSingletonClass V]
-    (hCV : External.CarneVaropoulos G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : HasExtMean ν) (hmean : extMean ν < 1) :
     (∀ p : ℝ, 3 < p → posMoment ν p ≠ ⊤ →
@@ -36,6 +36,6 @@ theorem stabilization {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
     (∀ (o : V) (C d_f : ℝ), 0 < C → 1 ≤ d_f → VolumeGrowthUpper G o C d_f →
       ∀ p : ℝ, d_f < p → posMoment ν p ≠ ⊤ →
         iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 1) := by
-  exact _root_.RWRS.stabilization (Bridge.carneVaropoulos hCV) hG d hd ν hν hdet hmean
+  exact _root_.RWRS.stabilization hG d hd ν hν hdet hmean
 
 end RWRSAudit

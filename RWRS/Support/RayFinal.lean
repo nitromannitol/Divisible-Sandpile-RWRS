@@ -24,6 +24,8 @@ noncomputable def rayPullFun (B : ℕ) (L : ℕ → ℕ) (m s : ℕ → ℕ) (k 
     (Y : RayV B L m → ℝ) (u : List (Fin B) × ℕ) : ℝ :=
   if h : u ∈ RWRS.gadgetSites B L (m k) then Y (rayEmb B L m s k ⟨u, h⟩) else 1
 
+/-- `rayPullFun` inherits the lower bound `1 ≤ Y` of `Y`, since off the
+gadget's sites it is set to the constant `1`. -/
 theorem one_le_rayPullFun {k : ℕ} {Y : RayV B L m → ℝ} (hY : ∀ v, 1 ≤ Y v)
     (u : List (Fin B) × ℕ) : 1 ≤ rayPullFun B L m s k Y u := by
   rw [rayPullFun]
@@ -31,6 +33,8 @@ theorem one_le_rayPullFun {k : ℕ} {Y : RayV B L m → ℝ} (hY : ∀ v, 1 ≤ 
   · exact hY _
   · exact le_rfl
 
+/-- The subtype finset `combGadget` maps onto `combFinset` under
+`Subtype.val`, so the two describe the same underlying set of comb sites. -/
 theorem image_combGadget {n : ℕ} (ω : List (Fin B)) :
     (combGadget B L n ω).image Subtype.val = combFinset B L n ω := by
   ext u

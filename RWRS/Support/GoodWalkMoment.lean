@@ -198,6 +198,8 @@ theorem abs_sub_rpow_le {z m p : ℝ} (hp : 1 ≤ p) :
   rw [hcast] at hconv
   linarith
 
+/-- A finite absolute `p`-th moment gives a finite centred `p`-th moment, from the
+elementary bound `|z - m|^p ≤ 2^{p-1} (|z|^p + |m|^p)`. -/
 theorem centeredMoment_ne_top (ν : Measure ℝ) [IsProbabilityMeasure ν] {m p : ℝ}
     (hp : 1 ≤ p) (hmom : RWRS.absMoment ν p ≠ ⊤) : RWRS.centeredMoment ν m p ≠ ⊤ := by
   have hpt : ∀ z : ℝ, ENNReal.ofReal (|z - m| ^ p)

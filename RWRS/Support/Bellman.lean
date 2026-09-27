@@ -192,6 +192,8 @@ theorem integral_walkLaw_firstStep' (x : V) (hx : 0 < G.degree x)
 /-! ### The Wald--Bellman equation -/
 
 omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] [DecidableEq V] in
+/-- Consing the first step back onto the shifted trajectory recovers the
+original trajectory. -/
 theorem cons_shift (X : ℕ → V) : RWRS.cons (X 0) (shift X) = X := by
   funext k
   cases k with

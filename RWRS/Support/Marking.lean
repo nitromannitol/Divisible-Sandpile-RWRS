@@ -18,6 +18,8 @@ namespace RWRS.Support
 open MeasureTheory
 open scoped ENNReal
 
+/-- The i.i.d. law built from a probability measure `ν` is again a probability
+measure. -/
 instance instIsProbabilityMeasureIidLaw {V : Type*} (ν : Measure ℝ) [IsProbabilityMeasure ν] :
     IsProbabilityMeasure (iidLaw V ν) := by
   unfold iidLaw; infer_instance
@@ -25,19 +27,27 @@ instance instIsProbabilityMeasureIidLaw {V : Type*} (ν : Measure ℝ) [IsProbab
 /-- The rooted network obtained from a rooted graph and a field of marks. -/
 def markMap (p : Net 0 × (ℕ → ℝ)) : Net 1 := (p.1.1, p.1.2.1, fun i (_ : Fin 1) => p.2 i)
 
+/-- `markMap`, decorating a rooted graph by a field of marks, is measurable. -/
 theorem measurable_markMap : Measurable markMap := by
   refine Measurable.prodMk (measurable_fst.comp measurable_fst) (Measurable.prodMk
     ((measurable_fst.comp measurable_snd).comp measurable_fst) ?_)
   refine measurable_pi_lambda _ fun i => measurable_pi_lambda _ fun _ => ?_
   exact (measurable_pi_apply i).comp measurable_snd
 
+/-- `markIid Q ν` unfolds to the pushforward of the product measure
+`Q.prod (iidLaw ℕ ν)` under `markMap`. -/
 theorem markIid_eq_map (Q : Measure (Net 0)) (ν : Measure ℝ) :
     markIid Q ν = (Q.prod (iidLaw ℕ ν)).map markMap := rfl
 
+/-- Decorating a rooted graph with marks leaves its underlying graph
+unchanged. -/
 theorem netGraph_markMap (p : Net 0 × (ℕ → ℝ)) : netGraph (markMap p) = netGraph p.1 := rfl
 
+/-- Decorating a rooted graph with marks leaves its root unchanged. -/
 theorem netRoot_markMap (p : Net 0 × (ℕ → ℝ)) : netRoot (markMap p) = netRoot p.1 := rfl
 
+/-- Rerooting a mark-decorated network agrees with decorating the rerooted
+graph by the same marks. -/
 theorem netReroot_markMap (N : Net 0) (ξ : ℕ → ℝ) (y : ℕ) :
     netReroot (markMap (N, ξ)) y = markMap (netReroot N y, ξ) := rfl
 
@@ -45,6 +55,8 @@ theorem netReroot_markMap (N : Net 0) (ξ : ℕ → ℝ) (y : ℕ) :
 noncomputable def markAvg (ν : Measure ℝ) (h : Net 1 → ℝ≥0∞) (N : Net 0) : ℝ≥0∞ :=
   ∫⁻ ξ, h (markMap (N, ξ)) ∂(iidLaw ℕ ν)
 
+/-- `markAvg`, the average of `h` over the i.i.d. marks, is measurable, via
+`measurable_markMap` and measurability of the parametrized `lintegral`. -/
 theorem measurable_markAvg (ν : Measure ℝ) [IsProbabilityMeasure ν] {h : Net 1 → ℝ≥0∞}
     (hm : Measurable h) : Measurable (markAvg ν h) := by
   have : Measurable (Function.uncurry fun (N : Net 0) (ξ : ℕ → ℝ) => h (markMap (N, ξ))) := by
@@ -76,6 +88,9 @@ theorem markAvg_invariant (ν : Measure ℝ) [IsProbabilityMeasure ν] {h : Net 
         exact lintegral_congr fun ξ => hiso ξ
     _ = markAvg ν h N' := rfl
 
+/-- The integral of a measurable `h` against `markIid Q ν` equals the integral
+of its mark average `markAvg ν h` against `Q`, by unfolding the pushforward
+in `markIid_eq_map` and applying Fubini to the product measure. -/
 theorem lintegral_markIid (Q : Measure (Net 0)) [IsProbabilityMeasure Q] (ν : Measure ℝ)
     [IsProbabilityMeasure ν] {h : Net 1 → ℝ≥0∞} (hm : Measurable h) :
     ∫⁻ M, h M ∂(markIid Q ν) = ∫⁻ N, markAvg ν h N ∂Q := by
@@ -93,12 +108,17 @@ noncomputable def rerootAvg {m : ℕ} (h : Net m → ℝ≥0∞) (N : Net m) : �
   (∑ y ∈ (netGraph N).neighborFinset (netRoot N), h (netReroot N y))
     / ((netGraph N).degree (netRoot N) : ℝ≥0∞)
 
+/-- Rerooting a network at a fixed vertex `y` is a measurable map on
+networks. -/
 theorem measurable_netReroot {m : ℕ} (y : ℕ) : Measurable fun N : Net m => netReroot N y :=
   measurable_fst.prodMk (measurable_const.prodMk (measurable_snd.comp measurable_snd))
 
+/-- Reading off the root is a measurable map on networks. -/
 theorem measurable_netRoot {m : ℕ} : Measurable fun N : Net m => netRoot N :=
   measurable_fst.comp measurable_snd
 
+/-- Adjacency of two fixed vertices `r` and `j` in the network's graph is a
+measurable condition on the network. -/
 theorem measurableSet_adj {m : ℕ} (r j : ℕ) :
     MeasurableSet {N : Net m | (netGraph N).Adj r j} := by
   have h1 : MeasurableSet {N : Net m | j ∈ N.1 r} :=
@@ -118,6 +138,8 @@ theorem measurableSet_adj {m : ℕ} (r j : ℕ) :
     rw [this]; exact h1.inter h2
 
 open scoped Classical in
+/-- The finite sum over the neighbour set of `r` rewrites as an unconditional
+sum over all of `ℕ`, gated by the adjacency indicator. -/
 theorem sum_neighborFinset_eq_tsum {m : ℕ} (h : Net m → ℝ≥0∞) (N : Net m) (r : ℕ) :
     (∑ y ∈ (netGraph N).neighborFinset r, h (netReroot N y))
       = ∑' j : ℕ, if (netGraph N).Adj r j then h (netReroot N j) else 0 := by
@@ -127,6 +149,8 @@ theorem sum_neighborFinset_eq_tsum {m : ℕ} (h : Net m → ℝ≥0∞) (N : Net
   · rw [if_neg fun hc => hj ((SimpleGraph.mem_neighborFinset _ _ _).mpr hc)]
 
 open scoped Classical in
+/-- The degree of `r`, coerced into `ℝ≥0∞`, is the unconditional sum of the
+adjacency indicator over all of `ℕ`. -/
 theorem degree_eq_tsum {m : ℕ} (N : Net m) (r : ℕ) :
     ((netGraph N).degree r : ℝ≥0∞)
       = ∑' j : ℕ, if (netGraph N).Adj r j then (1 : ℝ≥0∞) else 0 := by
@@ -141,6 +165,9 @@ noncomputable def rerootPair {m : ℕ} (h : Net m → ℝ≥0∞) (q : Net m × 
     / ((netGraph q.1).degree q.2 : ℝ≥0∞)
 
 set_option maxHeartbeats 1000000 in
+/-- `rerootAvg h` is measurable: the numerator and denominator are rewritten as
+the `tsum` forms of `sum_neighborFinset_eq_tsum` and `degree_eq_tsum`, then
+the quotient is factored through the pair function `rerootPair`. -/
 theorem measurable_rerootAvg {m : ℕ} {h : Net m → ℝ≥0∞} (hm : Measurable h) :
     Measurable (rerootAvg h) := by
   classical
@@ -168,6 +195,9 @@ theorem measurable_rerootAvg {m : ℕ} {h : Net m → ℝ≥0∞} (hm : Measurab
   rw [hsplit]
   exact hpair.comp (measurable_id.prodMk measurable_netRoot)
 
+/-- `IsStationaryNet` unfolds to the defining identity of `def:stationary-graph`:
+every measurable, isomorphism-invariant `h` has the same integral as its
+rerooting average `rerootAvg h`. -/
 theorem isStationaryNet_iff {m : ℕ} (P : Measure (Net m)) :
     IsStationaryNet P ↔ ∀ h : Net m → ℝ≥0∞, Measurable h → NetInvariant h →
       ∫⁻ N, h N ∂P = ∫⁻ N, rerootAvg h N ∂P := Iff.rfl

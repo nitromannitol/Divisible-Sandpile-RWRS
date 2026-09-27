@@ -36,13 +36,18 @@ noncomputable def trapRuleCapped (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
     (X : ℕ → V) : ℕ :=
   sInf (ruleSetCapped G r C ℓ K N ε ξ X)
 
+/-- The horizon `N` always belongs to `ruleSetCapped`, so the set is
+nonempty and its infimum `trapRuleCapped` is well-defined. -/
 theorem ruleSetCapped_nonempty (r : ℕ) (C : V → Finset V) (ℓ : ℕ) (K : Finset V) (N : ℕ)
     (ε : ℝ) (ξ : V → ℝ) (X : ℕ → V) : N ∈ ruleSetCapped G r C ℓ K N ε ξ X := Or.inl rfl
 
+/-- The capped rule never fires later than the horizon `N`. -/
 theorem trapRuleCapped_le (r : ℕ) (C : V → Finset V) (ℓ : ℕ) (K : Finset V) (N : ℕ)
     (ε : ℝ) (ξ : V → ℝ) (X : ℕ → V) : trapRuleCapped G r C ℓ K N ε ξ X ≤ N :=
   Nat.sInf_le (ruleSetCapped_nonempty r C ℓ K N ε ξ X)
 
+/-- The capped rule's value is itself a member of `ruleSetCapped`, as the
+infimum of a nonempty set of naturals. -/
 theorem trapRuleCapped_mem (r : ℕ) (C : V → Finset V) (ℓ : ℕ) (K : Finset V) (N : ℕ)
     (ε : ℝ) (ξ : V → ℝ) (X : ℕ → V) :
     trapRuleCapped G r C ℓ K N ε ξ X ∈ ruleSetCapped G r C ℓ K N ε ξ X :=

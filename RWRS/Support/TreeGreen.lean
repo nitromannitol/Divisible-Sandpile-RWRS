@@ -17,13 +17,17 @@ open scoped Classical
 /-- The number of children at depth `n`. -/
 def bTree (n : ℕ) : ℕ := (n + 2) ^ 3
 
+/-- The number of children `bTree n = (n + 2)^3` is positive. -/
 theorem bTree_pos (n : ℕ) : 0 < bTree n := by
   rw [bTree]; positivity
 
+/-- The number of children `bTree n` is at least `8`, its value at `n = 0`. -/
 theorem bTree_ge (n : ℕ) : 8 ≤ bTree n := by
   have : 2 ^ 3 ≤ (n + 2) ^ 3 := Nat.pow_le_pow_left (by omega) 3
   simpa [bTree] using this
 
+/-- The series `∑ 1 / bTree m` is summable, by comparison with the convergent
+`p`-series `∑ 1/n^3`. -/
 theorem summable_invB : Summable fun m : ℕ => (1 : ℝ) / bTree m := by
   have hs : Summable fun n : ℕ => (1 : ℝ) / (n : ℝ) ^ 3 :=
     Real.summable_one_div_nat_pow.mpr (by norm_num)
@@ -36,14 +40,18 @@ theorem summable_invB : Summable fun m : ℕ => (1 : ℝ) / bTree m := by
 /-- The tail sum `φ_n = ∑_{m ≥ n} 1/b_m`. -/
 noncomputable def phiTail (n : ℕ) : ℝ := ∑' m : ℕ, (1 : ℝ) / bTree (n + m)
 
+/-- The shifted series `∑_m 1 / bTree (n + m)` is summable, a shift of
+`summable_invB`. -/
 theorem summable_shift (n : ℕ) : Summable fun m : ℕ => (1 : ℝ) / bTree (n + m) := by
   have h := (summable_nat_add_iff n).mpr summable_invB
   refine h.congr fun m => ?_
   rw [Nat.add_comm]
 
+/-- The tail sum `phiTail n` is nonnegative, being a sum of nonnegative terms. -/
 theorem phiTail_nonneg (n : ℕ) : 0 ≤ phiTail n :=
   tsum_nonneg fun m => by positivity
 
+/-- The tail sum peels off its leading term: `phiTail n = 1/bTree n + phiTail (n+1)`. -/
 theorem phiTail_succ (n : ℕ) : phiTail n = 1 / bTree n + phiTail (n + 1) := by
   rw [phiTail, phiTail, (summable_shift n).tsum_eq_zero_add]
   simp only [Nat.add_zero]
@@ -52,6 +60,8 @@ theorem phiTail_succ (n : ℕ) : phiTail n = 1 / bTree n + phiTail (n + 1) := by
   have hm : n + (m + 1) = n + 1 + m := by omega
   rw [hm]
 
+/-- The rearranged form of `phiTail_succ`: the drop in the tail sum from `n` to
+`n + 1` is exactly `1 / bTree n`. -/
 theorem phiTail_sub (n : ℕ) : phiTail n - phiTail (n + 1) = 1 / bTree n := by
   rw [phiTail_succ n]; ring
 
@@ -59,6 +69,8 @@ theorem phiTail_sub (n : ℕ) : phiTail n - phiTail (n + 1) = 1 / bTree n := by
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
+/-- Iterating `walkOp` preserves a pointwise inequality between sceneries, by
+induction on the number of iterates. -/
 theorem walkOp_iterate_mono {f g : V → ℝ} (h : ∀ v, f v ≤ g v) :
     ∀ (k : ℕ) (x : V), (walkOp G)^[k] f x ≤ (walkOp G)^[k] g x := by
   intro k
@@ -69,6 +81,8 @@ theorem walkOp_iterate_mono {f g : V → ℝ} (h : ∀ v, f v ≤ g v) :
       rw [Function.iterate_succ_apply', Function.iterate_succ_apply']
       exact walkOp_mono ih x
 
+/-- Iterating `walkOp` distributes over the difference of two sceneries, by
+induction on the number of iterates. -/
 theorem walkOp_iterate_sub (f g : V → ℝ) :
     ∀ (k : ℕ) (x : V),
       (walkOp G)^[k] (fun v => f v - g v) x = (walkOp G)^[k] f x - (walkOp G)^[k] g x := by
@@ -83,6 +97,8 @@ theorem walkOp_iterate_sub (f g : V → ℝ) :
           = fun v => (walkOp G)^[k] f v - (walkOp G)^[k] g v from funext ih]
       simp only [walkOp, Finset.sum_sub_distrib, sub_div]
 
+/-- Iterating `walkOp` commutes with scalar multiplication, by induction on the
+number of iterates. -/
 theorem walkOp_iterate_smul (c : ℝ) (f : V → ℝ) :
     ∀ (k : ℕ) (x : V), (walkOp G)^[k] (fun v => c * f v) x = c * (walkOp G)^[k] f x := by
   intro k
@@ -95,6 +111,8 @@ theorem walkOp_iterate_smul (c : ℝ) (f : V → ℝ) :
           = fun v => c * (walkOp G)^[k] f v from funext ih]
       simp only [walkOp, ← Finset.mul_sum, mul_div_assoc]
 
+/-- Iterating `walkOp` preserves nonnegativity, comparing against the zero
+scenery via `walkOp_iterate_mono`. -/
 theorem walkOp_iterate_nonneg {f : V → ℝ} (h : ∀ v, 0 ≤ f v) (k : ℕ) (x : V) :
     0 ≤ (walkOp G)^[k] f x := by
   have hz : ∀ (m : ℕ) (y : V), (walkOp G)^[m] (fun _ => (0 : ℝ)) y = 0 := by
@@ -111,8 +129,12 @@ theorem walkOp_iterate_nonneg {f : V → ℝ} (h : ∀ v, 0 ≤ f v) (k : ℕ) (
 
 /-! ### The potential dominates the inverse degree -/
 
+/-- The potential at a site of the tree, the tail sum `phiTail` at its depth. -/
 noncomputable def phiV (v : TreeV bTree) : ℝ := phiTail v.1.length
 
+/-- **`phiV` is superharmonic with excess at least `1/2`.** Its discrete
+Laplacian at each site is bounded below by `1/2`, computed from `phiTail_sub`
+using `sum_over_neighbors`. -/
 theorem superharmonic (v : TreeV bTree) :
     (1 : ℝ) / 2 ≤ ((treeGraph bTree).degree v : ℝ) * phiV v
       - ∑ y ∈ (treeGraph bTree).neighborFinset v, phiV y := by
@@ -150,6 +172,9 @@ theorem superharmonic (v : TreeV bTree) :
     rw [hexp, h1, h2, hmul]
     linarith
 
+/-- **The inverse degree is dominated by the one-step drop of the potential.**
+The inverse degree at `v` is at most twice `phiV v - walkOp phiV v`, rescaling
+`superharmonic` by the degree. -/
 theorem invDeg_le_potential (v : TreeV bTree) :
     invDeg (treeGraph bTree) v ≤ 2 * (phiV v - walkOp (treeGraph bTree) phiV v) := by
   have hd : (0 : ℝ) < ((treeGraph bTree).degree v : ℝ) := by
@@ -167,6 +192,8 @@ theorem invDeg_le_potential (v : TreeV bTree) :
   rw [invDeg, walkOp, ← hS, hrw]
   exact div_le_div_of_nonneg_right key hd.le
 
+/-- **The clock is bounded by twice the potential**, telescoping
+`invDeg_le_potential` over `n` iterates of `walkOp` via a nested induction. -/
 theorem clock_le (x : TreeV bTree) (n : ℕ) :
     ∑ k ∈ Finset.range n,
         (walkOp (treeGraph bTree))^[k] (invDeg (treeGraph bTree)) x ≤ 2 * phiV x := by
@@ -194,6 +221,9 @@ theorem clock_le (x : TreeV bTree) (n : ℕ) :
     (fun v => phiTail_nonneg _) n x
   linarith
 
+/-- **The total inverse-degree time of the tree is finite.** The full Green mass
+at `x` is dominated by `2 * phiV x`, rewriting it as a sum over layers of the
+clock and applying `clock_le`. -/
 theorem tsum_green_ne_top (x : TreeV bTree) :
     (∑' v : TreeV bTree, green (treeGraph bTree) x v) ≠ ⊤ := by
   classical

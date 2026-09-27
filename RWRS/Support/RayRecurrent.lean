@@ -19,6 +19,8 @@ open LatticeProb.Network
 
 variable {B : ℕ} {L : ℕ → ℕ} {m s : ℕ → ℕ}
 
+/-- `gadgetSites B L M` is finite: it embeds into the finite product of words of length at
+most `M` and pipe positions up to `maxLen L M`. -/
 theorem gadgetSites_finite (M : ℕ) : (gadgetSites B L M).Finite := by
   classical
   refine Set.Finite.subset
@@ -30,6 +32,8 @@ theorem gadgetSites_finite (M : ℕ) : (gadgetSites B L M).Finite := by
   · have := le_maxLen L (j := v.1.length) hlen
     omega
 
+/-- `gadgetSites B L M` carries a `Finite` instance, converting the set-finiteness
+`gadgetSites_finite` to a subtype instance. -/
 instance gadgetSites_fintype (M : ℕ) : Finite (gadgetSites B L M) :=
   (gadgetSites_finite M).to_subtype
 
@@ -42,6 +46,9 @@ def rayLevel (B : ℕ) (L : ℕ → ℕ) (m s : ℕ → ℕ) : RayV B L m → �
 def rayBallSet (B : ℕ) (L : ℕ → ℕ) (m s : ℕ → ℕ) (k : ℕ) : Set (RayV B L m) :=
   {x | rayLevel B L m s x ≤ k}
 
+/-- The set of ray-graph vertices at level at most `k` is finite: finitely many backbone
+vertices `Sum.inl i` for `i ≤ k`, plus the finite gadget attached at each such level by
+monotonicity of `s`. -/
 theorem rayBallSet_finite (hs : StrictMono s) (k : ℕ) : (rayBallSet B L m s k).Finite := by
   classical
   refine Set.Finite.subset (Set.Finite.union
@@ -55,20 +62,27 @@ theorem rayBallSet_finite (hs : StrictMono s) (k : ℕ) : (rayBallSet B L m s k)
     exact Or.inr (Set.mem_biUnion (show j ∈ Set.Iic k from hjle)
       ⟨v, rayEmb_of_ne (s := s) hv⟩)
 
+/-- The `Finset` version of `rayBallSet`, the ray-graph vertices at level at most `k`. -/
 noncomputable def rayBall (B : ℕ) (L : ℕ → ℕ) (m s : ℕ → ℕ) (hs : StrictMono s) (k : ℕ) :
     Finset (RayV B L m) := (rayBallSet_finite (B := B) (L := L) (m := m) hs k).toFinset
 
+/-- Membership in `rayBall` unfolds to the level bound: `x ∈ rayBall B L m s hs k ↔
+rayLevel B L m s x ≤ k`. -/
 theorem mem_rayBall (hs : StrictMono s) (k : ℕ) (x : RayV B L m) :
     x ∈ rayBall B L m s hs k ↔ rayLevel B L m s x ≤ k := by
   rw [rayBall, Set.Finite.mem_toFinset]
   rfl
 
+/-- `rayBall` is monotone in its level bound: `rayBall ... a ⊆ rayBall ... b` whenever
+`a ≤ b`, directly from the level inequality `mem_rayBall`. -/
 theorem rayBall_mono (hs : StrictMono s) {a b : ℕ} (hab : a ≤ b) :
     rayBall B L m s hs a ⊆ rayBall B L m s hs b := by
   intro x hx
   rw [mem_rayBall] at hx ⊢
   omega
 
+/-- Adjacency in the ray graph raises the ray level by at most one, checked case-by-case
+for the backbone edges and the gadget edges, which stay within a single level. -/
 theorem rayLevel_adj_le {x y : RayV B L m} (h : (rayGraph B L m s).Adj x y) :
     rayLevel B L m s y ≤ rayLevel B L m s x + 1 := by
   rcases h with ⟨i, h1, h2⟩ | ⟨i, h1, h2⟩ | ⟨k, v, w, hvw, h1, h2⟩
@@ -78,6 +92,8 @@ theorem rayLevel_adj_le {x y : RayV B L m} (h : (rayGraph B L m s).Adj x y) :
     by_cases hv : v = gadgetRoot B L (m k) <;> by_cases hw : w = gadgetRoot B L (m k) <;>
       simp [rayEmb, hv, hw, rayLevel]
 
+/-- If an edge of the ray graph strictly increases the ray level, it must be a backbone edge
+`Sum.inl i` to `Sum.inl (i + 1)`: a gadget edge never changes the level. -/
 theorem rayLevel_adj_eq_succ {x y : RayV B L m} (h : (rayGraph B L m s).Adj x y)
     (hlt : rayLevel B L m s x < rayLevel B L m s y) :
     ∃ i, x = Sum.inl i ∧ y = Sum.inl (i + 1) := by
@@ -92,6 +108,9 @@ theorem rayLevel_adj_eq_succ {x y : RayV B L m} (h : (rayGraph B L m s).Adj x y)
 section
 variable [inst : (rayGraph B L m s).LocallyFinite]
 
+/-- The only cut pair of the ray graph across the boundary of `rayBall B L m s hs k` is the
+single backbone edge from `Sum.inl k` to `Sum.inl (k + 1)`, since every gadget lies entirely
+within one ray level. -/
 theorem cutPairs_rayBall (hs : StrictMono s) (k : ℕ) :
     cutPairs (rayGraph B L m s) (rayBall B L m s hs k)
       = {((Sum.inl k : RayV B L m), (Sum.inl (k + 1) : RayV B L m))} := by
@@ -116,6 +135,9 @@ theorem cutPairs_rayBall (hs : StrictMono s) (k : ℕ) :
     · rw [mem_rayBall]; exact le_rfl
     · rw [mem_rayBall]; simp [rayLevel]
 
+/-- The ray graph is recurrent at its basepoint: the disjoint backbone cutsets
+`cutPairs_rayBall` give, via the Nash-Williams series law, an effective resistance from the
+root growing at least linearly, hence unbounded, in the ball radius `N`. -/
 theorem recurrent_rayGraph (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s) :
     RWRS.Recurrent (rayGraph B L m s) (rayPt B L m 0) := by
   classical

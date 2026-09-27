@@ -32,6 +32,8 @@ theorem mem_iff_netReroot {A : Set (RWRS.Net 1)} (hre : RWRS.RerootInvariant A) 
           hre (RWRS.netReroot M w) v hadj
         rw [h1, h2, show RWRS.netReroot (RWRS.netReroot M w) v = RWRS.netReroot M v from rfl]
 
+/-- The rerooting-invariance criterion `mem_iff_netReroot` specialized to a good network `N`,
+using `exists_mem_netBallSet` to find a ball radius containing the given `v`. -/
 theorem mem_iff_netReroot_of_good {A : Set (RWRS.Net 1)} (hre : RWRS.RerootInvariant A)
     {M : RWRS.Net 1} (hM : RWRS.NetGood M) (v : ℕ) : M ∈ A ↔ RWRS.netReroot M v ∈ A := by
   obtain ⟨n, hn⟩ := exists_mem_netBallSet hM v
@@ -39,6 +41,8 @@ theorem mem_iff_netReroot_of_good {A : Set (RWRS.Net 1)} (hre : RWRS.RerootInvar
 
 /-! ### The ball is carried by an isomorphism -/
 
+/-- A net isomorphism `φ` respecting adjacency and roots carries the radius-`r` ball set
+of `N` onto that of `N'`, by induction on `r`. -/
 theorem mem_netBallSet_iso {m : ℕ} {N N' : RWRS.Net m} {φ : ℕ ≃ ℕ}
     (hadj : ∀ i j, (RWRS.netGraph N).Adj i j ↔ (RWRS.netGraph N').Adj (φ i) (φ j))
     (hroot : φ (RWRS.netRoot N) = RWRS.netRoot N') :
@@ -69,6 +73,8 @@ theorem mem_netBallSet_iso {m : ℕ} {N N' : RWRS.Net m} {φ : ℕ ≃ ℕ}
             rw [Equiv.apply_symm_apply] at this
             exact this hwi
 
+/-- The isomorphism carrying property of `mem_netBallSet_iso` extends to the completed ball
+`netBallX`, which folds in the vertices unreachable from the root at any positive radius. -/
 theorem mem_netBallX_iso {m : ℕ} {N N' : RWRS.Net m} {φ : ℕ ≃ ℕ}
     (hadj : ∀ i j, (RWRS.netGraph N).Adj i j ↔ (RWRS.netGraph N').Adj (φ i) (φ j))
     (hroot : φ (RWRS.netRoot N) = RWRS.netRoot N') :
@@ -86,10 +92,14 @@ theorem mem_netBallX_iso {m : ℕ} {N N' : RWRS.Net m} {φ : ℕ ≃ ℕ}
 
 variable {m : ℕ}
 
+/-- `rerootAvg` commutes with scaling by a constant `c : ℝ≥0∞`, by factoring `c` out of the
+defining sum over neighbors. -/
 theorem rerootAvg_const_mul (c : ℝ≥0∞) (Φ : RWRS.Net m → ℝ≥0∞) (N : RWRS.Net m) :
     rerootAvg (fun M => c * Φ M) N = c * rerootAvg Φ N := by
   simp only [rerootAvg, ← Finset.mul_sum, div_eq_mul_inv, mul_assoc]
 
+/-- The scalar-multiplication identity `rerootAvg_const_mul` propagates to every iterate
+`rerootAvg^[n]`, by induction on `n`. -/
 theorem rerootIter_const_mul (c : ℝ≥0∞) :
     ∀ (n : ℕ) (Φ : RWRS.Net m → ℝ≥0∞) (N : RWRS.Net m),
       (rerootAvg^[n] fun M => c * Φ M) N = c * (rerootAvg^[n] Φ) N := by
@@ -105,6 +115,8 @@ theorem rerootIter_const_mul (c : ℝ≥0∞) :
         funext fun M => rerootAvg_const_mul c Φ M
       rw [this, ih]
 
+/-- `rerootAvg^[n]` is additive in its test function, by induction on `n` using the one-step
+additivity `rerootAvg_add`. -/
 theorem rerootIter_add :
     ∀ (n : ℕ) (Φ Ψ : RWRS.Net m → ℝ≥0∞) (N : RWRS.Net m),
       (rerootAvg^[n] fun M => Φ M + Ψ M) N = (rerootAvg^[n] Φ) N + (rerootAvg^[n] Ψ) N := by
@@ -120,6 +132,8 @@ theorem rerootIter_add :
         funext fun M => rerootAvg_add Φ Ψ M
       rw [this, ih]
 
+/-- Iterating `rerootAvg` on a constant function returns the same constant at any good
+network `N`, since each averaging step is a convex combination fixing a constant. -/
 theorem rerootIter_const (c : ℝ≥0∞) :
     ∀ (n : ℕ) (N : RWRS.Net m), RWRS.NetGood N → (rerootAvg^[n] fun _ => c) N = c := by
   intro n
@@ -141,6 +155,8 @@ theorem rerootIter_const (c : ℝ≥0∞) :
       rw [Finset.sum_const, SimpleGraph.card_neighborFinset_eq_degree, nsmul_eq_mul, mul_comm,
         mul_div_assoc, ENNReal.div_self hd hdt, mul_one]
 
+/-- Pointwise monotonicity `Φ ≤ Ψ` after rerooting at every neighbor of `N` propagates
+through `n` iterations of `rerootAvg`, by induction on `n`. -/
 theorem rerootIter_congr_reroot_le {Φ Ψ : RWRS.Net m → ℝ≥0∞} :
     ∀ (n : ℕ) (N : RWRS.Net m),
       (∀ v : ℕ, Φ (RWRS.netReroot N v) ≤ Ψ (RWRS.netReroot N v)) →
@@ -160,6 +176,8 @@ theorem rerootIter_congr_reroot_le {Φ Ψ : RWRS.Net m → ℝ≥0∞} :
       refine ENNReal.div_le_div_right (Finset.sum_le_sum fun y _ => ?_) _
       exact ih (RWRS.netReroot N y) (fun v => hN v)
 
+/-- If `Φ` takes the same value at a good `N` as at every one of its reroots, that common
+value is a fixed point of `rerootAvg`, hence of every iterate `rerootAvg^[n]`. -/
 theorem rerootIter_eq_of_reroot {Φ : RWRS.Net m → ℝ≥0∞} :
     ∀ (n : ℕ) (N : RWRS.Net m), RWRS.NetGood N → (∀ v : ℕ, Φ (RWRS.netReroot N v) = Φ N) →
       (rerootAvg^[n] Φ) N = Φ N := by
@@ -185,6 +203,8 @@ theorem rerootIter_eq_of_reroot {Φ : RWRS.Net m → ℝ≥0∞} :
       rw [Finset.sum_const, SimpleGraph.card_neighborFinset_eq_degree, nsmul_eq_mul, mul_comm,
         mul_div_assoc, ENNReal.div_self hd hdt, mul_one]
 
+/-- The truncated subtraction `esub` of two iterated averages is bounded by the iterated
+average of the pointwise `esub`, via `esub_le_of_le_add` and additivity `rerootIter_add`. -/
 theorem esub_rerootIter_le {Φ Ψ : RWRS.Net m → ℝ≥0∞} (n : ℕ) (N : RWRS.Net m) :
     esub ((rerootAvg^[n] Φ) N) ((rerootAvg^[n] Ψ) N)
       ≤ (rerootAvg^[n] fun M => esub (Φ M) (Ψ M)) N := by
@@ -202,6 +222,8 @@ theorem esub_rerootIter_le {Φ Ψ : RWRS.Net m → ℝ≥0∞} (n : ℕ) (N : RW
       _ = (rerootAvg^[n] Φ) N + (rerootAvg^[n] fun M => esub (Φ M) (Ψ M)) N :=
           rerootIter_add n Φ (fun M => esub (Φ M) (Ψ M)) N
 
+/-- The `lintegral`-`rerootAvg` exchange for a single step propagates to every iterate
+`rerootAvg^[n]`, by induction on `n`, given `Ψ` is measurable in each net argument. -/
 theorem lintegral_rerootIter_exchange {P : Measure (ℕ → ℝ)} [SFinite P] :
     ∀ (n : ℕ) (Ψ : RWRS.Net m → (ℕ → ℝ) → ℝ≥0∞), (∀ M, Measurable (Ψ M)) →
       ∀ N : RWRS.Net m,
@@ -236,6 +258,8 @@ noncomputable def approxError (ν : Measure ℝ) (r : ℕ) (A : Set (RWRS.Net 1)
   ∫⁻ ξ, esub (A.indicator (fun _ => (1 : ℝ≥0∞)) (markMap (N, ξ)))
     (ballAvg ν r (A.indicator (fun _ => (1 : ℝ≥0∞))) N ξ) ∂(RWRS.iidLaw ℕ ν)
 
+/-- The indicator function of a `NetInvariantSet` is itself `RWRS.NetInvariant`, since
+membership in `A` is preserved by the isomorphism. -/
 theorem netInvariant_indicator {A : Set (RWRS.Net 1)} (hiso : RWRS.NetInvariantSet A) :
     RWRS.NetInvariant (A.indicator (fun _ => (1 : ℝ≥0∞))) := by
   intro M M' hM
@@ -244,6 +268,8 @@ theorem netInvariant_indicator {A : Set (RWRS.Net 1)} (hiso : RWRS.NetInvariantS
   · rw [Set.indicator_of_notMem hmem,
       Set.indicator_of_notMem (fun hc => hmem ((hiso M M' hM).2 hc))]
 
+/-- `approxError ν r A` is measurable in its network argument: it is the fiber integral of
+a jointly measurable `esub` of the indicator of `A` and the ball average `ballAvg`. -/
 theorem measurable_approxError (ν : Measure ℝ) [IsProbabilityMeasure ν] (r : ℕ)
     {A : Set (RWRS.Net 1)} (hA : MeasurableSet A) : Measurable (approxError ν r A) := by
 
@@ -258,6 +284,9 @@ theorem measurable_approxError (ν : Measure ℝ) [IsProbabilityMeasure ν] (r :
         (ballAvg ν r (A.indicator (fun _ => (1 : ℝ≥0∞))) N ξ)) := measurable_esub h1 h2
   exact huc.lintegral_prod_right'
 
+/-- The approximation error `approxError ν r A` is `RWRS.NetInvariant`: an isomorphism of
+nets pulls back to a measure-preserving coordinate shift of the marking law, under which
+both the indicator of `A` and the ball average agree. -/
 theorem netInvariant_approxError (ν : Measure ℝ) [IsProbabilityMeasure ν] (r : ℕ)
     {A : Set (RWRS.Net 1)} (hA : MeasurableSet A) (hiso : RWRS.NetInvariantSet A) :
     RWRS.NetInvariant (approxError ν r A) := by
@@ -319,6 +348,9 @@ theorem netInvariant_approxError (ν : Measure ℝ) [IsProbabilityMeasure ν] (r
 
 /-! ### The near and far parts of the walk average -/
 
+/-- For factors bounded by `1`, the truncated subtraction of a product is at most the sum
+of the truncated subtractions of the factors, by two symmetric `esub_le_of_le_add`
+estimates. -/
 theorem esub_mul_le {x y x' y' : ℝ≥0∞} (hx : x ≤ 1) (hy : y ≤ 1) (hx' : x' ≤ 1) (hy' : y' ≤ 1) :
     esub (x * x') (y * y') ≤ esub x y + esub x' y' := by
   refine esub_le_of_le_add ?_ ?_
@@ -344,6 +376,8 @@ theorem esub_mul_le {x y x' y' : ℝ≥0∞} (hx : x ≤ 1) (hy : y ≤ 1) (hx' 
           calc x * esub x' y' ≤ 1 * esub x' y' := by gcongr
             _ = esub x' y' := one_mul _
 
+/-- Measurability in `ξ` of a jointly measurable `Ψ` is preserved by iterating `rerootAvg`
+in its network argument, by induction on `n`. -/
 theorem measurable_rerootIter_apply :
     ∀ (n : ℕ) (Ψ : RWRS.Net m → (ℕ → ℝ) → ℝ≥0∞), (∀ M, Measurable (Ψ M)) →
       ∀ N : RWRS.Net m, Measurable fun ξ => (rerootAvg^[n] fun M => Ψ M ξ) N := by
@@ -374,20 +408,26 @@ open scoped Classical in
 noncomputable def farInd (N : RWRS.Net 0) (r : ℕ) : RWRS.Net 0 → ℝ≥0∞ :=
   fun M => if Disjoint (netBallX N r) (netBallX M r) then 1 else 0
 
+/-- `farInd` and `nearInd` are complementary `{0, 1}`-valued indicators of the same
+disjointness condition, so they sum to `1` at every network. -/
 theorem farInd_add_nearInd (N : RWRS.Net 0) (r : ℕ) (M : RWRS.Net 0) :
     farInd N r M + nearInd N r M = 1 := by
   classical
   by_cases h : Disjoint (netBallX N r) (netBallX M r) <;> simp [farInd, nearInd, h]
 
+/-- `nearInd` is a `{0, 1}`-valued indicator, hence bounded by `1`. -/
 theorem nearInd_le_one (N : RWRS.Net 0) (r : ℕ) (M : RWRS.Net 0) : nearInd N r M ≤ 1 := by
   classical
   by_cases h : Disjoint (netBallX N r) (netBallX M r) <;> simp [nearInd, h]
 
+/-- Multiplying by the `{0, 1}`-valued `farInd` can only shrink `x`, since `farInd ≤ 1`. -/
 theorem mul_farInd_le (N : RWRS.Net 0) (r : ℕ) (M : RWRS.Net 0) (x : ℝ≥0∞) :
     farInd N r M * x ≤ x := by
   classical
   by_cases h : Disjoint (netBallX N r) (netBallX M r) <;> simp [farInd, h]
 
+/-- For `x ≤ 1`, `x` is dominated by `farInd N r M * x + nearInd N r M`: on the far case
+`farInd * x = x`, and on the near case `nearInd = 1`. -/
 theorem le_mul_farInd_add (N : RWRS.Net 0) (r : ℕ) (M : RWRS.Net 0) {x : ℝ≥0∞} (hx : x ≤ 1) :
     x ≤ farInd N r M * x + nearInd N r M := by
   classical
@@ -411,6 +451,8 @@ theorem tendsto_nearIter {N : RWRS.Net 0} (hN : RWRS.NetGood N)
 
 /-! ### A measurable majorant for the near average -/
 
+/-- Measurability of `Φ` is preserved by every iterate `rerootAvg^[n]`, by induction on `n`
+using the one-step lemma `measurable_rerootAvg`. -/
 theorem measurable_rerootIter : ∀ (n : ℕ) {Φ : RWRS.Net m → ℝ≥0∞}, Measurable Φ →
     Measurable (rerootAvg^[n] Φ) := by
   intro n
@@ -423,6 +465,8 @@ theorem measurable_rerootIter : ∀ (n : ℕ) {Φ : RWRS.Net m → ℝ≥0∞}, 
       rw [hstep]
       exact ih (measurable_rerootAvg hΦ)
 
+/-- The indicator of the event that the root of `M` equals a fixed `v` is measurable, since
+`RWRS.netRoot` is measurable and singletons are measurable. -/
 theorem measurable_rootIndicator (v : ℕ) :
     Measurable fun M : RWRS.Net m => if RWRS.netRoot M = v then (1 : ℝ≥0∞) else 0 :=
   Measurable.ite (measurable_netRoot (measurableSet_singleton v)) measurable_const
@@ -436,6 +480,8 @@ noncomputable def nearBound (r n : ℕ) (N : RWRS.Net 0) : ℝ≥0∞ :=
     (rerootAvg^[n] fun M : RWRS.Net 0 => if RWRS.netRoot M = v then (1 : ℝ≥0∞) else 0) N else 0
 
 open scoped Classical in
+/-- `nearBound` is measurable, as a countable sum (`Measurable.tsum`) of the measurable
+iterated root indicators restricted to the ball `netBallSet N (2 * r)`. -/
 theorem measurable_nearBound (r n : ℕ) : Measurable (nearBound r n) := by
   classical
   refine Measurable.tsum fun v => ?_
@@ -443,6 +489,9 @@ theorem measurable_nearBound (r n : ℕ) : Measurable (nearBound r n) := by
     (measurable_rerootIter n (measurable_rootIndicator v)) measurable_const
 
 open scoped Classical in
+/-- For a good network `N`, the iterated average of `nearInd N r` at `N` is bounded by
+`nearBound r n N`: any net whose ball meets that of `N` has its root within the ball of
+radius `2r`. -/
 theorem nearIter_le_nearBound {N : RWRS.Net 0} (hN : RWRS.NetGood N) (r n : ℕ) :
     (rerootAvg^[n] (nearInd N r)) N ≤ nearBound r n N := by
   classical
@@ -478,6 +527,8 @@ theorem nearIter_le_nearBound {N : RWRS.Net 0} (hN : RWRS.NetGood N) (r n : ℕ)
     _ ≤ nearBound r n N := ENNReal.sum_le_tsum F
 
 open scoped Classical in
+/-- `nearBound r n N → 0` as `n → ∞`, since it is a finite sum, over the ball of radius `2r`,
+of heat-kernel values that vanish under `HeatKernelVanishing`. -/
 theorem tendsto_nearBound {N : RWRS.Net 0} (hN : RWRS.NetGood N)
     (hHKV : RWRS.External.HeatKernelVanishing (RWRS.netGraph N)) (r : ℕ) :
     Filter.Tendsto (fun n : ℕ => nearBound r n N) Filter.atTop (nhds 0) := by
@@ -501,6 +552,8 @@ theorem tendsto_nearBound {N : RWRS.Net 0} (hN : RWRS.NetGood N)
   simpa using tendsto_finsetSum F h0
 
 open scoped Classical in
+/-- `nearBound r n N ≤ 1` for a good network `N`: it is dominated by the iterate of the
+constant function `1`, which `rerootIter_const` fixes at `1`. -/
 theorem nearBound_le_one {N : RWRS.Net 0} (hN : RWRS.NetGood N) (r n : ℕ) :
     nearBound r n N ≤ 1 := by
   classical
@@ -522,6 +575,8 @@ theorem nearBound_le_one {N : RWRS.Net 0} (hN : RWRS.NetGood N) (r n : ℕ) :
 
 /-! ### The ergodicity of the marked law -/
 
+/-- For a rerooting-invariant `A` and a good network `N`, the marked average
+`markAvg ν (A.indicator 1)` is unchanged when `N` is rerooted at any `v`. -/
 theorem markAvg_reroot {A : Set (RWRS.Net 1)} (hre : RWRS.RerootInvariant A) (ν : Measure ℝ)
     {N : RWRS.Net 0} (hN : RWRS.NetGood N) (v : ℕ) :
     markAvg ν (A.indicator (fun _ => (1 : ℝ≥0∞))) (RWRS.netReroot N v)
@@ -535,6 +590,8 @@ theorem markAvg_reroot {A : Set (RWRS.Net 1)} (hre : RWRS.RerootInvariant A) (ν
   · rw [Set.indicator_of_notMem (fun hc => h ((mem_iff_netReroot_of_good hre hg v).2 hc)),
       Set.indicator_of_notMem h]
 
+/-- Pointwise version of `markAvg_reroot`: for a fixed marking `ξ`, rerooting a good `N` at
+`v` before marking does not change membership in a rerooting-invariant `A`. -/
 theorem indicator_markMap_reroot {A : Set (RWRS.Net 1)} (hre : RWRS.RerootInvariant A)
     {N : RWRS.Net 0} (hN : RWRS.NetGood N) (v : ℕ) (ξ : ℕ → ℝ) :
     A.indicator (fun _ => (1 : ℝ≥0∞)) (markMap (RWRS.netReroot N v, ξ))

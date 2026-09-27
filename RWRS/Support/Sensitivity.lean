@@ -17,6 +17,8 @@ open scoped ENNReal
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
+/-- `walkExp` is homogeneous: scaling the functional by a constant `c` scales
+its expectation by `c`. -/
 theorem walkExp_const_mul (c : ℝ) : ∀ (n : ℕ) (x : V) (F : (ℕ → V) → ℝ),
     walkExp G n x (fun X => c * F X) = c * walkExp G n x F := by
   intro n
@@ -30,6 +32,8 @@ theorem walkExp_const_mul (c : ℝ) : ∀ (n : ℕ) (x : V) (F : (ℕ → V) →
         funext fun y => ih y _]
       rw [← Finset.mul_sum, mul_div_assoc]
 
+/-- `walkExp` is additive under subtraction:
+`walkExp G n x (F - F') = walkExp G n x F - walkExp G n x F'`, from `walkExp_add`. -/
 theorem walkExp_sub (n : ℕ) (x : V) (F F' : (ℕ → V) → ℝ) :
     walkExp G n x (fun X => F X - F' X) = walkExp G n x F - walkExp G n x F' := by
   have h := walkExp_add (G := G) n x (fun X => F X - F' X) F'
@@ -41,6 +45,9 @@ open scoped Classical in
 noncomputable def spike (v : V) : V → ℝ := fun u => if u = v then 1 else 0
 
 open scoped Classical in
+/-- Resampling the scenery at `v` to `t` changes the payoff by `(ξ v - t)`
+times the payoff of the indicator spike at `v`, i.e. by that constant times
+the local time spent at `v`. -/
 theorem payoff_sub_resample (ξ : V → ℝ) (v : V) (t : ℝ) (k : ℕ) (X : ℕ → V) :
     payoff G ξ k X - payoff G (resample ξ v t) k X
       = (ξ v - t) * payoff G (spike v) k X := by
@@ -53,6 +60,8 @@ theorem payoff_sub_resample (ξ : V → ℝ) (v : V) (t : ℝ) (k : ℕ) (X : �
     ring
 
 open scoped Classical in
+/-- The walk average of the payoff of the spike scenery at `v` up to horizon
+`n` is exactly the finite-time Green function `greenTime G n o v`. -/
 theorem walkExp_payoff_spike [Infinite V] (hG : G.Connected) (n : ℕ) (o v : V) :
     walkExp G n o (payoff G (spike v) n) = greenTime G n o v := by
   rw [walkExp_payoff_eq hG]
@@ -67,6 +76,8 @@ theorem walkExp_payoff_spike [Infinite V] (hG : G.Connected) (n : ℕ) (o v : V)
   rw [← Finset.sum_mul, greenTime, meanLocalTime]
   ring
 
+/-- The payoff of the spike scenery `spike v` is nonnegative, since each term
+is a nonnegative indicator divided by a degree. -/
 theorem payoff_spike_nonneg (v : V) (k : ℕ) (X : ℕ → V) :
     0 ≤ payoff G (spike v) k X := by
   classical
@@ -74,6 +85,8 @@ theorem payoff_spike_nonneg (v : V) (k : ℕ) (X : ℕ → V) :
   rw [spike]
   split <;> norm_num
 
+/-- The payoff of the spike scenery `spike v` is monotone in the horizon: more
+steps can only add nonnegative terms. -/
 theorem payoff_spike_mono (v : V) {k n : ℕ} (h : k ≤ n)
     (X : ℕ → V) : payoff G (spike v) k X ≤ payoff G (spike v) n X := by
   classical
@@ -105,6 +118,9 @@ theorem abs_walkExp_payoff_sub [Infinite V] (hG : G.Connected) (ξ : V → ℝ) 
   rw [abs_of_nonneg hnn, mul_comm]
   exact mul_le_mul_of_nonneg_right hle (abs_nonneg (ξ v - t))
 
+/-- The finite-horizon value `value G ξ n x` is the least upper bound of the
+stopping values `stopValues G ξ n x`, transferred from `isLUB_odometer` via the
+shift `ξ = excess (ξ + 1)`. -/
 theorem isLUB_value [Infinite V] (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (x : V) :
     IsLUB (stopValues G ξ n x) (value G ξ n x) := by
   have hex : excess (fun u => ξ u + 1) = ξ := by
@@ -119,6 +135,8 @@ theorem isLUB_value [Infinite V] (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (
 
 
 open scoped Classical in
+/-- Resampling at `v` and then resampling back to the original value `ξ v`
+recovers `ξ`. -/
 theorem resample_resample (ξ : V → ℝ) (v : V) (t : ℝ) :
     resample (resample ξ v t) v (ξ v) = ξ := by
   funext u
@@ -127,6 +145,7 @@ theorem resample_resample (ξ : V → ℝ) (v : V) (t : ℝ) :
   · rw [resample, if_neg h, resample, if_neg h]
 
 open scoped Classical in
+/-- The resampled scenery takes the value `t` at the resampled vertex `v`. -/
 theorem resample_self (ξ : V → ℝ) (v : V) (t : ℝ) : resample ξ v t v = t := by
   rw [resample, if_pos rfl]
 
@@ -166,6 +185,10 @@ theorem supStopValue_le_resample [Infinite V] (hG : G.Connected) (ζ : V → ℝ
   · rw [ENNReal.ofReal_mul (greenTime_nonneg n o v)]
     exact mul_le_mul' (ofReal_greenTime_le_green hG n o v) le_rfl
 
+/-- **Finiteness of the Green function transfers to every vertex.**  If the
+graph is transient at `o` (`green G o o ≠ ⊤`), then `green G o v ≠ ⊤` for every
+`v`, using the heat-kernel reversibility identity to transfer finiteness of the
+reversed tail sum. -/
 theorem green_ne_top_of_not_recurrent [Infinite V] (hG : G.Connected) {o : V}
     (h : green G o o ≠ ⊤) (v : V) : green G o v ≠ ⊤ := by
   rw [green_ne_top_iff hG]

@@ -12,9 +12,10 @@ Networks have vertex set `ℕ`. The hypothesis `hgood` asserts almost sure
 connectedness, so the underlying graphs are almost surely infinite and connected,
 as in the paper's standing setting.
 
-The heat kernel decay quoted at `rwrs.tex:319-322` is supplied on connected
-networks by `RWRS.External.heatKernelVanishing_of_netGood`. The almost sure
-connectedness hypothesis of `Q` supplies `NetGood` at every use site.
+The heat kernel decay quoted at `rwrs.tex:319-322` is proved outright, on
+connected networks, by `RWRS.External.heatKernelVanishing_of_netGood`; the
+almost sure connectedness hypothesis of `Q` supplies `NetGood` at every use
+site, so no hypothesis for it remains here.
 -/
 import RWRS.Support.ErgFinal
 import RWRS.Frozen.IidStationary
@@ -24,8 +25,6 @@ open scoped ENNReal
 
 -- FROZEN-STATEMENT-BEGIN
 theorem RWRS.Frozen.ergodicMarked
-    (hHKV : ∀ N : RWRS.Net 0, RWRS.NetGood N →
-      RWRS.External.HeatKernelVanishing (RWRS.netGraph N))
     (Q : Measure (RWRS.Net 0)) (hQ : IsProbabilityMeasure Q)
     (hgood : ∀ᵐ N ∂Q, RWRS.NetGood N) (hstat : RWRS.IsStationaryNet Q)
     (herg : RWRS.IsErgodicNet Q) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν) :
@@ -48,7 +47,8 @@ theorem RWRS.Frozen.ergodicMarked
       ne_top_of_le_ne_top ENNReal.one_ne_top (RWRS.Support.markAvg_indicator_le_one ν A N)
     rw [hC, ← hN, RWRS.Support.markProb, ENNReal.ofReal_toReal hne]
   have hsq : C = C * C :=
-    RWRS.Support.markAvg_mul_self hHKV Q hgood hstat ν hA hiso hre hC1 hCae
+    RWRS.Support.markAvg_mul_self RWRS.External.heatKernelVanishing_of_netGood
+      Q hgood hstat ν hA hiso hre hC1 hCae
   rw [hval]
   by_cases h0 : C = 0
   · exact Or.inl h0

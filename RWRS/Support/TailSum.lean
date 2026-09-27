@@ -14,6 +14,8 @@ namespace RWRS.Support
 open MeasureTheory
 open scoped ENNReal Classical
 
+/-- The partial sum of the indicators `1{t + 1 ≤ z}` over `t < n` is at most `z`, by
+induction: whenever the `n`-th indicator fires so does every earlier one. -/
 theorem sum_range_indicator_le (z : ℝ≥0∞) :
     ∀ n : ℕ, (∑ t ∈ Finset.range n, (if (t : ℝ≥0∞) + 1 ≤ z then (1 : ℝ≥0∞) else 0)) ≤ z := by
   intro n
@@ -36,6 +38,8 @@ theorem sum_range_indicator_le (z : ℝ≥0∞) :
       · rw [if_neg h, add_zero]
         exact ih
 
+/-- The full tail sum `∑_t 1{t + 1 ≤ z}` is at most `z`, taking the supremum of the finite
+partial sums bounded by `sum_range_indicator_le`. -/
 theorem tsum_indicator_le (z : ℝ≥0∞) :
     (∑' t : ℕ, (if (t : ℝ≥0∞) + 1 ≤ z then (1 : ℝ≥0∞) else 0)) ≤ z := by
   rw [ENNReal.tsum_eq_iSup_nat]

@@ -84,6 +84,9 @@ theorem trapPotential_eq_zero_of_notMem (D : Finset V)
 
 /-! ### The potential has mean zero -/
 
+/-- The trap potential has mean zero when the scenery law `ν` has mean zero: integrating
+`trapPotential G D ξ x` over the iid law of `ξ` vanishes, since each term is a killed Green
+weight times a mean-zero coordinate. -/
 theorem integral_trapPotential (hν : IsProbabilityMeasure ν) (h0 : RWRS.extMean ν = 0)
     (D : Finset V) (x : V) :
     ∫ ξ, trapPotential G D ξ x ∂(RWRS.iidLaw V ν) = 0 := by
@@ -96,6 +99,8 @@ theorem integral_trapPotential (hν : IsProbabilityMeasure ν) (h0 : RWRS.extMea
 
 /-! ### Every bounded rule is below the value -/
 
+/-- Any stopping rule bounded by a horizon `n` gives a value lying in `RWRS.stopValues`, so
+its `ENNReal.ofReal` is at most the supremum `RWRS.supStopValue` over all such rules. -/
 theorem ofReal_walkExp_payoff_le_supStopValue [Infinite V] (ξ : V → ℝ) (n : ℕ) (o : V)
     (τ : (ℕ → V) → ℕ) (hτ : RWRS.IsStopping τ) (hle : ∀ X, τ X ≤ n) :
     ENNReal.ofReal (RWRS.walkExp G n o (fun X => RWRS.payoff G ξ (τ X) X))
@@ -116,6 +121,8 @@ theorem ofReal_valueExit_le_supStopValue [Infinite V] [MeasurableSpace V]
 
 /-! ### The killed Green function grows with the set -/
 
+/-- Enlarging the killing set only lets more mass survive: `killedHeat` killed outside `C`
+is pointwise `≤` `killedHeat` killed outside a superset `D`, by induction on the step count. -/
 theorem killedHeat_mono {C D : Set V} (hCD : C ⊆ D) :
     ∀ (k : ℕ) (x y : V),
       LatticeProb.Graph.killedHeat G C k x y ≤ LatticeProb.Graph.killedHeat G D k x y := by
@@ -138,6 +145,9 @@ theorem killedHeat_mono {C D : Set V} (hCD : C ⊆ D) :
       · rw [LatticeProb.Network.killedHeat_succ, if_neg hx]
         exact LatticeProb.Network.killedHeat_nonneg D (k + 1) x y
 
+/-- The real killed Green's function inherits the monotonicity of `killedHeat`: enlarging
+the killing set from `C` to `D` can only increase `killedGreenReal`, given both sets are
+escaped by the walk almost surely. -/
 theorem killedGreenReal_mono (C D : Finset V) (hCD : C ⊆ D)
     (hescC : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ (C : Set V))
     (hescD : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ (D : Set V)) (x y : V) :
@@ -151,6 +161,8 @@ theorem killedGreenReal_mono (C D : Finset V) (hCD : C ⊆ D)
 
 /-! ### The trap's share of the potential -/
 
+/-- The killed Green's function vanishes at any target outside the killing set `C`, since
+the killed heat kernel is `0` there at every time step. -/
 theorem killedGreen_eq_zero_of_notMem (C : Set V) {v : V} (hv : v ∉ C) (y : V) :
     RWRS.killedGreen G C y v = 0 := by
   have hz : ∀ k : ℕ, ENNReal.ofReal (LatticeProb.Graph.killedHeat G C k y v) = 0 := by
@@ -160,6 +172,8 @@ theorem killedGreen_eq_zero_of_notMem (C : Set V) {v : V} (hv : v ∉ C) (y : V)
   rw [killedGreen_eq_lib, LatticeProb.Graph.killedGreen, tsum_congr hz, tsum_zero]
   simp
 
+/-- Under the escape hypothesis and positive degrees the killed Green's function is finite:
+its defining sum is summable, and dividing by the nonzero degree keeps it below `⊤`. -/
 theorem killedGreen_ne_top_of_escape (C : Finset V)
     (hescC : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ (C : Set V))
     (hdeg : ∀ w : V, 0 < G.degree w) (y v : V) :
@@ -174,6 +188,9 @@ theorem killedGreen_ne_top_of_escape (C : Finset V)
       exact ENNReal.ofReal_ne_top
     exact ENNReal.div_ne_top hnum (by exact_mod_cast hd)
 
+/-- The exit measure `thetaExit` off `C` equals the `ENNReal.ofReal` of the sum of
+`killedGreenReal G C y v` over `v ∈ C`, since mass concentrates on `C` and is finite there
+by `killedGreen_ne_top_of_escape`. -/
 theorem thetaExit_eq_ofReal (C : Finset V)
     (hescC : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ (C : Set V))
     (hdeg : ∀ w : V, 0 < G.degree w) (y : V) :
@@ -186,6 +203,8 @@ theorem thetaExit_eq_ofReal (C : Finset V)
   refine Finset.sum_congr rfl fun v _ => ?_
   rw [RWRS.killedGreenReal, ENNReal.ofReal_toReal (killedGreen_ne_top_of_escape C hescC hdeg y v)]
 
+/-- Converts a lower bound `L` on the exit measure `thetaExit` into a lower bound on the real
+sum `∑ v ∈ C, killedGreenReal G C y v`, via `thetaExit_eq_ofReal` and `ENNReal.ofReal_le_ofReal`. -/
 theorem sum_killedGreenReal_ge_thetaExit (C : Finset V)
     (hescC : ∀ x : V, ∃ (q : V) (_ : G.Walk x q), q ∉ (C : Set V))
     (hdeg : ∀ w : V, 0 < G.degree w) (y : V) (L : ℝ)

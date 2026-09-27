@@ -36,8 +36,10 @@ open scoped ENNReal
 
 namespace RWRS
 
+/-- The discrete σ-algebra on `List ℕ`, making every set of neighbour lists measurable. -/
 instance : MeasurableSpace (List ℕ) := ⊤
 
+/-- Every set of `List ℕ` is measurable for the discrete σ-algebra just fixed. -/
 instance : DiscreteMeasurableSpace (List ℕ) := ⟨fun _ => trivial⟩
 
 /-- A rooted network with `m` real marks per vertex: the neighbour lists, the
@@ -51,6 +53,8 @@ def netGraph {m : ℕ} (N : Net m) : SimpleGraph ℕ where
   symm := ⟨fun _ _ h => ⟨h.1.symm, h.2.2, h.2.1⟩⟩
   loopless := ⟨fun _ h => h.1 rfl⟩
 
+/-- `netGraph N` is locally finite: the neighbours of `v` sit inside the finite
+list `N.1 v`, so the neighbour set of every vertex is finite. -/
 noncomputable instance netLocallyFinite {m : ℕ} (N : Net m) : (netGraph N).LocallyFinite :=
   fun v => Set.Finite.fintype
     (Set.Finite.subset (N.1 v).finite_toSet (fun _ hj => hj.2.1))

@@ -20,10 +20,12 @@ The vertex set carries the discrete measurable structure, as `ssec:notation`
 supplies it in substance and as `prop:subcritical`, `lem:dyadic` and
 `lem:good-walk` already carry it.  The von Bahr--Esseen and Fuk--Nagaev
 inequalities, which the proof of `lem:fuk-nagaev` quotes from outside the paper
-and which part (i) reaches through `prop:subcritical`, enter as explicit
-hypotheses.
+and which part (i) reaches through `prop:subcritical`, and the bounded-degree
+heat kernel bound quoted at `rwrs.tex:144-149`, are all proved outright in
+`RWRS/External/`, so none of the three is a hypothesis here.
 -/
 import RWRS.Support.SubStabPoly
+import RWRS.External.CarneVaropoulosProved
 import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
 
 open MeasureTheory
@@ -38,8 +40,6 @@ set_option linter.unusedVariables false in
 -- FROZEN-STATEMENT-BEGIN
 theorem RWRS.Frozen.stabilization [Infinite V] [MeasurableSpace V]
     [MeasurableSingletonClass V]
-    (hHK : RWRS.External.HeatKernelBoundedDegree G) (hCV : RWRS.External.CarneVaropoulos G)
-    (hVBE : RWRS.External.VonBahrEsseen) (hFNt : RWRS.External.FukNagaevTail)
     (hG : G.Connected)
     (d : ℕ) (hd : RWRS.BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : RWRS.HasExtMean ν) (hmean : RWRS.extMean ν < 1) :
@@ -58,11 +58,14 @@ theorem RWRS.Frozen.stabilization [Infinite V] [MeasurableSpace V]
   haveI : DecidableEq V := Classical.decEq V
   have hdeg : ∀ v : V, 1 ≤ G.degree v := fun v => RWRS.Support.degree_pos_of_connected hG v
   have hd1 : 1 ≤ d := le_trans (hdeg (Classical.arbitrary V)) (hd _)
+  have hHK : RWRS.External.HeatKernelBoundedDegree G :=
+    RWRS.External.heatKernelBoundedDegree_of_connected hG
   obtain ⟨A, hA0, hsp⟩ := hHK d hd1 hd
   exact ⟨fun p hp hmom =>
-      ⟨fun q hq1 hq2 => RWRS.Support.lintegral_odometerLimit_rpow_ne_top hG hVBE hFNt d hd hsp
+      ⟨fun q hq1 hq2 => RWRS.Support.lintegral_odometerLimit_rpow_ne_top hG d hd hsp
           ν hmean hp hmom hq1 hq2,
-        RWRS.Support.measure_stabilizes_eq_one_part_one hG hVBE hFNt d hd hsp ν hmean hp hmom⟩,
+        RWRS.Support.measure_stabilizes_eq_one_part_one hG d hd hsp ν hmean hp hmom⟩,
     fun o C d_f hC hdf hH1 p hp hmom =>
-      RWRS.Support.measure_stabilizes_eq_one_part_two hG hHK hCV d hd ν hmean o hC hdf hH1
+      RWRS.Support.measure_stabilizes_eq_one_part_two hG hHK
+        (RWRS.External.carneVaropoulos G) d hd ν hmean o hC hdf hH1
         hp hmom⟩

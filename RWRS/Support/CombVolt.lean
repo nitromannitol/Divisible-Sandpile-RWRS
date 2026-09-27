@@ -17,6 +17,7 @@ namespace RWRS.Support
 
 variable {B : ℕ} {L : ℕ → ℕ} {n : ℕ} {w : List (Fin B)}
 
+/-- Weakens the pipe-length bound `2 ≤ L j` for `j ≥ 1` to `1 ≤ L j`. -/
 theorem one_le_of_two_le (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) : ∀ j, 1 ≤ j → 1 ≤ L j :=
   fun j hj => le_trans (by omega) (hL2 j hj)
 
@@ -25,6 +26,8 @@ theorem one_le_of_two_le (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) : ∀ j, 1 ≤ j �
 section BVP
 
 open scoped Classical in
+/-- Every walk of the pipe graph starting from any vertex eventually escapes the finite
+set `combFinset`, transporting `escape_combSet` across the `combFinset`/`combSet` coercion. -/
 theorem comb_esc (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) :
     ∀ x : List (Fin B) × ℕ,
       ∃ (q : List (Fin B) × ℕ) (_ : (pipeGraph B L e).Walk x q),
@@ -37,6 +40,7 @@ theorem comb_esc (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length
   exact hq
 
 open scoped Classical in
+/-- Every vertex of `combFinset` has positive degree in the pipe graph. -/
 theorem comb_deg (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hB : 2 ≤ B) :
     ∀ v ∈ combFinset B L n w, 0 < (pipeGraph B L e).degree v := by
   classical
@@ -47,12 +51,15 @@ theorem comb_deg (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hB : 2 ≤ B) 
   exact_mod_cast hv
 
 open scoped Classical in
+/-- The root of the pipe graph belongs to `combFinset` whenever `n ≥ 1`. -/
 theorem comb_root_mem (hn : 1 ≤ n) : pipeRoot B ∈ combFinset B L n w := by
   classical
   rw [← Finset.mem_coe, coe_combFinset]
   exact pipeRoot_mem_combSet w hn
 
 open scoped Classical in
+/-- The comb voltage `combVoltage` is nonnegative everywhere, since it is a killed
+Green's function of the escaping pipe graph. -/
 theorem combVoltage_nonneg (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n)
     (v : List (Fin B) × ℕ) :
     0 ≤ combVoltage B L e n w v := by
@@ -62,6 +69,7 @@ theorem combVoltage_nonneg (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn 
   rwa [coe_combFinset] at h
 
 open scoped Classical in
+/-- The comb voltage vanishes at every site outside `combSet`. -/
 theorem combVoltage_eq_zero (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n)
     {v : List (Fin B) × ℕ}
     (hv : v ∉ combSet B L n w) : combVoltage B L e n w v = 0 := by
@@ -73,6 +81,8 @@ theorem combVoltage_eq_zero (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn
   rwa [coe_combFinset] at h
 
 open scoped Classical in
+/-- The comb voltage is harmonic (Laplacian `0`) at every site of `combSet` other than the
+root `pipeRoot B`. -/
 theorem combVoltage_harmonic (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hB : 2 ≤ B)
     (hwn : w.length = n) (hn : 1 ≤ n)
     {v : List (Fin B) × ℕ} (hv : v ∈ combSet B L n w) (hvo : v ≠ pipeRoot B) :
@@ -87,6 +97,7 @@ theorem combVoltage_harmonic (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hB
   exact h
 
 open scoped Classical in
+/-- The comb voltage has Laplacian `-1` at the root, i.e. it carries a unit source there. -/
 theorem combVoltage_source (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hB : 2 ≤ B)
     (hwn : w.length = n) (hn : 1 ≤ n) :
     laplacian (pipeGraph B L e) (combVoltage B L e n w) (pipeRoot B) = -1 := by
@@ -101,12 +112,16 @@ end BVP
 
 /-! ### The pipes of the comb -/
 
+/-- Dropping the last entry of the length-`j` prefix `w.take j` gives the length-`(j-1)`
+prefix `w.take (j - 1)`. -/
 theorem dropLast_take (hwn : w.length = n) {j : ℕ} (hjn : j ≤ n) :
     (w.take j).dropLast = w.take (j - 1) := by
   rw [List.dropLast_eq_take, length_take_eq hwn hjn, List.take_take]
   congr 1
   omega
 
+/-- Every interior site of the `j`-th trunk pipe (the pipe whose word is `w.take j`)
+belongs to `combSet`. -/
 theorem trunk_mem (hwn : w.length = n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
     ∀ i, 1 ≤ i → i ≤ L (w.take j).length - 1 →
       ((w.take j : List (Fin B)), i) ∈ combSet B L n w := by
@@ -114,6 +129,8 @@ theorem trunk_mem (hwn : w.length = n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) 
   rw [length_take_eq hwn hjn] at hiL
   exact mem_combSet_trunk hwn hj hjn hi hiL
 
+/-- Every interior site of the pipe attached to a child word `w.take j ++ [c]` at `b_j`
+belongs to `combSet`. -/
 theorem child_mem (hwn : w.length = n) {j : ℕ} (hjn : j < n) (c : Fin B) :
     ∀ i, 1 ≤ i → i ≤ L (w.take j ++ [c]).length - 1 →
       (((w.take j ++ [c] : List (Fin B))), i) ∈ combSet B L n w := by
@@ -227,6 +244,8 @@ theorem trunk_child_first (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e
 
 /-! ### Kirchhoff's node law -/
 
+/-- The branch vertex `(w.take j, 0)` is never the root, since `w.take j` is nonempty for
+`j ≥ 1`. -/
 theorem take_ne_root (hwn : w.length = n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
     ((w.take j : List (Fin B)), 0) ≠ pipeRoot B := by
   intro h

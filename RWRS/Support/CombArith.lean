@@ -20,6 +20,8 @@ theorem two_le_combLen (hc : CombCond B α) {j : ℕ} (hj : 1 ≤ j) : 2 ≤ com
   have : (2 : ℝ) ≤ (combLen B α j : ℝ) := by linarith
   exact_mod_cast this
 
+/-- Every pipe of positive level has at least four edges, sharpening `two_le_combLen`
+via `base_pow_ge`. -/
 theorem four_le_combLen (hc : CombCond B α) {j : ℕ} (hj : 1 ≤ j) : 4 ≤ combLen B α j := by
   rw [combLen]
   refine Nat.le_floor ?_
@@ -27,8 +29,10 @@ theorem four_le_combLen (hc : CombCond B α) {j : ℕ} (hj : 1 ≤ j) : 4 ≤ co
   rw [← base_pow hc j]
   exact base_pow_ge hc hj
 
+/-- Every pipe has at least one edge, the natural-number form of `combLen_pos'`. -/
 theorem one_le_combLen (hc : CombCond B α) (j : ℕ) : 1 ≤ combLen B α j := combLen_pos' hc j
 
+/-- The real-number cast of `one_le_combLen`: `combLen B α j` is at least `1`. -/
 theorem one_le_combLen_real (hc : CombCond B α) (j : ℕ) : (1 : ℝ) ≤ (combLen B α j : ℝ) := by
   exact_mod_cast one_le_combLen hc j
 
@@ -46,6 +50,7 @@ theorem combLen_succ_le_mul (hc : CombCond B α) {j : ℕ} (hj : 1 ≤ j) :
     nlinarith
   nlinarith
 
+/-- Twice the length of the level-`1` pipe is at most `B - 1`, from `combLen_le` at `j = 1`. -/
 theorem two_combLen_one_le (hc : CombCond B α) :
     2 * (combLen B α 1 : ℝ) ≤ (B : ℝ) - 1 := by
   have hup := combLen_le hc 1
@@ -55,6 +60,8 @@ theorem two_combLen_one_le (hc : CombCond B α) :
 
 /-! ### The geometric ratio -/
 
+/-- Rewrites the geometric ratio `2B/(B^α)^2` as `2B^{1-2α}`, the exponential form used to
+check it is a convergent ratio. -/
 theorem combRatio_eq (hc : CombCond B α) :
     2 * (B : ℝ) / ((B : ℝ) ^ α) ^ 2 = 2 * (B : ℝ) ^ (1 - 2 * α) := by
   have hBpos := cast_B_pos hc
@@ -67,11 +74,13 @@ theorem combRatio_eq (hc : CombCond B α) :
   have : (B : ℝ) ^ (2 * α) ≠ 0 := ne_of_gt (Real.rpow_pos_of_pos hBpos _)
   field_simp
 
+/-- The geometric ratio `2B/(B^α)^2` is positive. -/
 theorem combRatio_pos (hc : CombCond B α) : 0 < 2 * (B : ℝ) / ((B : ℝ) ^ α) ^ 2 := by
   have hBpos := cast_B_pos hc
   have hbpos := base_pos hc
   positivity
 
+/-- The geometric ratio `2B/(B^α)^2` is strictly less than one, as demanded by `CombCond`. -/
 theorem combRatio_lt_one (hc : CombCond B α) : 2 * (B : ℝ) / ((B : ℝ) ^ α) ^ 2 < 1 := by
   rw [combRatio_eq hc]
   exact hc.2.2.2.2.2.1
@@ -93,6 +102,8 @@ theorem sum_geom_le {r : ℝ} (hr0 : 0 ≤ r) (hr1 : r < 1) (m : ℕ) :
 
 /-! ### The level ratio of the squared pipe lengths -/
 
+/-- Bounds the level-`j` squared pipe length scaled by `((B^α)^2)^{m-j}` by four times the
+level-`m` squared pipe length, the comparison feeding the geometric-series bound on level sums. -/
 theorem combLen_sq_ratio (hc : CombCond B α) {j m : ℕ} (hm : 1 ≤ m) (hjm : j ≤ m) :
     (combLen B α j : ℝ) ^ 2 * (((B : ℝ) ^ α) ^ 2) ^ (m - j)
       ≤ 4 * (combLen B α m : ℝ) ^ 2 := by
@@ -117,6 +128,7 @@ theorem combLen_sq_ratio (hc : CombCond B α) {j m : ℕ} (hm : 1 ≤ m) (hjm : 
 
 /-! ### The growth constant -/
 
+/-- Identifies the growth constant `combLambda` with `(B^α)^2/(4B)`. -/
 theorem combLambda_eq (hc : CombCond B α) :
     combLambda B α = ((B : ℝ) ^ α) ^ 2 / (4 * (B : ℝ)) := by
   have hBpos := cast_B_pos hc

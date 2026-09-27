@@ -30,6 +30,7 @@ noncomputable def zdOdometer (η : Site d → ℝ) : ℕ → Site d → ℝ
 /-- The configuration whose scenery is `η`: `σ = 2dη + 1`. -/
 noncomputable def config (η : Site d → ℝ) : Site d → ℝ := fun z => 2 * d * η z + 1
 
+/-- The scenery of the configuration `config η = 2dη + 1` recovers `η`. -/
 theorem scenery_config [NeZero d] (η : Site d → ℝ) (x : Site d) :
     RWRS.scenery (lattice d) (config η) x = η x := by
   have hd : ((2 * d : ℕ) : ℝ) ≠ 0 := by
@@ -40,11 +41,16 @@ theorem scenery_config [NeZero d] (η : Site d → ℝ) (x : Site d) :
   push_cast
   ring
 
+/-- The excess of `config η` is `2d η`, since `config η` is already `2dη`
+shifted up by `1`. -/
 theorem excess_config [NeZero d] (η : Site d → ℝ) :
     RWRS.excess (config η) = fun z => 2 * d * η z := by
   funext z
   simp [RWRS.excess, config]
 
+/-- The general odometer of `config η` on the lattice agrees pointwise with the
+scenery-written recursion `zdOdometer η`, by induction on `n` using
+`RWRS.Frozen.recursion` and `scenery_config`. -/
 theorem zdOdometer_eq [NeZero d] (η : Site d → ℝ) :
     ∀ (n : ℕ) (x : Site d), RWRS.odometer (lattice d) (config η) n x = zdOdometer η n x := by
   intro n
@@ -76,6 +82,9 @@ noncomputable def zdStoppingValue (ζ : Site d → ℝ) (n : ℕ) (x : Site d) :
 noncomputable def zdOptimalStop (ζ : Site d → ℝ) (n : ℕ) (X : ℕ → Site d) : ℕ :=
   sInf {k : ℕ | k ≤ n ∧ zdStoppingValue ζ (n - k) (X k) = 0}
 
+/-- The general payoff of `excess (config ζ)` equals the scenery partial sum
+`sceneryPartialSum ζ`, term by term via `excess_config` and the degree of the
+lattice. -/
 theorem payoff_eq [NeZero d] (ζ : Site d → ℝ) (n : ℕ) (X : ℕ → Site d) :
     RWRS.payoff (lattice d) (RWRS.excess (config ζ)) n X = sceneryPartialSum ζ n X := by
   rw [excess_config, RWRS.payoff, sceneryPartialSum]
@@ -88,6 +97,8 @@ theorem payoff_eq [NeZero d] (ζ : Site d → ℝ) (n : ℕ) (X : ℕ → Site d
   push_cast
   ring
 
+/-- The payoff up to a stopping time `τ` bounded by `n` depends on a trajectory
+only through its first `n` coordinates. -/
 theorem payoff_dependsUpTo [NeZero d] (ζ : Site d → ℝ) (n : ℕ)
     {τ : (ℕ → Site d) → ℕ} (hτ : RWRS.IsStopping τ) (hle : ∀ X, τ X ≤ n) :
     ∀ X Y : ℕ → Site d, (∀ j ≤ n, X j = Y j) →
@@ -99,6 +110,11 @@ theorem payoff_dependsUpTo [NeZero d] (ζ : Site d → ℝ) (n : ℕ)
   refine Finset.sum_congr rfl fun k hk => ?_
   rw [hXY k (le_of_lt (lt_of_lt_of_le (Finset.mem_range.mp hk) (hle Y)))]
 
+/-- The general `walkExp` of the payoff up to a bounded stopping time `τ`
+equals the integral of the scenery partial sum against the lattice's
+path-space walk law `siteWalkLaw`, transferring the finite-dimensional
+identity `RWRS.Support.walkExp_eq_integral_siteWalkLaw` through
+`payoff_dependsUpTo` and `payoff_eq`. -/
 theorem walkExp_eq_integral [NeZero d]
     (ζ : Site d → ℝ) (n : ℕ) (x : Site d) {τ : (ℕ → Site d) → ℕ}
     (hτ : RWRS.IsStopping τ) (hle : ∀ X, τ X ≤ n) :
@@ -110,6 +126,8 @@ theorem walkExp_eq_integral [NeZero d]
     (LatticeProb.measurable_of_dependsUpTo hdep) hdep]
   exact integral_congr_ae (Filter.Eventually.of_forall fun X => payoff_eq ζ (τ X) X)
 
+/-- The general `stopValues` set of `excess (config ζ)` equals `zdStopValues ζ`,
+matching each admissible stopping-time payoff via `walkExp_eq_integral`. -/
 theorem stopValues_eq [NeZero d]
     (ζ : Site d → ℝ) (n : ℕ) (x : Site d) :
     RWRS.stopValues (lattice d) (RWRS.excess (config ζ)) n x = zdStopValues ζ n x := by

@@ -25,6 +25,8 @@ locally finite. -/
 
 variable {B : ℕ} {L : ℕ → ℕ}
 
+/-- `gadgetGraph B L m` is locally finite, via `induceLocallyFinite` applied to the tree of
+pipes it is induced from. -/
 noncomputable instance gadgetLocallyFinite (m : ℕ) :
     (gadgetGraph B L m).LocallyFinite :=
   induceLocallyFinite _ _
@@ -75,12 +77,16 @@ noncomputable def rayGraph (B : ℕ) (L : ℕ → ℕ) (m s : ℕ → ℕ) : Sim
 
 variable {m s : ℕ → ℕ}
 
+/-- The root of the `k`-th gadget embeds to the ray vertex it is attached to. -/
 theorem rayEmb_root (k : ℕ) :
     rayEmb B L m s k (gadgetRoot B L (m k)) = rayPt B L m (s k) := dif_pos rfl
 
+/-- A non-root site of the `k`-th gadget embeds to its own copy on the disjoint-union side of
+`RayV`. -/
 theorem rayEmb_of_ne {k : ℕ} {v : gadgetSites B L (m k)} (hv : v ≠ gadgetRoot B L (m k)) :
     rayEmb B L m s k v = Sum.inr ⟨k, ⟨v, hv⟩⟩ := dif_neg hv
 
+/-- The embedding `rayEmb` of the `k`-th gadget into the ray graph is injective. -/
 theorem rayEmb_injective (k : ℕ) : Function.Injective (rayEmb B L m s k) := by
   intro v w h
   by_cases hv : v = gadgetRoot B L (m k) <;> by_cases hw : w = gadgetRoot B L (m k)
@@ -127,15 +133,20 @@ noncomputable def rayEmbHom (k : ℕ) : gadgetGraph B L (m k) →g rayGraph B L 
   toFun := rayEmb B L m s k
   map_rel' := fun {v w} h => Or.inr (Or.inr ⟨k, v, w, h, rfl, rfl⟩)
 
+/-- Consecutive ray positions are adjacent in `rayGraph`. -/
 theorem rayGraph_adj_ray (i : ℕ) :
     (rayGraph B L m s).Adj (rayPt B L m i) (rayPt B L m (i + 1)) := Or.inl ⟨i, rfl, rfl⟩
 
+/-- Every ray position is reachable from the ray origin `rayPt B L m 0`, by induction along
+consecutive ray edges. -/
 theorem reachable_rayPt_zero (i : ℕ) :
     (rayGraph B L m s).Reachable (rayPt B L m i) (rayPt B L m 0) := by
   induction i with
   | zero => exact SimpleGraph.Reachable.refl _
   | succ i ih => exact ((rayGraph_adj_ray (s := s) i).symm.reachable).trans ih
 
+/-- Every embedded gadget site is reachable from the ray origin: a walk inside the gadget to
+its root, bounded via `exists_walk_le_depth`, followed by the ray path back to `rayPt B L m 0`. -/
 theorem reachable_rayEmb_zero (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (k : ℕ)
     (v : gadgetSites B L (m k)) :
     (rayGraph B L m s).Reachable (rayEmb B L m s k v) (rayPt B L m 0) := by
@@ -145,6 +156,8 @@ theorem reachable_rayEmb_zero (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (k : ℕ)
   rw [rayEmb_root] at hreach
   exact hreach.symm.trans (reachable_rayPt_zero (s := s) (s k))
 
+/-- `rayGraph` is connected: every vertex, ray position or embedded gadget site, reaches the ray
+origin by `reachable_rayPt_zero` or `reachable_rayEmb_zero`. -/
 theorem rayGraph_connected (hL : ∀ j, 1 ≤ j → 1 ≤ L j) :
     (rayGraph B L m s).Connected := by
   haveI : Nonempty (RayV B L m) := ⟨rayPt B L m 0⟩
@@ -157,11 +170,14 @@ theorem rayGraph_connected (hL : ∀ j, 1 ≤ j → 1 ≤ L j) :
       exact reachable_rayEmb_zero hL k v
   exact fun x y => (hall x).trans (hall y).symm
 
+/-- `RayV B L m` is infinite, since the ray positions alone already inject into it. -/
 theorem infinite_rayV : Infinite (RayV B L m) :=
   Infinite.of_injective (fun i : ℕ => (Sum.inl i : RayV B L m)) fun _ _ h => Sum.inl.inj h
 
 /-! ### The ray graph is locally finite -/
 
+/-- The neighbors of a ray position `i` in `rayGraph` lie among its two ray-neighbors and the
+images of the roots of gadgets attached at or before `i`, using that `s` is strictly monotone. -/
 theorem nbr_inl_subset (hs : StrictMono s) (i : ℕ) :
     (rayGraph B L m s).neighborSet (Sum.inl i) ⊆
       ({Sum.inl (i + 1), Sum.inl (i - 1)} : Set (RayV B L m)) ∪
@@ -190,6 +206,8 @@ theorem nbr_inl_subset (hs : StrictMono s) (i : ℕ) :
     · rw [rayEmb_of_ne hv] at h1
       exact absurd h1 Sum.inl_ne_inr
 
+/-- The neighbors of an embedded non-root gadget site are exactly the images, under `rayEmb`,
+of its neighbors inside its own gadget. -/
 theorem nbr_inr_subset (k : ℕ) (v : gadgetSites B L (m k))
     (hv : v ≠ gadgetRoot B L (m k)) :
     (rayGraph B L m s).neighborSet (Sum.inr ⟨k, ⟨v, hv⟩⟩) ⊆
@@ -210,6 +228,9 @@ theorem nbr_inr_subset (k : ℕ) (v : gadgetSites B L (m k))
       subst this
       exact ⟨w, hvw, h2.symm⟩
 
+/-- `rayGraph` is locally finite: `nbr_inl_subset` and `nbr_inr_subset` bound every vertex's
+neighbor set by finitely many ray vertices together with finite images of gadget neighbor
+sets. -/
 @[reducible] noncomputable def rayLocallyFinite (hs : StrictMono s) :
     (rayGraph B L m s).LocallyFinite := by
   rintro (i | ⟨k, ⟨v, hv⟩⟩)

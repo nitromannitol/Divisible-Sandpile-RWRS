@@ -39,13 +39,17 @@ noncomputable def stageState (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ) (C 
   | 0 => (0, C (X 0))
   | i + 1 => stageStep G r C K N X (stageState G r C K N X i)
 
+/-- The horizon `N` always belongs to `stageSet`, so the set is nonempty and
+its infimum in `stageStep` is well-defined. -/
 theorem stageSet_nonempty (r : ℕ) (K : Finset V) (N : ℕ) (X : ℕ → V) (p : ℕ × Finset V) :
     N ∈ stageSet G r K N X p := Or.inl rfl
 
+/-- The next stage time never exceeds the horizon `N`. -/
 theorem sInf_stageSet_le (r : ℕ) (K : Finset V) (N : ℕ) (X : ℕ → V) (p : ℕ × Finset V) :
     sInf (stageSet G r K N X p) ≤ N :=
   Nat.sInf_le (stageSet_nonempty r K N X p)
 
+/-- Every stage time is at most the horizon `N`. -/
 theorem stageState_le (r : ℕ) (C : V → Finset V) (K : Finset V) {N : ℕ} (hN : 0 < N)
     (X : ℕ → V) : ∀ i, (stageState G r C K N X i).1 ≤ N := by
   intro i
@@ -65,6 +69,8 @@ theorem stageState_mono (r : ℕ) (C : V → Finset V) (K : Finset V) {N : ℕ} 
   · rw [h]; exact stageState_le r C K hN X i
   · exact h.1.le
 
+/-- The sequence of stage times is monotone in the stage index, packaging
+`stageState_mono` as a `Monotone` statement. -/
 theorem stageState_mono' (r : ℕ) (C : V → Finset V) (K : Finset V) {N : ℕ} (hN : 0 < N)
     (X : ℕ → V) : Monotone fun i => (stageState G r C K N X i).1 :=
   monotone_nat_of_le_succ fun i => stageState_mono r C K hN X i
@@ -164,9 +170,12 @@ noncomputable def trapRule (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ) (C : 
     (K : Finset V) (N : ℕ) (ε : ℝ) (ξ : V → ℝ) (X : ℕ → V) : ℕ :=
   sInf (ruleSet G r C K N ε ξ X)
 
+/-- The horizon `N` always belongs to `ruleSet`, so the set is nonempty and
+its infimum `trapRule` is well-defined. -/
 theorem ruleSet_nonempty (r : ℕ) (C : V → Finset V) (K : Finset V) (N : ℕ) (ε : ℝ)
     (ξ : V → ℝ) (X : ℕ → V) : N ∈ ruleSet G r C K N ε ξ X := Or.inl rfl
 
+/-- The rule of Step 1 never fires later than the horizon `N`. -/
 theorem trapRule_le (r : ℕ) (C : V → Finset V) (K : Finset V) (N : ℕ) (ε : ℝ)
     (ξ : V → ℝ) (X : ℕ → V) : trapRule G r C K N ε ξ X ≤ N :=
   Nat.sInf_le (ruleSet_nonempty r C K N ε ξ X)
@@ -215,6 +224,8 @@ theorem isStopping_trapRule (r : ℕ) (C : V → Finset V) (K : Finset V) {N : �
   rw [← hk] at hlt
   exact absurd this (not_le.2 hlt)
 
+/-- The rule's value is itself a member of `ruleSet`, as the infimum of a
+nonempty set of naturals. -/
 theorem trapRule_mem (r : ℕ) (C : V → Finset V) (K : Finset V) (N : ℕ) (ε : ℝ)
     (ξ : V → ℝ) (X : ℕ → V) :
     trapRule G r C K N ε ξ X ∈ ruleSet G r C K N ε ξ X :=

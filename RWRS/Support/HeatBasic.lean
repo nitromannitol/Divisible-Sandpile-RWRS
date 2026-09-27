@@ -12,6 +12,8 @@ namespace RWRS.Support
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
+/-- The transition kernel `heat G k x y` is nonnegative for every `k`, by induction on `k`
+using that a sum and ratio of nonnegative terms is nonnegative. -/
 theorem heat_nonneg : ∀ (k : ℕ) (x y : V), 0 ≤ heat G k x y := by
   intro k
   induction k with
@@ -21,6 +23,8 @@ theorem heat_nonneg : ∀ (k : ℕ) (x y : V), 0 ≤ heat G k x y := by
       rw [heat_succ]
       exact div_nonneg (Finset.sum_nonneg fun z _ => ih z y) (Nat.cast_nonneg _)
 
+/-- **Chapman--Kolmogorov lower bound.** Passing through the single intermediate vertex `y`
+underestimates the full `(a + b)`-step kernel: `heat G a x y * heat G b y z ≤ heat G (a+b) x z`. -/
 theorem heat_ge_mul [Infinite V] (hG : G.Connected) :
     ∀ (a b : ℕ) (x y z : V), heat G a x y * heat G b y z ≤ heat G (a + b) x z := by
   intro a
@@ -41,6 +45,8 @@ theorem heat_ge_mul [Infinite V] (hG : G.Connected) :
         div_mul_eq_mul_div]
       gcongr
 
+/-- Along any actual walk `p` from `x` to `y`, the kernel at time `p.length` is strictly
+positive, by induction along the edges of `p`. -/
 theorem heat_pos_of_walk [Infinite V] (hG : G.Connected) :
     ∀ {x y : V} (p : G.Walk x y), 0 < heat G p.length x y := by
   intro x y p
@@ -53,6 +59,9 @@ theorem heat_pos_of_walk [Infinite V] (hG : G.Connected) :
       exact Finset.single_le_sum (f := fun s => heat G p.length s z)
         (fun s _ => heat_nonneg _ s z) ((SimpleGraph.mem_neighborFinset _ _ _).mpr h)
 
+/-- **Transience transfers along the graph.**  If the heat-kernel series returning to `o`
+is finite, then so is the series from any other vertex `v` to `o`, using a walk from `o`
+to `v` and `heat_ge_mul` to compare the two series. -/
 theorem green_ne_top_transfer [Infinite V] (hG : G.Connected) {o : V}
     (h : (∑' k : ℕ, ENNReal.ofReal (heat G k o o)) ≠ ⊤) (v : V) :
     (∑' k : ℕ, ENNReal.ofReal (heat G k v o)) ≠ ⊤ := by
@@ -75,9 +84,12 @@ theorem green_ne_top_transfer [Infinite V] (hG : G.Connected) {o : V}
   rw [hcon, ENNReal.mul_top (by simpa using (ENNReal.ofReal_pos.mpr hc).ne')] at hsum
   exact h (top_le_iff.mp hsum)
 
+/-- Unfolds the definition of `green` as the heat-kernel series divided by `deg y`. -/
 theorem green_eq_div (x y : V) :
     green G x y = (∑' k : ℕ, ENNReal.ofReal (heat G k x y)) / (G.degree y : ℝ≥0∞) := rfl
 
+/-- `green G x y` is finite iff the underlying heat-kernel series is finite, since dividing
+by the finite positive degree `deg y` cannot itself create infinity. -/
 theorem green_ne_top_iff [Infinite V] (hG : G.Connected) (x y : V) :
     green G x y ≠ ⊤ ↔ (∑' k : ℕ, ENNReal.ofReal (heat G k x y)) ≠ ⊤ := by
   have hd : (G.degree y : ℝ≥0∞) ≠ 0 := by

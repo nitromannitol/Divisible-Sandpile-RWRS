@@ -9,6 +9,12 @@ Lemma 5.1 of `rwrs.tex`, frozen.  `rwrs.tex:531-536` (label
 The supremum `sup_v g_n(x,v)` and the fluctuation scale `Σ_n(x)` are taken in
 `[0,∞]`, so neither is a junk real; the quotients are `[0,∞]`-quotients, and
 the hypothesis `A_n(x)→∞` makes the denominators eventually positive.
+
+The paper's own statement also carries the vanishing of the return probability
+(`rwrs.tex:319-322`) as a standing hypothesis; the proof below reaches its
+conclusion from the escape probability of the walk without using it, and the
+fact is in any case proved outright in `RWRS/External/HeatKernelVanishing.lean`,
+so it is not a hypothesis here.
 -/
 import RWRS.External.HeatKernelVanishing
 import RWRS.Support.ClockRatio
@@ -17,12 +23,8 @@ open Filter Topology
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
--- The proof below reaches the conclusion from the escape probability of the
--- walk and does not use the assumed vanishing of the return probability, so
--- that hypothesis of the statement is not referred to.
-set_option linter.unusedVariables false in
 -- FROZEN-STATEMENT-BEGIN
-theorem RWRS.Frozen.clockNoDominance (hHKV : RWRS.External.HeatKernelVanishing G)
+theorem RWRS.Frozen.clockNoDominance
     [Infinite V] (hG : G.Connected) (x : V)
     (hA : Tendsto (fun n : ℕ => RWRS.clock G n x) atTop atTop) :
     Tendsto (fun n : ℕ => RWRS.supGreenTime G n x / ENNReal.ofReal (RWRS.clock G n x))

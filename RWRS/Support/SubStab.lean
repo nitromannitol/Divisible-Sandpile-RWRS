@@ -39,10 +39,14 @@ theorem lintegral_rpow_ge {Ω : Type*} [MeasurableSpace Ω] (μ : Measure Ω)
 
 /-! ### The law of the excess -/
 
+/-- The positive part of the excess law `ν.map (· - 1)` is `∫ ofReal (z - 1) dν`, by change of
+variables. -/
 theorem posPart_map_sub_one (ν : Measure ℝ) :
     RWRS.posPart (ν.map (fun z : ℝ => z - 1)) = ∫⁻ z, ENNReal.ofReal (z - 1) ∂ν :=
   lintegral_map ENNReal.measurable_ofReal (measurable_id.sub_const 1)
 
+/-- The negative part of the excess law `ν.map (· - 1)` is `∫ ofReal (1 - z) dν`, by change of
+variables. -/
 theorem negPart_map_sub_one (ν : Measure ℝ) :
     RWRS.negPart (ν.map (fun z : ℝ => z - 1)) = ∫⁻ z, ENNReal.ofReal (1 - z) ∂ν := by
   have h : RWRS.negPart (ν.map (fun z : ℝ => z - 1))
@@ -53,16 +57,22 @@ theorem negPart_map_sub_one (ν : Measure ℝ) :
   congr 1
   ring
 
+/-- Shifting by `-1` cannot increase the positive part: `posPart` of the excess law is at most
+`posPart ν`, by `posPart_map_sub_one` and `z - 1 ≤ z`. -/
 theorem posPart_map_sub_one_le (ν : Measure ℝ) :
     RWRS.posPart (ν.map (fun z : ℝ => z - 1)) ≤ RWRS.posPart ν := by
   rw [posPart_map_sub_one]
   exact lintegral_mono fun z => ENNReal.ofReal_le_ofReal (by linarith)
 
+/-- Shifting by `-1` cannot decrease the negative part: `negPart ν` is at most `negPart` of the
+excess law, by `negPart_map_sub_one` and `1 - z ≥ -z`. -/
 theorem negPart_le_map_sub_one (ν : Measure ℝ) :
     RWRS.negPart ν ≤ RWRS.negPart (ν.map (fun z : ℝ => z - 1)) := by
   rw [negPart_map_sub_one]
   exact lintegral_mono fun z => ENNReal.ofReal_le_ofReal (by linarith)
 
+/-- If `negPart ν` is finite, so is the negative part of the excess law `ν.map (· - 1)`, via the
+subadditive bound `1 - z ≤ 1 + (-z)` and `ENNReal.ofReal_add_le`. -/
 theorem negPart_map_sub_one_ne_top (ν : Measure ℝ) [IsProbabilityMeasure ν]
     (hn : RWRS.negPart ν ≠ ⊤) : RWRS.negPart (ν.map (fun z : ℝ => z - 1)) ≠ ⊤ := by
   have hle : RWRS.negPart (ν.map (fun z : ℝ => z - 1)) ≤ 1 + RWRS.negPart ν := by
@@ -144,7 +154,6 @@ moment of the odometer is finite, uniformly in the vertex, for
 `q ∈ [1,(p-1)/2)`. -/
 theorem lintegral_odometerLimit_rpow_ne_top [Infinite V] [MeasurableSpace V]
     [MeasurableSingletonClass V] [Countable V] [DecidableEq V] (hG : G.Connected)
-    (hVBE : RWRS.External.VonBahrEsseen) (hFNt : RWRS.External.FukNagaevTail)
     (d : ℕ) (hbd : RWRS.BoundedDegree G d) {A : ℝ}
     (hsp : RWRS.SpectralDimensionBound G 1 A)
     (ν : Measure ℝ) [IsProbabilityMeasure ν] (hmean : RWRS.extMean ν < 1)
@@ -166,7 +175,7 @@ theorem lintegral_odometerLimit_rpow_ne_top [Infinite V] [MeasurableSpace V]
   have hqθ : q < (p - 1) * min ((1:ℝ) / 2) 1 := by
     rw [min_eq_left (by norm_num)]
     linarith [hq2]
-  have hbig := lintegral_supPayoff_rpow_ne_top (G := G) hG hVBE hFNt d hbd
+  have hbig := lintegral_supPayoff_rpow_ne_top (G := G) hG d hbd
     (by norm_num : (0:ℝ) < 1) hsp ν' hmean' hpds hmom' hq1 hqθ
   refine ne_top_of_le_ne_top hbig (iSup_le fun v => ?_)
   haveI : IsProbabilityMeasure (RWRS.walkLaw G v) := by rw [walkLaw_eq_lib]; infer_instance

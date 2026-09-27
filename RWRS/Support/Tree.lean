@@ -14,6 +14,9 @@ open scoped Classical
 
 /-! ### A cut function makes an edge a bridge -/
 
+/-- If `φ` is a cut function isolating the edge `s(u, v)` — every `G`-edge crossing its
+values equals `s(u, v)` — then every walk between two points of different `φ`-value passes
+through `s(u, v)`. -/
 theorem mem_edges_of_cut {V : Type*} {G : SimpleGraph V} {u v : V} (φ : V → Bool)
     (hcut : ∀ a c : V, G.Adj a c → φ a ≠ φ c → s(a, c) = s(u, v)) :
     ∀ {a c : V} (p : G.Walk a c), φ a ≠ φ c → s(u, v) ∈ p.edges := by
@@ -27,6 +30,8 @@ theorem mem_edges_of_cut {V : Type*} {G : SimpleGraph V} {u v : V} (φ : V → B
       · rw [SimpleGraph.Walk.edges_cons, ← hcut a m hadj hac]
         exact List.mem_cons_self
 
+/-- A cut function separating `u` (`φ = false`) from `v` (`φ = true`) certifies that
+`s(u, v)` is a bridge of `G`, via `mem_edges_of_cut`. -/
 theorem isBridge_of_cut {V : Type*} {G : SimpleGraph V} {u v : V} (φ : V → Bool)
     (hu : φ u = false) (hv : φ v = true)
     (hcut : ∀ a c : V, G.Adj a c → φ a ≠ φ c → s(a, c) = s(u, v)) :
@@ -46,10 +51,12 @@ def ValidWord (w : List ℕ) : Prop := ∀ i (h : i < w.length), w[i] < b i
 /-- A vertex of the spherically symmetric tree with `b n` children at depth `n`. -/
 abbrev TreeV : Type := {w : List ℕ // ValidWord b w}
 
+/-- The empty word is a valid vertex of the tree, vacuously. -/
 theorem valid_nil : ValidWord b [] := by
   intro i h
   simp at h
 
+/-- Appending a letter `j < b w.length` to a valid word `w` keeps the result valid. -/
 theorem valid_append {w : List ℕ} (hw : ValidWord b w) {j : ℕ} (hj : j < b w.length) :
     ValidWord b (w ++ [j]) := by
   intro i h
@@ -71,9 +78,13 @@ def treeGraph : SimpleGraph (TreeV b) where
       · have := congrArg List.length hj
         simp at this⟩
 
+/-- Adjacency in `treeGraph` unfolds to its definition: `q` extends `p` by one letter, or
+vice versa. -/
 theorem treeGraph_adj_iff {p q : TreeV b} :
     (treeGraph b).Adj p q ↔ (∃ j, q.1 = p.1 ++ [j]) ∨ (∃ j, p.1 = q.1 ++ [j]) := Iff.rfl
 
+/-- Dropping the last letter of a valid word keeps it valid, since validity only constrains
+a strict prefix of positions. -/
 theorem valid_dropLast {w : List ℕ} (hw : ValidWord b w) : ValidWord b w.dropLast := by
   intro i h
   have hlen : w.dropLast.length = w.length - 1 := @List.length_dropLast _ w
@@ -81,6 +92,8 @@ theorem valid_dropLast {w : List ℕ} (hw : ValidWord b w) : ValidWord b w.dropL
   rw [List.getElem_dropLast]
   exact hw i hi
 
+/-- `treeGraph b` is locally finite: the neighbors of any vertex lie in the finite set
+consisting of its parent (`dropLast`) together with its at most `b (v.1.length)` children. -/
 noncomputable instance treeLocallyFinite : (treeGraph b).LocallyFinite := fun p => by
   classical
   refine Set.Finite.fintype (Set.Finite.subset (s := Subtype.val ⁻¹'
@@ -100,6 +113,8 @@ noncomputable instance treeLocallyFinite : (treeGraph b).LocallyFinite := fun p 
       rw [hj]
       simp
 
+/-- Every vertex is reachable from the root `[]` in `treeGraph`, by induction on its word
+length, stepping up through `dropLast` at each stage. -/
 theorem reachable_root : ∀ (n : ℕ) (p : TreeV b), p.1.length = n →
     (treeGraph b).Reachable ⟨[], valid_nil b⟩ p := by
   intro n
@@ -121,6 +136,8 @@ theorem reachable_root : ∀ (n : ℕ) (p : TreeV b), p.1.length = n →
         Or.inl ⟨p.1.getLast hne, (List.dropLast_append_getLast hne).symm⟩
       exact (ih w hlen).trans hadj.reachable
 
+/-- `TreeV b` is infinite whenever every depth admits at least one child (`b i > 0` for all
+`i`), by injecting `ℕ` as the constant-`0` words of each length. -/
 theorem treeInfinite (hb : ∀ i, 0 < b i) : Infinite (TreeV b) := by
   refine Infinite.of_injective (fun n : ℕ => (⟨List.replicate n 0, ?_⟩ : TreeV b)) ?_
   · intro i hi
@@ -130,11 +147,15 @@ theorem treeInfinite (hb : ∀ i, 0 < b i) : Infinite (TreeV b) := by
     have := congrArg (fun w => w.1.length) hac
     simpa using this
 
+/-- `treeGraph b` is connected: every vertex reaches the root by `reachable_root`, hence any
+two vertices reach each other. -/
 theorem treeConnected : (treeGraph b).Connected := by
   haveI : Nonempty (TreeV b) := ⟨⟨[], valid_nil b⟩⟩
   refine ⟨fun p q => ?_⟩
   exact ((reachable_root b p.1.length p rfl).symm).trans (reachable_root b q.1.length q rfl)
 
+/-- `treeGraph b` is acyclic: every edge `s(p, q)` with `q` a one-letter extension of `p` is
+a bridge, certified by the cut function `r ↦ decide (q.1 <+: r.1)` via `isBridge_of_cut`. -/
 theorem treeAcyclic : (treeGraph b).IsAcyclic := by
   classical
   have key : ∀ (p q : TreeV b) (j : ℕ), q.1 = p.1 ++ [j] →
@@ -190,6 +211,7 @@ theorem treeAcyclic : (treeGraph b).IsAcyclic := by
   · rw [Sym2.eq_swap]
     exact key q p j hj
 
+/-- `treeGraph b` is a tree, bundling `treeConnected` and `treeAcyclic`. -/
 theorem treeIsTree : (treeGraph b).IsTree :=
   ⟨treeConnected b, treeAcyclic b⟩
 
@@ -199,6 +221,7 @@ theorem treeIsTree : (treeGraph b).IsTree :=
 noncomputable def childOf (v : TreeV b) (j : ℕ) : TreeV b :=
   if h : j < b v.1.length then ⟨v.1 ++ [j], valid_append b v.2 h⟩ else v
 
+/-- When `j` is a valid child index, `childOf b v j` is literally `v` with `j` appended. -/
 theorem childOf_val {v : TreeV b} {j : ℕ} (h : j < b v.1.length) :
     (childOf b v j).1 = v.1 ++ [j] := by
   rw [childOf, dif_pos h]
@@ -206,6 +229,8 @@ theorem childOf_val {v : TreeV b} {j : ℕ} (h : j < b v.1.length) :
 /-- The parent of `v`, and the root itself at the root. -/
 def parentOf (v : TreeV b) : TreeV b := ⟨v.1.dropLast, valid_dropLast b v.2⟩
 
+/-- Adjacency in `treeGraph` is exactly the child/parent relation: `w` is one of `v`'s
+children `childOf b v j`, or `v` is nonempty and `w` is its `parentOf`. -/
 theorem adj_iff_child_or_parent {v w : TreeV b} :
     (treeGraph b).Adj v w ↔
       ((∃ j, j < b v.1.length ∧ w = childOf b v j) ∨ (v.1 ≠ [] ∧ w = parentOf b v)) := by
@@ -239,10 +264,14 @@ theorem adj_iff_child_or_parent {v w : TreeV b} :
         rw [parentOf]
         exact (List.dropLast_append_getLast hne).symm⟩
 
+/-- The explicit `Finset` of `v`'s neighbors: its children `childOf b v j` for
+`j < b v.1.length`, together with its parent when `v` is not the root. -/
 noncomputable def nbrFinsetTree (v : TreeV b) : Finset (TreeV b) :=
   (Finset.range (b v.1.length)).image (childOf b v)
     ∪ (if v.1 = [] then (∅ : Finset (TreeV b)) else {parentOf b v})
 
+/-- Membership in `nbrFinsetTree` matches `treeGraph`-adjacency, unfolding both sides via
+`adj_iff_child_or_parent`. -/
 theorem mem_nbrFinsetTree {v w : TreeV b} :
     w ∈ nbrFinsetTree b v ↔ (treeGraph b).Adj v w := by
   classical
@@ -258,11 +287,15 @@ theorem mem_nbrFinsetTree {v w : TreeV b} :
     · exact Or.inl ⟨j, Finset.mem_range.mpr hj, rfl⟩
     · exact Or.inr (by rw [if_neg hv]; exact Finset.mem_singleton_self _)
 
+/-- The graph's own `neighborFinset` coincides with the explicit `nbrFinsetTree`, by
+`mem_nbrFinsetTree`. -/
 theorem neighborFinset_eq (v : TreeV b) :
     (treeGraph b).neighborFinset v = nbrFinsetTree b v := by
   ext w
   rw [SimpleGraph.mem_neighborFinset, ← mem_nbrFinsetTree]
 
+/-- `childOf b v` is injective on `Finset.range (b v.1.length)`: distinct child indices give
+words differing in their last letter. -/
 theorem childOf_injOn (v : TreeV b) :
     Set.InjOn (childOf b v) (Finset.range (b v.1.length)) := by
   intro j hj k hk hjk
@@ -271,6 +304,8 @@ theorem childOf_injOn (v : TreeV b) :
   have : v.1 ++ [j] = v.1 ++ [k] := by rw [← h1, ← h2, hjk]
   simpa using this
 
+/-- The children of `v` and its (optional) parent form disjoint sets: their word lengths
+differ from `v.1.length` in opposite directions. -/
 theorem disjoint_children_parent (v : TreeV b) :
     Disjoint ((Finset.range (b v.1.length)).image (childOf b v))
       (if v.1 = [] then (∅ : Finset (TreeV b)) else {parentOf b v}) := by
@@ -288,6 +323,8 @@ theorem disjoint_children_parent (v : TreeV b) :
     rw [hjc] at hlen2
     omega
 
+/-- The degree of `v` in `treeGraph` is `b v.1.length` plus `1` unless `v` is the root,
+combining the disjoint union `nbrFinsetTree` with `childOf_injOn`. -/
 theorem degree_eq (v : TreeV b) :
     (treeGraph b).degree v = b v.1.length + (if v.1 = [] then 0 else 1) := by
   classical
@@ -296,6 +333,9 @@ theorem degree_eq (v : TreeV b) :
     Finset.card_image_of_injOn (childOf_injOn b v), Finset.card_range]
   by_cases hv : v.1 = [] <;> simp [hv]
 
+/-- A sum of `ψ` over the word-length of `v`'s neighbors collapses to `b v.1.length` copies
+of `ψ (v.1.length + 1)` from the children, plus `ψ (v.1.length - 1)` from the parent unless
+`v` is the root. -/
 theorem sum_over_neighbors (v : TreeV b) (ψ : ℕ → ℝ) :
     ∑ y ∈ (treeGraph b).neighborFinset v, ψ y.1.length
       = b v.1.length * ψ (v.1.length + 1)

@@ -16,6 +16,8 @@ open scoped Classical
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] [Infinite V]
 
+/-- Stopping the payoff at any time bounded by `n` gives a walk expectation
+bounded by the finite-time Green function against the positive part of `ξ`. -/
 theorem walkExp_payoff_le_green (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (x : V)
     {τ : (ℕ → V) → ℕ} (hle : ∀ X, τ X ≤ n) :
     walkExp G n x (fun X => payoff G ξ (τ X) X)
@@ -48,6 +50,8 @@ theorem walkExp_payoff_le_green (hG : G.Connected) (ξ : V → ℝ) (n : ℕ) (x
   rw [greenTime, meanLocalTime, ← Finset.sum_mul]
   ring
 
+/-- The finite-time Green function is at most the full Green function, since the
+underlying sum only grows as more terms of the heat kernel are added. -/
 theorem ofReal_greenTime_le_green (hG : G.Connected) (n : ℕ) (x v : V) :
     ENNReal.ofReal (greenTime G n x v) ≤ green G x v := by
   have hd : (0 : ℝ) < (G.degree v : ℝ) := Nat.cast_pos.mpr (degree_pos hG v)
@@ -57,9 +61,15 @@ theorem ofReal_greenTime_le_green (hG : G.Connected) (n : ℕ) (x v : V) :
   exact ENNReal.div_le_div_right (ENNReal.sum_le_tsum _) _
 
 omit [Infinite V] in
+/-- The finite-time Green function is nonnegative, being a sum of nonnegative
+heat kernel values divided by a nonnegative degree. -/
 theorem greenTime_nonneg (n : ℕ) (x v : V) : 0 ≤ greenTime G n x v :=
   div_nonneg (Finset.sum_nonneg fun k _ => heat_nonneg k x v) (Nat.cast_nonneg _)
 
+/-- **The stopping value is bounded by the Green function.** The supremum of the
+walk expectation over all bounded stopping times is at most the full Green
+function against the positive part of the scenery, from `walkExp_payoff_le_green`
+and `ofReal_greenTime_le_green`. -/
 theorem supStopValue_le_green (hG : G.Connected) (ξ : V → ℝ) (o : V) :
     supStopValue G ξ o ≤ ∑' v : V, green G o v * ENNReal.ofReal (max (ξ v) 0) := by
   refine iSup_le fun n => iSup_le fun a => iSup_le fun ha => ?_
@@ -73,6 +83,9 @@ theorem supStopValue_le_green (hG : G.Connected) (ξ : V → ℝ) (o : V) :
   exact ofReal_greenTime_le_green hG n o v
 
 omit [Infinite V] in
+/-- Integrating the Green-function bound against the i.i.d. scenery law factors
+into the total Green mass times the mean positive part `posPart ν`, by Fubini
+and the marginal distribution of each coordinate. -/
 theorem lintegral_green_bound (hG : G.Connected) (o : V) (ν : MeasureTheory.Measure ℝ)
     (hν : MeasureTheory.IsProbabilityMeasure ν) :
     (∫⁻ ξ, ∑' v : V, green G o v * ENNReal.ofReal (max (ξ v) 0) ∂(iidLaw V ν))
@@ -104,6 +117,9 @@ theorem lintegral_green_bound (hG : G.Connected) (o : V) (ν : MeasureTheory.Mea
   rw [tsum_congr hstep, ENNReal.tsum_mul_right]
 
 omit [Infinite V] in
+/-- The general form of `lintegral_green_bound` for an arbitrary measurable
+function `h` in place of the positive-part function, by the same Fubini and
+marginal-distribution argument. -/
 theorem lintegral_green_bound' (hG : G.Connected) (o : V) (ν : MeasureTheory.Measure ℝ)
     (hν : MeasureTheory.IsProbabilityMeasure ν) (h : ℝ → ℝ≥0∞) (hh : Measurable h) :
     (∫⁻ σ, ∑' v : V, green G o v * h (σ v) ∂(iidLaw V ν))

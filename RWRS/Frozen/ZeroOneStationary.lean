@@ -23,7 +23,9 @@ connected rooted graphs, stationary and ergodic, so
 stabilization event is rerooting invariant, so it has probability `0` or `1`
 under each marked component; and the conditional expectation of its indicator
 is exactly the component probability, because the conditioning reads only the
-rooted graph and the marks are sampled independently of it.
+rooted graph and the marks are sampled independently of it.  The heat kernel
+decay `lem:ergodic-marked-stationary` needs is proved outright, so it is not a
+hypothesis of this lemma either.
 -/
 import RWRS.External.ErgodicDecomposition
 import RWRS.Frozen.ErgodicMarked
@@ -35,8 +37,6 @@ open MeasureTheory
 
 -- FROZEN-STATEMENT-BEGIN
 theorem RWRS.Frozen.zeroOneStationary
-    (hHKV : ∀ N : RWRS.Net 0, RWRS.NetGood N →
-      RWRS.External.HeatKernelVanishing (RWRS.netGraph N))
     (hED : RWRS.External.ErgodicDecomposition)
     (Q : Measure (RWRS.Net 0)) (hQ : IsProbabilityMeasure Q)
     (hgood : ∀ᵐ N ∂Q, RWRS.NetGood N) (hstat : RWRS.IsStationaryNet Q)
@@ -60,7 +60,7 @@ theorem RWRS.Frozen.zeroOneStationary
   have hcond := RWRS.Support.condExp_indicator_markIid Q ν K hKprob hKmeas hKid hAmeas
   have hcomp : ∀ᵐ N ∂Q, RWRS.markIid (K N) ν A = 0 ∨ RWRS.markIid (K N) ν A = 1 := by
     filter_upwards [hKae] with N hN
-    exact (RWRS.Frozen.ergodicMarked hHKV (K N) (hKprob N) hN.1 hN.2.1 hN.2.2 ν hν).2 A hAsig
+    exact (RWRS.Frozen.ergodicMarked (K N) (hKprob N) hN.1 hN.2.1 hN.2.2 ν hν).2 A hAsig
   have hqmp : Measure.QuasiMeasurePreserving RWRS.forgetMarks (RWRS.markIid Q ν) Q :=
     ⟨RWRS.Support.measurable_forgetMarks, by
       rw [RWRS.Support.map_forgetMarks_markIid Q ν]⟩

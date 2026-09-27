@@ -1,13 +1,16 @@
 /-
-External input: the Efron--Stein inequality, quoted in the proof of
+Cited input: the Efron--Stein inequality, quoted in the proof of
 `prop:critical` (`rwrs.tex:694-699`) from Efron and Stein, *The jackknife
 estimate of variance*.
 
-Assumed here.  It enters only as an explicit hypothesis of the results whose
-proofs use it.
+Proved here for every countable vertex set (`efronStein`), by applying the
+shared library's finite-product inequality to the partial integral over an
+increasing exhaustion of the index set and passing to the limit with Fatou;
+no hypothesis of any frozen statement carries it any longer.
 -/
 import RWRS.Setting
 import Mathlib.Probability.Moments.Variance
+import LatticeProb.Prob.EfronSteinCountable
 
 open MeasureTheory
 open scoped ENNReal
@@ -28,4 +31,18 @@ def RWRS.External.EfronStein (V : Type*) : Prop :=
     ProbabilityTheory.evariance F (RWRS.iidLaw V ν)
       ≤ (∑' v : V, ∫⁻ ξ, ∫⁻ t, ENNReal.ofReal ((F ξ - F (RWRS.resample ξ v t)) ^ 2) ∂ν
           ∂(RWRS.iidLaw V ν)) / 2
+
+/-- The Efron--Stein inequality for a countable i.i.d. field.
+Cited in `rwrs.tex:694-699`; proved by the shared library. -/
+theorem RWRS.External.efronStein (V : Type*) [Countable V] :
+    RWRS.External.EfronStein V
 -- FROZEN-STATEMENT-END
+:= by
+  classical
+  intro ν hν F hFm hF2
+  haveI := hν
+  have hres : ∀ (ξ : V → ℝ) (v : V) (t : ℝ),
+      RWRS.resample ξ v t = Function.update ξ v t := fun ξ v t => by
+    funext w; by_cases h : w = v <;> simp [RWRS.resample, h]
+  simp only [hres, RWRS.iidLaw] at hF2 ⊢
+  exact LatticeProb.evariance_le_half_sum_resample ν F hFm hF2

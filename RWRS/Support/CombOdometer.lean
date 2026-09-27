@@ -4,6 +4,16 @@ import RWRS.Support.NestedLower
 import RWRS.Support.IidMap
 import RWRS.Frozen.CombEstimates
 
+/-!
+# Comb sums and odometer divergence
+
+Realizes the comb `D_{w,n}` as a finite set of sites of the tree of pipes and
+identifies its comb sum against the killed Green function with the comb
+voltage sum of `prop:comb-estimates`. Combines this identification with the
+nested lower bound on the odometer to show that a good pipe at every
+sufficiently large level forces the odometer at the root to be infinite.
+-/
+
 namespace RWRS.Support
 
 open Filter MeasureTheory
@@ -20,6 +30,8 @@ noncomputable def combFinsetSub (B : ℕ) (L : ℕ → ℕ) (n : ℕ) (w : List 
     Finset (pipeSites B L) :=
   (combFinset B L n w).subtype (fun v => v ∈ pipeSites B L)
 
+/-- The coercion of `combFinsetSub` to a set of sites of the tree of pipes is the
+preimage of the comb `combSet` under the inclusion `Subtype.val`. -/
 theorem coe_combFinsetSub {L : ℕ → ℕ} (n : ℕ) (w : List (Fin B)) :
     ((combFinsetSub B L n w : Finset (pipeSites B L)) : Set (pipeSites B L))
       = Subtype.val ⁻¹' (combSet B L n w) := by
@@ -27,6 +39,8 @@ theorem coe_combFinsetSub {L : ℕ → ℕ} (n : ℕ) (w : List (Fin B)) :
   simp only [Set.mem_preimage, Finset.mem_coe, combFinsetSub, Finset.mem_subtype]
   rw [← Finset.mem_coe, coe_combFinset]
 
+/-- The image of `combFinsetSub` under `Subtype.val` recovers the ambient finset
+`combFinset`, the two-sided companion to `coe_combFinsetSub`. -/
 theorem image_combFinsetSub {L : ℕ → ℕ} (n : ℕ) (w : List (Fin B)) :
     (combFinsetSub B L n w).image Subtype.val = combFinset B L n w := by
   ext u
@@ -72,6 +86,8 @@ theorem sum_combFinsetSub (n : ℕ) (w : List (Fin B))
   exact (Finset.sum_image (f := fun u : List (Fin B) × ℕ =>
     combVoltage B (combLen B α) false n w u * a u) (fun x _ y _ h => Subtype.ext h)).symm
 
+/-- An extended nonnegative real dominating `ENNReal.ofReal M` for every real `M`
+must be `⊤`, since otherwise `M = x.toReal + 1` gives a contradiction. -/
 theorem eq_top_of_forall_ofReal_le {x : ℝ≥0∞} (h : ∀ M : ℝ, ENNReal.ofReal M ≤ x) : x = ⊤ := by
   by_contra hx
   have hM := h (x.toReal + 1)

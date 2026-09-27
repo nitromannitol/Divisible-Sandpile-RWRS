@@ -21,6 +21,8 @@ variable {V : Type*} {ν : Measure ℝ} [IsProbabilityMeasure ν]
 noncomputable def finsetEquiv (S : Finset V) : Fin S.card ≃ ((S : Set V) : Type _) :=
   S.equivFin.symm.trans (Equiv.subtypeEquivRight fun _ => Finset.mem_coe.symm)
 
+/-- The bijection `finsetEquiv` lands in `S`, unfolding to membership of the
+underlying subtype coordinate. -/
 theorem finsetEquiv_mem (S : Finset V) (j : Fin S.card) :
     ((finsetEquiv S j : (S : Set V)) : V) ∈ S :=
   (finsetEquiv S j).2

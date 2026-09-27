@@ -15,9 +15,12 @@ namespace RWRS.Support
 
 open Filter
 
+/-- `log R` tends to infinity as the natural number `R` tends to infinity. -/
 theorem tendsto_log_natCast : Tendsto (fun R : ℕ => Real.log R) atTop atTop :=
   Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop
 
+/-- `a / log R` tends to `0` as `R` tends to infinity, for any fixed real `a`, using
+`tendsto_log_natCast`. -/
 theorem tendsto_const_div_log (a : ℝ) :
     Tendsto (fun R : ℕ => a / Real.log R) atTop (nhds 0) := by
   have h := tendsto_log_natCast.inv_tendsto_atTop

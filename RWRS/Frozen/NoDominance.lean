@@ -12,6 +12,12 @@ The maximum is the supremum of the nonnegative numbers `g_n(o,v)`, taken in
 The divergence `Σ_n(o) → ∞` is convergence to `⊤` in the order topology
 of `[0,∞]`, written `Tendsto Σ atTop (𝓝 ⊤)`. It means that every finite
 threshold is eventually exceeded.
+
+The paper's own statement also carries the vanishing of the return probability
+(`rwrs.tex:319-322`) as a standing hypothesis; the proof below reaches its
+conclusion from the escape probability of the walk and the first-visit
+comparison without using it, and the fact is in any case proved outright in
+`RWRS/External/HeatKernelVanishing.lean`, so it is not a hypothesis here.
 -/
 import RWRS.External.HeatKernelVanishing
 import RWRS.Support.ClockRatio
@@ -21,13 +27,8 @@ open Filter Topology
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
--- The proof below reaches the conclusion from the escape probability of the
--- walk and the first-visit comparison, and does not use the assumed vanishing
--- of the return probability, so that hypothesis of the statement is not
--- referred to.
-set_option linter.unusedVariables false in
 -- FROZEN-STATEMENT-BEGIN
-theorem RWRS.Frozen.noDominance (hHKV : RWRS.External.HeatKernelVanishing G)
+theorem RWRS.Frozen.noDominance
     [Infinite V] (hG : G.Connected) (o : V)
     (hSigma : Tendsto (fun n : ℕ => RWRS.fluct G n o) atTop (𝓝 ⊤)) :
     Tendsto (fun n : ℕ => RWRS.supGreenTime G n o ^ 2 / RWRS.fluct G n o) atTop (𝓝 0)

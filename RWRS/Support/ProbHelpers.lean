@@ -2,6 +2,15 @@ import RWRS.Support.CombOdometer
 import RWRS.Support.Measurability
 import RWRS.Support.WeakLaw
 
+/-!
+# Two small probability lemmas
+
+This module collects two general-purpose probability facts used throughout
+the development: a set that almost surely contains the sample point has
+probability one, and, for an i.i.d. field, if the one-site marginal almost
+surely lands in a measurable set then almost surely every coordinate does.
+-/
+
 namespace RWRS.Support
 
 open MeasureTheory Filter

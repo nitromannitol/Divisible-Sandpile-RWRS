@@ -2,12 +2,25 @@ import RWRS.Support.CombExists
 import RWRS.Support.GadgetBall
 import RWRS.Support.CombArith
 
+/-!
+# Choosing the next gadget depth
+
+The gadget radius `gadgetRadius (combLen B α) M` sums the comb lengths up through depth `M`,
+so it is at least `M` and, together with every one of its positive real powers, tends to
+infinity as `M → ∞`. `exists_next_gadget` uses this growth to find, past any given depth
+`M0`, a further depth `M` whose radius simultaneously satisfies the three recursive growth
+conditions `eq:rec-cond-sep`, `eq:rec-cond-vol` and `eq:rec-cond-div` that the gadget
+construction needs at every step.
+-/
+
 namespace RWRS.Support
 
 open Filter
 
 variable {B : ℕ} {α : ℝ}
 
+/-- `gadgetRadius (combLen B α) M ≥ M`, since it sums `M` terms each at least `1` by
+`one_le_combLen`. -/
 theorem le_gadgetRadius (hc : CombCond B α) (M : ℕ) :
     M ≤ gadgetRadius (combLen B α) M := by
   have h : ∀ j ∈ Finset.Icc 1 M, 1 ≤ combLen B α j := fun j _ => one_le_combLen hc j
@@ -15,11 +28,15 @@ theorem le_gadgetRadius (hc : CombCond B α) (M : ℕ) :
     _ ≤ ∑ j ∈ Finset.Icc 1 M, combLen B α j := Finset.sum_le_sum h
     _ = gadgetRadius (combLen B α) M := rfl
 
+/-- `gadgetRadius (combLen B α) M → ∞` as `M → ∞`, since it dominates the identity by
+`le_gadgetRadius`. -/
 theorem tendsto_gadgetRadius (hc : CombCond B α) :
     Tendsto (fun M : ℕ => (gadgetRadius (combLen B α) M : ℝ)) atTop atTop := by
   refine tendsto_atTop_mono (fun M => ?_) tendsto_natCast_atTop_atTop
   exact_mod_cast le_gadgetRadius hc M
 
+/-- Any positive real power of `gadgetRadius (combLen B α) M` also tends to `∞`, composing
+`tendsto_gadgetRadius` with `tendsto_rpow_atTop`. -/
 theorem tendsto_gadgetRadius_rpow (hc : CombCond B α) {c : ℝ} (hcpos : 0 < c) :
     Tendsto (fun M : ℕ => (gadgetRadius (combLen B α) M : ℝ) ^ c) atTop atTop :=
   (tendsto_rpow_atTop hcpos).comp (tendsto_gadgetRadius hc)

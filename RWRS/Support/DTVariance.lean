@@ -51,6 +51,8 @@ theorem supStopValue_eq_iSup_value [Infinite V] (hG : G.Connected) (ξ : V → �
 noncomputable def greenSq (G : SimpleGraph V) [G.LocallyFinite] (o : V) : ℝ≥0∞ :=
   ∑' v : V, green G o v ^ 2
 
+/-- `fluct G n o` is bounded above by the total Green energy `greenSq G o`, since each
+finite-horizon Green time is at most the full Green function. -/
 theorem fluct_le_greenSq [Infinite V] (hG : G.Connected) (n : ℕ) (o : V) :
     fluct G n o ≤ greenSq G o := by
   refine ENNReal.tsum_le_tsum fun v => ?_
@@ -62,6 +64,8 @@ theorem fluct_le_greenSq [Infinite V] (hG : G.Connected) (n : ℕ) (o : V) :
 
 /-! ### The value at a finite horizon -/
 
+/-- `ξ ↦ supStopValue G ξ o` is measurable, factoring through the shift map and
+`measurable_odometerLimit`. -/
 theorem measurable_supStopValue [Infinite V] (hG : G.Connected) (o : V) :
     Measurable fun ξ : V → ℝ => supStopValue G ξ o := by
   have hfun : (fun ξ : V → ℝ => supStopValue G ξ o)
@@ -71,17 +75,23 @@ theorem measurable_supStopValue [Infinite V] (hG : G.Connected) (o : V) :
   exact (measurable_odometerLimit o).comp measurable_shift
 
 
+/-- The finite-horizon value is at most `supStopValue`, being one term of the defining
+supremum `supStopValue_eq_iSup_value`. -/
 theorem ofReal_value_le_supStopValue [Infinite V] (hG : G.Connected) (ξ : V → ℝ) (n : ℕ)
     (x : V) : ENNReal.ofReal (value G ξ n x) ≤ supStopValue G ξ x := by
   rw [supStopValue_eq_iSup_value hG]
   exact le_iSup (fun k : ℕ => ENNReal.ofReal (value G ξ k x)) n
 
+/-- `value G ξ n o` is integrable under `iidLaw V ν`, from membership in `L²` via
+`memLp_value`. -/
 theorem integrable_value [Infinite V] (hG : G.Connected) (hν : IsProbabilityMeasure ν)
     (h0 : extMean ν = 0) (hsq : evar ν < ⊤) (n : ℕ) (o : V) :
     Integrable (fun ξ : V → ℝ => value G ξ n o) (iidLaw V ν) := by
   haveI : Countable V := countable_of_connected hG
   exact (memLp_value (efronStein V) hG hν h0 hsq n o).integrable one_le_two
 
+/-- Converts the lower integral of `ENNReal.ofReal (value G ξ n o)` into `ENNReal.ofReal` of
+its real mean, using nonnegativity of the value. -/
 theorem lintegral_ofReal_value [Infinite V] (hG : G.Connected) (hν : IsProbabilityMeasure ν)
     (h0 : extMean ν = 0) (hsq : evar ν < ⊤) (n : ℕ) (o : V) :
     (∫⁻ ξ, ENNReal.ofReal (value G ξ n o) ∂(iidLaw V ν))

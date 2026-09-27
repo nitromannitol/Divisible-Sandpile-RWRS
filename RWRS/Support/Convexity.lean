@@ -20,11 +20,16 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
 /-! ### The two suprema are convex in the scenery -/
 
+/-- The payoff functional is affine in the scenery: the payoff of the midpoint
+scenery is the midpoint of the two payoffs. -/
 theorem payoff_midpoint (ξ η : V → ℝ) (n : ℕ) (X : ℕ → V) :
     payoff G (fun v => (ξ v + η v) / 2) n X = (payoff G ξ n X + payoff G η n X) / 2 := by
   rw [payoff, payoff, payoff, ← Finset.sum_add_distrib, Finset.sum_div]
   exact Finset.sum_congr rfl fun k _ => by ring
 
+/-- `walkExp` is affine in its functional: the expectation of the midpoint of
+two functionals is the midpoint of their expectations, from `walkExp_const_mul`
+and `walkExp_add`. -/
 theorem walkExp_midpoint (n : ℕ) (x : V) (F F' : (ℕ → V) → ℝ) :
     walkExp G n x (fun X => (F X + F' X) / 2)
       = (walkExp G n x F + walkExp G n x F') / 2 := by
@@ -33,6 +38,8 @@ theorem walkExp_midpoint (n : ℕ) (x : V) (F F' : (ℕ → V) → ℝ) :
   rw [h, walkExp_const_mul, walkExp_add]
   ring
 
+/-- `ENNReal.ofReal` applied to the midpoint of two reals is at most the
+midpoint of the two `ENNReal.ofReal`s, via `ENNReal.ofReal_add_le`. -/
 theorem ofReal_midpoint_le (a b : ℝ) :
     ENNReal.ofReal ((a + b) / 2) ≤ (ENNReal.ofReal a + ENNReal.ofReal b) / 2 := by
   rw [ENNReal.ofReal_div_of_pos two_pos]
@@ -40,6 +47,9 @@ theorem ofReal_midpoint_le (a b : ℝ) :
   rw [h2]
   exact ENNReal.div_le_div_right ENNReal.ofReal_add_le 2
 
+/-- `supStopValue` is convex in the scenery: the value of the midpoint scenery
+is at most the midpoint of the two values, combining `payoff_midpoint`,
+`walkExp_midpoint`, and `ofReal_midpoint_le` across the sup over stopping rules. -/
 theorem supStopValue_midpoint_le [Infinite V] (ξ η : V → ℝ) (o : V) :
     supStopValue G (fun v => (ξ v + η v) / 2) o
       ≤ (supStopValue G ξ o + supStopValue G η o) / 2 := by
@@ -55,6 +65,8 @@ theorem supStopValue_midpoint_le [Infinite V] (ξ η : V → ℝ) (o : V) :
   · exact le_iSup_of_le n (le_iSup_of_le _ (le_iSup_of_le ⟨τ, hτ, hle, rfl⟩ le_rfl))
   · exact le_iSup_of_le n (le_iSup_of_le _ (le_iSup_of_le ⟨τ, hτ, hle, rfl⟩ le_rfl))
 
+/-- `supMeanPayoff` is convex in the scenery, by the same midpoint argument as
+`supStopValue_midpoint_le`, applied to `meanPayoff` at each fixed horizon `n`. -/
 theorem supMeanPayoff_midpoint_le [Infinite V] (ξ η : V → ℝ) (o : V) :
     supMeanPayoff G (fun v => (ξ v + η v) / 2) o
       ≤ (supMeanPayoff G ξ o + supMeanPayoff G η o) / 2 := by
@@ -70,12 +82,17 @@ theorem supMeanPayoff_midpoint_le [Infinite V] (ξ η : V → ℝ) (o : V) :
 
 /-! ### The zero-one law for the value over bounded stopping rules -/
 
+/-- The optimal-stopping value of `ξ` equals the odometer limit of `ξ + 1`, via
+`RWRS.Frozen.rwInfinite` and the identity `excess_add_one`. -/
 theorem supStopValue_eq_odometerLimit [Infinite V] (hG : G.Connected) (ξ : V → ℝ) (x : V) :
     supStopValue G ξ x = odometerLimit G (fun u => ξ u + 1) x := by
   have h := RWRS.Frozen.rwInfinite hG (fun u => ξ u + 1) x
   rw [excess_add_one] at h
   exact h.symm
 
+/-- The explosion event `{supStopValue G ξ o = ⊤}` is measurable, obtained by
+shifting `ξ` by `1` and pulling back the measurability of odometer-limit
+explosion along `supStopValue_eq_odometerLimit`. -/
 theorem measurableSet_supStopValue_top [Infinite V] (hG : G.Connected) (o : V) :
     MeasurableSet {ξ : V → ℝ | supStopValue G ξ o = ⊤} := by
   have heq : {ξ : V → ℝ | supStopValue G ξ o = ⊤}
@@ -86,6 +103,9 @@ theorem measurableSet_supStopValue_top [Infinite V] (hG : G.Connected) (o : V) :
   rw [heq]
   exact measurable_shift ((measurable_odometerLimit o) (measurableSet_singleton ⊤))
 
+/-- Explosion of `supStopValue` for the excess of a scenery is invariant under
+any finitely-supported permutation of the scenery, via the two-sided bound
+`perm_sup_le` applied to `π` and to `π.symm`. -/
 theorem supStopValue_perm_iff [Infinite V] (hVF : RWRS.External.VoltageFunction G)
     (hG : G.Connected) (σ : V → ℝ) (π : Equiv.Perm V) (hfin : {i : V | π i ≠ i}.Finite)
     (o : V) :
@@ -109,6 +129,10 @@ theorem supStopValue_perm_iff [Infinite V] (hVF : RWRS.External.VoltageFunction 
     · exact h2
     · exact absurd h2 ENNReal.ofReal_ne_top
 
+/-- **A zero-one law for explosion.**  Under `iidLaw`, the explosion event of
+`supStopValue` has probability `0` or `1`, by exchangeability
+(`LatticeProb.measure_zero_or_one_of_exchangeable`) using the permutation
+invariance of `supStopValue_perm_iff`. -/
 theorem measure_supStopValue_top_zero_or_one [Infinite V]
     (hVF : RWRS.External.VoltageFunction G) (hG : G.Connected)
     (ν : Measure ℝ) [IsProbabilityMeasure ν] (o : V) :
@@ -130,11 +154,15 @@ open scoped Classical in
 noncomputable def flipAt (M z : ℝ) : ℝ := if |z| ≤ M then z else -z
 
 open scoped Classical in
+/-- `flipAt M` is measurable, since it agrees with the identity or with its
+negation on the measurable set `{z | |z| ≤ M}`. -/
 theorem measurable_flipAt (M : ℝ) : Measurable (flipAt M) := by
   unfold flipAt
   exact Measurable.ite (measurableSet_le (by fun_prop) measurable_const) measurable_id
     measurable_neg
 
+/-- The truncation `trunc M z` is the midpoint of `z` and its reflection
+`flipAt M z`. -/
 theorem trunc_eq_midpoint (M z : ℝ) : trunc M z = (z + flipAt M z) / 2 := by
   classical
   unfold trunc flipAt
@@ -142,6 +170,7 @@ theorem trunc_eq_midpoint (M z : ℝ) : trunc M z = (z + flipAt M z) / 2 := by
   · ring
   · ring
 
+/-- `flipAt M` is an odd function: `flipAt M (-z) = -flipAt M z`. -/
 theorem flipAt_neg (M z : ℝ) : flipAt M (-z) = -flipAt M z := by
   classical
   unfold flipAt
@@ -150,6 +179,7 @@ theorem flipAt_neg (M z : ℝ) : flipAt M (-z) = -flipAt M z := by
   · rfl
   · ring
 
+/-- `trunc M` is an odd function: `trunc M (-z) = -trunc M z`. -/
 theorem trunc_neg (M z : ℝ) : trunc M (-z) = -trunc M z := by
   classical
   unfold trunc
@@ -158,6 +188,9 @@ theorem trunc_neg (M z : ℝ) : trunc M (-z) = -trunc M z := by
   · rfl
   · ring
 
+/-- The pushforward of a symmetric measure `ν` under `flipAt M` is `ν` itself,
+since `flipAt M` only negates the part of the mass outside `[-M,M]`, and
+symmetry leaves that part's total measure unchanged. -/
 theorem map_flipAt (ν : Measure ℝ) (hsym : IsSymmetric ν) (M : ℝ) :
     ν.map (flipAt M) = ν := by
   classical
@@ -200,15 +233,22 @@ theorem map_flipAt (ν : Measure ℝ) (hsym : IsSymmetric ν) (M : ℝ) :
 
 /-! ### The bounded truncation of a symmetric marginal -/
 
+/-- For a symmetric measure `ρ`, integrating `f` and integrating `f ∘ Neg.neg`
+against `ρ` agree, since `ρ` is invariant under negation. -/
 theorem lintegral_of_symmetric {ρ : Measure ℝ} (hsym : IsSymmetric ρ) {f : ℝ → ℝ≥0∞}
     (hf : Measurable f) : ∫⁻ z, f z ∂ρ = ∫⁻ z, f (-z) ∂ρ := by
   conv_lhs => rw [← hsym]
   rw [lintegral_map hf measurable_neg]
 
+/-- For a symmetric measure, the positive and negative parts of its mean
+integral agree, from `lintegral_of_symmetric` applied to `ENNReal.ofReal`. -/
 theorem posPart_eq_negPart_of_symmetric {ρ : Measure ℝ} (hsym : IsSymmetric ρ) :
     posPart ρ = negPart ρ := by
   rw [posPart, negPart, lintegral_of_symmetric hsym ENNReal.measurable_ofReal]
 
+/-- A symmetric measure with finite positive part has extended mean `0`, since
+its positive and negative parts (`posPart_eq_negPart_of_symmetric`) then
+cancel exactly. -/
 theorem extMean_eq_zero_of_symmetric {ρ : Measure ℝ} (hsym : IsSymmetric ρ)
     (hfin : posPart ρ ≠ ⊤) : extMean ρ = 0 := by
   have hpn := posPart_eq_negPart_of_symmetric hsym
@@ -217,6 +257,8 @@ theorem extMean_eq_zero_of_symmetric {ρ : Measure ℝ} (hsym : IsSymmetric ρ)
   rw [extMean, ← hpn, ← hcoe, ← EReal.coe_sub]
   norm_num
 
+/-- The pushforward of a symmetric measure under `trunc M` is again symmetric,
+since `trunc M` commutes with negation by `trunc_neg`. -/
 theorem isSymmetric_map_trunc (ν : Measure ℝ) (hsym : IsSymmetric ν) (M : ℝ) :
     IsSymmetric (ν.map (trunc M)) := by
   rw [IsSymmetric, Measure.map_map measurable_neg (measurable_trunc M)]
@@ -226,12 +268,16 @@ theorem isSymmetric_map_trunc (ν : Measure ℝ) (hsym : IsSymmetric ν) (M : �
     rw [trunc_neg]
   rw [h, ← Measure.map_map (measurable_trunc M) measurable_neg, hsym]
 
+/-- Almost every point of the truncated pushforward measure satisfies `|z| ≤ M`,
+from the pointwise bound `abs_trunc_le`. -/
 theorem ae_abs_le_map_trunc (ν : Measure ℝ) [IsProbabilityMeasure ν] {M : ℝ} (hM : 0 ≤ M) :
     ∀ᵐ z ∂(ν.map (trunc M)), |z| ≤ M := by
   rw [ae_map_iff (measurable_trunc M).aemeasurable
     (measurableSet_le (by fun_prop) measurable_const)]
   exact Filter.Eventually.of_forall fun z => abs_trunc_le hM z
 
+/-- The positive part of the truncated pushforward measure is finite, bounded
+by `M` using the a.e. bound `ae_abs_le_map_trunc`. -/
 theorem posPart_map_trunc_ne_top (ν : Measure ℝ) [IsProbabilityMeasure ν] {M : ℝ}
     (hM : 0 ≤ M) : posPart (ν.map (trunc M)) ≠ ⊤ := by
   refine ne_top_of_le_ne_top (b := ENNReal.ofReal M) ENNReal.ofReal_ne_top ?_
@@ -246,6 +292,8 @@ theorem posPart_map_trunc_ne_top (ν : Measure ℝ) [IsProbabilityMeasure ν] {M
           Measure.isProbabilityMeasure_map (measurable_trunc M).aemeasurable
         rw [lintegral_const, measure_univ, mul_one]
 
+/-- The variance of the truncated pushforward measure is finite, since `id` is
+square-integrable on the a.e.-bounded support given by `ae_abs_le_map_trunc`. -/
 theorem evar_map_trunc_lt_top (ν : Measure ℝ) [IsProbabilityMeasure ν] {M : ℝ}
     (hM : 0 ≤ M) : evar (ν.map (trunc M)) < ⊤ := by
   haveI : IsProbabilityMeasure (ν.map (trunc M)) :=
@@ -260,6 +308,7 @@ theorem evar_map_trunc_lt_top (ν : Measure ℝ) [IsProbabilityMeasure ν] {M : 
   rw [abs_pow, sq_abs]
   nlinarith [abs_nonneg z, sq_abs z]
 
+/-- A probability measure supported a.e. on `{0}` is the Dirac mass at `0`. -/
 theorem eq_dirac_of_ae_zero (ν : Measure ℝ) [IsProbabilityMeasure ν]
     (h : ν {z : ℝ | z ≠ 0} = 0) : ν = Measure.dirac 0 := by
   refine Measure.ext fun A hA => ?_
@@ -292,6 +341,9 @@ theorem eq_dirac_of_ae_zero (ν : Measure ℝ) [IsProbabilityMeasure ν]
       · exact fun hz => absurd hz (Set.notMem_empty z)
     rw [hAi, measure_empty, Set.indicator_of_notMem h0]
 
+/-- For a non-degenerate probability measure there is a truncation level `M > 0`
+at which `trunc M z` is still nonzero on a set of positive measure, since the
+sets `{trunc (k+1) z ≠ 0}` exhaust `{z ≠ 0}` as `k → ∞`. -/
 theorem exists_trunc_level (ν : Measure ℝ) [IsProbabilityMeasure ν]
     (hnz : ν ≠ Measure.dirac 0) :
     ∃ M : ℝ, 0 < M ∧ 0 < ν {z : ℝ | trunc M z ≠ 0} := by
@@ -316,6 +368,8 @@ theorem exists_trunc_level (ν : Measure ℝ) [IsProbabilityMeasure ν]
   refine measure_iUnion_null fun k => ?_
   exact le_antisymm (hcon ((k : ℝ) + 1) (by positivity)) bot_le
 
+/-- Positive mass on `{trunc M z ≠ 0}` under `ν` transfers to positive mass on
+`{z ≠ 0}` under the pushforward measure `ν.map (trunc M)`. -/
 theorem measure_map_trunc_ne_zero (ν : Measure ℝ) [IsProbabilityMeasure ν] {M : ℝ}
     (hpos : 0 < ν {z : ℝ | trunc M z ≠ 0}) :
     0 < (ν.map (trunc M)) {z : ℝ | z ≠ 0} := by
@@ -323,6 +377,11 @@ theorem measure_map_trunc_ne_zero (ν : Measure ℝ) [IsProbabilityMeasure ν] {
   rw [Measure.map_apply (measurable_trunc M) hms]
   exact hpos
 
+/-- **Positivity of the truncated variance.**  If a symmetric measure survives
+truncation at level `M` with positive mass, the truncated pushforward has
+strictly positive variance: its mean is `0` by `extMean_eq_zero_of_symmetric`,
+so zero variance would force it to be a Dirac mass at `0`, contradicting the
+surviving mass. -/
 theorem evar_map_trunc_pos (ν : Measure ℝ) [IsProbabilityMeasure ν] (hsym : IsSymmetric ν)
     {M : ℝ} (hM : 0 ≤ M) (hpos : 0 < ν {z : ℝ | trunc M z ≠ 0}) :
     0 < evar (ν.map (trunc M)) := by
@@ -348,10 +407,12 @@ theorem evar_map_trunc_pos (ν : Measure ℝ) [IsProbabilityMeasure ν] (hsym : 
 
 /-! ### The reduction -/
 
+/-- Applying `trunc M` pointwise to a scenery `ξ : V → ℝ` is a measurable map. -/
 theorem measurable_truncMap (M : ℝ) :
     Measurable fun ξ : V → ℝ => (fun v => trunc M (ξ v)) :=
   measurable_pi_lambda _ fun v => (measurable_trunc M).comp (measurable_pi_apply v)
 
+/-- Applying `flipAt M` pointwise to a scenery `ξ : V → ℝ` is a measurable map. -/
 theorem measurable_flipMap (M : ℝ) :
     Measurable fun ξ : V → ℝ => (fun v => flipAt M (ξ v)) :=
   measurable_pi_lambda _ fun v => (measurable_flipAt M).comp (measurable_pi_apply v)

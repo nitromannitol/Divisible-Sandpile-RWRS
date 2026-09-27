@@ -1,6 +1,17 @@
 import RWRS.Support.DTStageFire
 import RWRS.Support.DTStageIntegral
 
+/-!
+# Pointwise identity of rule and stage time on a hit event
+
+This module isolates the pointwise consequence of `DTStageFire`: on a stage-`i`
+hit event the capped rule's stopping time coincides with the deterministic
+stage-`i` time, so the indicator of the hit event times the trap potential at
+the rule equals the same indicator times the trap potential at the stage
+time. It is the pointwise fact behind the integral identity of
+`DTStageHitRew`.
+-/
+
 open scoped Classical
 open MeasureTheory
 

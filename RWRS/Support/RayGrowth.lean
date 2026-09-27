@@ -16,12 +16,15 @@ open scoped ENNReal
 
 variable {V : Type*} {G : SimpleGraph V}
 
+/-- Every closed ball contains at least its centre, so `1 ≤ (closedBall G o R).encard`. -/
 theorem one_le_encard_closedBall (o : V) (R : ℕ) :
     1 ≤ (RWRS.closedBall G o R).encard := by
   refine Set.one_le_encard_iff_nonempty.2 ⟨o, ?_⟩
   show G.edist o o ≤ (R : ℕ∞)
   simp
 
+/-- The natural-number cardinality of a finite closed ball is at least `1`, the
+natural-number form of `one_le_encard_closedBall`. -/
 theorem toNat_encard_pos (o : V) (R : ℕ) (hfin : (RWRS.closedBall G o R).Finite) :
     1 ≤ (RWRS.closedBall G o R).encard.toNat := by
   have hne : (RWRS.closedBall G o R).encard ≠ ⊤ := hfin.encard_lt_top.ne
@@ -31,6 +34,8 @@ theorem toNat_encard_pos (o : V) (R : ℕ) (hfin : (RWRS.closedBall G o R).Finit
   rw [← this] at h1
   exact_mod_cast h1
 
+/-- Transports an upper bound `s.encard ≤ ENNReal.ofReal x` on a finite set to the real
+inequality `(s.encard.toNat : ℝ) ≤ x`. -/
 theorem toNat_encard_le_of_le {s : Set V} (hfin : s.Finite) {x : ℝ} (hx : 0 ≤ x)
     (h : s.encard ≤ ENNReal.ofReal x) : (s.encard.toNat : ℝ) ≤ x := by
   have hne : s.encard ≠ ⊤ := hfin.encard_lt_top.ne
@@ -42,6 +47,8 @@ theorem toNat_encard_le_of_le {s : Set V} (hfin : s.Finite) {x : ℝ} (hx : 0 �
   rw [← ENNReal.ofReal_natCast] at h2
   exact (ENNReal.ofReal_le_ofReal_iff hx).1 h2
 
+/-- Transports a lower bound `ENNReal.ofReal x ≤ s.encard` on a finite set to the real
+inequality `x ≤ (s.encard.toNat : ℝ)`. -/
 theorem le_toNat_encard_of_le {s : Set V} (hfin : s.Finite) {x : ℝ}
     (h : ENNReal.ofReal x ≤ s.encard) : x ≤ (s.encard.toNat : ℝ) := by
   have hne : s.encard ≠ ⊤ := hfin.encard_lt_top.ne

@@ -26,6 +26,8 @@ section Marginal
 
 variable {ν : Measure ℝ}
 
+/-- If the extended mean vanishes then the positive part is finite, since
+`posPart ν = ⊤` would force `extMean ν = ⊤` regardless of the negative part. -/
 theorem posPart_ne_top_of_extMean_zero (h : extMean ν = 0) : posPart ν ≠ ⊤ := by
   intro hp
   rw [extMean, hp, EReal.coe_ennreal_top] at h
@@ -33,6 +35,8 @@ theorem posPart_ne_top_of_extMean_zero (h : extMean ν = 0) : posPart ν ≠ ⊤
   · rw [hn, EReal.coe_ennreal_top] at h; simp at h
   · rw [EReal.top_sub (by simpa using hn)] at h; simp at h
 
+/-- The negative part is finite when the extended mean vanishes, symmetric to
+`posPart_ne_top_of_extMean_zero`. -/
 theorem negPart_ne_top_of_extMean_zero (h : extMean ν = 0) : negPart ν ≠ ⊤ := by
   intro hn
   rw [extMean, hn, EReal.coe_ennreal_top] at h
@@ -40,10 +44,15 @@ theorem negPart_ne_top_of_extMean_zero (h : extMean ν = 0) : negPart ν ≠ ⊤
   · rw [hp, EReal.coe_ennreal_top] at h; simp at h
   · rw [EReal.sub_top] at h; simp at h
 
+/-- The identity function is integrable once the extended mean vanishes, since
+both `posPart_ne_top_of_extMean_zero` and `negPart_ne_top_of_extMean_zero` then
+apply. -/
 theorem integrable_id_of_extMean_zero (h : extMean ν = 0) :
     Integrable (fun z : ℝ => z) ν :=
   integrable_id_of_finite (posPart_ne_top_of_extMean_zero h) (negPart_ne_top_of_extMean_zero h)
 
+/-- The Bochner integral of the identity vanishes once the extended mean does,
+converting the `EReal` equation into the real subtraction of the two parts. -/
 theorem integral_id_zero (h : extMean ν = 0) : ∫ z, z ∂ν = 0 := by
   have hp := posPart_ne_top_of_extMean_zero h
   have hn := negPart_ne_top_of_extMean_zero h
@@ -53,6 +62,8 @@ theorem integral_id_zero (h : extMean ν = 0) : ∫ z, z ∂ν = 0 := by
   rw [extMean, ← hpe, ← hne, ← EReal.coe_sub] at h
   exact_mod_cast h
 
+/-- The extended variance equals the lintegral of the second moment, once the
+extended mean vanishes so the centring term in `evariance` drops out. -/
 theorem evar_eq_lintegral (h : extMean ν = 0) :
     evar ν = ∫⁻ z, ENNReal.ofReal (z ^ 2) ∂ν := by
   rw [evar, ProbabilityTheory.evariance_eq_lintegral_ofReal]
@@ -61,6 +72,8 @@ theorem evar_eq_lintegral (h : extMean ν = 0) :
   rw [hz]
   simp
 
+/-- `z ↦ z ^ 2` is integrable once the extended variance is finite, rewriting
+its lintegral via `evar_eq_lintegral`. -/
 theorem integrable_sq_of_evar (h : extMean ν = 0) (hsq : evar ν < ⊤) :
     Integrable (fun z : ℝ => z ^ 2) ν := by
   refine ⟨(measurable_id.pow_const 2).aestronglyMeasurable, ?_⟩
@@ -70,12 +83,16 @@ theorem integrable_sq_of_evar (h : extMean ν = 0) (hsq : evar ν < ⊤) :
   rw [lintegral_congr he, ← evar_eq_lintegral h]
   exact hsq
 
+/-- The extended variance equals `ENNReal.ofReal` of the real second moment,
+once the extended mean vanishes and the variance is finite. -/
 theorem evar_eq_ofReal (h : extMean ν = 0) (hsq : evar ν < ⊤) :
     evar ν = ENNReal.ofReal (∫ z, z ^ 2 ∂ν) := by
   rw [evar_eq_lintegral h,
     ofReal_integral_eq_lintegral_ofReal (integrable_sq_of_evar h hsq)
       (Filter.Eventually.of_forall fun z => sq_nonneg z)]
 
+/-- The real second moment is strictly positive once the extended variance is
+finite and positive, from `evar_eq_ofReal`. -/
 theorem integral_sq_pos (h : extMean ν = 0) (hsq : evar ν < ⊤) (hvar : 0 < evar ν) :
     0 < ∫ z, z ^ 2 ∂ν := by
   by_contra hle
@@ -92,11 +109,15 @@ open scoped Classical in
 noncomputable def trunc (M z : ℝ) : ℝ := if |z| ≤ M then z else 0
 
 open scoped Classical in
+/-- `trunc M` is measurable, being an if-then-else between two measurable
+functions on a measurable set. -/
 theorem measurable_trunc (M : ℝ) : Measurable (trunc M) := by
   unfold trunc
   exact Measurable.ite (measurableSet_le (by fun_prop) measurable_const) measurable_id
     measurable_const
 
+/-- The truncation `trunc M` is bounded in absolute value by `M`, splitting on
+the defining condition `|z| ≤ M`. -/
 theorem abs_trunc_le {M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |trunc M z| ≤ M := by
   classical
   unfold trunc
@@ -104,6 +125,8 @@ theorem abs_trunc_le {M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |trunc M z| ≤ M := b
   · assumption
   · simpa using hM
 
+/-- The truncation never exceeds `z` in absolute value, splitting on the
+defining condition. -/
 theorem abs_trunc_le_abs (M z : ℝ) : |trunc M z| ≤ |z| := by
   classical
   unfold trunc
@@ -111,6 +134,8 @@ theorem abs_trunc_le_abs (M z : ℝ) : |trunc M z| ≤ |z| := by
   · exact le_rfl
   · simp
 
+/-- The square of the truncation remainder is `z^2 - trunc(M,z)^2`, splitting
+on whether `z` is truncated. -/
 theorem sub_trunc_sq (M z : ℝ) : (z - trunc M z) ^ 2 = z ^ 2 - trunc M z ^ 2 := by
   classical
   unfold trunc
@@ -118,11 +143,14 @@ theorem sub_trunc_sq (M z : ℝ) : (z - trunc M z) ^ 2 = z ^ 2 - trunc M z ^ 2 :
   · ring
   · ring
 
+/-- The squared truncation is at most `z^2`, from `sub_trunc_sq` and the
+nonnegativity of a square. -/
 theorem trunc_sq_le (M z : ℝ) : trunc M z ^ 2 ≤ z ^ 2 := by
   have h := sq_nonneg (z - trunc M z)
   rw [sub_trunc_sq] at h
   linarith
 
+/-- `trunc (k) z` eventually equals `z` as `k → ∞`, once `k` exceeds `|z|`. -/
 theorem tendsto_trunc (z : ℝ) : Tendsto (fun k : ℕ => trunc (k : ℝ) z) atTop (𝓝 z) := by
   classical
   refine tendsto_const_nhds.congr' ?_
@@ -135,9 +163,12 @@ section TruncMoments
 
 variable {ν : Measure ℝ} [IsProbabilityMeasure ν]
 
+/-- `trunc M` is integrable against a probability measure, being bounded by
+`abs_trunc_le`. -/
 theorem integrable_trunc {M : ℝ} (hM : 0 ≤ M) : Integrable (trunc M) ν :=
   integrable_of_bounded (measurable_trunc M) (abs_trunc_le hM)
 
+/-- `trunc M z ^ 2` is integrable, bounded by `M ^ 2` via `abs_trunc_le`. -/
 theorem integrable_trunc_sq {M : ℝ} (hM : 0 ≤ M) :
     Integrable (fun z => trunc M z ^ 2) ν := by
   refine integrable_of_bounded ((measurable_trunc M).pow_const 2) (C := M ^ 2) fun z => ?_
@@ -145,6 +176,8 @@ theorem integrable_trunc_sq {M : ℝ} (hM : 0 ≤ M) :
   nlinarith [abs_trunc_le hM z, abs_nonneg (trunc M z), sq_abs (trunc M z)]
 
 omit [IsProbabilityMeasure ν] in
+/-- The mean of `trunc (k)` converges to the mean of the identity as `k → ∞`,
+by dominated convergence with dominating function `|z|`. -/
 theorem tendsto_integral_trunc (hint : Integrable (fun z : ℝ => z) ν) :
     Tendsto (fun k : ℕ => ∫ z, trunc (k : ℝ) z ∂ν) atTop (𝓝 (∫ z, z ∂ν)) := by
   refine tendsto_integral_of_dominated_convergence (fun z => |z|)
@@ -155,6 +188,8 @@ theorem tendsto_integral_trunc (hint : Integrable (fun z : ℝ => z) ν) :
   exact abs_trunc_le_abs _ z
 
 omit [IsProbabilityMeasure ν] in
+/-- The second moment of `trunc (k)` converges to the second moment of the
+identity as `k → ∞`, by dominated convergence with dominating function `z^2`. -/
 theorem tendsto_integral_trunc_sq (hint : Integrable (fun z : ℝ => z ^ 2) ν) :
     Tendsto (fun k : ℕ => ∫ z, trunc (k : ℝ) z ^ 2 ∂ν) atTop (𝓝 (∫ z, z ^ 2 ∂ν)) := by
   refine tendsto_integral_of_dominated_convergence (fun z => z ^ 2)
@@ -191,17 +226,25 @@ section TruncPieces
 variable {ν : Measure ℝ} [IsProbabilityMeasure ν]
 
 omit [IsProbabilityMeasure ν] in
+/-- The centred truncation and centred remainder recombine to the identity:
+`hhat + krem = id`. -/
 theorem hhat_add_krem (M z : ℝ) : hhat ν M z + krem ν M z = z := by
   rw [hhat, krem]; ring
 
 omit [IsProbabilityMeasure ν] in
+/-- `hhat ν M` is measurable, being `trunc M` shifted by the constant
+`tMean ν M`. -/
 theorem measurable_hhat (M : ℝ) : Measurable (hhat ν M) :=
   (measurable_trunc M).sub_const _
 
 omit [IsProbabilityMeasure ν] in
+/-- `krem ν M` is measurable, being the identity minus `trunc M` shifted by
+`tMean ν M`. -/
 theorem measurable_krem (M : ℝ) : Measurable (krem ν M) :=
   (measurable_id.sub (measurable_trunc M)).add_const _
 
+/-- The mean of the truncated marginal is bounded in absolute value by `M`,
+from `abs_trunc_le`. -/
 theorem abs_tMean_le {M : ℝ} (hM : 0 ≤ M) : |tMean ν M| ≤ M := by
   rw [tMean]
   calc |∫ z, trunc M z ∂ν| ≤ ∫ z, |trunc M z| ∂ν := abs_integral_le_integral_abs
@@ -210,6 +253,8 @@ theorem abs_tMean_le {M : ℝ} (hM : 0 ≤ M) : |tMean ν M| ≤ M := by
     _ = M := by simp
 
 
+/-- The centred truncation `hhat ν M` is bounded in absolute value by `2M`,
+combining `abs_trunc_le` and `abs_tMean_le` via the triangle inequality. -/
 theorem abs_hhat_le {M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |hhat ν M z| ≤ 2 * M := by
   have h1 := abs_trunc_le hM z
   have h2 := abs_tMean_le (ν := ν) hM
@@ -218,24 +263,31 @@ theorem abs_hhat_le {M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |hhat ν M z| ≤ 2 * M
   show |trunc M z - tMean ν M| ≤ 2 * M
   linarith
 
+/-- `hhat ν M` is integrable, being bounded by `abs_hhat_le`. -/
 theorem integrable_hhat {M : ℝ} (hM : 0 ≤ M) : Integrable (hhat ν M) ν :=
   integrable_of_bounded (measurable_hhat M) (abs_hhat_le hM)
 
+/-- `hhat ν M ^ 2` is integrable, bounded by `(2M)^2` via `abs_hhat_le`. -/
 theorem integrable_hhat_sq {M : ℝ} (hM : 0 ≤ M) :
     Integrable (fun z => hhat ν M z ^ 2) ν := by
   refine integrable_of_bounded ((measurable_hhat M).pow_const 2) (C := (2 * M) ^ 2) fun z => ?_
   rw [abs_pow, sq_abs]
   nlinarith [abs_hhat_le (ν := ν) hM z, abs_nonneg (hhat ν M z), sq_abs (hhat ν M z), hM]
 
+/-- `trunc M` lies in `L^2`, from its integrable square `integrable_trunc_sq`. -/
 theorem memLp_trunc {M : ℝ} (hM : 0 ≤ M) : MemLp (trunc M) 2 ν :=
   (memLp_two_iff_integrable_sq (measurable_trunc M).aestronglyMeasurable).2
     (integrable_trunc_sq hM)
 
+/-- `hhat ν M` has mean zero, since it is `trunc M` recentred by its own
+mean `tMean ν M`. -/
 theorem integral_hhat {M : ℝ} (hM : 0 ≤ M) : ∫ z, hhat ν M z ∂ν = 0 := by
   show ∫ z, (trunc M z - tMean ν M) ∂ν = 0
   rw [integral_sub (integrable_trunc hM) (integrable_const _), integral_const]
   simp [tMean]
 
+/-- The second moment of `hhat ν M` equals `tVar ν M`, identifying it with the
+variance of `trunc M`. -/
 theorem integral_hhat_sq {M : ℝ} (hM : 0 ≤ M) :
     ∫ z, hhat ν M z ^ 2 ∂ν = tVar ν M := by
   have h1 : variance (trunc M) ν = ∫ z, (trunc M z - ∫ w, trunc M w ∂ν) ^ 2 ∂ν :=
@@ -245,14 +297,20 @@ theorem integral_hhat_sq {M : ℝ} (hM : 0 ≤ M) :
   show ∫ z, (trunc M z - tMean ν M) ^ 2 ∂ν = tVar ν M
   rw [tVar, tSq, tMean, ← h1, h2]
 
+/-- `tVar ν M` is nonnegative, being the second moment of `hhat ν M` by
+`integral_hhat_sq`. -/
 theorem tVar_nonneg {M : ℝ} (hM : 0 ≤ M) : 0 ≤ tVar ν M := by
   rw [← integral_hhat_sq hM]
   exact integral_nonneg fun z => sq_nonneg _
 
+/-- `krem ν M` is integrable once the identity is, being `z - trunc M z` plus
+a constant. -/
 theorem integrable_krem {M : ℝ} (hM : 0 ≤ M) (hint : Integrable (fun z : ℝ => z) ν) :
     Integrable (krem ν M) ν :=
   (hint.sub (integrable_trunc hM)).add (integrable_const _)
 
+/-- `krem ν M` has mean zero once the marginal itself has mean zero, since the
+mean of `z - trunc M z` cancels `tMean ν M`. -/
 theorem integral_krem {M : ℝ} (hM : 0 ≤ M) (hint : Integrable (fun z : ℝ => z) ν)
     (h0 : ∫ z, z ∂ν = 0) : ∫ z, krem ν M z ∂ν = 0 := by
   show ∫ z, ((z - trunc M z) + tMean ν M) ∂ν = 0
@@ -262,6 +320,8 @@ theorem integral_krem {M : ℝ} (hM : 0 ≤ M) (hint : Integrable (fun z : ℝ =
   simp [tMean]
 
 omit [IsProbabilityMeasure ν] in
+/-- `(z - trunc M z) ^ 2` is integrable once `z^2` is, dominated by `z^2` via
+`sub_trunc_sq`. -/
 theorem integrable_sub_trunc_sq {M : ℝ} (_hM : 0 ≤ M)
     (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) :
     Integrable (fun z : ℝ => (z - trunc M z) ^ 2) ν := by
@@ -271,24 +331,32 @@ theorem integrable_sub_trunc_sq {M : ℝ} (_hM : 0 ≤ M)
   rw [Real.norm_eq_abs, abs_of_nonneg (sq_nonneg _), sub_trunc_sq]
   nlinarith [sq_nonneg (trunc M z)]
 
+/-- The mean of `(z - trunc M z) ^ 2` equals `tTail ν M`, rewriting via
+`sub_trunc_sq`. -/
 theorem integral_sub_trunc_sq {M : ℝ} (hM : 0 ≤ M)
     (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) :
     ∫ z, (z - trunc M z) ^ 2 ∂ν = tTail ν M := by
   rw [integral_congr_ae (Filter.Eventually.of_forall fun z => sub_trunc_sq M z),
     integral_sub hint2 (integrable_trunc_sq hM), tTail, tSq]
 
+/-- `tTail ν M` is nonnegative, being the mean of a square by
+`integral_sub_trunc_sq`. -/
 theorem tTail_nonneg {M : ℝ} (hM : 0 ≤ M) (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) :
     0 ≤ tTail ν M := by
   rw [← integral_sub_trunc_sq hM hint2]
   exact integral_nonneg fun z => sq_nonneg _
 
 omit [IsProbabilityMeasure ν] in
+/-- `z ↦ z - trunc M z` lies in `L^2` once `z^2` is integrable, from
+`integrable_sub_trunc_sq`. -/
 theorem memLp_sub_trunc {M : ℝ} (hM : 0 ≤ M) (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) :
     MemLp (fun z : ℝ => z - trunc M z) 2 ν :=
   (memLp_two_iff_integrable_sq
     (measurable_id.sub (measurable_trunc M)).aestronglyMeasurable).2
     (integrable_sub_trunc_sq hM hint2)
 
+/-- `krem ν M` lies in `L^2` once `z^2` is integrable, being `z - trunc M z`
+plus a constant added to `memLp_sub_trunc`. -/
 theorem memLp_krem {M : ℝ} (hM : 0 ≤ M) (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) :
     MemLp (krem ν M) 2 ν := by
   have h := (memLp_sub_trunc hM hint2).add (memLp_const (tMean ν M) (μ := ν) (p := 2))
@@ -296,9 +364,13 @@ theorem memLp_krem {M : ℝ} (hM : 0 ≤ M) (hint2 : Integrable (fun z : ℝ => 
     funext z; rw [krem]; rfl
   rwa [he] at h
 
+/-- `krem ν M ^ 2` is integrable, from its `L^2` membership `memLp_krem`. -/
 theorem integrable_krem_sq {M : ℝ} (hM : 0 ≤ M) (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) :
     Integrable (fun z => krem ν M z ^ 2) ν := (memLp_krem hM hint2).integrable_sq
 
+/-- **The centred remainder keeps at most the tail second moment.** The second
+moment of `krem ν M` is at most `tTail ν M`, since `krem ν M` is `z - trunc M z`
+recentred, and centring only decreases the second moment. -/
 theorem integral_krem_sq_le {M : ℝ} (hM : 0 ≤ M) (hint : Integrable (fun z : ℝ => z) ν)
     (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) (h0 : ∫ z, z ∂ν = 0) :
     ∫ z, krem ν M z ^ 2 ∂ν ≤ tTail ν M := by
@@ -325,11 +397,15 @@ theorem integral_krem_sq_le {M : ℝ} (hM : 0 ≤ M) (hint : Integrable (fun z :
 /-! ### The choice of the truncation level -/
 
 omit [IsProbabilityMeasure ν] in
+/-- `tSq ν k` converges to the second moment of the identity as `k → ∞`,
+restating `tendsto_integral_trunc_sq`. -/
 theorem tendsto_tSq (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) :
     Tendsto (fun k : ℕ => tSq ν (k : ℝ)) atTop (𝓝 (∫ z, z ^ 2 ∂ν)) :=
   tendsto_integral_trunc_sq hint2
 
 omit [IsProbabilityMeasure ν] in
+/-- `tMean ν k` converges to `0` as `k → ∞` once the marginal has mean zero,
+restating `tendsto_integral_trunc`. -/
 theorem tendsto_tMean (hint : Integrable (fun z : ℝ => z) ν) (h0 : ∫ z, z ∂ν = 0) :
     Tendsto (fun k : ℕ => tMean ν (k : ℝ)) atTop (𝓝 0) := by
   have h := tendsto_integral_trunc (ν := ν) hint
@@ -337,6 +413,8 @@ theorem tendsto_tMean (hint : Integrable (fun z : ℝ => z) ν) (h0 : ∫ z, z �
   exact h
 
 omit [IsProbabilityMeasure ν] in
+/-- `tVar ν k` converges to the second moment of the identity as `k → ∞`,
+combining `tendsto_tSq` and `tendsto_tMean`. -/
 theorem tendsto_tVar (hint : Integrable (fun z : ℝ => z) ν)
     (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) (h0 : ∫ z, z ∂ν = 0) :
     Tendsto (fun k : ℕ => tVar ν (k : ℝ)) atTop (𝓝 (∫ z, z ^ 2 ∂ν)) := by
@@ -344,6 +422,8 @@ theorem tendsto_tVar (hint : Integrable (fun z : ℝ => z) ν)
   simpa [tVar] using h
 
 omit [IsProbabilityMeasure ν] in
+/-- `tTail ν k` converges to `0` as `k → ∞`, the complementary limit to
+`tendsto_tSq`. -/
 theorem tendsto_tTail (hint2 : Integrable (fun z : ℝ => z ^ 2) ν) :
     Tendsto (fun k : ℕ => tTail ν (k : ℝ)) atTop (𝓝 0) := by
   have h := tendsto_const_nhds (x := ∫ z, z ^ 2 ∂ν) (f := atTop (α := ℕ))

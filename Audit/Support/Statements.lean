@@ -25,7 +25,7 @@ set_option linter.unusedVariables false
 def optimalStopping : Prop :=
   ∀ {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
     [Infinite V] [MeasurableSpace V] [MeasurableSingletonClass V]
-    (hVF : External.VoltageFunction G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : HasExtMean ν),
     (0 < extMean ν →
@@ -43,7 +43,7 @@ def optimalStopping : Prop :=
 def explosion : Prop :=
   ∀ {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
     [Infinite V] [MeasurableSpace V]
-    (hVF : External.VoltageFunction G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : HasExtMean ν),
     (1 < extMean ν → iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 0) ∧
@@ -56,7 +56,7 @@ def explosion : Prop :=
 def stabilization : Prop :=
   ∀ {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
     [Infinite V] [MeasurableSpace V] [MeasurableSingletonClass V]
-    (hCV : External.CarneVaropoulos G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : HasExtMean ν) (hmean : extMean ν < 1),
     (∀ p : ℝ, 3 < p → posMoment ν p ≠ ⊤ →

@@ -3,6 +3,17 @@ import RWRS.Support.DTStageIntegral
 import RWRS.Support.DTCappedRule
 import RWRS.Support.DTUnconstrained
 
+/-!
+# Partition of the trapped integral over stage hit events
+
+This module specializes the general hit-event/no-hit partition to the
+integrable capped-rule integrand: for a fixed trajectory, the
+scenery-integral of the trap potential at the capped rule splits as the sum
+of its integrals over the first `n` stage hit events plus its integral over
+the event that none of those `n` stages fires, feeding the stage-by-stage
+bias sum.
+-/
+
 open scoped Classical
 open MeasureTheory
 

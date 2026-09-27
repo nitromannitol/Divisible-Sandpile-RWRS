@@ -26,20 +26,21 @@ proof of the final theorem.
 
 ## Cited results
 
-The paper uses results from the literature without proof.  The repository
-does not prove this one: it is a proposition taken as an explicit hypothesis,
-and this challenge carries the same hypothesis, restated in the vocabulary:
-   * `External.CarneVaropoulos`: Carne (1985), Varopoulos (1985), Lyons–Peres,
-     Theorem 13.4, in its pointwise form.
+The paper uses results from the literature without proof.  The repository now
+proves the one this theorem used to carry as a hypothesis outright
+(`External.CarneVaropoulos`: Carne (1985), Varopoulos (1985), Lyons–Peres,
+Theorem 13.4, in its pointwise form), so this challenge no longer states it as
+a hypothesis either.  The vocabulary copy of the proposition is kept below for
+provenance, unused by the theorem.
 
 ## Presentation deltas
 
 None at the level of the displayed statement: the theorem below is the
 statement of `RWRS.stabilization` with every repository name replaced by its
 vocabulary copy.  Relative to the frozen statement `RWRS.Frozen.stabilization`, it omits
-the hypotheses for the von Bahr–Esseen and Fuk–Nagaev inequalities and the bounded-degree
-heat kernel bound, which the repository proves and
-`RWRS/MainTheorems.lean` discharges; that is a strengthening.
+the hypotheses for the von Bahr–Esseen and Fuk–Nagaev inequalities, the bounded-degree
+heat kernel bound, and the pointwise Carne–Varopoulos bound, all of which the repository
+proves and `RWRS/MainTheorems.lean` discharges; that is a strengthening.
 -/
 
 -- VOCABULARY-BEGIN
@@ -222,18 +223,9 @@ def BoundedDegree (G : SimpleGraph V) [G.LocallyFinite] (d : ℕ) : Prop :=
 def VolumeGrowthUpper (G : SimpleGraph V) (o : V) (C d_f : ℝ) : Prop :=
   ∀ r : ℕ, 1 ≤ r → (closedBall G o r).encard ≤ ENNReal.ofReal (C * (r : ℝ) ^ d_f)
 
-/-! ## 7. The cited results that remain hypotheses -/
+/-! ## 7. The cited results -/
 
 namespace External
-
-open scoped Classical in
-/-- Lyons–Peres, Proposition 2.1 and equation (2.4), quoted in the proof of
-`prop:01-law` (`rwrs.tex:513-520`), assumed: "The function
-$f(x)=\P_x(T_a<T_b)/(\deg(a)\P_a(T_b<T_a^+))$ satisfies
-$0\leq f\leq\|f\|_\infty<\infty$ and $\Delta f=\delta_b-\delta_a$." -/
-def VoltageFunction {V : Type*} (G : SimpleGraph V) [G.LocallyFinite] : Prop :=
-  ∀ a b : V, a ≠ b → ∃ f : V → ℝ, ∃ M : ℝ, 0 < M ∧ (∀ x, 0 ≤ f x ∧ f x ≤ M) ∧
-    ∀ x : V, laplacian G f x = (if x = b then (1 : ℝ) else 0) - (if x = a then 1 else 0)
 
 /-- The pointwise Carne--Varopoulos bound for simple random walk on a connected,
 nontrivial, locally finite graph with measurable singletons, assumed.  Sources:
@@ -261,7 +253,7 @@ universe u
 /-- Theorem 1.3 (`thm:stab`). -/
 theorem stabilization {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
     [Infinite V] [MeasurableSpace V] [MeasurableSingletonClass V]
-    (hCV : External.CarneVaropoulos G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : HasExtMean ν) (hmean : extMean ν < 1) :
     (∀ p : ℝ, 3 < p → posMoment ν p ≠ ⊤ →

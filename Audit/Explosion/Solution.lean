@@ -26,7 +26,7 @@ universe u
 /-- Theorem 1.2 (`thm:explosion`). -/
 theorem explosion {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
     [Infinite V] [MeasurableSpace V]
-    (hVF : External.VoltageFunction G) (hG : G.Connected)
+    (hG : G.Connected)
     (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
     (hdet : HasExtMean ν) :
     (1 < extMean ν → iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 0) ∧
@@ -34,6 +34,6 @@ theorem explosion {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
       ((0 < evar ν ∧ evar ν < ⊤) ∨
         (ν ≠ Measure.dirac 1 ∧ IsSymmetric (ν.map (fun z => z - 1)))) →
       iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 0) := by
-  exact _root_.RWRS.explosion (Bridge.voltageFunction hVF) hG d hd ν hν hdet
+  exact _root_.RWRS.explosion hG d hd ν hν hdet
 
 end RWRSAudit

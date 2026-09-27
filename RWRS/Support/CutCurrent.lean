@@ -178,6 +178,8 @@ theorem two_mul_sum_mul_laplacian (U : Finset V) (h : V → ℝ) :
 /-! ### The maximum principle for dead ends -/
 
 omit [G.LocallyFinite] in
+/-- If `h` agrees across every edge inside `S`, it is constant along walks of the induced
+subgraph `G.induce S`. -/
 theorem eq_of_walk_induce {S : Set V} (h : V → ℝ)
     (hadj : ∀ a b : V, a ∈ S → b ∈ S → G.Adj a b → h a = h b) :
     ∀ {a b : ↥S} (_ : (G.induce S).Walk a b), h a.1 = h b.1 := by

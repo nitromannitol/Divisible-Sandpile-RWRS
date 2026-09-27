@@ -23,18 +23,22 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 /-- The radius of Step 3: just above the critical scale `N^{1/d_w}`. -/
 noncomputable def polyR (d_w s : ℝ) (N : ℕ) : ℕ := ⌈(N : ℝ) ^ (1 / d_w + s)⌉₊
 
+/-- `N^e ≥ 1` for `N ≥ 1` and `e ≥ 0`, from monotonicity of `rpow` in the base. -/
 theorem one_le_rpow_natCast {e : ℝ} (he : 0 ≤ e) {N : ℕ} (hN : 1 ≤ N) :
     (1:ℝ) ≤ (N : ℝ) ^ e := by
   have hN1 : (1:ℝ) ≤ (N : ℝ) := by exact_mod_cast hN
   calc (1:ℝ) = (1:ℝ) ^ e := (Real.one_rpow e).symm
     _ ≤ (N : ℝ) ^ e := Real.rpow_le_rpow (by norm_num) hN1 he
 
+/-- The Step 3 radius `polyR d_w s N` is at least `1` for `N ≥ 1`. -/
 theorem one_le_polyR {d_w s : ℝ} (hdw : 2 ≤ d_w) (hs : 0 < s) {N : ℕ} (hN : 1 ≤ N) :
     1 ≤ polyR d_w s N := by
   have he : (0:ℝ) ≤ 1 / d_w + s := by positivity
   have h1 : (1:ℝ) ≤ (N : ℝ) ^ (1 / d_w + s) := one_le_rpow_natCast he hN
   exact Nat.ceil_pos.2 (lt_of_lt_of_le zero_lt_one h1)
 
+/-- The Step 3 radius is at most twice the critical scale: `polyR d_w s N ≤ 2 N^{1/d_w+s}`,
+from the ceiling bound `⌈x⌉ < x + 1`. -/
 theorem polyR_le {d_w s : ℝ} (hdw : 2 ≤ d_w) (hs : 0 < s) {N : ℕ} (hN : 1 ≤ N) :
     (polyR d_w s N : ℝ) ≤ 2 * (N : ℝ) ^ (1 / d_w + s) := by
   have he : (0:ℝ) ≤ 1 / d_w + s := by positivity

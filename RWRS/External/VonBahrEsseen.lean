@@ -1,11 +1,12 @@
 /-
-External input: the von Bahr--Esseen inequality, cited in the proof of
+Cited input: the von Bahr--Esseen inequality, cited in the proof of
 `lem:fuk-nagaev` (`rwrs.tex:1096-1098`) as the source of part (a) of that
-lemma.  Assumed here; it enters only as an explicit hypothesis of the result
-whose proof uses it.
+lemma.  Proved outright by the shared library (`LatticeProb.vonBahrEsseen`);
+no hypothesis of any frozen statement carries it any longer.
 -/
 import RWRS.Setting
 import Mathlib.Probability.Independence.Basic
+import LatticeProb.Prob.VonBahrEsseenSum
 
 open MeasureTheory
 
@@ -22,4 +23,10 @@ def RWRS.External.VonBahrEsseen : Prop :=
         (∀ i, (∫⁻ ω, ENNReal.ofReal (|Y i ω| ^ p) ∂P) ≠ ⊤) →
         ∀ t : ℝ, 0 < t →
           P {ω | t ≤ |∑ i, Y i ω|} ≤ ENNReal.ofReal (Cp * Mp / t ^ p)
+
+/-- The von Bahr--Esseen tail inequality for independent centred summands.
+Cited in `rwrs.tex:1096-1098`; proved by the shared library. -/
+theorem RWRS.External.vonBahrEsseen : RWRS.External.VonBahrEsseen
 -- FROZEN-STATEMENT-END
+:= by
+  exact LatticeProb.vonBahrEsseen

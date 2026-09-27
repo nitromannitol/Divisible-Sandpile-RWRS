@@ -29,10 +29,13 @@ open scoped ENNReal
 /-- The one-sided truncation `max(z,-M)` of the reduction of `prop:subcritical`. -/
 noncomputable def lowTrunc (M z : ℝ) : ℝ := max z (-M)
 
+/-- `lowTrunc M` is measurable, being the maximum of the identity and a
+constant. -/
 theorem measurable_lowTrunc (M : ℝ) : Measurable (lowTrunc M) := by
   unfold lowTrunc
   fun_prop
 
+/-- The truncation `lowTrunc M` only ever raises a value: `z ≤ lowTrunc M z`. -/
 theorem le_lowTrunc (M z : ℝ) : z ≤ lowTrunc M z := le_max_left _ _
 
 /-- The truncation does not change the positive part. -/
@@ -44,11 +47,13 @@ theorem ofReal_lowTrunc {M : ℝ} (hM : 0 ≤ M) (z : ℝ) :
   · rw [ENNReal.ofReal_eq_zero.mpr (by linarith : z ≤ 0),
       ENNReal.ofReal_eq_zero.mpr (max_le (by linarith : z ≤ 0) (by linarith : -M ≤ 0))]
 
+/-- De Morgan for the truncation: `-(lowTrunc M z) = min (-z) M`. -/
 theorem neg_lowTrunc (M z : ℝ) : -(lowTrunc M z) = min (-z) M := by
   unfold lowTrunc
   rw [show max z (-M) = z ⊔ (-M) from rfl, neg_sup, neg_neg,
     show (-z) ⊓ M = min (-z) M from rfl]
 
+/-- The truncated value is absolutely bounded by `max z 0 + M`, for `M ≥ 0`. -/
 theorem abs_lowTrunc_le {M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |lowTrunc M z| ≤ max z 0 + M := by
   unfold lowTrunc
   have h1 : (0:ℝ) ≤ max z 0 := le_max_right z 0
@@ -63,18 +68,24 @@ theorem abs_lowTrunc_le {M : ℝ} (hM : 0 ≤ M) (z : ℝ) : |lowTrunc M z| ≤ 
     · have : max z (-M) ≤ 0 := max_le (by linarith) (by linarith)
       linarith
 
+/-- Truncating from below by `-M` (`M ≥ 0`) does not change the positive
+part of the law, since `ofReal_lowTrunc` shows it leaves nonnegative values
+untouched. -/
 theorem posPart_map_lowTrunc (ν : Measure ℝ) {M : ℝ} (hM : 0 ≤ M) :
     RWRS.posPart (ν.map (lowTrunc M)) = RWRS.posPart ν := by
   unfold RWRS.posPart
   rw [lintegral_map ENNReal.measurable_ofReal (measurable_lowTrunc M)]
   exact lintegral_congr fun z => ofReal_lowTrunc hM z
 
+/-- The negative part of the truncated law is the lintegral of `min(-z, M)`,
+by `neg_lowTrunc` and change of variables. -/
 theorem negPart_map_lowTrunc_eq (ν : Measure ℝ) (M : ℝ) :
     RWRS.negPart (ν.map (lowTrunc M)) = ∫⁻ z, ENNReal.ofReal (min (-z) M) ∂ν := by
   unfold RWRS.negPart
   rw [lintegral_map (by fun_prop) (measurable_lowTrunc M)]
   exact lintegral_congr fun z => by rw [neg_lowTrunc]
 
+/-- The truncated law's negative part is always finite, capped by `M`. -/
 theorem negPart_map_lowTrunc_ne_top (ν : Measure ℝ) [IsProbabilityMeasure ν] (M : ℝ) :
     RWRS.negPart (ν.map (lowTrunc M)) ≠ ⊤ := by
   rw [negPart_map_lowTrunc_eq]
@@ -83,6 +94,8 @@ theorem negPart_map_lowTrunc_ne_top (ν : Measure ℝ) [IsProbabilityMeasure ν]
   rw [lintegral_const, measure_univ, mul_one]
   exact ENNReal.ofReal_ne_top
 
+/-- `min(-z, k)` increases to `-z` as `k → ∞` along the naturals, in
+`ENNReal.ofReal` form. -/
 theorem iSup_ofReal_min (z : ℝ) :
     (⨆ k : ℕ, ENNReal.ofReal (min (-z) (k : ℝ))) = ENNReal.ofReal (-z) := by
   refine le_antisymm (iSup_le fun k => ENNReal.ofReal_le_ofReal (min_le_left _ _)) ?_
@@ -131,6 +144,9 @@ theorem posPart_ne_top_of_posMoment (ν : Measure ℝ) [IsProbabilityMeasure ν]
   rw [lintegral_const, measure_univ, mul_one]
   exact ENNReal.one_ne_top
 
+/-- The `p`-th power of the truncated absolute value is bounded by
+`2 ^ p (max(z,0) ^ p + M ^ p)`, from `abs_lowTrunc_le` and subadditivity of
+`x ↦ x ^ p` after doubling the larger term. -/
 theorem abs_lowTrunc_rpow_le {M p : ℝ} (hM : 0 ≤ M) (hp : 0 ≤ p) (z : ℝ) :
     |lowTrunc M z| ^ p ≤ 2 ^ p * (max z 0 ^ p + M ^ p) := by
   have h0 : (0:ℝ) ≤ max z 0 := le_max_right z 0
@@ -180,6 +196,8 @@ theorem absMoment_map_lowTrunc_ne_top (ν : Measure ℝ) [IsProbabilityMeasure �
 
 /-! ### A truncation level with a negative mean -/
 
+/-- With both parts finite, the extended mean coincides with the real number
+`(posPart ρ).toReal - (negPart ρ).toReal`, coerced into `EReal`. -/
 theorem extMean_eq_coe {ρ : Measure ℝ} (hp : RWRS.posPart ρ ≠ ⊤) (hn : RWRS.negPart ρ ≠ ⊤) :
     RWRS.extMean ρ = (((RWRS.posPart ρ).toReal - (RWRS.negPart ρ).toReal : ℝ) : EReal) := by
   have hpe : (((RWRS.posPart ρ).toReal : ℝ) : EReal) = (RWRS.posPart ρ : EReal) :=
@@ -188,6 +206,8 @@ theorem extMean_eq_coe {ρ : Measure ℝ} (hp : RWRS.posPart ρ ≠ ⊤) (hn : R
     EReal.coe_ennreal_toReal hn
   rw [RWRS.extMean, ← hpe, ← hne, ← EReal.coe_sub]
 
+/-- If the positive part is finite and the extended mean is negative, the
+positive part is strictly less than the negative part. -/
 theorem posPart_lt_negPart (ν : Measure ℝ) (hp : RWRS.posPart ν ≠ ⊤)
     (hmean : RWRS.extMean ν < 0) : RWRS.posPart ν < RWRS.negPart ν := by
   by_contra hcon
@@ -247,17 +267,23 @@ section Meas
 
 variable [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V]
 
+/-- The payoff at deterministic time `n`, as a function of the joint pair of
+scenery and trajectory, is measurable. -/
 theorem measurable_payoff_prod (n : ℕ) :
     Measurable fun z : (V → ℝ) × (ℕ → V) => RWRS.payoff G z.1 n z.2 := by
   unfold RWRS.payoff
   exact Finset.measurable_sum _ fun k _ =>
     (measurable_scenery_at k).div (measurable_degree_at k)
 
+/-- `sup_n S_n`, as a function of the joint pair of scenery and trajectory,
+is measurable, as a countable supremum of the measurable `payoff` maps. -/
 theorem measurable_supPayoff_prod :
     Measurable fun z : (V → ℝ) × (ℕ → V) => RWRS.supPayoff G z.1 z.2 := by
   unfold RWRS.supPayoff
   exact Measurable.iSup fun n => ENNReal.measurable_ofReal.comp (measurable_payoff_prod n)
 
+/-- The `q`-th power of `sup_n S_n` is measurable in the joint pair, from
+`measurable_supPayoff_prod`. -/
 theorem measurable_supPayoff_rpow (q : ℝ) :
     Measurable fun z : (V → ℝ) × (ℕ → V) => RWRS.supPayoff G z.1 z.2 ^ q :=
   measurable_supPayoff_prod.pow_const q

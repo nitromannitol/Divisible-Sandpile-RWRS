@@ -191,18 +191,9 @@ def BoundedDegree (G : SimpleGraph V) [G.LocallyFinite] (d : ℕ) : Prop :=
 def VolumeGrowthUpper (G : SimpleGraph V) (o : V) (C d_f : ℝ) : Prop :=
   ∀ r : ℕ, 1 ≤ r → (closedBall G o r).encard ≤ ENNReal.ofReal (C * (r : ℝ) ^ d_f)
 
-/-! ## 7. The cited results that remain hypotheses -/
+/-! ## 7. The cited results -/
 
 namespace External
-
-open scoped Classical in
-/-- Lyons–Peres, Proposition 2.1 and equation (2.4), quoted in the proof of
-`prop:01-law` (`rwrs.tex:513-520`), assumed: "The function
-$f(x)=\P_x(T_a<T_b)/(\deg(a)\P_a(T_b<T_a^+))$ satisfies
-$0\leq f\leq\|f\|_\infty<\infty$ and $\Delta f=\delta_b-\delta_a$." -/
-def VoltageFunction {V : Type*} (G : SimpleGraph V) [G.LocallyFinite] : Prop :=
-  ∀ a b : V, a ≠ b → ∃ f : V → ℝ, ∃ M : ℝ, 0 < M ∧ (∀ x, 0 ≤ f x ∧ f x ≤ M) ∧
-    ∀ x : V, laplacian G f x = (if x = b then (1 : ℝ) else 0) - (if x = a then 1 else 0)
 
 /-- The pointwise Carne--Varopoulos bound for simple random walk on a connected,
 nontrivial, locally finite graph with measurable singletons, assumed.  Sources:

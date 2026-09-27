@@ -1,5 +1,14 @@
 import Mathlib
 
+/-!
+# Re-association of the first-hit event
+
+This module supplies a single set-theoretic identity: splitting off one
+excluded index `j < i` from the intersection defining the first-hit event
+`{J = i}` so that the complement of `A j` becomes its own factor, in the
+shape the block correlation bound `integral_sum_block_le` requires.
+-/
+
 namespace RWRS.Support
 
 variable {Ω : Type*} (A : ℕ → Set Ω)

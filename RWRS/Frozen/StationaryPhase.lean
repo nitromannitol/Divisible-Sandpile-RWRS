@@ -17,9 +17,10 @@ rerooting-invariant events of the underlying rooted graph,
 `graphInvariantSigma 1`: it needs the conditioning event to be graph-measurable,
 so that the marks keep their common law under the conditional law
 (`rwrs.tex:347`), and rerooting-invariant, so that the conditional law of the
-rooted graph is again stationary.  The heat kernel decay is carried because the
-proof reaches `lem:01-stationary`, and through it the marking lemma, on the
-components of the ergodic decomposition.
+rooted graph is again stationary.  The heat kernel decay the proof reaches
+through `lem:01-stationary`, and through it the marking lemma, on the
+components of the ergodic decomposition, is proved outright, so it is not a
+hypothesis here.
 -/
 import RWRS.External.ErgodicDecomposition
 import RWRS.External.HeatKernelVanishing
@@ -35,8 +36,6 @@ open MeasureTheory ProbabilityTheory
 set_option linter.unusedVariables false in
 -- FROZEN-STATEMENT-BEGIN
 theorem RWRS.Frozen.stationaryPhase
-    (hHKV : ∀ N : RWRS.Net 0, RWRS.NetGood N →
-      RWRS.External.HeatKernelVanishing (RWRS.netGraph N))
     (hED : RWRS.External.ErgodicDecomposition)
     (Q : Measure (RWRS.Net 0)) (hQ : IsProbabilityMeasure Q)
     (hgood : ∀ᵐ N ∂Q, RWRS.NetGood N) (hstat : RWRS.IsStationaryNet Q)
@@ -56,7 +55,7 @@ theorem RWRS.Frozen.stationaryPhase
   have hAmeas : MeasurableSet A := RWRS.Support.measurableSet_stabilizesNet
   haveI hP : IsProbabilityMeasure (RWRS.markIid Q ν) :=
     RWRS.Support.isProbabilityMeasure_markIid Q ν
-  have h01 := RWRS.Frozen.zeroOneStationary hHKV hED Q hQ hgood hstat ν hν
+  have h01 := RWRS.Frozen.zeroOneStationary hED Q hQ hgood hstat ν hν
   obtain ⟨B, hB, hPA, hinter, hcompl⟩ :=
     RWRS.Support.exists_graph_event_of_zeroOne Q ν hAmeas h01
   have hν1 : Integrable (fun z : ℝ => z) ν :=

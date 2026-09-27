@@ -50,10 +50,14 @@ noncomputable def stageCnt (G : SimpleGraph V) [G.LocallyFinite] (r : ℕ)
     (C : V → Finset V) (ℓ : ℕ) (K : Finset V) (N : ℕ) (X : ℕ → V) : ℕ :=
   sInf {n : ℕ | ¬ (n ≤ ℓ ∧ StageOK G r C K N X n)}
 
+/-- The usable-stage count never exceeds the cap `ℓ + 1`, since `ℓ + 1` already lies in the
+`sInf`'s underlying failure set by definition. -/
 theorem stageCnt_le (r : ℕ) (C : V → Finset V) (ℓ : ℕ) (K : Finset V) (N : ℕ)
     (X : ℕ → V) : stageCnt G r C ℓ K N X ≤ ℓ + 1 :=
   Nat.sInf_le (Set.mem_setOf.2 fun h => absurd h.1 (by omega))
 
+/-- The defining property of `stageCnt`: it is not itself both `≤ ℓ` and usable, since it is
+the least element of the set where that conjunction fails, by `Nat.sInf_mem`. -/
 theorem stageCnt_spec (r : ℕ) (C : V → Finset V) (ℓ : ℕ) (K : Finset V) (N : ℕ)
     (X : ℕ → V) :
     ¬ (stageCnt G r C ℓ K N X ≤ ℓ ∧ StageOK G r C K N X (stageCnt G r C ℓ K N X)) := by
