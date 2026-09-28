@@ -143,7 +143,8 @@ theorem card_level_le (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (hL0 : 1 ≤ L 0) (j 
         have hdl : u.1.dropLast = w.take (j - 1) := by
           have := dropLast_eq_take_of_mem huS
           simpa [hlen] using this
-        refine Finset.mem_union_left _ (Finset.mem_image.2 ⟨u.1.getLast hvne, Finset.mem_univ _, ?_⟩)
+        refine Finset.mem_union_left _ (Finset.mem_image.2 ⟨u.1.getLast hvne, Finset.mem_univ _,
+            ?_⟩)
         rw [← hdl]
         exact List.dropLast_append_getLast hvne
     · rw [Finset.mem_range]

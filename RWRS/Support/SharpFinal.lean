@@ -33,7 +33,8 @@ theorem lintegral_odometerLimit_eq_top_of_posPart (hG : G.Connected) (o : V)
     exact_mod_cast this
   have hd0 : (0 : ℝ) < d := by linarith
   set f : ℝ → ℝ≥0∞ := fun z => ENNReal.ofReal ((z - 1) / d) with hf
-  have hfmeas : Measurable f := ENNReal.measurable_ofReal.comp ((measurable_id.sub_const 1).div_const d)
+  have hfmeas : Measurable f := ENNReal.measurable_ofReal.comp ((measurable_id.sub_const
+      1).div_const d)
   have hle : (∫⁻ σ, f (σ o) ∂(RWRS.iidLaw V ν))
       ≤ ∫⁻ σ, RWRS.odometerLimit G σ o ∂(RWRS.iidLaw V ν) :=
     lintegral_mono fun σ => ofReal_excess_le_odometerLimit hG σ o

@@ -61,7 +61,8 @@ theorem measure_inter_compl_trapEvent_prod (ν : Measure ℝ) [IsProbabilityMeas
       simp only [Set.mem_iUnion] at hx
       obtain ⟨a, ha⟩ := hx
       obtain ⟨ha, hxa⟩ := ha
-      have hda := hdisj a (by have := Finset.mem_range.1 ha; omega) ℓ (Nat.lt_succ_self ℓ) (by have := Finset.mem_range.1 ha; omega)
+      have hda := hdisj a (by have := Finset.mem_range.1 ha; omega) ℓ (Nat.lt_succ_self ℓ)
+        (by have := Finset.mem_range.1 ha; omega)
       exact absurd (hda.le_bot (Finset.mem_inter.2 ⟨hxa, hxℓ⟩)) (by simp)
     have hAS : ∀ ξ η : V → ℝ, (∀ w ∈ ⋃ i ∈ Finset.range ℓ, ↑(C i), ξ w = η w) →
         (ξ ∈ ⋂ i, {ξ : V → ℝ | i ∈ Finset.range ℓ → ξ ∈ (trapEvent (C i) ε)ᶜ} ↔

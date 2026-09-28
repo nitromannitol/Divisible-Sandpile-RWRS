@@ -12,8 +12,8 @@ unattained supremum can satisfy it, and it says both that `u_n(x)` is an upper
 bound for every bounded stopping rule and that it is the least one; that is the
 identity `u_n = v_n`, since `RWRS.value` is the supremum of the same set.  The
 scenery is the excess mass `ξ = σ - 1`, so the payoff is the paper's
-`S_n = ∑_{k<n} ζ(X_k)`.  `hG` and `[Infinite V]` are the standing assumptions of `ssec:notation` and of
-Section 3.
+`S_n = ∑_{k<n} ζ(X_k)`.  `hG` and `[Infinite V]` are the standing assumptions
+of `ssec:notation` and of Section 3.
 -/
 import RWRS.Support.Representation
 

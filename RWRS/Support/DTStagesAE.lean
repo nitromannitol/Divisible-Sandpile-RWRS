@@ -60,7 +60,8 @@ theorem ae_stageTime_succ_of_fixed [Infinite V] (hG : G.Connected)
       ∧ Admissible G r (stageUsed G r C X i) (X n))).1 htop
   have hTcoe : (((stageTime G r C X i).toNat : ℕ) : ℕ∞) = stageTime G r C X i :=
     ENat.coe_toNat hTne
-  have hmem : ∀ k : ℕ, LatticeProb.Graph.shiftPath (stageTime G r C X i).toNat X k ∈ (D : Set V) := by
+  have hmem : ∀ k : ℕ, LatticeProb.Graph.shiftPath (stageTime G r C X i).toNat X k ∈ (D : Set V) :=
+      by
     intro k
     have h1 : stageTime G r C X i ≤ (((stageTime G r C X i).toNat + k : ℕ) : ℕ∞) := by
       rw [← hTcoe]

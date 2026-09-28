@@ -26,12 +26,12 @@ COMPARATOR_LANDRUN=<landrun> COMPARATOR_LEAN4EXPORT=<lean4export> \
 
 ## Run of 2026-09-27
 
-The statements of Theorems 1.1 and 1.2 no longer take the voltage-function
-hypothesis, so every pair was run again on 2026-09-27, at commit `c7a26b9`, on a
-second local machine (Linux 6.17), with the same tool revisions as above.
+Every pair was run again on 2026-09-27, at commit `cddf021`, against the current
+statements and the published Lattice-Probability pin, on a second local machine
+(Linux 6.17), with the same tool revisions as above.
 
 | Pair | Lean kernel | Lean and nanoda kernels |
 |---|---|---|
-| `Explosion` | passed (94 s) | passed (118 s) |
-| `OptimalStopping` | passed (117 s) | passed (151 s) |
-| `Stabilization` | passed (105 s) | passed (149 s) |
+| `Explosion` | passed (95 s) | passed (133 s) |
+| `OptimalStopping` | passed (143 s) | passed (216 s) |
+| `Stabilization` | passed (271 s) | passed (280 s) |

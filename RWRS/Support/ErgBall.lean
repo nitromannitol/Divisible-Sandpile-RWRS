@@ -252,6 +252,7 @@ theorem mem_closedBall_of_not_disjoint_netBallX {m : ℕ} {N : RWRS.Net m} (hN :
     (v r : ℕ) (h : ¬ Disjoint (netBallX N r) (netBallX (RWRS.netReroot N v) r)) :
     v ∈ RWRS.closedBall (RWRS.netGraph N) (RWRS.netRoot N) (2 * r) := by
   refine mem_closedBall_of_not_disjoint N v r ?_
-  rwa [netBallX_eq_of_good hN r, netBallX_eq_of_good (show RWRS.NetGood (RWRS.netReroot N v) from hN) r] at h
+  rwa [netBallX_eq_of_good hN r, netBallX_eq_of_good (show RWRS.NetGood (RWRS.netReroot N v) from
+      hN) r] at h
 
 end RWRS.Support

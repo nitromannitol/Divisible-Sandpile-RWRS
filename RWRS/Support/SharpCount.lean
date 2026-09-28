@@ -81,7 +81,8 @@ theorem one_le_indicator_sum_iff (B : Finset ι) (A : ι → Set Ω) (ω : Ω) :
   rw [indicator_sum_eq_card]
   constructor
   · intro h
-    have hcard : 0 < (B.filter (fun i => ω ∈ A i)).card := by exact_mod_cast lt_of_lt_of_le zero_lt_one h
+    have hcard : 0 < (B.filter (fun i => ω ∈ A i)).card := by
+      exact_mod_cast lt_of_lt_of_le zero_lt_one h
     obtain ⟨i, hi⟩ := Finset.card_pos.1 hcard
     rw [Finset.mem_filter] at hi
     exact Set.mem_biUnion hi.1 hi.2

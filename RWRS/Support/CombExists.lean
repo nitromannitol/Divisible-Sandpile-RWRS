@@ -58,7 +58,8 @@ theorem exists_combCond {α : ℝ} (hα1 : 1 / 2 < α) (hα2 : α < 1) :
 `1/2 < α < min(1, 1/(q-1))`. -/
 theorem exists_params (p : ℝ) (hp3 : p < 3) :
     ∃ q α : ℝ, p < q ∧ 1 < q ∧ q < 3 ∧ 1 / 2 < α ∧ α < 1 ∧ α < 1 / (q - 1) := by
-  refine ⟨(max p 1 + 3) / 2, (1 / 2 + min 1 (1 / ((max p 1 + 3) / 2 - 1))) / 2, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  refine ⟨(max p 1 + 3) / 2, (1 / 2 + min 1 (1 / ((max p 1 + 3) / 2 - 1))) / 2, ?_, ?_, ?_, ?_, ?_,
+      ?_⟩
   · have : p ≤ max p 1 := le_max_left _ _
     linarith
   · have : (1 : ℝ) ≤ max p 1 := le_max_right _ _

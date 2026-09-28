@@ -156,7 +156,7 @@ automation:
         checkers verify the hashes, the axiom closure of every node, a
         warning-free build, coverage of every labelled statement of the paper,
         and quantifier order.  The Lean comparator (leanprover/comparator) was
-        run on all three Audit pairs on 2026-09-24 at commit 2cfdd84, and each
+        run on all three Audit pairs on 2026-09-27 at commit cddf021, and each
         pair passed with the Lean kernel and with the independent nanoda
         kernel; results and reproduction steps are in
         Audit/COMPARATOR_RUNS.md.  The workflow .github/workflows/comparator.yml

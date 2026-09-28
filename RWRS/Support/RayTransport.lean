@@ -105,7 +105,8 @@ theorem pipeValid_of_adj_true {u v : List (Fin B) × ℕ}
       exact hune hpred
 
 /-- Away from the root, the extra boundary edge changes no neighbour. -/
-theorem neighborFinset_pipe_true_eq {u : List (Fin B) × ℕ} (hu : RWRS.PipeValid B L u) (hune : u ≠ RWRS.pipeRoot B) :
+theorem neighborFinset_pipe_true_eq {u : List (Fin B) × ℕ} (hu : RWRS.PipeValid B L u) (hune : u ≠
+    RWRS.pipeRoot B) :
     (RWRS.pipeGraph B L true).neighborFinset u
       = (RWRS.pipeGraph B L false).neighborFinset u := by
   ext y

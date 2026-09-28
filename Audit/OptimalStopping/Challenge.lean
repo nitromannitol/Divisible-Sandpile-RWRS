@@ -4,16 +4,15 @@ import Mathlib
 # Theorem 1.1 (`thm:OS`): comparator challenge
 
 Mathlib-only comparator challenge for Theorem 1.1 (`thm:OS`) of Bou-Rabee, Peres and Sava-Huss,
-*Divisible sandpiles via random walks in random scenery* (arXiv:2604.13968).  The
-certified statement is `RWRS.Frozen.optimalStopping`, restated in `RWRS/MainTheorems.lean`
-as `RWRS.optimalStopping`.  Content: for simple random walk `X` on an infinite, connected graph of degree at most `d`
-and an i.i.d. scenery `ξ` of law `ν`, independent of the walk, with
-`S_n = ∑_{k<n} ξ(X_k)/deg(X_k)`: if `E[ξ] > 0` then `sup_n E_x[S_n | ξ] = ∞`
-almost surely; if `E[ξ] = 0` with positive finite variance, or with `ξ ≢ 0`
-symmetric, then `sup_τ E_x[S_τ | ξ] = ∞` almost surely over bounded stopping
-times, and `sup_n E_x[S_n | ξ] = ∞` if the graph is not doubly transient; if
-`E[ξ] < 0` and `E[(ξ⁺)^p] < ∞` for some `p > 3`, then `E_x[(sup_n S_n)^q] < ∞`
-for every `q ∈ [1, (p-1)/2)`.
+*Divisible sandpiles via random walks in random scenery* (arXiv:2604.13968).  The certified
+statement is `RWRS.Frozen.optimalStopping`, restated in `RWRS/MainTheorems.lean` as
+`RWRS.optimalStopping`.  Content: for simple random walk `X` on an infinite, connected graph of
+degree at most `d` and an i.i.d. scenery `ξ` of law `ν`, independent of the walk, with
+`S_n = ∑_{k<n} ξ(X_k)/deg(X_k)`: if `E[ξ] > 0` then `sup_n E_x[S_n | ξ] = ∞` almost surely; if
+`E[ξ] = 0` with positive finite variance, or with `ξ ≢ 0` symmetric, then
+`sup_τ E_x[S_τ | ξ] = ∞` almost surely over bounded stopping times, and `sup_n E_x[S_n | ξ] = ∞`
+if the graph is not doubly transient; if `E[ξ] < 0` and `E[(ξ⁺)^p] < ∞` for some `p > 3`, then
+`E_x[(sup_n S_n)^q] < ∞` for every `q ∈ [1, (p-1)/2)`.
 
 Only Mathlib is imported.  The vocabulary between `VOCABULARY-BEGIN` and
 `VOCABULARY-END` rebuilds, from Mathlib primitives, every definition needed to

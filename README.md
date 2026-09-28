@@ -180,7 +180,7 @@ three solutions build and depend only on `propext`, `Classical.choice` and
 `Quot.sound`, and `Audit/StatementRegression.lean` checks locally that each
 solution statement is exactly the challenge statement and mentions no constant
 of the repository or of Lattice-Probability.  The comparator itself was run
-on all three pairs on 2026-09-24 at commit `2cfdd84`, and each pair passed
+on all three pairs on 2026-09-27 at commit `cddf021`, and each pair passed
 with the Lean kernel and with the independent nanoda kernel.  Results and
 reproduction steps are in [`Audit/COMPARATOR_RUNS.md`](Audit/COMPARATOR_RUNS.md).
 The workflow

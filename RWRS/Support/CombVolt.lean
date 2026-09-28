@@ -143,13 +143,15 @@ section Pipes
 
 /-- The drop across the first edge of the `j`-th trunk pipe is the trunk current
 `I_j`. -/
-theorem trunk_drop (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
+theorem trunk_drop (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) {j : ℕ} (hj : 1 ≤ j)
+    (hjn : j ≤ n) :
     pipeDrop B L e n w (w.take j) = combI B L e n w j := by
   rw [pipeDrop, combI, combBranch, dropLast_take hwn hjn,
     if_pos (hL2 j hj)]
 
 /-- **The trunk step.**  `V_j = V_{j-1} - I_j L_j`. -/
-theorem trunk_step (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn : 1 ≤ n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
+theorem trunk_step (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn : 1
+    ≤ n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
     combV B L e n w j
       = combV B L e n w (j - 1) - (L j : ℝ) * combI B L e n w j := by
   have hlen : (w.take j).length = j := length_take_eq hwn hjn
@@ -160,11 +162,13 @@ theorem trunk_step (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool
   rw [hfar, dropLast_take hwn hjn, trunk_drop hL2 e hwn hj hjn]
 
 /-- The voltage vanishes at the far endpoint of the terminal pipe. -/
-theorem trunk_end (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) : combV B L e n w n = 0 :=
+theorem trunk_end (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) : combV B L e n w n =
+    0 :=
   combVoltage_eq_zero hL2 e hwn (not_mem_combSet_terminal hwn)
 
 /-- The first interior site of the `j`-th trunk pipe. -/
-theorem trunk_first (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn : 1 ≤ n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
+theorem trunk_first (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn
+    : 1 ≤ n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
     combVoltage B L e n w ((w.take j : List (Fin B)), 1)
       = combV B L e n w (j - 1) - combI B L e n w j := by
   have hlen : (w.take j).length = j := length_take_eq hwn hjn
@@ -179,7 +183,8 @@ theorem trunk_first (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Boo
   ring
 
 /-- The last interior site of the `j`-th trunk pipe carries `V_j + I_j`. -/
-theorem trunk_last (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn : 1 ≤ n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
+theorem trunk_last (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn : 1
+    ≤ n) {j : ℕ} (hj : 1 ≤ j) (hjn : j ≤ n) :
     combVoltage B L e n w ((w.take j : List (Fin B)), L j - 1)
       = combV B L e n w j + combI B L e n w j := by
   have hlen : (w.take j).length = j := length_take_eq hwn hjn
@@ -200,7 +205,8 @@ theorem trunk_last (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool
 
 /-- The drop across the first edge of a sibling pipe at `b_j` is `V_j/L_{j+1}`,
 because the far endpoint of a sibling pipe is outside the comb. -/
-theorem sibling_drop (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn : 1 ≤ n) {j : ℕ} (hjn : j < n) {c : Fin B}
+theorem sibling_drop (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn
+    : 1 ≤ n) {j : ℕ} (hjn : j < n) {c : Fin B}
     (hc : w.take j ++ [c] ≠ w.take (j + 1)) :
     pipeDrop B L e n w (w.take j ++ [c]) * (L (j + 1) : ℝ) = combV B L e n w j := by
   have hlen : (w.take j ++ [c]).length = j + 1 := by
@@ -216,7 +222,8 @@ theorem sibling_drop (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bo
   linarith [hfar]
 
 /-- The first interior site of a sibling pipe at `b_j`. -/
-theorem sibling_first (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn : 1 ≤ n) {j : ℕ} (hjn : j < n) {c : Fin B}
+theorem sibling_first (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn
+    : 1 ≤ n) {j : ℕ} (hjn : j < n) {c : Fin B}
     (hc : w.take j ++ [c] ≠ w.take (j + 1)) :
     combVoltage B L e n w (((w.take j ++ [c] : List (Fin B))), 1) * (L (j + 1) : ℝ)
       = combV B L e n w j * (L (j + 1) : ℝ) - combV B L e n w j := by
@@ -234,7 +241,8 @@ theorem sibling_first (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : B
   nlinarith [haff, hdrop]
 
 /-- The first interior site of the trunk continuation at `b_j`. -/
-theorem trunk_child_first (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n) (hn : 1 ≤ n) {j : ℕ} (hjn : j < n) {c : Fin B}
+theorem trunk_child_first (hB : 2 ≤ B) (hL2 : ∀ j, 1 ≤ j → 2 ≤ L j) (e : Bool) (hwn : w.length = n)
+    (hn : 1 ≤ n) {j : ℕ} (hjn : j < n) {c : Fin B}
     (hc : w.take j ++ [c] = w.take (j + 1)) :
     combVoltage B L e n w (((w.take j ++ [c] : List (Fin B))), 1)
       = combV B L e n w j - combI B L e n w (j + 1) := by

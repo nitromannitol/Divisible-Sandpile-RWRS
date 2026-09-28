@@ -33,7 +33,8 @@ theorem measurable_degWeight : Measurable degWeight := by
     simp only [degWeightAt]
     exact (measurable_degree r).inv
   have hsplit : degWeight
-      = (fun q : RWRS.Net 0 × ℕ => degWeightAt q.1 q.2) ∘ fun N : RWRS.Net 0 => (N, RWRS.netRoot N) :=
+      = (fun q : RWRS.Net 0 × ℕ => degWeightAt q.1 q.2) ∘ fun N : RWRS.Net 0 => (N, RWRS.netRoot N)
+          :=
     rfl
   rw [hsplit]
   exact hpair.comp (measurable_id.prodMk measurable_netRoot)

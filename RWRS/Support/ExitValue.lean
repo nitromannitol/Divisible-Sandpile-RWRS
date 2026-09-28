@@ -194,7 +194,8 @@ theorem valueExit_eq_exitValue (hG : G.Connected) (hdeg : ∀ v : V, 0 < G.degre
       simp only [netLaplacian, Pi.neg_apply, ← Finset.sum_neg_distrib]
       exact Finset.sum_congr rfl fun y _ => by ring
     rw [hneg, this, neg_zero]
-  have hzero : f x = 0 := le_antisymm (hle x) (by have := hge x; simp only [Pi.neg_apply] at this; linarith)
+  have hzero : f x = 0 :=
+    le_antisymm (hle x) (by have := hge x; simp only [Pi.neg_apply] at this; linarith)
   have hvx : vD x = RWRS.valueExit G ξ (K : Set V) x := by simp [hvD, hx]
   rw [hf] at hzero
   simp only [hvx] at hzero

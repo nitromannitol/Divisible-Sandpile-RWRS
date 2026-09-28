@@ -222,7 +222,8 @@ theorem meas_background_small {ν : Measure ℝ} [IsProbabilityMeasure ν] {μ :
   have hbd2 : RWRS.iidLaw V ν {ξ : V → ℝ | t / 4 ≤ |B ξ|} ≤ ENNReal.ofReal (1 / 8) := by
     refine le_trans (meas_ge_le_sq_integral B hmB hiB2 (by linarith)) ?_
     refine ENNReal.ofReal_le_ofReal ?_
-    have hvar : ∫ ξ, B ξ ^ 2 ∂(RWRS.iidLaw V ν) = (∑ v ∈ S, w v ^ 2) * ∫ z, ctrPart ν μ M z ^ 2 ∂ν :=
+    have hvar : ∫ ξ, B ξ ^ 2 ∂(RWRS.iidLaw V ν) = (∑ v ∈ S, w v ^ 2) * ∫ z, ctrPart ν μ M z ^ 2 ∂ν
+        :=
       integral_weighted_sq S w (measurable_ctrPart ν μ M) hctr2 (integral_ctrPart μ M hint)
     have hbound : ∫ z, ctrPart ν μ M z ^ 2 ∂ν ≤ 4 * M ^ 2 := by
       have := integral_mono hctr2 (integrable_const ((2 * M) ^ 2)) (fun z => by

@@ -45,7 +45,8 @@ theorem integral_earlierBlock_le (ν : Measure ℝ) [IsProbabilityMeasure ν]
   have hrest := integral_sum_block_le ν hint
     (S := ((C j : Finset V) : Set V))
     (T := ((stageSitesExcept C i j : Finset V) : Set V))
-    (disjoint_block_stageSitesExcept C (le_of_lt hji) (fun a b hab => by exact_mod_cast hdisj a b hab))
+    (disjoint_block_stageSitesExcept C (le_of_lt hji)
+        (fun a b hab => by exact_mod_cast hdisj a b hab))
     (F := C j) (hFS := fun v hv => hv)
     (w := fun v => RWRS.killedGreenReal G (K : Set V) v y) hgnn
     (A := (trapEvent (C j) ε)ᶜ) (B := restEvent C ε i j)
@@ -56,7 +57,8 @@ theorem integral_earlierBlock_le (ν : Measure ℝ) [IsProbabilityMeasure ν]
   have hset : ((trapEvent (C j) ε)ᶜ ∩ restEvent C ε i j)
       = hitEvent C ε i := (hitEvent_eq_compl_inter_rest C ε hji).symm
   rw [hset] at hrest
-  have hmeas := measure_restEvent_le ν C ε hji (fun a b hab => by exact_mod_cast hdisj a b hab) hq hcompl
+  have hmeas := measure_restEvent_le ν C ε hji (fun a b hab => by exact_mod_cast hdisj a b hab) hq
+      hcompl
   have hnn : 0 ≤ (∫ z, |z| ∂ν) * (∑ v ∈ C j, RWRS.killedGreenReal G (K : Set V) v y) := by
     refine mul_nonneg (integral_nonneg fun z => abs_nonneg z) ?_
     exact Finset.sum_nonneg fun v _ => hgnn v
@@ -212,22 +214,27 @@ theorem integral_sum_earlierBlocks_le (ν : Measure ℝ) [IsProbabilityMeasure �
           * (hitEvent C ε i).indicator (fun _ => (1 : ℝ)) ξ ∂(RWRS.iidLaw V ν)
       ≤ (∫ z, |z| ∂ν) * (∑ v ∈ C j, RWRS.killedGreenReal G (K : Set V) v y)
           * ((RWRS.iidLaw V ν (hitEvent C ε i)).toReal / q) :=
-    fun j hj => integral_earlierBlock_le ν hint K C ε (Finset.mem_range.1 hj) y hdisj hescK hq (hcompl j (Finset.mem_range.1 hj))
+    fun j hj => integral_earlierBlock_le ν hint K C ε (Finset.mem_range.1 hj) y hdisj hescK hq
+        (hcompl j (Finset.mem_range.1 hj))
   have hsum := Finset.sum_le_sum hstep
   have hcap := sum_earlierBlocks_le_one G C i y F K r hescK hCF
     (fun a ha b hb hab => by
       have := hdisj a (Nat.le_of_lt ha) b (Nat.le_of_lt hb) hab
       exact_mod_cast this)
     hadm hgreen
-  have hsplit : ∑ j ∈ Finset.range i, (∫ z, |z| ∂ν) * (∑ v ∈ C j, RWRS.killedGreenReal G (K : Set V) v y) * ((RWRS.iidLaw V ν (hitEvent C ε i)).toReal / q)
-      = (∫ z, |z| ∂ν) * (∑ j ∈ Finset.range i, ∑ v ∈ C j, RWRS.killedGreenReal G (K : Set V) v y) * ((RWRS.iidLaw V ν (hitEvent C ε i)).toReal / q) := by
+  have hsplit : ∑ j ∈ Finset.range i, (∫ z, |z| ∂ν) * (∑ v ∈ C j, RWRS.killedGreenReal G (K : Set V)
+      v y) * ((RWRS.iidLaw V ν (hitEvent C ε i)).toReal / q)
+      = (∫ z, |z| ∂ν) * (∑ j ∈ Finset.range i, ∑ v ∈ C j, RWRS.killedGreenReal G (K : Set V) v y) *
+          ((RWRS.iidLaw V ν (hitEvent C ε i)).toReal / q) := by
     simp only [Finset.mul_sum, Finset.sum_mul]
   rw [hsplit] at hsum
   have hP : 0 ≤ (RWRS.iidLaw V ν (hitEvent C ε i)).toReal / q :=
     div_nonneg ENNReal.toReal_nonneg (le_of_lt hq)
   have hA : 0 ≤ ∫ z, |z| ∂ν := integral_nonneg fun z => abs_nonneg z
-  calc ∑ j ∈ Finset.range i, ∫ ξ, (∑ v ∈ C j, ξ v * RWRS.killedGreenReal G (K : Set V) v y) * (hitEvent C ε i).indicator (fun _ => (1 : ℝ)) ξ ∂(RWRS.iidLaw V ν)
-      ≤ (∫ z, |z| ∂ν) * (∑ j ∈ Finset.range i, ∑ v ∈ C j, RWRS.killedGreenReal G (K : Set V) v y) * ((RWRS.iidLaw V ν (hitEvent C ε i)).toReal / q) := hsum
+  calc ∑ j ∈ Finset.range i, ∫ ξ, (∑ v ∈ C j, ξ v * RWRS.killedGreenReal G (K : Set V) v y) *
+      (hitEvent C ε i).indicator (fun _ => (1 : ℝ)) ξ ∂(RWRS.iidLaw V ν)
+      ≤ (∫ z, |z| ∂ν) * (∑ j ∈ Finset.range i, ∑ v ∈ C j, RWRS.killedGreenReal G (K : Set V) v y) *
+          ((RWRS.iidLaw V ν (hitEvent C ε i)).toReal / q) := hsum
     _ ≤ (∫ z, |z| ∂ν) * 1 * ((RWRS.iidLaw V ν (hitEvent C ε i)).toReal / q) := by
         refine mul_le_mul_of_nonneg_right ?_ hP
         exact mul_le_mul_of_nonneg_left hcap hA

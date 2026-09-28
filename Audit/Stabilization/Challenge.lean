@@ -3,14 +3,14 @@ import Mathlib
 /-!
 # Theorem 1.3 (`thm:stab`): comparator challenge
 
-Mathlib-only comparator challenge for Theorem 1.3 (`thm:stab`) of Bou-Rabee, Peres and Sava-Huss,
-*Divisible sandpiles via random walks in random scenery* (arXiv:2604.13968).  The
-certified statement is `RWRS.Frozen.stabilization`, restated in `RWRS/MainTheorems.lean`
-as `RWRS.stabilization`.  Content: on an infinite, connected graph of degree at most `d`, i.i.d. initial masses
-of mean `μ < 1` with `E[(σ⁺)^p] < ∞` for some `p > 3` have
-`sup_v E[u_∞(v)^q] < ∞` for every `q ∈ [1, (p-1)/2)` and stabilize almost
-surely; if `|B(o,r)| ≤ C r^{d_f}` for all `r ≥ 1`, then `E[(σ⁺)^p] < ∞` for
-some `p > d_f` suffices for almost sure stabilization.
+Mathlib-only comparator challenge for Theorem 1.3 (`thm:stab`) of Bou-Rabee, Peres and
+Sava-Huss, *Divisible sandpiles via random walks in random scenery* (arXiv:2604.13968).  The
+certified statement is `RWRS.Frozen.stabilization`, restated in `RWRS/MainTheorems.lean` as
+`RWRS.stabilization`.  Content: on an infinite, connected graph of degree at most `d`, i.i.d.
+initial masses of mean `μ < 1` with `E[(σ⁺)^p] < ∞` for some `p > 3` have
+`sup_v E[u_∞(v)^q] < ∞` for every `q ∈ [1, (p-1)/2)` and stabilize almost surely; if
+`|B(o,r)| ≤ C r^{d_f}` for all `r ≥ 1`, then `E[(σ⁺)^p] < ∞` for some `p > d_f` suffices for
+almost sure stabilization.
 
 Only Mathlib is imported.  The vocabulary between `VOCABULARY-BEGIN` and
 `VOCABULARY-END` rebuilds, from Mathlib primitives, every definition needed to

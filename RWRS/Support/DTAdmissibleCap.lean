@@ -38,7 +38,8 @@ theorem killedGreenReal_le_greenReal {C : Set V} {x v : V}
   rw [RWRS.killedGreenReal]
   have hkg : RWRS.killedGreen G C x v ≠ ⊤ :=
     fun hc => hv (le_antisymm le_top (hc ▸ RWRS.Support.killedGreen_le_green (G := G) (C := C) x v))
-  exact (ENNReal.toReal_le_toReal hkg hv).mpr (RWRS.Support.killedGreen_le_green (G := G) (C := C) x v)
+  exact (ENNReal.toReal_le_toReal hkg hv).mpr (RWRS.Support.killedGreen_le_green (G := G) (C := C) x
+      v)
 
 /-- A double sum over pairwise disjoint blocks contained in `F` is bounded by
 the sum over `F`, for nonnegative weights. -/

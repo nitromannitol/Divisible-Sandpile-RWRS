@@ -72,7 +72,8 @@ theorem card_ballFinset_ge {o : V} {c d_f : ℝ} (hA3 : RWRS.VolumeGrowthLower G
   have hcard : (RWRS.closedBall G o r).encard = ((ballFinset G o r).card : ℕ∞) := by
     rw [ballFinset, Set.Finite.encard_eq_coe_toFinset_card]
   rw [hcard] at h
-  have h2 : ENNReal.ofReal (c * (r : ℝ) ^ d_f) ≤ ENNReal.ofReal (((ballFinset G o r).card : ℝ)) := by
+  have h2 : ENNReal.ofReal (c * (r : ℝ) ^ d_f) ≤ ENNReal.ofReal (((ballFinset G o r).card : ℝ)) :=
+      by
     refine le_trans h (le_of_eq ?_)
     simp [ENNReal.ofReal_natCast]
   have := (ENNReal.ofReal_le_ofReal_iff (by positivity)).1 h2

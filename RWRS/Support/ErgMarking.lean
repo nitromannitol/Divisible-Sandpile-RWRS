@@ -125,7 +125,8 @@ theorem ae_eq_const_of_isErgodicNet {m : ℕ} {P : Measure (RWRS.Net m)}
     have hone : ∀ n : ℕ, P (S (c + 1 / ((n : ℝ) + 1))) = 1 := by
       intro n
       have hpos : (0:ℝ) < 1 / ((n : ℝ) + 1) := by positivity
-      obtain ⟨t, htT, hts⟩ := exists_lt_of_csInf_lt ⟨1, h1T⟩ (by linarith : c < c + 1 / ((n : ℝ) + 1))
+      obtain ⟨t, htT, hts⟩ := exists_lt_of_csInf_lt ⟨1, h1T⟩
+        (by linarith : c < c + 1 / ((n : ℝ) + 1))
       have hsub : S t ⊆ S (c + 1 / ((n : ℝ) + 1)) := by
         intro N hN
         exact le_trans hN hts.le

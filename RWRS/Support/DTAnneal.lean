@@ -93,7 +93,8 @@ theorem walkExp_conditional_le (hG : G.Connected) (hdeg : ∀ v : V, 0 < G.degre
       rw [Set.indicator_of_mem hX, Set.indicator_of_notMem (by simpa using hE), add_zero]
       have hcnt : stageCnt G r C ℓ K N X = ℓ + 1 :=
         stageCnt_eq_of_walkGood r C ℓ K hN X hX
-      have hdisj := disjoint_walkBlocks r C K hCball hCself X ℓ (by omega : ℓ < stageCnt G r C ℓ K N X)
+      have hdisj := disjoint_walkBlocks r C K hCball hCself X ℓ
+        (by omega : ℓ < stageCnt G r C ℓ K N X)
       have hfail : RWRS.iidLaw V ν {ξ : V → ℝ | ∀ j < ℓ + 1,
           ξ ∉ trapEvent (C (X ((uncTime G r C X j).toNat))) ε} ≤ ENNReal.ofReal (1 / 4) := by
         refine le_trans (measure_noHit_le ν (fun j => C (X ((uncTime G r C X j).toNat))) ε

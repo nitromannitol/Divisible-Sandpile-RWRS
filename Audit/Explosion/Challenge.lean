@@ -3,13 +3,13 @@ import Mathlib
 /-!
 # Theorem 1.2 (`thm:explosion`): comparator challenge
 
-Mathlib-only comparator challenge for Theorem 1.2 (`thm:explosion`) of Bou-Rabee, Peres and Sava-Huss,
-*Divisible sandpiles via random walks in random scenery* (arXiv:2604.13968).  The
-certified statement is `RWRS.Frozen.explosion`, restated in `RWRS/MainTheorems.lean`
-as `RWRS.explosion`.  Content: on an infinite, connected graph of degree at most `d`, i.i.d. initial masses
-of mean `μ > 1`, or of mean `μ = 1` with positive finite variance or with
-`σ - 1` symmetric and `σ ≢ 1`, stabilize with probability zero under the
-parallel toppling procedure of the divisible sandpile.
+Mathlib-only comparator challenge for Theorem 1.2 (`thm:explosion`) of Bou-Rabee, Peres and
+Sava-Huss, *Divisible sandpiles via random walks in random scenery* (arXiv:2604.13968).  The
+certified statement is `RWRS.Frozen.explosion`, restated in `RWRS/MainTheorems.lean` as
+`RWRS.explosion`.  Content: on an infinite, connected graph of degree at most `d`, i.i.d.
+initial masses of mean `μ > 1`, or of mean `μ = 1` with positive finite variance or with `σ - 1`
+symmetric and `σ ≢ 1`, stabilize with probability zero under the parallel toppling procedure of
+the divisible sandpile.
 
 Only Mathlib is imported.  The vocabulary between `VOCABULARY-BEGIN` and
 `VOCABULARY-END` rebuilds, from Mathlib primitives, every definition needed to

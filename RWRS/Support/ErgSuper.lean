@@ -57,7 +57,8 @@ theorem integral_netWeightedMass_markIid (Q : Measure (RWRS.Net 0)) [IsProbabili
       = (fun z : ℝ => z) (RWRS.netConfig M (RWRS.netRoot M)) * degWeight (RWRS.forgetMarks M) :=
     netWeightedMass_eq_mul
   simp only [hrw]
-  exact integral_markIid_mark_mul Q ν measurable_id measurable_degWeight hν1 (integrable_degWeight Q)
+  exact integral_markIid_mark_mul Q ν measurable_id measurable_degWeight hν1 (integrable_degWeight
+      Q)
 
 /-- The integrability hypothesis of `thm:stationary-toppling` forces the mark law
 to have a finite first moment. -/

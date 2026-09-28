@@ -251,7 +251,8 @@ theorem measurable_trapPotential_rule (r : ℕ) (C : V → Finset V) (K : Finset
   have hjoint : Measurable fun p : (V → ℝ) × V =>
       ∑ v ∈ K, p.1 v * RWRS.killedGreenReal G (K : Set V) v p.2 :=
     Finset.measurable_sum _ fun v _ =>
-      ((measurable_pi_apply v).comp measurable_fst).mul ((measurable_of_countable (f := fun y : V => RWRS.killedGreenReal G (K : Set V) v y)).comp measurable_snd)
+      ((measurable_pi_apply v).comp measurable_fst).mul ((measurable_of_countable (f := fun y : V =>
+          RWRS.killedGreenReal G (K : Set V) v y)).comp measurable_snd)
   have hpair : Measurable fun ξ : V → ℝ => (ξ, X (trapRule G r C K N ε ξ X)) :=
     Measurable.prod measurable_id hpos
   exact hjoint.comp hpair

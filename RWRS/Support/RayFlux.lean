@@ -150,8 +150,10 @@ theorem recVolt_eq_zero (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s)
 /-- **Unit current traverses every backbone edge below the attachment vertex.** -/
 theorem backbone_drop (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s)
     {k : ℕ} {w : List (Fin B)} {i : ℕ} (hi : i < s k) :
-    RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) (rayPt B L m i)
-      - RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) (rayPt B L m (i + 1)) = 1 := by
+    RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set
+        (RayV B L m)) (rayPt B L m 0) (rayPt B L m i)
+      - RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set
+          (RayV B L m)) (rayPt B L m 0) (rayPt B L m (i + 1)) = 1 := by
   classical
   have hcut := current_across_cut (G := rayGraph B L m s) (recSet B L m s hs k w)
     (ray_escape hL _) (fun v _ => ray_degree_pos hL v)
@@ -163,7 +165,8 @@ theorem backbone_drop (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s)
 /-- **The voltage at the attachment vertex is at most one.** -/
 theorem recVolt_attach_le_one (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s)
     {k : ℕ} {w : List (Fin B)} (hmk : 1 ≤ m k) :
-    RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) (rayPt B L m (s k)) ≤ 1 := by
+    RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set
+        (RayV B L m)) (rayPt B L m 0) (rayPt B L m (s k)) ≤ 1 := by
   classical
   set C := recSet B L m s hs k w with hC
   have hcut := current_across_cut (G := rayGraph B L m s) C
@@ -172,7 +175,9 @@ theorem recVolt_attach_le_one (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMo
     (rayPt_zero_mem_recSet hs k w)
   rw [sum_cut_eq_sum_cutPairs] at hcut
   have hnn : ∀ p ∈ cutPairs (rayGraph B L m s) C,
-      0 ≤ RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) p.1 - RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) p.2 := by
+      0 ≤ RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) :
+          Set (RayV B L m)) (rayPt B L m 0) p.1 - RWRS.killedGreenReal (rayGraph B L m s) ((recSet B
+          L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) p.2 := by
     intro p hp
     rw [mem_cutPairs] at hp
     rw [recVolt_eq_zero hL hs k w hp.2.1, sub_zero]
@@ -183,7 +188,9 @@ theorem recVolt_attach_le_one (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMo
     exact ⟨rayPt_attach_mem_recSet hs hmk, rayPt_succ_attach_notMem_recSet hs k w,
       rayGraph_adj_ray (s := s) (s k)⟩
   have hsingle := Finset.single_le_sum (f := fun p : RayV B L m × RayV B L m =>
-    RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) p.1 - RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) p.2) hnn hmem
+    RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set
+        (RayV B L m)) (rayPt B L m 0) p.1 - RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s
+        hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) p.2) hnn hmem
   rw [hcut] at hsingle
   have hzero := recVolt_eq_zero (m := m) hL hs k w (rayPt_succ_attach_notMem_recSet hs k w)
   simp only at hsingle
@@ -217,9 +224,12 @@ theorem recVolt_ray (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s)
 /-- **The voltage is at most `s_k + 1` everywhere.** -/
 theorem recVolt_le (hL : ∀ j, 1 ≤ j → 1 ≤ L j) (hs : StrictMono s)
     {k : ℕ} {w : List (Fin B)} (hmk : 1 ≤ m k) (x : RayV B L m) :
-    RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) x ≤ (s k : ℝ) + 1 := by
-  have hroot : RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) (rayPt B L m 0)
-      = RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set (RayV B L m)) (rayPt B L m 0) (rayPt B L m (s k)) + (s k : ℕ) := by
+    RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set
+        (RayV B L m)) (rayPt B L m 0) x ≤ (s k : ℝ) + 1 := by
+  have hroot : RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L
+      m)) : Set (RayV B L m)) (rayPt B L m 0) (rayPt B L m 0)
+      = RWRS.killedGreenReal (rayGraph B L m s) ((recSet B L m s hs k w : Finset (RayV B L m)) : Set
+          (RayV B L m)) (rayPt B L m 0) (rayPt B L m (s k)) + (s k : ℕ) := by
     have := recVolt_ray hL hs (m := m) (k := k) (w := w) (s k) 0 (by omega)
     simpa using this
   have hle := killedGreenReal_le_source (G := rayGraph B L m s)

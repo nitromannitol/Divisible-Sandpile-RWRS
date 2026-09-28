@@ -144,7 +144,8 @@ theorem measurable_odometerNet (k : ℕ) (v : ℕ) :
 open scoped Classical in
 /-- One step of parallel toppling, `netTopple`, is a measurable function of the network. -/
 theorem measurable_netTopple (k : ℕ) : Measurable fun N : Net 1 => netTopple N k := by
-  refine Measurable.prodMk measurable_fst (Measurable.prodMk (measurable_fst.comp measurable_snd) ?_)
+  refine Measurable.prodMk measurable_fst (Measurable.prodMk (measurable_fst.comp measurable_snd)
+      ?_)
   refine measurable_pi_lambda _ fun i => measurable_pi_lambda _ fun j => ?_
   by_cases hj : j = 0
   · simp only [hj]

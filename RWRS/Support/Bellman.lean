@@ -21,7 +21,8 @@ omit [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V] [DecidableEq
 /-- The trajectory is in `C` before the exit time and outside it at the exit
 time, when the exit time is finite. -/
 theorem exitNat_spec {C : Set V} {X : ℕ → V} (hX : LatticeProb.Graph.exitTime C X ≠ ⊤) :
-    X ((LatticeProb.Graph.exitTime C X).toNat) ∉ C ∧ ∀ j < (LatticeProb.Graph.exitTime C X).toNat, X j ∈ C := by
+    X ((LatticeProb.Graph.exitTime C X).toNat) ∉ C ∧ ∀ j < (LatticeProb.Graph.exitTime C X).toNat, X
+        j ∈ C := by
   obtain ⟨r, hr⟩ := ENat.ne_top_iff_exists.mp hX
   have hrr : (LatticeProb.Graph.exitTime C X).toNat = r := by rw [← hr]; simp
   refine ⟨?_, ?_⟩
@@ -85,7 +86,8 @@ theorem measurable_of_isStopping {τ : (ℕ → V) → ℕ} (hτ : RWRS.IsStoppi
     Measurable τ := by
   classical
   refine measurable_to_countable' fun k => ?_
-  have hdep : LatticeProb.Graph.DependsUpTo k (fun X : ℕ → V => if τ X = k then (1 : ℝ) else 0) := by
+  have hdep : LatticeProb.Graph.DependsUpTo k (fun X : ℕ → V => if τ X = k then (1 : ℝ) else 0) :=
+      by
     intro X Y hXY
     show (if τ X = k then (1 : ℝ) else 0) = (if τ Y = k then (1 : ℝ) else 0)
     by_cases h : τ X = k
