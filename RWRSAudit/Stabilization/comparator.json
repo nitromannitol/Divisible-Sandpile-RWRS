@@ -1,0 +1,14 @@
+{
+  "challenge_module": "RWRSAudit.Stabilization.Challenge",
+  "solution_module": "RWRSAudit.Stabilization.Solution",
+  "theorem_names": [
+    "RWRSAudit.stabilization"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

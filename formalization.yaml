@@ -14,7 +14,7 @@ project:
     paper cites from the literature, eight are proved here and the ergodic
     decomposition of stationary random networks is an explicit hypothesis of
     the statements that use it.  The three main theorems are independently
-    checked using the Audit/ comparator pairs.
+    checked using the RWRSAudit/ comparator pairs.
   authors:
     - "Ahmed Bou-Rabee"
   license: "Apache-2.0"
@@ -80,7 +80,7 @@ status:
     related work of Sections 1.1 and 1.2, the example and remark environments,
     and the figures.  The main theorems are stated in full in
     RWRS/MainTheorems.lean; all three are additionally restated over a
-    Mathlib-only vocabulary for the Lean comparator (Audit/).
+    Mathlib-only vocabulary for the Lean comparator (RWRSAudit/).
   sorry_count: 0
   sorry_count_scope: "RWRS production library only"
   comparator_challenge_sorry_count: 3
@@ -94,37 +94,37 @@ status:
       file: "RWRS/MainTheorems.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      comparator_config: "Audit/OptimalStopping/comparator.json"
+      comparator_config: "RWRSAudit/OptimalStopping/comparator.json"
       literature_dependencies: []
     - declaration: "RWRS.explosion"
       file: "RWRS/MainTheorems.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      comparator_config: "Audit/Explosion/comparator.json"
+      comparator_config: "RWRSAudit/Explosion/comparator.json"
       literature_dependencies: []
     - declaration: "RWRS.stabilization"
       file: "RWRS/MainTheorems.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      comparator_config: "Audit/Stabilization/comparator.json"
+      comparator_config: "RWRSAudit/Stabilization/comparator.json"
       literature_dependencies: []
     - declaration: "RWRSAudit.optimalStopping"
-      file: "Audit/OptimalStopping/Solution.lean"
+      file: "RWRSAudit/OptimalStopping/Solution.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      comparator_config: "Audit/OptimalStopping/comparator.json"
+      comparator_config: "RWRSAudit/OptimalStopping/comparator.json"
       literature_dependencies: []
     - declaration: "RWRSAudit.explosion"
-      file: "Audit/Explosion/Solution.lean"
+      file: "RWRSAudit/Explosion/Solution.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      comparator_config: "Audit/Explosion/comparator.json"
+      comparator_config: "RWRSAudit/Explosion/comparator.json"
       literature_dependencies: []
     - declaration: "RWRSAudit.stabilization"
-      file: "Audit/Stabilization/Solution.lean"
+      file: "RWRSAudit/Stabilization/Solution.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      comparator_config: "Audit/Stabilization/comparator.json"
+      comparator_config: "RWRSAudit/Stabilization/comparator.json"
       literature_dependencies: []
 
 automation:
@@ -155,9 +155,9 @@ automation:
         the hashes, the axiom closure of every node, a warning-free build,
         coverage of every labelled statement of the paper, and quantifier
         order.  The Lean comparator (leanprover/comparator) passes on all three
-        Audit pairs, with the Lean kernel and with the independent nanoda
+        RWRSAudit pairs, with the Lean kernel and with the independent nanoda
         kernel; pins, results and reproduction steps are in
-        Audit/COMPARATOR_RUNS.md.  The workflow
+        RWRSAudit/COMPARATOR_RUNS.md.  The workflow
         .github/workflows/comparator.yml runs it on request.
       cost:
         wall_time: "about two weeks of calendar time"
@@ -176,9 +176,9 @@ automation:
     and Mathlib; the verified library contains no sorry and no custom axiom.
     The one cited result that is not proved, the ergodic decomposition, enters
     as an explicit hypothesis, not an axiom.  The Mathlib-only comparator
-    challenge files (Audit/*/Challenge.lean) each contain exactly one
+    challenge files (RWRSAudit/*/Challenge.lean) each contain exactly one
     intentional statement-level sorry (the theorem body), which is filled by
-    the corresponding Audit/*/Solution.lean.  The shared library
+    the corresponding RWRSAudit/*/Solution.lean.  The shared library
     Lattice-Probability is a separate formalization by the same author, also
     written with AI models, not part of this repository.
 
@@ -222,17 +222,17 @@ alignment:
       lean: "RWRS.optimalStopping"
       module: "RWRS.MainTheorems"
       status: "proved"
-      note: "Certified statement RWRS.Frozen.optimalStopping; the von Bahr-Esseen, Fuk-Nagaev and bounded-degree heat kernel results it uses are proved outright in RWRS/External/. Comparator challenge Audit/OptimalStopping/."
+      note: "Certified statement RWRS.Frozen.optimalStopping; the von Bahr-Esseen, Fuk-Nagaev and bounded-degree heat kernel results it uses are proved outright in RWRS/External/. Comparator challenge RWRSAudit/OptimalStopping/."
     - source: "Theorem 1.2 (thm:explosion)"
       lean: "RWRS.explosion"
       module: "RWRS.MainTheorems"
       status: "proved"
-      note: "Certified statement RWRS.Frozen.explosion. Comparator challenge Audit/Explosion/."
+      note: "Certified statement RWRS.Frozen.explosion. Comparator challenge RWRSAudit/Explosion/."
     - source: "Theorem 1.3 (thm:stab)"
       lean: "RWRS.stabilization"
       module: "RWRS.MainTheorems"
       status: "proved"
-      note: "Certified statement RWRS.Frozen.stabilization; the von Bahr-Esseen, Fuk-Nagaev, bounded-degree heat kernel and pointwise Carne-Varopoulos results it uses are proved outright in RWRS/External/. Comparator challenge Audit/Stabilization/."
+      note: "Certified statement RWRS.Frozen.stabilization; the von Bahr-Esseen, Fuk-Nagaev, bounded-degree heat kernel and pointwise Carne-Varopoulos results it uses are proved outright in RWRS/External/. Comparator challenge RWRSAudit/Stabilization/."
     - source: "Every other labelled theorem, lemma, proposition and corollary"
       lean: "RWRS.Frozen.*"
       module: "RWRS.Frozen"

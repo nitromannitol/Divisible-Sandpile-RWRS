@@ -1,16 +1,16 @@
 import Mathlib
 import RWRS.MainTheorems
-import Audit.Support.Vocabulary
-import Audit.Support.Bridge
+import RWRSAudit.OptimalStopping.SolutionBasic
+import RWRSAudit.Support.OptimalStoppingBridge
 
 /-!
 # Solution: OptimalStopping
 
-The challenge module `Audit/OptimalStopping/Challenge.lean` imports only Mathlib and states
+The challenge module `RWRSAudit/OptimalStopping/Challenge.lean` imports only Mathlib and states
 the theorem with one intentional `sorry`.  This solution imports the repository
-together with `Audit.Support.Vocabulary`, a verbatim copy of the challenge's
+together with `RWRSAudit.OptimalStopping.SolutionBasic`, a verbatim copy of the challenge's
 vocabulary, and proves the byte-identical statement from `RWRS.optimalStopping`.  The goal
-is rewritten with the identifications of `Audit/Support/Bridge.lean` for the
+is rewritten with the identifications of `RWRSAudit/Support/OptimalStoppingBridge.lean` for the
 four constants built on recursive definitions (`supMeanPayoff`,
 `supStopValue`, `DoublyTransient`, `jointLaw`); every other vocabulary
 constant is definitionally equal to its repository counterpart, so the library

@@ -1,28 +1,26 @@
 import Mathlib
 import RWRS.MainTheorems
-import Audit.Support.Vocabulary
+import RWRSAudit.OptimalStopping.SolutionBasic
 
 /-!
-# Bridges from the Mathlib-only vocabulary to the repository
+# Bridge from the `OptimalStopping` vocabulary to the repository
 
-The challenge vocabulary (`Audit/Support/Vocabulary.lean`, namespace
-`RWRSAudit`) is a statement-level copy of the repository definitions.  It
-contains no structure: every declaration is a definition over Mathlib types,
-written token for token as in `RWRS/Basic.lean`, `RWRS/Walk.lean`,
-`RWRS/Scenery.lean`, `RWRS/Setting.lean` and `RWRS/External/`.  Each is
-therefore definitionally equal to its repository counterpart, and this file
-records every identification as an equation of constants.  The non-recursive
-definitions are identified by `rfl`, which the kernel checks by unfolding both
-sides.  The three recursive definitions `heat`, `walkExp` and `walkPath` are
-compiled by structural recursion into distinct auxiliary constants, so they are
-identified by induction on the time index, and the definitions built on them
-(`green`, `stopValues`, `walkLaw`, `meanPayoff`, `supMeanPayoff`,
-`supStopValue`, `jointLaw`, `DoublyTransient`, `CarneVaropoulos`) by rewriting.
-Nothing is asserted.  The one cited-result proposition still carried in the
-vocabulary, `External.CarneVaropoulos`, is then the repository's, and
-`carneVaropoulos` transports it.  The voltage-function proposition is no
-longer part of the vocabulary: the repository now proves it outright and
-discharges it inside the proofs, so no bridge for it is needed.
+The vocabulary of `RWRSAudit/OptimalStopping/Challenge.lean` (copied verbatim into
+`RWRSAudit/OptimalStopping/SolutionBasic.lean`, which imports only Mathlib) is a statement-level
+copy of the repository definitions. It contains no structure: every declaration is a definition
+over Mathlib types, written token for token as in `RWRS/Basic.lean`, `RWRS/Walk.lean`,
+`RWRS/Scenery.lean` and `RWRS/Setting.lean`. Each constant that the statement of
+`optimalStopping` depends on is therefore definitionally equal to its repository counterpart,
+and this file records each identification as an equation of constants. The non-recursive
+definitions are identified by `rfl`, which the kernel checks by unfolding both sides. The three
+recursive definitions `heat`, `walkExp` and `walkPath` are compiled by structural recursion into
+distinct auxiliary constants, so they are identified by induction on the time index, and the
+definitions built on them (`green`, `stopValues`, `walkLaw`, `meanPayoff`, `supMeanPayoff`,
+`supStopValue`, `jointLaw`, `DoublyTransient`) by rewriting. Nothing is asserted.
+
+**It is imported by the `Solution` file only.**  The `Challenge` and `SolutionBasic` files must
+stay Mathlib-only: a repository import inside the vocabulary changes instance elaboration there
+and breaks the comparator's constant-by-constant closure check.
 -/
 
 namespace RWRSAudit.Bridge
@@ -30,22 +28,6 @@ namespace RWRSAudit.Bridge
 /-! ### Non-recursive definitions -/
 
 theorem walkOp_eq : @RWRSAudit.walkOp = @RWRS.walkOp := rfl
-
-theorem laplacian_eq : @RWRSAudit.laplacian = @RWRS.laplacian := rfl
-
-theorem closedBall_eq : @RWRSAudit.closedBall = @RWRS.closedBall := rfl
-
-theorem emission_eq : @RWRSAudit.emission = @RWRS.emission := rfl
-
-theorem topple_eq : @RWRSAudit.topple = @RWRS.topple := rfl
-
-theorem config_eq : @RWRSAudit.config = @RWRS.config := rfl
-
-theorem odometer_eq : @RWRSAudit.odometer = @RWRS.odometer := rfl
-
-theorem odometerLimit_eq : @RWRSAudit.odometerLimit = @RWRS.odometerLimit := rfl
-
-theorem Stabilizes_eq : @RWRSAudit.Stabilizes = @RWRS.Stabilizes := rfl
 
 theorem cons_eq : @RWRSAudit.cons = @RWRS.cons := rfl
 
@@ -78,8 +60,6 @@ theorem IsSymmetric_eq : @RWRSAudit.IsSymmetric = @RWRS.IsSymmetric := rfl
 theorem evar_eq : @RWRSAudit.evar = @RWRS.evar := rfl
 
 theorem BoundedDegree_eq : @RWRSAudit.BoundedDegree = @RWRS.BoundedDegree := rfl
-
-theorem VolumeGrowthUpper_eq : @RWRSAudit.VolumeGrowthUpper = @RWRS.VolumeGrowthUpper := rfl
 
 /-! ### The recursive definitions, by induction -/
 
@@ -161,18 +141,5 @@ theorem jointLaw_eq : @RWRSAudit.jointLaw = @RWRS.jointLaw := by
 theorem doublyTransient_eq : @RWRSAudit.DoublyTransient = @RWRS.DoublyTransient := by
   funext V G _
   simp only [RWRSAudit.DoublyTransient, RWRS.DoublyTransient, green_eq]
-
-theorem carneVaropoulos_eq :
-    @RWRSAudit.External.CarneVaropoulos = @RWRS.External.CarneVaropoulos := by
-  funext V G _ _
-  simp only [RWRSAudit.External.CarneVaropoulos, RWRS.External.CarneVaropoulos, walkLaw_eq]
-
-/-! ### The cited-result hypotheses -/
-
-/-- The vocabulary's Carne--Varopoulos hypothesis is the repository's. -/
-theorem carneVaropoulos {V : Type*} {G : SimpleGraph V} [G.LocallyFinite] [MeasurableSpace V]
-    (h : RWRSAudit.External.CarneVaropoulos G) : RWRS.External.CarneVaropoulos G := by
-  rw [← carneVaropoulos_eq]
-  exact h
 
 end RWRSAudit.Bridge

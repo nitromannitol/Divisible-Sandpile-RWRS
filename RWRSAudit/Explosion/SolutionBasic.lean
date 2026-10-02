@@ -1,41 +1,12 @@
 import Mathlib
 
 /-!
-# Theorem 1.2 (`thm:explosion`): comparator challenge
+# Mathlib-only statement vocabulary for the `Explosion` comparator
 
-Mathlib-only comparator challenge for Theorem 1.2 (`thm:explosion`) of Bou-Rabee, Peres and
-Sava-Huss, *Divisible sandpiles via random walks in random scenery* (arXiv:2604.13968).  The
-certified statement is `RWRS.Frozen.explosion`, restated in `RWRS/MainTheorems.lean` as
-`RWRS.explosion`.  Content: on an infinite, connected graph of degree at most `d`, i.i.d.
-initial masses of mean `μ > 1`, or of mean `μ = 1` with positive finite variance or with `σ - 1`
-symmetric and `σ ≢ 1`, stabilize with probability zero under the parallel toppling procedure of
-the divisible sandpile.
-
-Only Mathlib is imported.  The vocabulary between `VOCABULARY-BEGIN` and
-`VOCABULARY-END` rebuilds, from Mathlib primitives, every definition needed to
-read the theorem: the averaging operator and the Laplacian of a locally finite
-graph, the parallel toppling procedure and its odometer, the heat kernel and
-the Green function, the walk payoff and bounded stopping times, the law of the
-simple random walk on path space, the i.i.d. scenery and its moments, the
-optimal stopping suprema, double transience, a degree bound, volume growth,
-and the cited results.  It is a statement-level copy of the repository
-definitions (see `Audit/README.md` for the provenance table) and is
-byte-identical in all three challenges.  The sole intentional `sorry` is the
-proof of the final theorem.
-
-## Cited results
-
-The paper uses results from the literature without proof.  The bounded
-voltage function of Lyons–Peres, Proposition 2.1 and equation (2.4), is proved
-inside the repository on every infinite connected graph, recurrent or transient
-(`RWRS.External.voltageFunction_of_connected`), and is used only inside the
-proof, so it is not a hypothesis of this theorem.
-
-## Presentation deltas
-
-None at the level of the displayed statement: the theorem below is the
-statement of `RWRS.explosion` with every repository name replaced by its
-vocabulary copy.
+Verbatim copy of the vocabulary block of `RWRSAudit/Explosion/Challenge.lean` (between
+`VOCABULARY-BEGIN` and `VOCABULARY-END`); a mechanical copy, not hand-edited.  It imports only
+Mathlib, so the definitions it declares elaborate exactly as they do in the challenge;
+`RWRSAudit/check_standalone.sh --vocabulary` checks that the two blocks are byte-identical.
 -/
 
 -- VOCABULARY-BEGIN
@@ -237,25 +208,3 @@ end External
 
 end RWRSAudit
 -- VOCABULARY-END
-
-namespace RWRSAudit
-
-open MeasureTheory
-open scoped ENNReal
-
-universe u
-
-/-- Theorem 1.2 (`thm:explosion`). -/
-theorem explosion {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
-    [Infinite V] [MeasurableSpace V]
-    (hG : G.Connected)
-    (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
-    (hdet : HasExtMean ν) :
-    (1 < extMean ν → iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 0) ∧
-    (extMean ν = 1 →
-      ((0 < evar ν ∧ evar ν < ⊤) ∨
-        (ν ≠ Measure.dirac 1 ∧ IsSymmetric (ν.map (fun z => z - 1)))) →
-      iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 0) := by
-  sorry
-
-end RWRSAudit

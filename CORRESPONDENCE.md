@@ -33,13 +33,13 @@ proved witnesses and their hypotheses are listed below.
 
 The three theorems of the introduction are also exposed, stated in full, in
 [`RWRS/MainTheorems.lean`](RWRS/MainTheorems.lean), and all three are restated
-over a Mathlib-only vocabulary for the comparator (see [`Audit/`](Audit/)).
+over a Mathlib-only vocabulary for the comparator (see [`RWRSAudit/`](RWRSAudit/)).
 
 | Source | Main theorem | Certified statement | Comparator |
 |---|---|---|---|
-| Theorem 1.1, `thm:OS` | `RWRS.optimalStopping` | `RWRS.Frozen.optimalStopping` | `Audit/OptimalStopping/` |
-| Theorem 1.2, `thm:explosion` | `RWRS.explosion` | `RWRS.Frozen.explosion` | `Audit/Explosion/` |
-| Theorem 1.3, `thm:stab` | `RWRS.stabilization` | `RWRS.Frozen.stabilization` | `Audit/Stabilization/` |
+| Theorem 1.1, `thm:OS` | `RWRS.optimalStopping` | `RWRS.Frozen.optimalStopping` | `RWRSAudit/OptimalStopping/` |
+| Theorem 1.2, `thm:explosion` | `RWRS.explosion` | `RWRS.Frozen.explosion` | `RWRSAudit/Explosion/` |
+| Theorem 1.3, `thm:stab` | `RWRS.stabilization` | `RWRS.Frozen.stabilization` | `RWRSAudit/Stabilization/` |
 
 Each main theorem has exactly the statement of its certified counterpart.  The
 von Bahr–Esseen inequality (`X-001`), the Fuk–Nagaev tail inequality (`X-002`),

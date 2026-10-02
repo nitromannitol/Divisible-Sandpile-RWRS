@@ -1,4 +1,4 @@
-# Audit Comparator Surface
+# RWRSAudit Comparator Surface
 
 This directory contains Mathlib-only comparator challenges for the three main
 theorems of the formalization of *Divisible sandpiles via random walks in
@@ -81,19 +81,14 @@ in this repository's own vocabulary, which is built on Mathlib alone.
 
 ## Solutions
 
-Each `Solution.lean` imports the repository together with
-`Audit/Support/Vocabulary.lean`, a verbatim copy of the vocabulary block that
-imports only Mathlib, and proves the byte-identical statement from the
-corresponding theorem of `RWRS/MainTheorems.lean` through the identifications
-in `Audit/Support/Bridge.lean` (see [`DESIGN.md`](DESIGN.md)).
-
-`Audit/StatementRegression.lean` is a local check of the statement-identity
-part of the comparator: it elaborates each statement in the challenge
-environment (`Audit/Support/Statements.lean`, which imports only Mathlib and
-the vocabulary), checks that each solution theorem has exactly that type and
-mentions no constant of the repository namespace `RWRS` or of the library
-namespace `LatticeProb`, and prints the axioms
-of each solution theorem.
+Each pair has four files, described in [`DESIGN.md`](DESIGN.md): `Challenge.lean`;
+`SolutionBasic.lean`, a verbatim copy of the vocabulary block of that challenge that
+imports only Mathlib; `Solution.lean`, which imports the repository together with its
+`SolutionBasic.lean` and its bridge `Support/<Pair>Bridge.lean`, and proves the
+byte-identical statement from the corresponding theorem of `RWRS/MainTheorems.lean`; and
+`comparator.json`.  The bridge identifies the vocabulary constants in the dependency
+closure of the pair's theorem with the repository's.  The comparator itself checks each
+solution statement against its challenge and the closure against Mathlib.
 
 ## Reproducing The Checks
 
@@ -103,31 +98,34 @@ The comparator configurations permit only
 ["propext", "Quot.sound", "Classical.choice"]
 ```
 
-and set `enable_nanoda: false`.  Each challenge elaborates standalone against
-this repository's Mathlib toolchain, e.g.
+and enable the nanoda replay.  Each challenge elaborates standalone against this
+repository's Mathlib toolchain, e.g.
 
 ```bash
-bash Audit/check_standalone.sh Audit/OptimalStopping/Challenge.lean
-bash Audit/check_standalone.sh --vocabulary
+bash RWRSAudit/check_standalone.sh RWRSAudit/OptimalStopping/Challenge.lean
+bash RWRSAudit/check_standalone.sh --vocabulary   # Challenge vs SolutionBasic, per pair
 ```
 
-with expected outcome `rc=0` and exactly one `declaration uses 'sorry'`
-warning per challenge; the second command checks that the vocabulary block is
-the same in every challenge and in `Audit/Support/Vocabulary.lean`.  The
-solutions and the regression build with
+with expected outcome `rc=0` and exactly one `declaration uses 'sorry'` warning per
+challenge; the second command checks that the vocabulary block of each challenge is
+byte-identical to the one in its `SolutionBasic.lean`.  The solutions build with
 
 ```bash
-lake build Audit.StatementRegression
+lake build RWRSAudit
 ```
 
-which prints, for each of the three theorems, that it is identical to the
-challenge statement and depends only on `propext`, `Classical.choice` and
-`Quot.sound`.
+Then, with `leanprover/comparator`, `lean4export` and `landrun` built at the pins in
+[`COMPARATOR_RUNS.md`](COMPARATOR_RUNS.md), from the repository root:
 
-**Status.**  All three solutions build, and the statement regression and the
-axiom prints pass locally.  `leanprover/comparator` passes on all three pairs,
-against the statements of this repository, with the Lean kernel and with the
-independent nanoda kernel; see [`COMPARATOR_RUNS.md`](COMPARATOR_RUNS.md) for
-the pins and the results.  The workflow
-[`.github/workflows/comparator.yml`](../.github/workflows/comparator.yml)
+```bash
+COMPARATOR_LANDRUN=<landrun> COMPARATOR_LEAN4EXPORT=<lean4export> \
+  lake env <comparator>/.lake/build/bin/comparator RWRSAudit/<Pair>/comparator.json
+```
+
+expecting `Your solution is okay!`.
+
+**Status.**  All three solutions build.  `leanprover/comparator` passes on all three pairs,
+against the statements of this repository, with the Lean kernel and with the independent
+nanoda kernel; see [`COMPARATOR_RUNS.md`](COMPARATOR_RUNS.md) for the pins and the results.
+The workflow [`.github/workflows/comparator.yml`](../.github/workflows/comparator.yml)
 runs it on request.

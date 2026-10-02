@@ -1,0 +1,14 @@
+{
+  "challenge_module": "RWRSAudit.OptimalStopping.Challenge",
+  "solution_module": "RWRSAudit.OptimalStopping.Solution",
+  "theorem_names": [
+    "RWRSAudit.optimalStopping"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

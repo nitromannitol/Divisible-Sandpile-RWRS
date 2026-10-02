@@ -149,7 +149,7 @@ their proof does not use.  Modelling decisions:
 
 - **No `sorry`** in the library; `tools/check_manifest.py` rejects any other
   than a registered `DRAFT_SORRY` node, and there is none.  The three
-  comparator challenges under `Audit/` each contain one intentional
+  comparator challenges under `RWRSAudit/` each contain one intentional
   statement-level `sorry`, which the corresponding solution file proves.
 - **No custom axiom.**  The three main theorems depend only on mathlib's
   standard axioms `propext`, `Classical.choice` and `Quot.sound`.
@@ -162,9 +162,9 @@ their proof does not use.  Modelling decisions:
 - **Independent check of the statements.**  So that the main claims can be read
   without trusting the development, all three main theorems are restated using
   only Mathlib, with no project definitions, in
-  [`Audit/OptimalStopping/Challenge.lean`](Audit/OptimalStopping/Challenge.lean),
-  [`Audit/Explosion/Challenge.lean`](Audit/Explosion/Challenge.lean) and
-  [`Audit/Stabilization/Challenge.lean`](Audit/Stabilization/Challenge.lean).
+  [`RWRSAudit/OptimalStopping/Challenge.lean`](RWRSAudit/OptimalStopping/Challenge.lean),
+  [`RWRSAudit/Explosion/Challenge.lean`](RWRSAudit/Explosion/Challenge.lean) and
+  [`RWRSAudit/Stabilization/Challenge.lean`](RWRSAudit/Stabilization/Challenge.lean).
   Each challenge rebuilds the model from Mathlib primitives (the averaging
   operator and Laplacian of a locally finite graph, parallel toppling and its
   odometer, the heat kernel and Green function, the walk payoff, bounded
@@ -172,18 +172,18 @@ their proof does not use.  Modelling decisions:
   scenery and its moments, the optimal stopping suprema, double transience,
   volume growth) and contains one intentional statement-level `sorry`, which
   the corresponding `Solution.lean` fills from the library through the
-  identifications in `Audit/Support/`.  The configurations in
-  `Audit/*/comparator.json` are for
+  identifications in `RWRSAudit/Support/`, one bridge per challenge; the
+  vocabulary of each challenge is copied verbatim into a Mathlib-only
+  `SolutionBasic.lean` beside it.  The configurations in
+  `RWRSAudit/*/comparator.json` are for
   [`leanprover/comparator`](https://github.com/leanprover/comparator), which
   confirms that the two statements have identical elaborated types and that the
   proof reduces to the three standard axioms; all three pairs pass it, with the
   Lean kernel and with the independent nanoda kernel (pins and results in
-  [`Audit/COMPARATOR_RUNS.md`](Audit/COMPARATOR_RUNS.md)).
-  `Audit/StatementRegression.lean` checks locally that each solution statement
-  is exactly the challenge statement and mentions no constant of the repository
-  or of Lattice-Probability, and the workflow
+  [`RWRSAudit/COMPARATOR_RUNS.md`](RWRSAudit/COMPARATOR_RUNS.md)).
+  The workflow
   [`.github/workflows/comparator.yml`](.github/workflows/comparator.yml) runs
-  the comparator on request.  See [`Audit/README.md`](Audit/README.md).
+  the comparator on request.  See [`RWRSAudit/README.md`](RWRSAudit/README.md).
 - **Pinned toolchain.**  Lean `v4.32.0` ([`lean-toolchain`](lean-toolchain)),
   mathlib at revision `81a5d257c8e410db227a6665ed08f64fea08e997`, and
   Lattice-Probability at commit `9d44b4d4670df393bb86ac5a4e042f215001cddf`,
@@ -216,8 +216,7 @@ lake build RWRS         # compile the library, about 9,000 build jobs, nearly al
 
 ```bash
 lake build RWRS.Meta.AxiomsAudit   # print the axioms of the three main theorems
-lake build Audit                   # the comparator challenges and solutions
-lake build Audit.StatementRegression
+lake build RWRSAudit               # the comparator challenges and solutions
 ```
 
 To use the library, `import RWRS` pulls in the whole development; the main
@@ -261,12 +260,11 @@ RWRS/
   Setting.lean        the optimal stopping suprema, double transience, growth bounds
   Network.lean        stationary rooted networks
 RWRS.lean             the root module (imports the whole library)
-Audit/                the mathlib-only comparator challenges and solutions
-  OptimalStopping/    Challenge.lean, Solution.lean, comparator.json (Theorem 1.1)
+RWRSAudit/            the mathlib-only comparator challenges and solutions
+  OptimalStopping/    Challenge.lean, SolutionBasic.lean, Solution.lean, comparator.json (Theorem 1.1)
   Explosion/          the same for Theorem 1.2
   Stabilization/      the same for Theorem 1.3
-  Support/            Vocabulary.lean, Statements.lean, Bridge.lean
-  StatementRegression.lean   the local statement-identity check
+  Support/            OptimalStoppingBridge.lean, ExplosionBridge.lean, StabilizationBridge.lean
   README.md, DESIGN.md, COMPARATOR_RUNS.md, check_standalone.sh
 ASSUMPTIONS.md        the cited result assumed, with its Lean statement (generated)
 CORRESPONDENCE.md     paper ↔ Lean, node by node
@@ -306,7 +304,7 @@ This formalization is built on [Lean 4](https://lean-lang.org),
 library [Lattice-Probability](https://github.com/nitromannitol/Lattice-Probability),
 which supplies the probability inequalities, the heat kernel estimates and the
 voltage function behind the cited results proved here; the comparator audit in
-[`Audit/`](Audit/) is set up for
+[`RWRSAudit/`](RWRSAudit/) is set up for
 [`leanprover/comparator`](https://github.com/leanprover/comparator).
 
 ## License

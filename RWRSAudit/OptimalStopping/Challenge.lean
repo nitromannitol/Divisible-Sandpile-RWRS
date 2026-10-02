@@ -1,14 +1,47 @@
 import Mathlib
 
 /-!
-# Mathlib-only statement vocabulary for the comparator solutions
+# Theorem 1.1 (`thm:OS`): comparator challenge
 
-A verbatim copy of the vocabulary block (between `VOCABULARY-BEGIN` and
-`VOCABULARY-END`) shared by every `Audit/*/Challenge.lean`.  It imports only
-Mathlib, so the definitions it declares elaborate exactly as they do in the
-challenges; `Audit/check_standalone.sh --vocabulary` checks that the blocks are
-byte-identical.  This file plays the role of the per-challenge
-`SolutionBasic.lean` of the comparator pattern.
+Mathlib-only comparator challenge for Theorem 1.1 (`thm:OS`) of Bou-Rabee, Peres and Sava-Huss,
+*Divisible sandpiles via random walks in random scenery* (arXiv:2604.13968).  The certified
+statement is `RWRS.Frozen.optimalStopping`, restated in `RWRS/MainTheorems.lean` as
+`RWRS.optimalStopping`.  Content: for simple random walk `X` on an infinite, connected graph of
+degree at most `d` and an i.i.d. scenery `ξ` of law `ν`, independent of the walk, with
+`S_n = ∑_{k<n} ξ(X_k)/deg(X_k)`: if `E[ξ] > 0` then `sup_n E_x[S_n | ξ] = ∞` almost surely; if
+`E[ξ] = 0` with positive finite variance, or with `ξ ≢ 0` symmetric, then
+`sup_τ E_x[S_τ | ξ] = ∞` almost surely over bounded stopping times, and `sup_n E_x[S_n | ξ] = ∞`
+if the graph is not doubly transient; if `E[ξ] < 0` and `E[(ξ⁺)^p] < ∞` for some `p > 3`, then
+`E_x[(sup_n S_n)^q] < ∞` for every `q ∈ [1, (p-1)/2)`.
+
+Only Mathlib is imported.  The vocabulary between `VOCABULARY-BEGIN` and
+`VOCABULARY-END` rebuilds, from Mathlib primitives, every definition needed to
+read the theorem: the averaging operator and the Laplacian of a locally finite
+graph, the parallel toppling procedure and its odometer, the heat kernel and
+the Green function, the walk payoff and bounded stopping times, the law of the
+simple random walk on path space, the i.i.d. scenery and its moments, the
+optimal stopping suprema, double transience, a degree bound, volume growth,
+and the cited results.  It is a statement-level copy of the repository
+definitions (see `RWRSAudit/README.md` for the provenance table) and is
+byte-identical in all three challenges.  The sole intentional `sorry` is the
+proof of the final theorem.
+
+## Cited results
+
+The paper uses results from the literature without proof.  The bounded
+voltage function of Lyons–Peres, Proposition 2.1 and equation (2.4), is proved
+inside the repository on every infinite connected graph, recurrent or transient
+(`RWRS.External.voltageFunction_of_connected`), and is used only inside the
+proof, so it is not a hypothesis of this theorem.
+
+## Presentation deltas
+
+None at the level of the displayed statement: the theorem below is the
+statement of `RWRS.optimalStopping` with every repository name replaced by its
+vocabulary copy.  Relative to the frozen statement `RWRS.Frozen.optimalStopping`, it omits
+the hypotheses for the von Bahr–Esseen and Fuk–Nagaev inequalities and the bounded-degree
+heat kernel bound, which the repository proves and
+`RWRS/MainTheorems.lean` discharges; that is a strengthening.
 -/
 
 -- VOCABULARY-BEGIN
@@ -210,3 +243,30 @@ end External
 
 end RWRSAudit
 -- VOCABULARY-END
+
+namespace RWRSAudit
+
+open MeasureTheory
+open scoped ENNReal
+
+universe u
+
+/-- Theorem 1.1 (`thm:OS`). -/
+theorem optimalStopping {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
+    [Infinite V] [MeasurableSpace V] [MeasurableSingletonClass V]
+    (hG : G.Connected)
+    (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
+    (hdet : HasExtMean ν) :
+    (0 < extMean ν →
+      ∀ x : V, ∀ᵐ ξ ∂(iidLaw V ν), supMeanPayoff G ξ x = ⊤) ∧
+    (extMean ν = 0 →
+      ((0 < evar ν ∧ evar ν < ⊤) ∨ (ν ≠ Measure.dirac 0 ∧ IsSymmetric ν)) →
+      (∀ x : V, ∀ᵐ ξ ∂(iidLaw V ν), supStopValue G ξ x = ⊤) ∧
+      (¬ DoublyTransient G →
+        ∀ x : V, ∀ᵐ ξ ∂(iidLaw V ν), supMeanPayoff G ξ x = ⊤)) ∧
+    (extMean ν < 0 → ∀ p : ℝ, 3 < p → posMoment ν p ≠ ⊤ →
+      ∀ q : ℝ, 1 ≤ q → q < (p - 1) / 2 → ∀ x : V,
+        (∫⁻ z, supPayoff G z.1 z.2 ^ q ∂(jointLaw G ν x)) ≠ ⊤) := by
+  sorry
+
+end RWRSAudit

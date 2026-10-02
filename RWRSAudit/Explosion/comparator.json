@@ -1,0 +1,14 @@
+{
+  "challenge_module": "RWRSAudit.Explosion.Challenge",
+  "solution_module": "RWRSAudit.Explosion.Solution",
+  "theorem_names": [
+    "RWRSAudit.explosion"
+  ],
+  "definition_names": [],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

@@ -1,16 +1,15 @@
 import Mathlib
 
 /-!
-# Theorem 1.3 (`thm:stab`): comparator challenge
+# Theorem 1.2 (`thm:explosion`): comparator challenge
 
-Mathlib-only comparator challenge for Theorem 1.3 (`thm:stab`) of Bou-Rabee, Peres and
+Mathlib-only comparator challenge for Theorem 1.2 (`thm:explosion`) of Bou-Rabee, Peres and
 Sava-Huss, *Divisible sandpiles via random walks in random scenery* (arXiv:2604.13968).  The
-certified statement is `RWRS.Frozen.stabilization`, restated in `RWRS/MainTheorems.lean` as
-`RWRS.stabilization`.  Content: on an infinite, connected graph of degree at most `d`, i.i.d.
-initial masses of mean `μ < 1` with `E[(σ⁺)^p] < ∞` for some `p > 3` have
-`sup_v E[u_∞(v)^q] < ∞` for every `q ∈ [1, (p-1)/2)` and stabilize almost surely; if
-`|B(o,r)| ≤ C r^{d_f}` for all `r ≥ 1`, then `E[(σ⁺)^p] < ∞` for some `p > d_f` suffices for
-almost sure stabilization.
+certified statement is `RWRS.Frozen.explosion`, restated in `RWRS/MainTheorems.lean` as
+`RWRS.explosion`.  Content: on an infinite, connected graph of degree at most `d`, i.i.d.
+initial masses of mean `μ > 1`, or of mean `μ = 1` with positive finite variance or with `σ - 1`
+symmetric and `σ ≢ 1`, stabilize with probability zero under the parallel toppling procedure of
+the divisible sandpile.
 
 Only Mathlib is imported.  The vocabulary between `VOCABULARY-BEGIN` and
 `VOCABULARY-END` rebuilds, from Mathlib primitives, every definition needed to
@@ -20,27 +19,23 @@ the Green function, the walk payoff and bounded stopping times, the law of the
 simple random walk on path space, the i.i.d. scenery and its moments, the
 optimal stopping suprema, double transience, a degree bound, volume growth,
 and the cited results.  It is a statement-level copy of the repository
-definitions (see `Audit/README.md` for the provenance table) and is
+definitions (see `RWRSAudit/README.md` for the provenance table) and is
 byte-identical in all three challenges.  The sole intentional `sorry` is the
 proof of the final theorem.
 
 ## Cited results
 
-The paper uses results from the literature without proof.  The repository now
-proves the one this theorem used to carry as a hypothesis outright
-(`External.CarneVaropoulos`: Carne (1985), Varopoulos (1985), Lyons–Peres,
-Theorem 13.4, in its pointwise form), so this challenge no longer states it as
-a hypothesis either.  The vocabulary copy of the proposition is kept below for
-provenance, unused by the theorem.
+The paper uses results from the literature without proof.  The bounded
+voltage function of Lyons–Peres, Proposition 2.1 and equation (2.4), is proved
+inside the repository on every infinite connected graph, recurrent or transient
+(`RWRS.External.voltageFunction_of_connected`), and is used only inside the
+proof, so it is not a hypothesis of this theorem.
 
 ## Presentation deltas
 
 None at the level of the displayed statement: the theorem below is the
-statement of `RWRS.stabilization` with every repository name replaced by its
-vocabulary copy.  Relative to the frozen statement `RWRS.Frozen.stabilization`, it omits
-the hypotheses for the von Bahr–Esseen and Fuk–Nagaev inequalities, the bounded-degree
-heat kernel bound, and the pointwise Carne–Varopoulos bound, all of which the repository
-proves and `RWRS/MainTheorems.lean` discharges; that is a strengthening.
+statement of `RWRS.explosion` with every repository name replaced by its
+vocabulary copy.
 -/
 
 -- VOCABULARY-BEGIN
@@ -250,19 +245,17 @@ open scoped ENNReal
 
 universe u
 
-/-- Theorem 1.3 (`thm:stab`). -/
-theorem stabilization {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
-    [Infinite V] [MeasurableSpace V] [MeasurableSingletonClass V]
+/-- Theorem 1.2 (`thm:explosion`). -/
+theorem explosion {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
+    [Infinite V] [MeasurableSpace V]
     (hG : G.Connected)
     (d : ℕ) (hd : BoundedDegree G d) (ν : Measure ℝ) (hν : IsProbabilityMeasure ν)
-    (hdet : HasExtMean ν) (hmean : extMean ν < 1) :
-    (∀ p : ℝ, 3 < p → posMoment ν p ≠ ⊤ →
-      (∀ q : ℝ, 1 ≤ q → q < (p - 1) / 2 →
-        (⨆ v : V, ∫⁻ σ, odometerLimit G σ v ^ q ∂(iidLaw V ν)) ≠ ⊤) ∧
-      iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 1) ∧
-    (∀ (o : V) (C d_f : ℝ), 0 < C → 1 ≤ d_f → VolumeGrowthUpper G o C d_f →
-      ∀ p : ℝ, d_f < p → posMoment ν p ≠ ⊤ →
-        iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 1) := by
+    (hdet : HasExtMean ν) :
+    (1 < extMean ν → iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 0) ∧
+    (extMean ν = 1 →
+      ((0 < evar ν ∧ evar ν < ⊤) ∨
+        (ν ≠ Measure.dirac 1 ∧ IsSymmetric (ν.map (fun z => z - 1)))) →
+      iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 0) := by
   sorry
 
 end RWRSAudit
