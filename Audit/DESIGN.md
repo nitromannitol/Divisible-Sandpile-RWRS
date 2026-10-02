@@ -67,12 +67,12 @@ identifications being definitional.
 None at the level of the displayed statements: each challenge theorem is the
 statement of the corresponding theorem of `RWRS/MainTheorems.lean` with every
 repository name replaced by its vocabulary copy.  `RWRS/MainTheorems.lean`
-restates its `RWRS/Frozen/` counterpart unchanged in every case: the cited
-inputs `External.VonBahrEsseen`, `External.FukNagaevTail` and
+states the same theorem as its `RWRS/Frozen/` counterpart in every case: the
+cited inputs `External.VonBahrEsseen`, `External.FukNagaevTail` and
 `External.HeatKernelBoundedDegree G` that the paper's proof of `optimalStopping`
 and `stabilization` quotes are proved outright in `RWRS/External/` and so are
 not hypotheses of the frozen statements themselves.  `explosion` is the frozen
-statement unchanged.
+statement itself.
 
 How each statement reads the paper is recorded in the frozen docstrings and
 summarized in [`CORRESPONDENCE.md`](../CORRESPONDENCE.md).  The comparator does

@@ -20,7 +20,7 @@ before the end marker kept, and checked by `tools/check_manifest.py`.
 
 A result the paper cites rather than proves is a `def … : Prop` under
 `RWRS/External/`.  Where this repository proves the cited result only under
-extra hypotheses, or not at all, the `def` stays in state `FROZEN` and enters
+extra hypotheses, or not at all, the `def` is in state `FROZEN` and enters
 the results that use it as an explicit hypothesis; a companion theorem
 alongside it, if one exists, discharges it under its own hypotheses.  Where
 this repository proves the cited result outright, in the generality every use
@@ -41,15 +41,15 @@ over a Mathlib-only vocabulary for the comparator (see [`Audit/`](Audit/)).
 | Theorem 1.2, `thm:explosion` | `RWRS.explosion` | `RWRS.Frozen.explosion` | `Audit/Explosion/` |
 | Theorem 1.3, `thm:stab` | `RWRS.stabilization` | `RWRS.Frozen.stabilization` | `Audit/Stabilization/` |
 
-All three main theorems are their certified statements unchanged: the von
-Bahr–Esseen inequality (`X-001`), the Fuk–Nagaev tail inequality (`X-002`), the
-bounded-degree heat kernel bound (`X-004`) and the pointwise Carne–Varopoulos
-bound (`X-005`), which the paper's proofs of Theorems 1.1 and 1.3 quote, are
-proved outright in `RWRS/External/` and so never appear as a hypothesis of
-`RWRS.Frozen.optimalStopping` or `RWRS.Frozen.stabilization` in the first
-place.  The voltage function (`X-008`), which the paper's proofs of Theorems 1.1
-and 1.2 quote, is proved on every infinite connected graph and is discharged
-inside their proofs, so it is not a hypothesis either.
+Each main theorem has exactly the statement of its certified counterpart.  The
+von Bahr–Esseen inequality (`X-001`), the Fuk–Nagaev tail inequality (`X-002`),
+the bounded-degree heat kernel bound (`X-004`) and the pointwise
+Carne–Varopoulos bound (`X-005`), which the paper's proofs of Theorems 1.1 and
+1.3 quote, are proved outright in `RWRS/External/`, so none of them is a
+hypothesis of `RWRS.Frozen.optimalStopping` or `RWRS.Frozen.stabilization`.
+The voltage function (`X-008`), which the paper's proofs of Theorems 1.1 and 1.2
+quote, is proved on every infinite connected graph and is discharged inside
+their proofs, so it is not a hypothesis either.
 
 ## Transcription conventions
 
