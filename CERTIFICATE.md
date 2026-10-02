@@ -107,8 +107,8 @@ nowhere below.
 | 51 | `N-001` | `RWRS.Frozen.optimalStopping` | `SEALED` | `thm:OS` | classical only |
 
 All 50 declarations have axiom closures contained in the three classical
-axioms. The 50 theorem nodes are `SEALED`; the 1 external definitions
-are `FROZEN`. A clean definition does not supply a proof of its proposition.
+axioms. The 50 theorem nodes are `SEALED`; the 1 external definition
+is `FROZEN`. A clean definition does not supply a proof of its proposition.
 
 ## External inputs
 

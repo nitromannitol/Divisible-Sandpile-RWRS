@@ -203,8 +203,10 @@ def build() -> str:
         A(f"| {i} | `{n['id']}` | `{e}` | `{n['state']}` | {paper_cell} | {verdict} |")
     A("")
     A(f"All {clean} declarations have axiom closures contained in the three classical")
-    A(f"axioms. The {sealed} theorem nodes are `SEALED`; the {inputs} external definitions")
-    A("are `FROZEN`. A clean definition does not supply a proof of its proposition.")
+    A(f"axioms. The {sealed} theorem nodes are `SEALED`; the {inputs} external definition"
+      + ("" if inputs == 1 else "s"))
+    A(("is" if inputs == 1 else "are")
+      + " `FROZEN`. A clean definition does not supply a proof of its proposition.")
     A("")
     A("## External inputs")
     A("")
