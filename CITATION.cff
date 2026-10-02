@@ -9,10 +9,10 @@ abstract: >-
   on infinite bounded-degree graphs for mean above one and at mean one
   (Theorem 1.2), its stabilization below mean one under a moment condition
   (Theorem 1.3), and every other labelled statement of the paper, including
-  the sharpness constructions.  Results the paper cites without proof are
-  taken as explicit hypotheses; seven of the nine are proved here, one of them
-  only on transient graphs.  The development contains no sorry and no custom
-  axiom.
+  the sharpness constructions.  Of the nine results the paper cites without
+  proof, eight are proved here and one, the ergodic decomposition of stationary
+  random networks, is an explicit hypothesis of the statements that use it.
+  The development contains no sorry and no custom axiom.
 type: software
 authors:
   - family-names: Bou-Rabee

@@ -119,7 +119,7 @@ def status_block(nodes: list[dict]) -> str:
     if proved_cited:
         body += ["", "Cited inputs proved outright, as ordinary SEALED theorems: " + ", ".join(
             f"`{n['id']}` (`{n['export']}`)" for n in proved_cited) + ".",
-            "No hypothesis for any of them remains in any frozen statement."]
+            "No frozen statement carries any of them as a hypothesis."]
     names = unconditional_names()
     if names:
         body += ["", "Corollaries with every cited input discharged:", ""]
@@ -137,7 +137,7 @@ def external_inputs_block(nodes: list[dict]) -> str:
         f"The manifest registers {total} external propositions, of which "
         f"{len(proved_cited)} are proved outright and merged into an ordinary",
         f"SEALED theorem node (kind `theorem`, no separate companion), leaving "
-        f"{len(inputs)} still carried as a `FROZEN` `definition` node.  A",
+        f"{len(inputs)} carried as a `FROZEN` `definition` node.  A",
         "`FROZEN` proposition's axiom closure checks its definition; a witness",
         "theorem proves the input under the witness's stated hypotheses.",
         "",

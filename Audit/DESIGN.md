@@ -48,10 +48,10 @@ inductive types, and no field-by-field transport is needed.
   `DoublyTransient`, `External.CarneVaropoulos`) are identified by unfolding
   and rewriting with the three inductions.
 
-From these, `carneVaropoulos` turns the one cited-result proposition still
-kept in the vocabulary into the repository's.  The voltage-function
-proposition needs no such bridge: it is proved outright and discharged inside
-the library proofs, and it is no longer part of the vocabulary.
+From these, `carneVaropoulos` turns the one cited-result proposition kept in
+the vocabulary into the repository's.  The voltage-function proposition needs
+no such bridge: it is proved outright and discharged inside the library proofs,
+and it is not part of the vocabulary.
 
 ## 3. Theorem-level bridges
 
@@ -81,27 +81,26 @@ displayed statement, over definitions that can be read without the library.
 
 ## 5. What the comparator does not certify
 
-- The cited results.  No challenge carries one as a hypothesis any longer:
-  the voltage function that `OptimalStopping` and `Explosion` used to carry is
-  proved on every infinite connected graph and discharged inside the proofs,
-  and the pointwise Carne–Varopoulos bound is proved outright and kept in the
+- The cited results.  No challenge carries one as a hypothesis: the voltage
+  function that the proofs of `OptimalStopping` and `Explosion` need is proved
+  on every infinite connected graph and discharged inside the proofs, and the
+  pointwise Carne–Varopoulos bound is proved outright and kept in the
   vocabulary only for provenance.  Whether each proved proposition is a
-  faithful rendering of the cited theorem is still the subject of
-  `ASSUMPTIONS.md` and of `CORRESPONDENCE.md`.
+  faithful rendering of the cited theorem is the subject of `ASSUMPTIONS.md`
+  and of `CORRESPONDENCE.md`.
 - The faithfulness of the vocabulary to the paper.  The vocabulary is a copy
   of the repository's definitions, so the comparator shows that nothing in the
   statements depends on the library beyond what the vocabulary displays; a
   reader still has to check the vocabulary against the paper.
 
-## 6. Uncertainties
+## 6. Notes on the local check
 
-- **U1.**  Resolved.  `leanprover/comparator` was run on all three pairs on
-  2026-09-24 at commit `2cfdd84`, and each pair passed with the Lean kernel
-  and with the independent nanoda kernel; see `Audit/COMPARATOR_RUNS.md`.
-  Before that run, the local regression compared the solution types with
+- **Local regression.**  `Audit/StatementRegression.lean` compares the solution types with
   the challenge-environment types up to the auxiliary proof lemmas that a
-  `def` abstracts, a weaker check than the comparator's own closure check.
-- **U2.**  The repository and its shared library Lattice-Probability both
+  `def` abstracts, which is weaker than the comparator's own closure check.
+  `leanprover/comparator` passes on all three pairs, with the Lean kernel and
+  with the independent nanoda kernel; see `Audit/COMPARATOR_RUNS.md`.
+- **Import closure.**  The repository and its shared library Lattice-Probability both
   enter the solutions' import closure.  `Audit/StatementRegression.lean`
   checks that no solution statement names a constant of the namespace `RWRS`
   or of the library namespace `LatticeProb`.

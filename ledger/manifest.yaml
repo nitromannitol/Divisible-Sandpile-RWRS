@@ -9,12 +9,6 @@
 #         FROZEN (a statement with no proof obligation here, such as a cited
 #           result taken as a hypothesis),
 #         SEALED (a proof exists and its axiom closure is clean).
-#
-# 2026-09-27: N-001, N-002, N-014, N-020 and N-022 were re-frozen with a version
-# bump to discharge the voltage-function hypothesis `hVF`.  X-008
-# (`RWRS.External.voltageFunction_of_connected`) proves it on every infinite
-# connected graph, so each proof now obtains it from `hG`; the only change to
-# each statement is the removed hypothesis.
 
 version: 1
 source_pin:
@@ -497,7 +491,7 @@ nodes:
   - id: X-005
     version: 4
     kind: theorem
-    source: rwrs.tex:143-149 (Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4); proved outright by the Chebyshev-Pell route, no longer assumed
+    source: rwrs.tex:143-149 (Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4); proved outright by the Chebyshev-Pell route
     file: RWRS/External/CarneVaropoulosProved.lean
     export: RWRS.External.carneVaropoulos
     state: SEALED
@@ -508,7 +502,7 @@ nodes:
   - id: N-003
     version: 5
     kind: theorem
-    source: rwrs.tex:131-140 (thm:stab); the Carne-Varopoulos hypothesis is now obtained internally from X-005, not carried
+    source: rwrs.tex:131-140 (thm:stab); the Carne-Varopoulos bound is obtained internally from X-005, not carried as a hypothesis
     file: RWRS/Frozen/Stabilization.lean
     export: RWRS.Frozen.stabilization
     state: SEALED
@@ -519,7 +513,7 @@ nodes:
   - id: X-008
     version: 4
     kind: theorem
-    source: rwrs.tex:513-520 (cited in prop:01-law; Lyons-Peres Proposition 2.1 and equation (2.4)); proved on every infinite connected graph, recurrent or transient, no longer assumed
+    source: rwrs.tex:513-520 (cited in prop:01-law; Lyons-Peres Proposition 2.1 and equation (2.4)); proved on every infinite connected graph, recurrent or transient
     file: RWRS/External/VoltageFunctionConnected.lean
     export: RWRS.External.voltageFunction_of_connected
     state: SEALED

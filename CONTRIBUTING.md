@@ -3,16 +3,22 @@
 This repository is primarily a finished artifact rather than an actively
 solicited collaborative project, but issues and pull requests are welcome.
 
+The shared library
+[Lattice-Probability](https://github.com/nitromannitol/Lattice-Probability),
+which supplies the probability inequalities and the heat kernel estimates, is a
+separate repository.  `lakefile.lean` requires it as a `git` dependency pinned
+to an exact commit; Lake materializes it under
+`.lake/packages/lattice-probability`.  It is read-only for this project: the
+identification of its definitions with this repository's is in
+`RWRS/Support/LibraryBridge.lean`, and contributors must not edit the
+dependency's sources.
+
 ## Building locally
 
 ```bash
 lake exe cache get   # first time: the Mathlib cache
 lake build RWRS      # the library
 ```
-
-At this commit `lakefile.lean` reads the shared library Lattice-Probability
-from the sibling directory `../Lattice-Probability-clean`, which must be a
-checkout of commit `bbe0b90`.
 
 The production build is required to emit no Lean or linter warnings
 (`python3 tools/check_warnings.py`).  The three Mathlib-only files
@@ -41,3 +47,20 @@ A few practical notes for working with this development:
 - **The main results** are in `RWRS/MainTheorems.lean`; the axiom audit is
   `lake build RWRS.Meta.AxiomsAudit`, and the comparator surface is
   `lake build Audit`.
+
+## Elaboration policy for new files
+
+- Close arithmetic goals with named monotonicity lemmas and `calc`, not with
+  `nlinarith`.  When a nonlinear fact is needed, hoist it into a small `private`
+  lemma over abstract real variables, so that `Real.rpow` and `Real.exp` terms
+  never enter a numeric tactic; in particular, do not call `nlinarith` on a goal
+  that mentions `rpow` or `exp`.
+- Before `ring` or `field_simp` on an expression built with `set`, run
+  `clear_value` on the bound names; otherwise the let-bodies are unfolded inside
+  the tactic.
+- Do not split a file, narrow its imports, or add an instance cache "for
+  performance" without a warm profile before and after
+  (`lake env lean --profile <file>`).  The profiler's default 100 ms floor hides
+  diffuse costs; use `-D profiler.threshold=1` when hunting them.
+- Keep Lean files under 1500 lines.
+- Never run `lake clean`.

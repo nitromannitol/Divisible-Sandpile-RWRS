@@ -25,10 +25,9 @@ the i.i.d. scenery with its extended mean, positive moments, variance and
 symmetry, the two optimal stopping suprema, the joint law of scenery and walk,
 double transience, a degree bound, polynomial volume growth, and the one cited
 result kept in the vocabulary, the pointwise Carne–Varopoulos bound, proved
-outright and kept only for provenance.  The voltage function that
-`OptimalStopping` and `Explosion` used to carry as a hypothesis is now proved
-on every infinite connected graph and discharged inside the proofs, so it is
-no longer part of the vocabulary.
+outright and kept only for provenance.  The voltage function that the proofs of
+`OptimalStopping` and `Explosion` need is proved on every infinite connected
+graph and discharged inside the proofs, so it is not part of the vocabulary.
 
 ## What Is Checked
 
@@ -36,19 +35,18 @@ All three theorems are unconditional: every result the paper cites without
 proof is proved outright inside the repository, and no challenge carries one
 as a hypothesis.
 
-| Directory | Cited result once carried as a hypothesis |
+| Directory | Cited result the proofs use |
 | --- | --- |
-| `OptimalStopping/`, `Explosion/` | `External.VoltageFunction G` (Lyons–Peres, Proposition 2.1 and equation (2.4)), proved on every infinite connected graph, recurrent or transient (`RWRS.External.voltageFunction_of_connected`), and discharged inside the proofs; no longer part of the vocabulary |
+| `OptimalStopping/`, `Explosion/` | `External.VoltageFunction G` (Lyons–Peres, Proposition 2.1 and equation (2.4)), proved on every infinite connected graph, recurrent or transient (`RWRS.External.voltageFunction_of_connected`), and discharged inside the proofs; not part of the vocabulary |
 | `Stabilization/` | `External.CarneVaropoulos G` (Carne, Varopoulos, Lyons–Peres Theorem 13.4, pointwise form), proved outright; kept in the vocabulary only for provenance |
 
-The frozen statements `RWRS.Frozen.optimalStopping` and
-`RWRS.Frozen.stabilization` also take the von Bahr–Esseen inequality, the
-Fuk–Nagaev tail inequality and the bounded-degree heat kernel bound as
-hypotheses.  They are not hypotheses here: the repository proves the first two
-outright (`RWRS.External.vonBahrEsseen`, `RWRS.External.fukNagaevTail`, from
-the shared library Lattice-Probability) and the third on every infinite
-connected graph (`RWRS.External.heatKernelBoundedDegree_of_connected`), and
-`RWRS/MainTheorems.lean` discharges them.
+The proofs of `RWRS.Frozen.optimalStopping` and `RWRS.Frozen.stabilization`
+also use the von Bahr–Esseen inequality, the Fuk–Nagaev tail inequality and the
+bounded-degree heat kernel bound.  The repository proves the first two outright
+(`RWRS.External.vonBahrEsseen`, `RWRS.External.fukNagaevTail`, from the shared
+library Lattice-Probability) and the third on every infinite connected graph
+(`RWRS.External.heatKernelBoundedDegree_of_connected`), so none of the three is
+a hypothesis of the frozen statements or of the challenges.
 
 - **`OptimalStopping`** (Theorem 1.1): on an infinite connected graph of degree
   at most `d`, with an i.i.d. scenery `ξ` of law `ν` and
@@ -127,10 +125,9 @@ challenge statement and depends only on `propext`, `Classical.choice` and
 `Quot.sound`.
 
 **Status.**  All three solutions build, and the statement regression and the
-axiom prints pass locally.  `leanprover/comparator` was run on all three
-pairs on 2026-09-27 at commit `cddf021`, against the current statements, and
-each pair passed with the Lean kernel and with the independent nanoda kernel;
-see [`COMPARATOR_RUNS.md`](COMPARATOR_RUNS.md) for the recorded runs.  The
-workflow
+axiom prints pass locally.  `leanprover/comparator` passes on all three pairs,
+against the statements of this repository, with the Lean kernel and with the
+independent nanoda kernel; see [`COMPARATOR_RUNS.md`](COMPARATOR_RUNS.md) for
+the pins and the results.  The workflow
 [`.github/workflows/comparator.yml`](../.github/workflows/comparator.yml)
 runs it on request.

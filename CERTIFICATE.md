@@ -14,9 +14,9 @@ Cited inputs are proposition-valued predicates in `RWRS/External/`,
 carried as explicit hypotheses together with each theorem's own hypotheses.
 Separate companion theorems discharge these predicates under the conditions
 listed below; `CORRESPONDENCE.md` records the correspondence with the paper.
-0 of the 1 still-cited inputs have registered proved
+0 of the 1 cited inputs not proved outright have registered proved
 companions. 8 further cited inputs are proved outright and merged
-into an ordinary `SEALED` theorem node, so no hypothesis for them remains anywhere.
+into an ordinary `SEALED` theorem node, so no statement carries a hypothesis for them.
 
 ## Environment
 
@@ -113,10 +113,10 @@ are `FROZEN`. A clean definition does not supply a proof of its proposition.
 ## External inputs
 
 50 of 50 registered theorem proofs depend on nothing beyond
-Lean's three classical axioms. The still-cited external predicates remain
-definition nodes in state `FROZEN`; their proved companions, and the cited
-inputs proved outright and merged into their own node, are theorem nodes in
-state `SEALED`.
+Lean's three classical axioms. The cited external predicates that are not
+proved outright are definition nodes in state `FROZEN`; their proved companions,
+and the cited inputs proved outright and merged into their own node, are theorem
+nodes in state `SEALED`.
 
 ## Hypotheses of the proved companions
 
@@ -143,7 +143,7 @@ Each of these is a cited input merged into its own `SEALED` theorem node
 | `X-008` | `RWRS.External.voltageFunction_of_connected` | locally finite infinite connected graph |
 
 The manifest registers 9 external propositions, of which 8 are proved outright and merged into an ordinary
-SEALED theorem node (kind `theorem`, no separate companion), leaving 1 still carried as a `FROZEN` `definition` node.  A
+SEALED theorem node (kind `theorem`, no separate companion), leaving 1 carried as a `FROZEN` `definition` node.  A
 `FROZEN` proposition's axiom closure checks its definition; a witness
 theorem proves the input under the witness's stated hypotheses.
 
@@ -157,10 +157,10 @@ Proved outright (`kind: theorem`, `state: SEALED`):
 - `X-002` (`RWRS.External.fukNagaevTail`), rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
 - `X-003` (`RWRS.External.bernstein`), rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
 - `X-004` (`RWRS.External.heatKernelBoundedDegree_of_connected`), rwrs.tex:144-149 (cited in thm:stab)
-- `X-005` (`RWRS.External.carneVaropoulos`), rwrs.tex:143-149 (Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4); proved outright by the Chebyshev-Pell route, no longer assumed
+- `X-005` (`RWRS.External.carneVaropoulos`), rwrs.tex:143-149 (Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4); proved outright by the Chebyshev-Pell route
 - `X-006` (`RWRS.External.heatKernelVanishing_of_connected`), rwrs.tex:319-322 (cited in lem:ergodic-marked-stationary)
 - `X-007` (`RWRS.External.efronStein`), rwrs.tex:694-699 (cited in prop:critical)
-- `X-008` (`RWRS.External.voltageFunction_of_connected`), rwrs.tex:513-520 (cited in prop:01-law; Lyons-Peres Proposition 2.1 and equation (2.4)); proved on every infinite connected graph, recurrent or transient, no longer assumed
+- `X-008` (`RWRS.External.voltageFunction_of_connected`), rwrs.tex:513-520 (cited in prop:01-law; Lyons-Peres Proposition 2.1 and equation (2.4)); proved on every infinite connected graph, recurrent or transient
 
 `X-005` is the pointwise transition estimate
 `P_x(X_n = y) ≤ 2 sqrt(deg(y)/deg(x)) exp(-dist(x,y)^2/(2n))`,
