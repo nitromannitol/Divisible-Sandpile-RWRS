@@ -131,57 +131,24 @@ automation:
   methods:
     - method: "agent"
       models:
-        - "claude-opus (version not recorded)"
-        - "claude-opus-5-5"
-        - "claude-sonnet-5"
-        - "gpt-6-astra"
-        - "gpt-6-luna"
-        - "gpt-5.6-luna"
-        - "glm-5.3"
-        - "glm-5.3-flash"
-        - "deepseek-v4.1-flash"
+        - "Claude Opus 5.5"
+        - "Claude Sonnet 5"
+        - "Claude Opus 5"
+        - "DeepSeek v4.1 Flash"
       framework: >-
-        Claude Code (Anthropic) as the supervising and proving harness, which
-        wrote nearly all of the Lean code; Codex CLI (OpenAI; versions 0.153.4
-        and 0.154.0, reasoning max or xhigh, for gpt-6-astra) for the OpenAI
-        models; a custom Python driver over a hosted API for glm-5.3; scripted
-        API fan-outs for glm-5.3-flash and deepseek-v4.1-flash
+        Claude Code (Anthropic) and the Pi agent harness, directing the models above; the author
+        supervised the work and is responsible for the formalization.
       tool_setup: >-
-        Lake builds under leanprover/lean4:v4.32.0 with Mathlib at revision
-        81a5d257c8e410db227a6665ed08f64fea08e997 and the shared library
-        Lattice-Probability at commit 9d44b4d4670df393bb86ac5a4e042f215001cddf.
-        A frozen-statement manifest (ledger/manifest.yaml) pins each registered
-        statement by the SHA-256 of its text, and the tools/ checkers verify
-        the hashes, the axiom closure of every node, a warning-free build,
-        coverage of every labelled statement of the paper, and quantifier
-        order.  The Lean comparator (leanprover/comparator) passes on all three
-        RWRSAudit pairs, with the Lean kernel and with the independent nanoda
-        kernel; pins, results and reproduction steps are in
-        RWRSAudit/COMPARATOR_RUNS.md.  The workflow
-        .github/workflows/comparator.yml runs it on request.
+        Lake builds under the pinned Lean toolchain and Mathlib revision. Every change is gated by
+        the axiom-closure and warning-free-build checks, and the public CI runs the Mathlib-only
+        comparator challenge/solution pairs against leanprover/comparator, lean4export and landrun
+        at the revisions recorded in .github/workflows/.
       cost:
-        wall_time: "about two weeks of calendar time"
-        spend_usd: "not tracked (subscription and API accounts)"
-        hardware: "a 20-thread Intel i9-9900X / 125 GB RAM Ubuntu machine"
-        token_usage: "glm-5.3, through the hosted API: about 338 million input and 1.2 million output tokens"
+        spend_usd: "not separately tracked (subscription and API accounts)"
+        hardware: "one Ubuntu workstation"
       prompting_notes: >-
-        Human-directed agent work, closely supervised by the author, who decided
-        every statement-level question.  Every statement was pinned before its
-        proof was attempted, and proofs were accepted only through the manifest
-        and axiom gates.
-  spend_usd: "not tracked (subscription and API accounts)"
-  notes: >-
-    All Lean code in this repository was written by the listed models under the
-    close supervision of the author.  Every proof is checked by the Lean kernel
-    and Mathlib; the verified library contains no sorry and no custom axiom.
-    The one cited result that is not proved, the ergodic decomposition, enters
-    as an explicit hypothesis, not an axiom.  The Mathlib-only comparator
-    challenge files (RWRSAudit/*/Challenge.lean) each contain exactly one
-    intentional statement-level sorry (the theorem body), which is filled by
-    the corresponding RWRSAudit/*/Solution.lean.  The shared library
-    Lattice-Probability is a separate formalization by the same author, also
-    written with AI models, not part of this repository.
-
+        Human-directed agent work, closely supervised by the author. Statement differences from the
+        paper are disclosed under fidelity.
 fidelity:
   divergences: >-
     Where a Lean statement is a reading of the paper's wording,
