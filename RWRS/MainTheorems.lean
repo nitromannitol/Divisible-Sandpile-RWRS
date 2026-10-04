@@ -14,7 +14,7 @@ divisible sandpile; and Theorem 1.3 (`thm:stab`), its stabilization.
 Each theorem below restates its certified counterpart in `RWRS/Frozen/` and is
 proved by direct application of it, so the statements displayed in this file
 are byte-faithful to the certified ones.  Four cited inputs the paper quotes
-for these theorems are proved outright, as ordinary `SEALED` theorems, in
+for these theorems are proved outright, as ordinary `PROVED` theorems, in
 `RWRS/External/`, and so already carry no hypothesis in the certified
 statements themselves: the von Bahr–Esseen inequality
 (`RWRS.External.vonBahrEsseen`), the Fuk–Nagaev tail inequality

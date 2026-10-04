@@ -3,7 +3,7 @@
 
     python3 tools/freeze.py ID FILE EXPORT KIND STATE "SOURCE"
 
-KIND is `theorem` or `definition`; STATE is `DRAFT_SORRY`, `SEALED` or `FROZEN`.
+KIND is `theorem` or `definition`; STATE is `DRAFT_SORRY`, `SEALED`, `PROVED` or `FROZEN`.
 The frozen SHA-256 is computed with the recipe of CORRESPONDENCE.md: the bytes
 strictly between the markers, one leading newline dropped, the trailing newline
 before the END marker kept (as `check_manifest.py` does).  An existing

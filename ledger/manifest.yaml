@@ -8,7 +8,10 @@
 # States: DRAFT_SORRY (statement frozen, proof is a registered `sorry`),
 #         FROZEN (a statement with no proof obligation here, such as a cited
 #           result taken as a hypothesis),
-#         SEALED (a proof exists and its axiom closure is clean).
+#         SEALED (a proof exists and its axiom closure is clean),
+#         PROVED (a proved statement promoted from SEALED after an independent
+#           refute-first audit found no defect; this is the proved-and-audited
+#           state).
 
 version: 1
 source_pin:
@@ -21,7 +24,7 @@ nodes:
     source: rwrs.tex:257-259 (prop:iid-stationary)
     file: RWRS/Frozen/IidStationary.lean
     export: RWRS.Frozen.iidStationary
-    state: SEALED
+    state: PROVED
     frozen_sha256: 7d3e130a1991d5cb888d666c110a09b0afb883a8978218b49eecf92256ed1eae
     provider: RWRS.Frozen.iidStationary
     approved: "2026-09-06"
@@ -32,7 +35,7 @@ nodes:
     source: rwrs.tex:278-284 (thm:stationary-toppling)
     file: RWRS/Frozen/StationaryToppling.lean
     export: RWRS.Frozen.stationaryToppling
-    state: SEALED
+    state: PROVED
     frozen_sha256: fb7e57f30ed81ad0000de0f8044b073e603b82944891a75a6eefd67fc9156e63
     provider: RWRS.Frozen.stationaryToppling
     approved: "2026-09-06"
@@ -43,7 +46,7 @@ nodes:
     source: rwrs.tex:377-382 (lem:recursion)
     file: RWRS/Frozen/Recursion.lean
     export: RWRS.Frozen.recursion
-    state: SEALED
+    state: PROVED
     frozen_sha256: 046b3c5d4c3503d1cdea1f64f9d096b2415ed3e05cb297c5d1f54b135f4c8681
     provider: RWRS.Frozen.recursion
     approved: "2026-09-06"
@@ -54,7 +57,7 @@ nodes:
     source: rwrs.tex:554-558 (prop:supercritical)
     file: RWRS/Frozen/Supercritical.lean
     export: RWRS.Frozen.supercritical
-    state: SEALED
+    state: PROVED
     frozen_sha256: 0c18073041c39be7f21cbcf3782c80979463eda137a8f07b954eeeca2499ff49
     provider: RWRS.Frozen.supercritical
     approved: "2026-09-06"
@@ -65,7 +68,7 @@ nodes:
     source: rwrs.tex:600-605 (lem:positive-part)
     file: RWRS/Frozen/PositivePart.lean
     export: RWRS.Frozen.positivePart
-    state: SEALED
+    state: PROVED
     frozen_sha256: 05a9d3dd39e0657f90de379265d21dd0f1c2d4e9bec86ed44c1d316cbf1c41e3
     provider: RWRS.Frozen.positivePart
     approved: "2026-09-06"
@@ -76,7 +79,7 @@ nodes:
     source: rwrs.tex:636-653 (lem:sensitivity)
     file: RWRS/Frozen/Sensitivity.lean
     export: RWRS.Frozen.sensitivity
-    state: SEALED
+    state: PROVED
     frozen_sha256: c1efd16b49c5b23a63fdd2e854908a6ea5d9730b76aaa0ba07ede539adc88bc1
     provider: RWRS.Frozen.sensitivity
     approved: "2026-09-06"
@@ -87,7 +90,7 @@ nodes:
     source: rwrs.tex:1077-1095 (lem:fuk-nagaev)
     file: RWRS/Frozen/FukNagaev.lean
     export: RWRS.Frozen.fukNagaev
-    state: SEALED
+    state: PROVED
     frozen_sha256: a936cd5a92ba16bddd1c6b0840add169454129f6740cbf7f8b01944e7367c6d3
     provider: RWRS.Frozen.fukNagaev
     approved: "2026-09-06"
@@ -98,7 +101,7 @@ nodes:
     source: rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
     file: RWRS/External/VonBahrEsseen.lean
     export: RWRS.External.vonBahrEsseen
-    state: SEALED
+    state: PROVED
     frozen_sha256: ab5679578ed797daced6ad56c716cb73adcd4760b6856df12c3a4e563898fc46
     provider: RWRS.External.vonBahrEsseen
     approved: "2026-09-06"
@@ -109,7 +112,7 @@ nodes:
     source: rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
     file: RWRS/External/FukNagaevTail.lean
     export: RWRS.External.fukNagaevTail
-    state: SEALED
+    state: PROVED
     frozen_sha256: e4177e6ec97757acb68b0d44553ca3b9899de4f46466195f6e5d70a7c7ce1b34
     provider: RWRS.External.fukNagaevTail
     approved: "2026-09-06"
@@ -120,7 +123,7 @@ nodes:
     source: rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
     file: RWRS/External/Bernstein.lean
     export: RWRS.External.bernstein
-    state: SEALED
+    state: PROVED
     frozen_sha256: 980fb30144cd8580ec61bb79e46e72bc9406a9530d8da32dfc6000245b7a8953
     provider: RWRS.External.bernstein
     approved: "2026-09-06"
@@ -131,7 +134,7 @@ nodes:
     source: rwrs.tex:393-400 (thm:RW)
     file: RWRS/Frozen/RandomWalkRepresentation.lean
     export: RWRS.Frozen.randomWalkRepresentation
-    state: SEALED
+    state: PROVED
     frozen_sha256: 08286b28225dc3e7c307456a69945cf95b5023c2cae3053402294d905b6eab0b
     provider: RWRS.Frozen.randomWalkRepresentation
     approved: "2026-09-06"
@@ -142,7 +145,7 @@ nodes:
     source: rwrs.tex:473-478 (cor:RW-infinite)
     file: RWRS/Frozen/RWInfinite.lean
     export: RWRS.Frozen.rwInfinite
-    state: SEALED
+    state: PROVED
     frozen_sha256: e18fa354fc44432c7a37682c5a283528b5ca2d1b756a4ae1e75d83155de3268a
     provider: RWRS.Frozen.rwInfinite
     approved: "2026-09-06"
@@ -153,7 +156,7 @@ nodes:
     source: rwrs.tex:1478-1480 (ex:coboundary)
     file: RWRS/Frozen/Coboundary.lean
     export: RWRS.Frozen.coboundary
-    state: SEALED
+    state: PROVED
     frozen_sha256: 25a5f2b1a5ad43fd56465dcd72e76062db10c92fa10ce61b75c46a8d8fc2772d
     provider: RWRS.Frozen.coboundary
     approved: "2026-09-06"
@@ -164,7 +167,7 @@ nodes:
     source: rwrs.tex:1453-1456 (ex:finite-perturbation)
     file: RWRS/Frozen/FinitePerturbation.lean
     export: RWRS.Frozen.finitePerturbation
-    state: SEALED
+    state: PROVED
     frozen_sha256: 5e16e954b827d3ebc63d6abe289d6c2cd9619e1ac7e7df828d3b40a6cd51a995
     provider: RWRS.Frozen.finitePerturbation
     approved: "2026-09-06"
@@ -175,7 +178,7 @@ nodes:
     source: rwrs.tex:144-149 (cited in thm:stab)
     file: RWRS/External/HeatKernelBoundedDegree.lean
     export: RWRS.External.heatKernelBoundedDegree_of_connected
-    state: SEALED
+    state: PROVED
     frozen_sha256: 9a22487f62536b4e70d04dc100c93d0957a7397949672e56bb69270919e3fba7
     provider: RWRS.External.heatKernelBoundedDegree_of_connected
     approved: "2026-09-06"
@@ -186,7 +189,7 @@ nodes:
     source: rwrs.tex:319-322 (cited in lem:ergodic-marked-stationary)
     file: RWRS/External/HeatKernelVanishing.lean
     export: RWRS.External.heatKernelVanishing_of_connected
-    state: SEALED
+    state: PROVED
     frozen_sha256: a446f51e3fb113a1aba6aa80bb6ee9d1c299bdcb0437ed31ae86aace621401ed
     provider: RWRS.External.heatKernelVanishing_of_connected
     approved: "2026-09-06"
@@ -197,7 +200,7 @@ nodes:
     source: rwrs.tex:531-536 (lem:clock-no-dom)
     file: RWRS/Frozen/ClockNoDominance.lean
     export: RWRS.Frozen.clockNoDominance
-    state: SEALED
+    state: PROVED
     frozen_sha256: fdaff691fa1f676adb7103f218c915ca9003f97a2324f4295af1184bcf949186
     provider: RWRS.Frozen.clockNoDominance
     approved: "2026-09-06"
@@ -208,7 +211,7 @@ nodes:
     source: rwrs.tex:997-999 (prop:short-clock)
     file: RWRS/Frozen/ShortClock.lean
     export: RWRS.Frozen.shortClock
-    state: SEALED
+    state: PROVED
     frozen_sha256: f4c173dfbabd25438a35ba5584549b6d9a42da48fdb11a9bc65a77a3e429ff47
     provider: RWRS.Frozen.shortClock
     approved: "2026-09-06"
@@ -219,7 +222,7 @@ nodes:
     source: rwrs.tex:1364-1366 (ex:counterexample)
     file: RWRS/Frozen/UnboundedDegreeTree.lean
     export: RWRS.Frozen.unboundedDegreeTree
-    state: SEALED
+    state: PROVED
     frozen_sha256: 8631b2ae71aa0e59a159701dcfb5151eddd419af7c0434a55156c361f41e5461
     provider: RWRS.Frozen.unboundedDegreeTree
     approved: "2026-09-06"
@@ -230,7 +233,7 @@ nodes:
     source: rwrs.tex:629-632 (lem:no-dominance)
     file: RWRS/Frozen/NoDominance.lean
     export: RWRS.Frozen.noDominance
-    state: SEALED
+    state: PROVED
     frozen_sha256: 7d16e63626cf5db527e510b84fd952125389fa031df31dd6c0e204be0fdc874c
     provider: RWRS.Frozen.noDominance
     approved: "2026-09-07"
@@ -241,7 +244,7 @@ nodes:
     source: rwrs.tex:694-699 (cited in prop:critical)
     file: RWRS/External/EfronStein.lean
     export: RWRS.External.efronStein
-    state: SEALED
+    state: PROVED
     frozen_sha256: a60c69f6abe597842d7a5bf4ec48c2a7a4653c2d5758c7c894c4d46ef8f90813
     provider: RWRS.External.efronStein
     approved: "2026-09-07"
@@ -252,7 +255,7 @@ nodes:
     source: rwrs.tex:1102-1111 (lem:dyadic)
     file: RWRS/Frozen/Dyadic.lean
     export: RWRS.Frozen.dyadic
-    state: SEALED
+    state: PROVED
     frozen_sha256: c96f045c18909ca96fe06fcd8cf43c829bc45731297604453fcb9d8f0dd88e7c
     provider: RWRS.Frozen.dyadic
     approved: "2026-09-07"
@@ -263,7 +266,7 @@ nodes:
     source: rwrs.tex:1740-1747 (lem:rec-geometry)
     file: RWRS/Frozen/GadgetGeometry.lean
     export: RWRS.Frozen.gadgetGeometry
-    state: SEALED
+    state: PROVED
     frozen_sha256: 5ddaea56b282ba195e9fcf636968173ad51a508461776bb69ad147355f42d76f
     provider: RWRS.Frozen.gadgetGeometry
     approved: "2026-09-07"
@@ -274,7 +277,7 @@ nodes:
     source: rwrs.tex:1946-1948 (lem:rec-good)
     file: RWRS/Frozen/RecGoodEvents.lean
     export: RWRS.Frozen.recGoodEvents
-    state: SEALED
+    state: PROVED
     frozen_sha256: 8263e78bc224b6783b9396ef07dc058f402e33228a7ee5cf971000420167d7b5
     provider: RWRS.Frozen.recGoodEvents
     approved: "2026-09-07"
@@ -285,7 +288,7 @@ nodes:
     source: rwrs.tex:1919-1922 (prop:rec-growth)
     file: RWRS/Frozen/RecVolumeGrowth.lean
     export: RWRS.Frozen.recVolumeGrowth
-    state: SEALED
+    state: PROVED
     frozen_sha256: bd40afc025dd4f3442a406b32d2d3e931aac191043039bec52adc6796c692048
     provider: RWRS.Frozen.recVolumeGrowth
     approved: "2026-09-07"
@@ -296,7 +299,7 @@ nodes:
     source: rwrs.tex:1530-1545 (prop:comb-estimates)
     file: RWRS/Frozen/CombEstimates.lean
     export: RWRS.Frozen.combEstimates
-    state: SEALED
+    state: PROVED
     frozen_sha256: 70da02877b4287244a536b3a3725ba062a8a183b09f115f949d1a95719fa46ad
     provider: RWRS.Frozen.combEstimates
     approved: "2026-09-07"
@@ -307,7 +310,7 @@ nodes:
     source: rwrs.tex:1792-1799 (cor:rec-loc)
     file: RWRS/Frozen/RecLocal.lean
     export: RWRS.Frozen.recLocal
-    state: SEALED
+    state: PROVED
     frozen_sha256: 5c445f5d482e4ee03c1e7d29f2b93b2f5e80b1040225c2f9c5862d61beb38396
     provider: RWRS.Frozen.recLocal
     approved: "2026-09-07"
@@ -318,7 +321,7 @@ nodes:
     source: rwrs.tex:1661-1663 (lem:tr-good)
     file: RWRS/Frozen/TransientGoodPipes.lean
     export: RWRS.Frozen.transientGoodPipes
-    state: SEALED
+    state: PROVED
     frozen_sha256: 2df0a0c39bce58ed813eafed78ca7e8ee564907bf81a62708141fe724981bdbf
     provider: RWRS.Frozen.transientGoodPipes
     approved: "2026-09-07"
@@ -329,7 +332,7 @@ nodes:
     source: rwrs.tex:429-438 (prop:finite-vol)
     file: RWRS/Frozen/FiniteVolume.lean
     export: RWRS.Frozen.finiteVolume
-    state: SEALED
+    state: PROVED
     frozen_sha256: c4c952e7100934aecc0075b69f88ecc5784e309054735ab0c774ba5970792e98
     provider: RWRS.Frozen.finiteVolume
     approved: "2026-09-07"
@@ -340,7 +343,7 @@ nodes:
     source: rwrs.tex:448-453 (thm:nested-vol)
     file: RWRS/Frozen/NestedVolume.lean
     export: RWRS.Frozen.nestedVolume
-    state: SEALED
+    state: PROVED
     frozen_sha256: 63721b5390bf8432ec744bf828693afd1423d6240c48f8fb5fe70ad6597a9b58
     provider: RWRS.Frozen.nestedVolume
     approved: "2026-09-07"
@@ -351,7 +354,7 @@ nodes:
     source: rwrs.tex:1575-1577 (thm:transient-nonstab)
     file: RWRS/Frozen/TransientNonstabilization.lean
     export: RWRS.Frozen.transientNonstabilization
-    state: SEALED
+    state: PROVED
     frozen_sha256: 6ca69c98d10805c64cfa258359d50b715d3eed9d414ef1199a2d99fa2bedadc4
     provider: RWRS.Frozen.transientNonstabilization
     approved: "2026-09-07"
@@ -362,7 +365,7 @@ nodes:
     source: rwrs.tex:1700-1708 (thm:recurrent-nonstab)
     file: RWRS/Frozen/RecurrentNonstabilization.lean
     export: RWRS.Frozen.recurrentNonstabilization
-    state: SEALED
+    state: PROVED
     frozen_sha256: eced45e07d7c8ab166cf233aec11b09a0c93e2d01a43f39a98f4571f03107cf6
     provider: RWRS.Frozen.recurrentNonstabilization
     approved: "2026-09-07"
@@ -373,7 +376,7 @@ nodes:
     source: rwrs.tex:1019-1034 (lem:local-time)
     file: RWRS/Frozen/LocalTime.lean
     export: RWRS.Frozen.localTimeMoments
-    state: SEALED
+    state: PROVED
     frozen_sha256: 56e71eaa4cb8bd598a84e214757a074969d907dc89c02764e497270185a8f445
     provider: RWRS.Frozen.localTimeMoments
     approved: "2026-09-07"
@@ -384,7 +387,7 @@ nodes:
     source: rwrs.tex:1124-1142 (lem:good-walk)
     file: RWRS/Frozen/GoodWalk.lean
     export: RWRS.Frozen.goodWalkBounds
-    state: SEALED
+    state: PROVED
     frozen_sha256: a9bfad72287e1a65d658cb1be68796dab2cc67d4b9da87003c5769401fd071bb
     provider: RWRS.Frozen.goodWalkBounds
     approved: "2026-09-07"
@@ -395,7 +398,7 @@ nodes:
     source: rwrs.tex:1385-1398 (lem:moment-sharpness)
     file: RWRS/Frozen/MomentSharpness.lean
     export: RWRS.Frozen.momentSharpness
-    state: SEALED
+    state: PROVED
     frozen_sha256: d79cfdcd2856ee38b62783579263ab1655bec64621c1acce617ead2c91e5dbae
     provider: RWRS.Frozen.momentSharpness
     approved: "2026-09-08"
@@ -406,7 +409,7 @@ nodes:
     source: rwrs.tex:513-520 (voltage function cited in prop:01-law, proved on a transient graph)
     file: RWRS/External/VoltageFunctionProved.lean
     export: RWRS.External.voltageFunction
-    state: SEALED
+    state: PROVED
     frozen_sha256: dcc91d8356cec2129b9a6fd51425ecf8dd3eceaedfebb6f5442417c62dc94a8e
     provider: RWRS.External.voltageFunction
     approved: "2026-09-08"
@@ -417,7 +420,7 @@ nodes:
     source: rwrs.tex:1155-1165 (prop:subcritical)
     file: RWRS/Frozen/Subcritical.lean
     export: RWRS.Frozen.subcritical
-    state: SEALED
+    state: PROVED
     frozen_sha256: 68478080648953835d5484ebce2e8f62f0caa26e0a93b979e01a912d8f49d055
     provider: RWRS.Frozen.subcritical
     approved: "2026-09-10"
@@ -428,7 +431,7 @@ nodes:
     source: rwrs.tex:1229-1241 (prop:poly-growth)
     file: RWRS/Frozen/PolyGrowth.lean
     export: RWRS.Frozen.polyGrowth
-    state: SEALED
+    state: PROVED
     frozen_sha256: 4680b5421701fe8e9c525473efe18bf9ff2f310a7cf6020178b7f2c83137c326
     provider: RWRS.Frozen.polyGrowth
     approved: "2026-09-10"
@@ -439,7 +442,7 @@ nodes:
     source: rwrs.tex:310-312 (lem:ergodic-marked-stationary)
     file: RWRS/Frozen/ErgodicMarked.lean
     export: RWRS.Frozen.ergodicMarked
-    state: SEALED
+    state: PROVED
     frozen_sha256: 4eeaa909c69f8b0d587725616d038d38f2d111a7f72e10b90e5f28bd790b27a2
     provider: RWRS.Frozen.ergodicMarked
     approved: "2026-09-11"
@@ -461,7 +464,7 @@ nodes:
     source: rwrs.tex:329-334 (lem:01-stationary)
     file: RWRS/Frozen/ZeroOneStationary.lean
     export: RWRS.Frozen.zeroOneStationary
-    state: SEALED
+    state: PROVED
     frozen_sha256: b655e0dc97471930577f5dbe84f5b6d81c0b95a8125092658ff9203f4c43a57d
     provider: RWRS.Frozen.zeroOneStationary
     approved: "2026-09-11"
@@ -472,7 +475,7 @@ nodes:
     source: rwrs.tex:268-274 (thm:stationary-phase)
     file: RWRS/Frozen/StationaryPhase.lean
     export: RWRS.Frozen.stationaryPhase
-    state: SEALED
+    state: PROVED
     frozen_sha256: c7abf92e97bdbf8ffa74624fbb7e8a9e1b20ccc8ffeb76573b487e8a85ba873a
     provider: RWRS.Frozen.stationaryPhase
     approved: "2026-09-11"
@@ -483,7 +486,7 @@ nodes:
     source: rwrs.tex:777-781 (prop:doubly-transient-really-general)
     file: RWRS/Frozen/DoublyTransient.lean
     export: RWRS.Frozen.doublyTransient
-    state: SEALED
+    state: PROVED
     frozen_sha256: 2a84c3e7148b2d00ca87d1de412e312516ed55ea0d982c229444ae0747d2e7da
     provider: RWRS.Frozen.doublyTransient
     approved: "2026-09-11"
@@ -494,7 +497,7 @@ nodes:
     source: rwrs.tex:143-149 (Carne 1985, Varopoulos 1985, Lyons-Peres Theorem 13.4); proved outright by the Chebyshev-Pell route
     file: RWRS/External/CarneVaropoulosProved.lean
     export: RWRS.External.carneVaropoulos
-    state: SEALED
+    state: PROVED
     frozen_sha256: b4c272044b0675d3b8d84587fd5c5112c3a1f4529e74fb31a7304ac00a969143
     provider: RWRS.External.carneVaropoulos
     approved: "2026-09-27"
@@ -505,7 +508,7 @@ nodes:
     source: rwrs.tex:131-140 (thm:stab); the Carne-Varopoulos bound is obtained internally from X-005, not carried as a hypothesis
     file: RWRS/Frozen/Stabilization.lean
     export: RWRS.Frozen.stabilization
-    state: SEALED
+    state: PROVED
     frozen_sha256: b685fab3fcf88e1a0254354667c38f7c5f209dfc8f73c9c7ab9098f6238dc7b8
     provider: RWRS.Frozen.stabilization
     approved: "2026-09-27"
@@ -516,7 +519,7 @@ nodes:
     source: rwrs.tex:513-520 (cited in prop:01-law; Lyons-Peres Proposition 2.1 and equation (2.4)); proved on every infinite connected graph, recurrent or transient
     file: RWRS/External/VoltageFunctionConnected.lean
     export: RWRS.External.voltageFunction_of_connected
-    state: SEALED
+    state: PROVED
     frozen_sha256: 21130d4a91debd0ebed462deadf233abd94e352fb590fc9358baaa99de6de5ff
     provider: RWRS.External.voltageFunction_of_connected
     approved: "2026-09-27"
@@ -527,7 +530,7 @@ nodes:
     source: rwrs.tex:491-495 (prop:01-law)
     file: RWRS/Frozen/ZeroOneLaw.lean
     export: RWRS.Frozen.zeroOneLaw
-    state: SEALED
+    state: PROVED
     frozen_sha256: 14263bfcecaced2a16c607b3fbfdc8ebe06d1ffdd4f79e899d685757b135961e
     provider: RWRS.Frozen.zeroOneLaw
     approved: "2026-09-27"
@@ -538,7 +541,7 @@ nodes:
     source: rwrs.tex:664-683 (prop:critical)
     file: RWRS/Frozen/Critical.lean
     export: RWRS.Frozen.critical
-    state: SEALED
+    state: PROVED
     frozen_sha256: 648ae96476df023fde65cef2e90d57d653ec0cfad23281238474e4b0acc90336
     provider: RWRS.Frozen.critical
     approved: "2026-09-27"
@@ -549,7 +552,7 @@ nodes:
     source: rwrs.tex:950-954 (prop:convexity-reduction)
     file: RWRS/Frozen/ConvexityReduction.lean
     export: RWRS.Frozen.convexityReduction
-    state: SEALED
+    state: PROVED
     frozen_sha256: 82a5d07b091bbe0c93da553df1acb897aeb50a50b031998ef0ca503274298f2b
     provider: RWRS.Frozen.convexityReduction
     approved: "2026-09-27"
@@ -560,7 +563,7 @@ nodes:
     source: rwrs.tex:117-127 (thm:explosion)
     file: RWRS/Frozen/Explosion.lean
     export: RWRS.Frozen.explosion
-    state: SEALED
+    state: PROVED
     frozen_sha256: 41a0e1db457a71b7849043c846d280a2ccb3ac96ee7720203c98db8f2e5d995e
     provider: RWRS.Frozen.explosion
     approved: "2026-09-27"
@@ -571,7 +574,7 @@ nodes:
     source: rwrs.tex:94-101 (thm:OS)
     file: RWRS/Frozen/OptimalStopping.lean
     export: RWRS.Frozen.optimalStopping
-    state: SEALED
+    state: PROVED
     frozen_sha256: 641b485c20de1154ab59feb9db876b69cad65261c97477e104e926e9d58449fc
     provider: RWRS.Frozen.optimalStopping
     approved: "2026-09-27"

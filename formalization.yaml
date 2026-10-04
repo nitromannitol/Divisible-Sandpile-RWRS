@@ -71,7 +71,7 @@ status:
     finite graph, and the bounded voltage function on every infinite connected
     graph, recurrent or transient
     (RWRS.External.voltageFunction_of_connected); each lives as a single
-    SEALED theorem node together with its proof, and no statement carries it as
+    PROVED theorem node together with its proof, and no statement carries it as
     a hypothesis.  One is not proved here: the ergodic decomposition of
     stationary random networks.  The statements whose proofs use it
     (RWRS.Frozen.stationaryPhase and RWRS.Frozen.zeroOneStationary) take it as

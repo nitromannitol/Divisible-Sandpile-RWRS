@@ -16,7 +16,7 @@ Separate companion theorems discharge these predicates under the conditions
 listed below; `CORRESPONDENCE.md` records the correspondence with the paper.
 0 of the 1 cited inputs not proved outright have registered proved
 companions. 8 further cited inputs are proved outright and merged
-into an ordinary `SEALED` theorem node, so no statement carries a hypothesis for them.
+into an ordinary proved theorem node, so no statement carries a hypothesis for them.
 
 ## Environment
 
@@ -27,7 +27,7 @@ into an ordinary `SEALED` theorem node, so no statement carries a hypothesis for
 | Paper (`paper/rwrs.tex`) SHA-256 | `809373589ee57976f2eb57cd62a1cb1d94d8e66ac576632be65385e9a06ded6c` |
 | Build | succeeded, 9006 jobs |
 | Build warnings | 0 |
-| Generated | 2026-09-27 |
+| Generated | 2026-10-04 |
 
 ## Reproducing it
 
@@ -54,60 +54,60 @@ nowhere below.
 
 | # | node | Lean name | state | paper | axiom closure |
 |---|---|---|---|---|---|
-| 1 | `N-004` | `RWRS.Frozen.iidStationary` | `SEALED` | `prop:iid-stationary` | classical only |
-| 2 | `N-006` | `RWRS.Frozen.stationaryToppling` | `SEALED` | `thm:stationary-toppling` | classical only |
-| 3 | `N-009` | `RWRS.Frozen.recursion` | `SEALED` | `lem:recursion` | classical only |
-| 4 | `N-016` | `RWRS.Frozen.supercritical` | `SEALED` | `prop:supercritical` | classical only |
-| 5 | `N-017` | `RWRS.Frozen.positivePart` | `SEALED` | `lem:positive-part` | classical only |
-| 6 | `N-019` | `RWRS.Frozen.sensitivity` | `SEALED` | `lem:sensitivity` | classical only |
-| 7 | `N-025` | `RWRS.Frozen.fukNagaev` | `SEALED` | `lem:fuk-nagaev` | classical only |
-| 8 | `X-001` | `RWRS.External.vonBahrEsseen` | `SEALED` | — | classical only |
-| 9 | `X-002` | `RWRS.External.fukNagaevTail` | `SEALED` | — | classical only |
-| 10 | `X-003` | `RWRS.External.bernstein` | `SEALED` | — | classical only |
-| 11 | `N-010` | `RWRS.Frozen.randomWalkRepresentation` | `SEALED` | `thm:RW` | classical only |
-| 12 | `N-013` | `RWRS.Frozen.rwInfinite` | `SEALED` | `cor:RW-infinite` | classical only |
-| 13 | `N-033` | `RWRS.Frozen.coboundary` | `SEALED` | `ex:coboundary` | classical only |
-| 14 | `N-032` | `RWRS.Frozen.finitePerturbation` | `SEALED` | `ex:finite-perturbation` | classical only |
-| 15 | `X-004` | `RWRS.External.heatKernelBoundedDegree_of_connected` | `SEALED` | — | classical only |
-| 16 | `X-006` | `RWRS.External.heatKernelVanishing_of_connected` | `SEALED` | — | classical only |
-| 17 | `N-015` | `RWRS.Frozen.clockNoDominance` | `SEALED` | `lem:clock-no-dom` | classical only |
-| 18 | `N-023` | `RWRS.Frozen.shortClock` | `SEALED` | `prop:short-clock` | classical only |
-| 19 | `N-030` | `RWRS.Frozen.unboundedDegreeTree` | `SEALED` | `ex:counterexample` | classical only |
-| 20 | `N-018` | `RWRS.Frozen.noDominance` | `SEALED` | `lem:no-dominance` | classical only |
-| 21 | `X-007` | `RWRS.External.efronStein` | `SEALED` | — | classical only |
-| 22 | `N-026` | `RWRS.Frozen.dyadic` | `SEALED` | `lem:dyadic` | classical only |
-| 23 | `N-038` | `RWRS.Frozen.gadgetGeometry` | `SEALED` | `lem:rec-geometry` | classical only |
-| 24 | `N-041` | `RWRS.Frozen.recGoodEvents` | `SEALED` | `lem:rec-good` | classical only |
-| 25 | `N-040` | `RWRS.Frozen.recVolumeGrowth` | `SEALED` | `prop:rec-growth` | classical only |
-| 26 | `N-034` | `RWRS.Frozen.combEstimates` | `SEALED` | `prop:comb-estimates` | classical only |
-| 27 | `N-039` | `RWRS.Frozen.recLocal` | `SEALED` | `cor:rec-loc` | classical only |
-| 28 | `N-036` | `RWRS.Frozen.transientGoodPipes` | `SEALED` | `lem:tr-good` | classical only |
-| 29 | `N-011` | `RWRS.Frozen.finiteVolume` | `SEALED` | `prop:finite-vol` | classical only |
-| 30 | `N-012` | `RWRS.Frozen.nestedVolume` | `SEALED` | `thm:nested-vol` | classical only |
-| 31 | `N-035` | `RWRS.Frozen.transientNonstabilization` | `SEALED` | `thm:transient-nonstab` | classical only |
-| 32 | `N-037` | `RWRS.Frozen.recurrentNonstabilization` | `SEALED` | `thm:recurrent-nonstab` | classical only |
-| 33 | `N-024` | `RWRS.Frozen.localTimeMoments` | `SEALED` | `lem:local-time` | classical only |
-| 34 | `N-027` | `RWRS.Frozen.goodWalkBounds` | `SEALED` | `lem:good-walk` | classical only |
-| 35 | `N-031` | `RWRS.Frozen.momentSharpness` | `SEALED` | `lem:moment-sharpness` | classical only |
-| 36 | `X-008P` | `RWRS.External.voltageFunction` | `SEALED` | — | classical only |
-| 37 | `N-028` | `RWRS.Frozen.subcritical` | `SEALED` | `prop:subcritical` | classical only |
-| 38 | `N-029` | `RWRS.Frozen.polyGrowth` | `SEALED` | `prop:poly-growth` | classical only |
-| 39 | `N-007` | `RWRS.Frozen.ergodicMarked` | `SEALED` | `lem:ergodic-marked-stationary` | classical only |
+| 1 | `N-004` | `RWRS.Frozen.iidStationary` | `PROVED` | `prop:iid-stationary` | classical only |
+| 2 | `N-006` | `RWRS.Frozen.stationaryToppling` | `PROVED` | `thm:stationary-toppling` | classical only |
+| 3 | `N-009` | `RWRS.Frozen.recursion` | `PROVED` | `lem:recursion` | classical only |
+| 4 | `N-016` | `RWRS.Frozen.supercritical` | `PROVED` | `prop:supercritical` | classical only |
+| 5 | `N-017` | `RWRS.Frozen.positivePart` | `PROVED` | `lem:positive-part` | classical only |
+| 6 | `N-019` | `RWRS.Frozen.sensitivity` | `PROVED` | `lem:sensitivity` | classical only |
+| 7 | `N-025` | `RWRS.Frozen.fukNagaev` | `PROVED` | `lem:fuk-nagaev` | classical only |
+| 8 | `X-001` | `RWRS.External.vonBahrEsseen` | `PROVED` | — | classical only |
+| 9 | `X-002` | `RWRS.External.fukNagaevTail` | `PROVED` | — | classical only |
+| 10 | `X-003` | `RWRS.External.bernstein` | `PROVED` | — | classical only |
+| 11 | `N-010` | `RWRS.Frozen.randomWalkRepresentation` | `PROVED` | `thm:RW` | classical only |
+| 12 | `N-013` | `RWRS.Frozen.rwInfinite` | `PROVED` | `cor:RW-infinite` | classical only |
+| 13 | `N-033` | `RWRS.Frozen.coboundary` | `PROVED` | `ex:coboundary` | classical only |
+| 14 | `N-032` | `RWRS.Frozen.finitePerturbation` | `PROVED` | `ex:finite-perturbation` | classical only |
+| 15 | `X-004` | `RWRS.External.heatKernelBoundedDegree_of_connected` | `PROVED` | — | classical only |
+| 16 | `X-006` | `RWRS.External.heatKernelVanishing_of_connected` | `PROVED` | — | classical only |
+| 17 | `N-015` | `RWRS.Frozen.clockNoDominance` | `PROVED` | `lem:clock-no-dom` | classical only |
+| 18 | `N-023` | `RWRS.Frozen.shortClock` | `PROVED` | `prop:short-clock` | classical only |
+| 19 | `N-030` | `RWRS.Frozen.unboundedDegreeTree` | `PROVED` | `ex:counterexample` | classical only |
+| 20 | `N-018` | `RWRS.Frozen.noDominance` | `PROVED` | `lem:no-dominance` | classical only |
+| 21 | `X-007` | `RWRS.External.efronStein` | `PROVED` | — | classical only |
+| 22 | `N-026` | `RWRS.Frozen.dyadic` | `PROVED` | `lem:dyadic` | classical only |
+| 23 | `N-038` | `RWRS.Frozen.gadgetGeometry` | `PROVED` | `lem:rec-geometry` | classical only |
+| 24 | `N-041` | `RWRS.Frozen.recGoodEvents` | `PROVED` | `lem:rec-good` | classical only |
+| 25 | `N-040` | `RWRS.Frozen.recVolumeGrowth` | `PROVED` | `prop:rec-growth` | classical only |
+| 26 | `N-034` | `RWRS.Frozen.combEstimates` | `PROVED` | `prop:comb-estimates` | classical only |
+| 27 | `N-039` | `RWRS.Frozen.recLocal` | `PROVED` | `cor:rec-loc` | classical only |
+| 28 | `N-036` | `RWRS.Frozen.transientGoodPipes` | `PROVED` | `lem:tr-good` | classical only |
+| 29 | `N-011` | `RWRS.Frozen.finiteVolume` | `PROVED` | `prop:finite-vol` | classical only |
+| 30 | `N-012` | `RWRS.Frozen.nestedVolume` | `PROVED` | `thm:nested-vol` | classical only |
+| 31 | `N-035` | `RWRS.Frozen.transientNonstabilization` | `PROVED` | `thm:transient-nonstab` | classical only |
+| 32 | `N-037` | `RWRS.Frozen.recurrentNonstabilization` | `PROVED` | `thm:recurrent-nonstab` | classical only |
+| 33 | `N-024` | `RWRS.Frozen.localTimeMoments` | `PROVED` | `lem:local-time` | classical only |
+| 34 | `N-027` | `RWRS.Frozen.goodWalkBounds` | `PROVED` | `lem:good-walk` | classical only |
+| 35 | `N-031` | `RWRS.Frozen.momentSharpness` | `PROVED` | `lem:moment-sharpness` | classical only |
+| 36 | `X-008P` | `RWRS.External.voltageFunction` | `PROVED` | — | classical only |
+| 37 | `N-028` | `RWRS.Frozen.subcritical` | `PROVED` | `prop:subcritical` | classical only |
+| 38 | `N-029` | `RWRS.Frozen.polyGrowth` | `PROVED` | `prop:poly-growth` | classical only |
+| 39 | `N-007` | `RWRS.Frozen.ergodicMarked` | `PROVED` | `lem:ergodic-marked-stationary` | classical only |
 | 40 | `X-009` | `RWRS.External.ErgodicDecomposition` | `FROZEN` | — | assumed (a cited theorem, stated as a proposition) |
-| 41 | `N-008` | `RWRS.Frozen.zeroOneStationary` | `SEALED` | `lem:01-stationary` | classical only |
-| 42 | `N-005` | `RWRS.Frozen.stationaryPhase` | `SEALED` | `thm:stationary-phase` | classical only |
-| 43 | `N-021` | `RWRS.Frozen.doublyTransient` | `SEALED` | `prop:doubly-transient-really-general` | classical only |
-| 44 | `X-005` | `RWRS.External.carneVaropoulos` | `SEALED` | — | classical only |
-| 45 | `N-003` | `RWRS.Frozen.stabilization` | `SEALED` | `thm:stab` | classical only |
-| 46 | `X-008` | `RWRS.External.voltageFunction_of_connected` | `SEALED` | — | classical only |
-| 47 | `N-014` | `RWRS.Frozen.zeroOneLaw` | `SEALED` | `prop:01-law` | classical only |
-| 48 | `N-020` | `RWRS.Frozen.critical` | `SEALED` | `prop:critical` | classical only |
-| 49 | `N-022` | `RWRS.Frozen.convexityReduction` | `SEALED` | `prop:convexity-reduction` | classical only |
-| 50 | `N-002` | `RWRS.Frozen.explosion` | `SEALED` | `thm:explosion` | classical only |
-| 51 | `N-001` | `RWRS.Frozen.optimalStopping` | `SEALED` | `thm:OS` | classical only |
+| 41 | `N-008` | `RWRS.Frozen.zeroOneStationary` | `PROVED` | `lem:01-stationary` | classical only |
+| 42 | `N-005` | `RWRS.Frozen.stationaryPhase` | `PROVED` | `thm:stationary-phase` | classical only |
+| 43 | `N-021` | `RWRS.Frozen.doublyTransient` | `PROVED` | `prop:doubly-transient-really-general` | classical only |
+| 44 | `X-005` | `RWRS.External.carneVaropoulos` | `PROVED` | — | classical only |
+| 45 | `N-003` | `RWRS.Frozen.stabilization` | `PROVED` | `thm:stab` | classical only |
+| 46 | `X-008` | `RWRS.External.voltageFunction_of_connected` | `PROVED` | — | classical only |
+| 47 | `N-014` | `RWRS.Frozen.zeroOneLaw` | `PROVED` | `prop:01-law` | classical only |
+| 48 | `N-020` | `RWRS.Frozen.critical` | `PROVED` | `prop:critical` | classical only |
+| 49 | `N-022` | `RWRS.Frozen.convexityReduction` | `PROVED` | `prop:convexity-reduction` | classical only |
+| 50 | `N-002` | `RWRS.Frozen.explosion` | `PROVED` | `thm:explosion` | classical only |
+| 51 | `N-001` | `RWRS.Frozen.optimalStopping` | `PROVED` | `thm:OS` | classical only |
 
 All 50 declarations have axiom closures contained in the three classical
-axioms. The 50 theorem nodes are `SEALED`; the 1 external definition
+axioms. The 50 theorem nodes are `PROVED`; the 1 external definition
 is `FROZEN`. A clean definition does not supply a proof of its proposition.
 
 ## External inputs
@@ -116,7 +116,7 @@ is `FROZEN`. A clean definition does not supply a proof of its proposition.
 Lean's three classical axioms. The cited external predicates that are not
 proved outright are definition nodes in state `FROZEN`; their proved companions,
 and the cited inputs proved outright and merged into their own node, are theorem
-nodes in state `SEALED`.
+nodes in state `PROVED`.
 
 ## Hypotheses of the proved companions
 
@@ -128,7 +128,7 @@ The hypotheses of a frozen theorem determine which companions apply at its use s
 
 ## Scope of the cited inputs proved outright
 
-Each of these is a cited input merged into its own `SEALED` theorem node
+Each of these is a cited input merged into its own proved theorem node
 (no separate companion node, no hypothesis carried anywhere else).
 
 | node | Lean theorem | hypotheses |
@@ -143,7 +143,7 @@ Each of these is a cited input merged into its own `SEALED` theorem node
 | `X-008` | `RWRS.External.voltageFunction_of_connected` | locally finite infinite connected graph |
 
 The manifest registers 9 external propositions, of which 8 are proved outright and merged into an ordinary
-SEALED theorem node (kind `theorem`, no separate companion), leaving 1 carried as a `FROZEN` `definition` node.  A
+proved theorem node (kind `theorem`, no separate companion), leaving 1 carried as a `FROZEN` `definition` node.  A
 `FROZEN` proposition's axiom closure checks its definition; a witness
 theorem proves the input under the witness's stated hypotheses.
 
@@ -151,7 +151,7 @@ theorem proves the input under the witness's stated hypotheses.
 |---|---|---|---|
 | `X-009` | `RWRS.External.ErgodicDecomposition` | rwrs.tex:337-342 (cited in lem:01-stationary) | — |
 
-Proved outright (`kind: theorem`, `state: SEALED`):
+Proved outright (`kind: theorem`, `state: PROVED`):
 
 - `X-001` (`RWRS.External.vonBahrEsseen`), rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)
 - `X-002` (`RWRS.External.fukNagaevTail`), rwrs.tex:1096-1098 (cited in lem:fuk-nagaev)

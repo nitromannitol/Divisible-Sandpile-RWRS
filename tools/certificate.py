@@ -17,8 +17,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from sync_docs import (external_inputs_block, proved_citations, proved_companions,
-                       unconditional_names)
+from sync_docs import (PROVED_STATES, external_inputs_block, proved_citations,
+                       proved_companions, proved_state_label, unconditional_names)
 
 try:
     import yaml
@@ -116,7 +116,9 @@ def build() -> str:
         raise RuntimeError("certificate: non-classical axiom in a closure")
     if warnings:
         raise RuntimeError("certificate: unexpected build warnings")
-    sealed = sum(n["kind"] == "theorem" and n["state"] == "SEALED" for n in nodes)
+    sealed = sum(n["kind"] == "theorem" and n["state"] in PROVED_STATES for n in nodes)
+    state_label = proved_state_label(
+        {s: sum(1 for n in nodes if n["state"] == s) for s in PROVED_STATES})
     inputs = sum(n["kind"] == "definition" for n in nodes)
     toolchain = (ROOT / "lean-toolchain").read_text().strip()
     import json
@@ -146,7 +148,7 @@ def build() -> str:
     A("listed below; `CORRESPONDENCE.md` records the correspondence with the paper.")
     A(f"{len(companions)} of the {len(externals)} cited inputs not proved outright have registered proved")
     A(f"companions. {len(proved_cited)} further cited inputs are proved outright and merged")
-    A("into an ordinary `SEALED` theorem node, so no statement carries a hypothesis for them.")
+    A("into an ordinary proved theorem node, so no statement carries a hypothesis for them.")
     A("")
     A("## Environment")
     A("")
@@ -203,7 +205,7 @@ def build() -> str:
         A(f"| {i} | `{n['id']}` | `{e}` | `{n['state']}` | {paper_cell} | {verdict} |")
     A("")
     A(f"All {clean} declarations have axiom closures contained in the three classical")
-    A(f"axioms. The {sealed} theorem nodes are `SEALED`; the {inputs} external definition"
+    A(f"axioms. The {sealed} theorem nodes are `{state_label}`; the {inputs} external definition"
       + ("" if inputs == 1 else "s"))
     A(("is" if inputs == 1 else "are")
       + " `FROZEN`. A clean definition does not supply a proof of its proposition.")
@@ -214,7 +216,7 @@ def build() -> str:
     A("Lean's three classical axioms. The cited external predicates that are not")
     A("proved outright are definition nodes in state `FROZEN`; their proved companions,")
     A("and the cited inputs proved outright and merged into their own node, are theorem")
-    A("nodes in state `SEALED`.")
+    A("nodes in state `%s`." % state_label)
     A("")
     A("## Hypotheses of the proved companions")
     A("")
@@ -235,7 +237,7 @@ def build() -> str:
         A("")
         A("## Scope of the cited inputs proved outright")
         A("")
-        A("Each of these is a cited input merged into its own `SEALED` theorem node")
+        A("Each of these is a cited input merged into its own proved theorem node")
         A("(no separate companion node, no hypothesis carried anywhere else).")
         A("")
         A("| node | Lean theorem | hypotheses |")

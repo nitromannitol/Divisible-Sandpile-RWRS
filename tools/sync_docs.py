@@ -37,6 +37,17 @@ HYPOTHESES_END = "<!-- INPUT-HYPOTHESES-END -->"
 LABEL_RE = re.compile(r"label ([A-Za-z][A-Za-z0-9:_-]*)")
 RANGE_RE = re.compile(r"rwrs\.tex:\d+-\d+")
 
+# A theorem node is proved when its proof is machine-checked and its axiom
+# closure is clean.  `PROVED` is a `SEALED` node promoted after an
+# independent refute-first audit found no defect, so both count as proved.
+PROVED_STATES = ("PROVED", "SEALED")
+
+
+def proved_state_label(counts: Counter) -> str:
+    """The proved state(s) present, preferring the audited `PROVED`."""
+    present = [s for s in PROVED_STATES if counts.get(s)]
+    return "/".join(present) if present else "PROVED"
+
 
 def paper_cell(source: str) -> str:
     """The `paper` column: line range plus label, or the guard's own wording."""
@@ -57,9 +68,9 @@ def surface_table(nodes: list[dict]) -> str:
 
 
 def proved_companions(nodes: list[dict]) -> dict[str, dict]:
-    """The SEALED theorem registered beside each external predicate."""
+    """The proved theorem registered beside each external predicate."""
     sealed = {n["id"]: n for n in nodes
-              if n["kind"] == "theorem" and n["state"] == "SEALED"}
+              if n["kind"] == "theorem" and n["state"] in PROVED_STATES}
     return {n["id"]: sealed[n["id"] + "P"] for n in nodes
             if n["kind"] == "definition" and n["id"] + "P" in sealed}
 
@@ -74,16 +85,16 @@ def unconditional_names() -> list[str]:
 
 
 def proved_citations(nodes: list[dict]) -> list[dict]:
-    """Cited inputs proved outright and merged into an ordinary SEALED theorem node.
+    """Cited inputs proved outright and merged into an ordinary proved theorem node.
 
     Such a node's id still names the citation (an `X-` id), but its `kind` is
-    `theorem` and its `state` is `SEALED`: the cited proposition and its proof
-    live together in one frozen block (see `check_manifest.py`), and no
-    hypothesis for it remains in any statement.
+    `theorem` and its `state` is `PROVED` (or the older `SEALED`): the cited
+    proposition and its proof live together in one frozen block (see
+    `check_manifest.py`), and no hypothesis for it remains in any statement.
     """
     return sorted((n for n in nodes
                    if n["id"].startswith("X-") and not n["id"].endswith("P")
-                   and n["kind"] == "theorem" and n["state"] == "SEALED"),
+                   and n["kind"] == "theorem" and n["state"] in PROVED_STATES),
                   key=lambda n: n["id"])
 
 
@@ -92,18 +103,24 @@ def status_block(nodes: list[dict]) -> str:
     companions = proved_companions(nodes)
     proved_cited = proved_citations(nodes)
     draft = [n["id"] for n in nodes if n["state"] == "DRAFT_SORRY"]
+    proved = sum(counts.get(s, 0) for s in PROVED_STATES)
+    state_label = proved_state_label(counts)
+    audited = counts.get("PROVED", 0) == proved and proved > 0
     sentence = (
-        f"{len(nodes)} registered nodes: {counts['SEALED']} SEALED "
-        f"(statements of the paper, proved), {counts['FROZEN']} FROZEN "
+        f"{len(nodes)} registered nodes: {proved} {state_label} "
+        f"(statements of the paper, proved"
+        f"{' and independently audited' if audited else ''}), "
+        f"{counts['FROZEN']} FROZEN "
         f"(cited external inputs, stated as hypotheses; {len(companions)} "
         "of them with a proved companion)")
     other = [f"{count} {state}" for state, count in sorted(counts.items())
-             if state not in {"SEALED", "FROZEN"}]
+             if state not in {*PROVED_STATES, "FROZEN"}]
     if other:
         sentence += "; " + ", ".join(other)
-    paper_sealed = sum(n["id"].startswith("N-") and n["state"] == "SEALED" for n in nodes)
+    paper_sealed = sum(n["id"].startswith("N-") and n["state"] in PROVED_STATES
+                       for n in nodes)
     body = [f"Status: **{sentence}.**", "",
-            f"The SEALED count includes {paper_sealed} paper statements and "
+            f"The {state_label} count includes {paper_sealed} paper statements and "
             f"{len(companions)} companion theorems. Their proofs are machine-checked,",
             "and their axiom closures are exactly Lean's three standard axioms "
             "`propext`, `Classical.choice` and `Quot.sound`: no `sorry`, and no "
@@ -117,7 +134,7 @@ def status_block(nodes: list[dict]) -> str:
             "Companions discharge a cited input under their own hypotheses;",
             "see [the certificate](CERTIFICATE.md) for their scope."]
     if proved_cited:
-        body += ["", "Cited inputs proved outright, as ordinary SEALED theorems: " + ", ".join(
+        body += ["", "Cited inputs proved outright, as ordinary proved theorem nodes: " + ", ".join(
             f"`{n['id']}` (`{n['export']}`)" for n in proved_cited) + ".",
             "No frozen statement carries any of them as a hypothesis."]
     names = unconditional_names()
@@ -132,11 +149,12 @@ def status_block(nodes: list[dict]) -> str:
 def external_inputs_block(nodes: list[dict]) -> str:
     inputs = [n for n in nodes if n["kind"] == "definition"]
     proved_cited = proved_citations(nodes)
+    state_label = proved_state_label(Counter(n["state"] for n in nodes))
     total = len(inputs) + len(proved_cited)
     rows = [
         f"The manifest registers {total} external propositions, of which "
         f"{len(proved_cited)} are proved outright and merged into an ordinary",
-        f"SEALED theorem node (kind `theorem`, no separate companion), leaving "
+        f"proved theorem node (kind `theorem`, no separate companion), leaving "
         f"{len(inputs)} carried as a `FROZEN` `definition` node.  A",
         "`FROZEN` proposition's axiom closure checks its definition; a witness",
         "theorem proves the input under the witness's stated hypotheses.",
@@ -150,7 +168,7 @@ def external_inputs_block(nodes: list[dict]) -> str:
         witness = (f"`{companion['export']}` (`{companion['id']}`)" if companion else "—")
         rows.append(f"| `{n['id']}` | `{n['export']}` | {n['source']} | {witness} |")
     if proved_cited:
-        rows.extend(["", "Proved outright (`kind: theorem`, `state: SEALED`):", ""])
+        rows.extend(["", f"Proved outright (`kind: theorem`, `state: {state_label}`):", ""])
         for n in proved_cited:
             rows.append(f"- `{n['id']}` (`{n['export']}`), {n['source']}")
     rows.extend([
