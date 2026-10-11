@@ -185,7 +185,7 @@ their proof does not use.  Modelling decisions:
   [`RWRSAudit/COMPARATOR_RUNS.md`](RWRSAudit/COMPARATOR_RUNS.md)).
   The workflow
   [`.github/workflows/comparator.yml`](.github/workflows/comparator.yml) runs
-  the comparator on request.  See [`RWRSAudit/README.md`](RWRSAudit/README.md).
+  the comparator on relevant changes to `main` or by manual dispatch.  See [`RWRSAudit/README.md`](RWRSAudit/README.md).
 - **Pinned toolchain.**  Lean `v4.32.0` ([`lean-toolchain`](lean-toolchain)),
   mathlib at revision `81a5d257c8e410db227a6665ed08f64fea08e997`, and
   Lattice-Probability at commit `9d44b4d4670df393bb86ac5a4e042f215001cddf`,
