@@ -1,10 +1,13 @@
-# Divisible-Sandpile-RWRS
+# Divisible sandpiles via random walks in random scenery
 
 A machine-checked **Lean 4** formalization of the paper
-[*Divisible sandpiles via random walks in random scenery*](https://arxiv.org/abs/2604.13968)
-(Ahmed Bou-Rabee, Yuval Peres and Ecaterina Sava-Huss, arXiv:2604.13968), built
-on [`mathlib`](https://github.com/leanprover-community/mathlib4) and the shared
-library [Lattice-Probability](https://github.com/nitromannitol/Lattice-Probability).
+
+> Ahmed Bou-Rabee, Yuval Peres and Ecaterina Sava-Huss,
+> [*Divisible sandpiles via random walks in random scenery*](https://arxiv.org/abs/2604.13968),
+> arXiv:2604.13968.
+
+The development is built on [mathlib](https://github.com/leanprover-community/mathlib4) and the shared library
+[Lattice-Probability](https://github.com/nitromannitol/Lattice-Probability) (`LatticeProb`).
 
 The three main theorems of the paper are proved in the form in which its
 introduction states them, and so is every other labelled theorem, lemma,
@@ -13,8 +16,8 @@ literature without proof, eight are proved here; the ninth, the ergodic
 decomposition of stationary random networks, is an explicit hypothesis of the
 statements that use it, and none of the three main theorems uses it.
 
-[![CI](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/build.yml/badge.svg)](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/build.yml)
-[![Comparator audit](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/comparator.yml/badge.svg)](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/comparator.yml)
+[![CI](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/build.yml)
+[![Comparator audit](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/comparator.yml/badge.svg?branch=main)](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/comparator.yml)
 
 ## What is proved
 
