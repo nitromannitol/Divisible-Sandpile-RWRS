@@ -36,7 +36,7 @@ sources:
       and corollary is formalized; see status.scope for the precise scope
       boundary and fidelity.divergences for the readings of the paper's
       wording.
-    license: ""                 # TODO(author): the license under which the paper is posted
+    license: "arXiv non-exclusive distribution license 1.0"
     author_contacted: "n/a"     # the formalizer is an author of the source
     prior_work: ""
 
