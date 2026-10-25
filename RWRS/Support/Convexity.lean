@@ -414,12 +414,12 @@ theorem evar_map_trunc_pos (ν : Measure ℝ) [IsProbabilityMeasure ν] (hsym : 
 /-- Applying `trunc M` pointwise to a scenery `ξ : V → ℝ` is a measurable map. -/
 theorem measurable_truncMap (M : ℝ) :
     Measurable fun ξ : V → ℝ => (fun v => trunc M (ξ v)) :=
-  measurable_pi_lambda _ fun v => (measurable_trunc M).comp (measurable_pi_apply v)
+  measurable_pi_iff.mpr fun v => (measurable_trunc M).comp (measurable_pi_apply v)
 
 /-- Applying `flipAt M` pointwise to a scenery `ξ : V → ℝ` is a measurable map. -/
 theorem measurable_flipMap (M : ℝ) :
     Measurable fun ξ : V → ℝ => (fun v => flipAt M (ξ v)) :=
-  measurable_pi_lambda _ fun v => (measurable_flipAt M).comp (measurable_pi_apply v)
+  measurable_pi_iff.mpr fun v => (measurable_flipAt M).comp (measurable_pi_apply v)
 
 /-- The reduction of `prop:convexity-reduction`, for either of the two
 convex functionals of the scenery. -/

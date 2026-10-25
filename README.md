@@ -191,7 +191,7 @@ their proof does not use.  Modelling decisions:
   the comparator on relevant changes to `main` or by manual dispatch.  See [`RWRSAudit/README.md`](RWRSAudit/README.md).
 - **Pinned toolchain.**  Lean `v4.35.0-rc2` ([`lean-toolchain`](lean-toolchain)),
   mathlib at revision `065356127b1dc0016f66b7283ce0ce2c4055aa55`, and
-  Lattice-Probability at commit `b5fa741a3b9b7ee5bde8459d6ccdda807e38faf7`,
+  Lattice-Probability at commit `85268026a15fe086261119d9675d00dc73374acc`,
   recorded in [`lakefile.lean`](lakefile.lean) and
   [`lake-manifest.json`](lake-manifest.json).
 
@@ -330,3 +330,10 @@ The module compatibility revision retains every frozen statement and the origina
 mathematical definitions. Its Lattice-Probability source is a compatibility port of
 this project's exact prior snapshot. The existing ergodic-decomposition assumption
 for the supporting stationary-network results is unchanged.
+
+The selected Explosion comparator imports `RWRS.Frozen.Explosion` directly and
+applies the exact frozen theorem used by the public `RWRS.explosion` wrapper.
+Supporting statements outside this selected proof closure are not claimed
+verified by this preflight. Existing measurability, mapped-probability and
+ergodicity proof calls are adapted to the current Mathlib API; their hypotheses
+and mathematical definitions are retained.

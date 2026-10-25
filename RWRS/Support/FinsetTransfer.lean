@@ -47,7 +47,7 @@ theorem iidLaw_map_equiv (S : Set V) (ν : Measure ℝ) [IsProbabilityMeasure ν
 `(V → ℝ) → (Fin n → ℝ)`. -/
 theorem measurable_readAlong (S : Set V) {n : ℕ} (e : Fin n ≃ S) :
     Measurable (fun ξ : V → ℝ => fun j : Fin n => ξ ((e j : S) : V)) :=
-  measurable_pi_lambda _ fun _ => measurable_pi_apply _
+  measurable_pi_iff.mpr fun _ => measurable_pi_apply _
 
 /-- **The transfer of an event.**  An event of the field read along the
 bijection has the same probability under the two laws. -/

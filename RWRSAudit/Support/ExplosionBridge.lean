@@ -1,7 +1,7 @@
 module
 
 public import Mathlib
-public import RWRS.MainTheorems
+public import RWRS.Frozen.Explosion
 public import RWRSAudit.Explosion.SolutionBasic
 
 @[expose] public section

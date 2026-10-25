@@ -124,7 +124,7 @@ theorem extMean_map_sub_one_lt (ν : Measure ℝ) [IsProbabilityMeasure ν]
     have hn'' : RWRS.negPart (ν.map (fun z : ℝ => z - 1)) ≠ ⊤ :=
       negPart_map_sub_one_ne_top ν hn
     haveI : IsProbabilityMeasure (ν.map (fun z : ℝ => z - 1)) :=
-      Measure.isProbabilityMeasure_map (measurable_id.sub_const 1).aemeasurable
+      (Measure.isProbabilityMeasure_map_iff (measurable_id.sub_const 1).aemeasurable).2 inferInstance
     have hint : Integrable (fun z : ℝ => z) ν := integrable_id_of_finite hp hn
     have hint' : Integrable (fun z : ℝ => z) (ν.map (fun z : ℝ => z - 1)) :=
       integrable_id_of_finite hp' hn''
@@ -168,7 +168,7 @@ theorem lintegral_odometerLimit_rpow_ne_top [Infinite V] [MeasurableSpace V]
   have hq0 : (0:ℝ) < q := lt_of_lt_of_le zero_lt_one hq1
   set ν' : Measure ℝ := ν.map (fun z : ℝ => z - 1) with hν'def
   haveI : IsProbabilityMeasure ν' :=
-    Measure.isProbabilityMeasure_map (measurable_id.sub_const 1).aemeasurable
+    (Measure.isProbabilityMeasure_map_iff (measurable_id.sub_const 1).aemeasurable).2 inferInstance
   have hmean' : RWRS.extMean ν' < 0 := extMean_map_sub_one_lt ν hmean
   have hmom' : RWRS.posMoment ν' p ≠ ⊤ :=
     ne_top_of_le_ne_top hmom (posMoment_map_sub_one_le ν (by linarith))
@@ -211,7 +211,7 @@ theorem lintegral_odometerLimit_rpow_ne_top [Infinite V] [MeasurableSpace V]
           ∂(RWRS.iidLaw V ν))
         = ∫⁻ ξ, (∫⁻ X, RWRS.supPayoff G ξ X ^ q ∂(RWRS.walkLaw G v)) ∂(RWRS.iidLaw V ν') := by
           have hexcm : Measurable fun σ : V → ℝ => RWRS.excess σ :=
-            measurable_pi_lambda _ fun w => (measurable_pi_apply w).sub_const 1
+            measurable_pi_iff.mpr fun w => (measurable_pi_apply w).sub_const 1
           rw [← hmapexc, lintegral_map hmeasg hexcm]
       _ = ∫⁻ z, RWRS.supPayoff G z.1 z.2 ^ q ∂(RWRS.jointLaw G ν' v) := by
           rw [RWRS.jointLaw,

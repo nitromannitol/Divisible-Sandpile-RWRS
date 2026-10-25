@@ -46,7 +46,7 @@ theorem measure_forall_lt (ν : Measure ℝ) [IsProbabilityMeasure ν] (S : Fins
     iidLaw V ν {Y : V → ℝ | ∀ v ∈ S, Y v < c} = ν (Set.Iio c) ^ S.card := by
   classical
   set T : (V → ℝ) → ({x // x ∈ S} → ℝ) := fun ω i => ω (i : V) with hT
-  have hTm : Measurable T := measurable_pi_lambda _ fun i => measurable_pi_apply (i : V)
+  have hTm : Measurable T := measurable_pi_iff.mpr fun i => measurable_pi_apply (i : V)
   have hmap : (iidLaw V ν).map T = Measure.pi fun _ : {x // x ∈ S} => ν :=
     LatticeProb.infinitePi_map_comp ν (fun i : {x // x ∈ S} => (i : V))
       Subtype.val_injective

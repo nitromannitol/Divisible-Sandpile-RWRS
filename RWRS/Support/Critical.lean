@@ -254,7 +254,7 @@ theorem excess_add_one (ξ : V → ℝ) : excess (fun u => ξ u + 1) = ξ := by
 
 /-- The unit-shift map `ξ ↦ (fun u => ξ u + 1)` is measurable. -/
 theorem measurable_shift : Measurable fun ξ : V → ℝ => (fun u => ξ u + 1) :=
-  measurable_pi_lambda _ fun u => (measurable_pi_apply u).add_const 1
+  measurable_pi_iff.mpr fun u => (measurable_pi_apply u).add_const 1
 
 /-- `ξ ↦ value G ξ n o` is measurable, since it factors through the shift map `excess_add_one`
 and `measurable_odometer`. -/

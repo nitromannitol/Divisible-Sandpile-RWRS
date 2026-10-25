@@ -33,7 +33,7 @@ noncomputable def blockExtend (S : Set V) (z : ↥S → ℝ) : V → ℝ :=
 coordinate projection of `z` or the constant `0`. -/
 theorem measurable_blockExtend (S : Set V) : Measurable (blockExtend (V := V) S) := by
   classical
-  refine measurable_pi_lambda _ fun w => ?_
+  refine measurable_pi_iff.mpr fun w => ?_
   by_cases h : w ∈ S
   · simpa [blockExtend, h] using measurable_pi_apply (⟨w, h⟩ : ↥S)
   · simp [blockExtend, h]

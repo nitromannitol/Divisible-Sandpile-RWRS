@@ -1,7 +1,7 @@
 module
 
 public import Mathlib
-public import RWRS.MainTheorems
+public import RWRS.Frozen.Explosion
 public import RWRSAudit.Explosion.SolutionBasic
 public import RWRSAudit.Support.ExplosionBridge
 
@@ -13,7 +13,7 @@ public import RWRSAudit.Support.ExplosionBridge
 The challenge module `RWRSAudit/Explosion/Challenge.lean` imports only Mathlib and states
 the theorem with one intentional `sorry`.  This solution imports the repository
 together with `RWRSAudit.Explosion.SolutionBasic`, a verbatim copy of the challenge's
-vocabulary, and proves the byte-identical statement from `RWRS.explosion`.  Every
+vocabulary, and proves the byte-identical statement from `RWRS.Frozen.explosion`, the theorem used by the public wrapper.  Every
 vocabulary constant in this statement is definitionally equal to its
 repository counterpart (`RWRSAudit/Support/ExplosionBridge.lean` records each
 identification), so the library theorem, applied to the transported
@@ -38,6 +38,6 @@ theorem explosion {V : Type u} {G : SimpleGraph V} [G.LocallyFinite]
       ((0 < evar ν ∧ evar ν < ⊤) ∨
         (ν ≠ Measure.dirac 1 ∧ IsSymmetric (ν.map (fun z => z - 1)))) →
       iidLaw V ν {σ : V → ℝ | Stabilizes G σ} = 0) := by
-  exact _root_.RWRS.explosion hG d hd ν hν hdet
+  exact _root_.RWRS.Frozen.explosion hG d hd ν hν hdet
 
 end RWRSAudit

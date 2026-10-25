@@ -35,7 +35,7 @@ def markMap (p : Net 0 × (ℕ → ℝ)) : Net 1 := (p.1.1, p.1.2.1, fun i (_ : 
 theorem measurable_markMap : Measurable markMap := by
   refine Measurable.prodMk (measurable_fst.comp measurable_fst) (Measurable.prodMk
     ((measurable_fst.comp measurable_snd).comp measurable_fst) ?_)
-  refine measurable_pi_lambda _ fun i => measurable_pi_lambda _ fun _ => ?_
+  refine measurable_pi_iff.mpr fun i => measurable_pi_iff.mpr fun _ => ?_
   exact (measurable_pi_apply i).comp measurable_snd
 
 /-- `markIid Q ν` unfolds to the pushforward of the product measure

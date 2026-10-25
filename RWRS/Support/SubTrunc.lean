@@ -305,7 +305,7 @@ theorem jointLaw_map_lowTrunc [MeasurableSingletonClass V] [Countable V]
   haveI : IsProbabilityMeasure (RWRS.walkLaw G x) := by rw [walkLaw_eq_lib]; infer_instance
   haveI : IsProbabilityMeasure (RWRS.iidLaw V ν) := instIsProbabilityMeasureIid ν
   have hT : Measurable fun (ξ : V → ℝ) v => lowTrunc M (ξ v) :=
-    measurable_pi_lambda _ fun v => (measurable_lowTrunc M).comp (measurable_pi_apply v)
+    measurable_pi_iff.mpr fun v => (measurable_lowTrunc M).comp (measurable_pi_apply v)
   calc RWRS.jointLaw G (ν.map (lowTrunc M)) x
       = ((RWRS.iidLaw V ν).map (fun (ξ : V → ℝ) v => lowTrunc M (ξ v))).prod
           (RWRS.walkLaw G x) := by
@@ -325,7 +325,7 @@ theorem lintegral_supPayoff_rpow_le_lowTrunc [MeasurableSingletonClass V] [Count
     (∫⁻ z, RWRS.supPayoff G z.1 z.2 ^ q ∂(RWRS.jointLaw G ν x))
       ≤ ∫⁻ z, RWRS.supPayoff G z.1 z.2 ^ q ∂(RWRS.jointLaw G (ν.map (lowTrunc M)) x) := by
   have hT : Measurable fun (ξ : V → ℝ) v => lowTrunc M (ξ v) :=
-    measurable_pi_lambda _ fun v => (measurable_lowTrunc M).comp (measurable_pi_apply v)
+    measurable_pi_iff.mpr fun v => (measurable_lowTrunc M).comp (measurable_pi_apply v)
   rw [jointLaw_map_lowTrunc ν M x,
     lintegral_map (measurable_supPayoff_rpow q) (hT.prodMap measurable_id)]
   exact lintegral_mono fun z =>

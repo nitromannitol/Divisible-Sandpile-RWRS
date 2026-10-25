@@ -150,7 +150,7 @@ open scoped Classical in
 theorem measurable_netTopple (k : ℕ) : Measurable fun N : Net 1 => netTopple N k := by
   refine Measurable.prodMk measurable_fst (Measurable.prodMk (measurable_fst.comp measurable_snd)
       ?_)
-  refine measurable_pi_lambda _ fun i => measurable_pi_lambda _ fun j => ?_
+  refine measurable_pi_iff.mpr fun i => measurable_pi_iff.mpr fun j => ?_
   by_cases hj : j = 0
   · simp only [hj]
     exact measurable_configOfNet k i

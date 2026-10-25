@@ -5,7 +5,7 @@ package «divisible-sandpile-rwrs» where
   leanOptions := #[⟨`autoImplicit, false⟩]
 
 require «lattice-probability» from git
-  "https://github.com/nitromannitol/Lattice-Probability.git" @ "b5fa741a3b9b7ee5bde8459d6ccdda807e38faf7"
+  "https://github.com/nitromannitol/Lattice-Probability.git" @ "85268026a15fe086261119d9675d00dc73374acc"
 
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4" @ "065356127b1dc0016f66b7283ce0ce2c4055aa55"

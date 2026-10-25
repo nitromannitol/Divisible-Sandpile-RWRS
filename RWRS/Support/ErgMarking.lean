@@ -256,7 +256,7 @@ theorem exists_markProb_ae_eq (Q : Measure (RWRS.Net 0)) [IsProbabilityMeasure Q
       RWRS.markIid Q ν A = ENNReal.ofReal c := by
   haveI : IsProbabilityMeasure (RWRS.markIid Q ν) := by
     rw [markIid_eq_map]
-    exact Measure.isProbabilityMeasure_map measurable_markMap.aemeasurable
+    exact (Measure.isProbabilityMeasure_map_iff measurable_markMap.aemeasurable).2 inferInstance
   obtain ⟨c, hc0, hc1, hae⟩ := ae_eq_const_of_isErgodicNet herg
     (measurable_markProb ν hA) (markProb_nonneg ν A) (markProb_le_one ν A)
     (markProb_invariant ν hA hiso) (fun N y hadj => markProb_reroot ν hre N y hadj)

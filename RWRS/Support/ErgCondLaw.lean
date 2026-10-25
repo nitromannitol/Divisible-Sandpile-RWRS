@@ -109,7 +109,7 @@ theorem isProbabilityMeasure_markIid (Q : Measure (RWRS.Net 0)) [IsProbabilityMe
     (ν : Measure ℝ) [IsProbabilityMeasure ν] : IsProbabilityMeasure (RWRS.markIid Q ν) := by
   haveI := instIsProbabilityMeasureIidLaw (V := ℕ) ν
   rw [markIid_eq_map]
-  exact Measure.isProbabilityMeasure_map measurable_markMap.aemeasurable
+  exact (Measure.isProbabilityMeasure_map_iff measurable_markMap.aemeasurable).2 inferInstance
 
 
 /-- The conditional law of an i.i.d. marked network given the rerooting-invariant

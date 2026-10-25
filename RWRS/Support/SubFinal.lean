@@ -124,7 +124,7 @@ theorem lintegral_supPayoff_rpow_ne_top [Infinite V] [MeasurableSpace V]
   obtain ⟨M, hM0, habs, m, hmext, hmneg⟩ := exists_lowTrunc ν hple hmom hmean
   set ρ : Measure ℝ := ν.map (lowTrunc M) with hρdef
   haveI : IsProbabilityMeasure ρ :=
-    Measure.isProbabilityMeasure_map (measurable_lowTrunc M).aemeasurable
+    (Measure.isProbabilityMeasure_map_iff (measurable_lowTrunc M).aemeasurable).2 inferInstance
   have hpp : RWRS.posPart ρ ≠ ⊤ := by
     rw [hρdef, posPart_map_lowTrunc ν hM0]
     exact posPart_ne_top_of_posMoment ν hple hmom

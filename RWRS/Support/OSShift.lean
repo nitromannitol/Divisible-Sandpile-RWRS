@@ -22,7 +22,7 @@ variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 
 /-- `excess`, subtracting `1` at every coordinate, is measurable. -/
 theorem measurable_excess : Measurable (fun σ : V → ℝ => RWRS.excess σ) :=
-  measurable_pi_lambda _ fun v => (measurable_pi_apply v).sub_const 1
+  measurable_pi_iff.mpr fun v => (measurable_pi_apply v).sub_const 1
 
 /-- **The excess of an i.i.d. field is i.i.d. with the shifted marginal.** -/
 theorem map_excess_iidLaw (ν : Measure ℝ) [IsProbabilityMeasure ν] :

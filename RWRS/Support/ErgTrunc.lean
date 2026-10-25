@@ -83,7 +83,7 @@ def truncMarks (M : ℝ) (N : RWRS.Net 1) : RWRS.Net 1 :=
 minimum with the constant `M`. -/
 theorem measurable_truncMarks (M : ℝ) : Measurable (truncMarks M) := by
   refine measurable_fst.prodMk ((measurable_fst.comp measurable_snd).prodMk ?_)
-  refine measurable_pi_lambda _ fun i => measurable_pi_lambda _ fun j => ?_
+  refine measurable_pi_iff.mpr fun i => measurable_pi_iff.mpr fun j => ?_
   exact ((measurable_pi_apply j).comp ((measurable_pi_apply i).comp
     (measurable_snd.comp measurable_snd))).min measurable_const
 
@@ -103,7 +103,7 @@ theorem markIid_map_truncMarks (Q : Measure (RWRS.Net 0)) [IsProbabilityMeasure 
     (RWRS.markIid Q ν).map (truncMarks M) = RWRS.markIid Q (ν.map (fun z => min z M)) := by
   haveI := instIsProbabilityMeasureIidLaw (V := ℕ) ν
   have hg : Measurable fun (ξ : ℕ → ℝ) (i : ℕ) => min (ξ i) M :=
-    measurable_pi_lambda _ fun i => (measurable_pi_apply i).min measurable_const
+    measurable_pi_iff.mpr fun i => (measurable_pi_apply i).min measurable_const
   rw [markIid_eq_map, markIid_eq_map, Measure.map_map (measurable_truncMarks M) measurable_markMap]
   have hcomp : truncMarks M ∘ markMap
       = markMap ∘ (Prod.map id fun (ξ : ℕ → ℝ) (i : ℕ) => min (ξ i) M) := rfl

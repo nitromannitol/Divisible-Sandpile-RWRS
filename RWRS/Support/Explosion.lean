@@ -234,7 +234,7 @@ theorem ae_supMeanPayoff_top [Infinite V] (hG : G.Connected) (x : V)
     obtain ⟨K, hpK, hnK, hlt⟩ := exists_truncation ν hp hn
     set f : ℝ → ℝ := fun z => min z (K : ℝ) with hf
     have hfm : Measurable f := measurable_id.min measurable_const
-    haveI : IsProbabilityMeasure (ν.map f) := Measure.isProbabilityMeasure_map hfm.aemeasurable
+    haveI : IsProbabilityMeasure (ν.map f) := (Measure.isProbabilityMeasure_map_iff hfm.aemeasurable).2 inferInstance
     have hintK : Integrable (fun z : ℝ => z) (ν.map f) := integrable_id_of_finite hpK hnK
     have hmK : ∫ z, z ∂(ν.map f) = (posPart (ν.map f)).toReal - (negPart (ν.map f)).toReal :=
       integral_id_eq hintK
@@ -242,7 +242,7 @@ theorem ae_supMeanPayoff_top [Infinite V] (hG : G.Connected) (x : V)
       ((posPart (ν.map f)).toReal - (negPart (ν.map f)).toReal) (by linarith) hintK hmK
     rw [ae_iff] at hae ⊢
     set Φ : (V → ℝ) → (V → ℝ) := fun ξ v => f (ξ v) with hΦ
-    have hΦm : Measurable Φ := measurable_pi_lambda _ fun v => hfm.comp (measurable_pi_apply v)
+    have hΦm : Measurable Φ := measurable_pi_iff.mpr fun v => hfm.comp (measurable_pi_apply v)
     have hsub : {ξ : V → ℝ | ¬ supMeanPayoff G ξ x = ⊤}
         ⊆ Φ ⁻¹' {η : V → ℝ | ¬ supMeanPayoff G η x = ⊤} := by
       intro ξ hξ hcon
