@@ -17,6 +17,8 @@ project:
     checked using the RWRSAudit/ comparator pairs.
   authors:
     - "Ahmed Bou-Rabee"
+  responsible_maintainers:
+    - "Ahmed Bou-Rabee"
   license: "Apache-2.0"
 
 sources:
@@ -225,3 +227,6 @@ acknowledgements: >-
   The paper is joint work with Yuval Peres and Ecaterina Sava-Huss.  Built on
   Lean 4, Mathlib, Lake, the shared library Lattice-Probability, and
   leanprover/comparator.
+
+classification:
+  arxiv: ["math.PR"]
