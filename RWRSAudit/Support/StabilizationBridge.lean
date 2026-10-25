@@ -1,6 +1,10 @@
-import Mathlib
-import RWRS.MainTheorems
-import RWRSAudit.Stabilization.SolutionBasic
+module
+
+public import Mathlib
+public import RWRS.MainTheorems
+public import RWRSAudit.Stabilization.SolutionBasic
+
+@[expose] public section
 
 /-!
 # Bridge from the `Stabilization` vocabulary to the repository

@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 6.12 of `rwrs.tex`, frozen.  `rwrs.tex:1740-1747` (label
 `lem:rec-geometry`), under the setup of `sec:recurrent-nonstab`
@@ -16,8 +18,10 @@ root `x` is `gadgetRoot`.  The cardinality in (c) is the `encard` of the ball,
 in `[0,∞]`, so a hypothetical infinite ball would not be given a junk finite
 value.
 -/
-import RWRS.Support.GadgetBall
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import RWRS.Support.GadgetBall
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+
+@[expose] public section
 
 open scoped ENNReal
 

@@ -1,10 +1,14 @@
+module
+
 /-
 The iterate of the averaging operator is the transition kernel against the
 function: `(P^k h)(x) = ∑_v p_k(x,v) h(v)`, a finite sum because the kernel is
 supported on the vertices reachable in `k` steps.
 -/
-import RWRS.Support.Countable
-import RWRS.Support.Green
+public import RWRS.Support.Countable
+public import RWRS.Support.Green
+
+@[expose] public section
 
 namespace RWRS.Support
 

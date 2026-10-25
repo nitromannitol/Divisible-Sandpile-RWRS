@@ -1,3 +1,5 @@
+module
+
 /-
 The comb `D_{w,n}` of `ssec:comb-estimates`: the trunk from the root of the tree
 of pipes to the terminal pipe indexed by `w`, together with the sibling pipes at
@@ -8,8 +10,10 @@ comb is a finite set of sites, it misses at least one site, and it is exactly th
 union of the trunk pipes with the sibling pipes hanging off the trunk branching
 vertices.
 -/
-import RWRS.Support.RayGadget
-import RWRS.Support.KilledGreen
+public import RWRS.Support.RayGadget
+public import RWRS.Support.KilledGreen
+
+@[expose] public section
 
 namespace RWRS.Support
 

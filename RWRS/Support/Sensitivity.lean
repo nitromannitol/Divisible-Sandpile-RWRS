@@ -1,3 +1,5 @@
+module
+
 /-
 One-site sensitivity of the optimal stopping value (`lem:sensitivity`).
 
@@ -7,9 +9,11 @@ the walk average of the payoff by at most the value of the change times the
 finite-time Green function.  Passing to the supremum over stopping rules keeps
 the bound, because a supremum is `1`-Lipschitz in the family.
 -/
-import RWRS.Support.ShortClock
-import RWRS.Support.Green
-import RWRS.Support.LibraryBridge
+public import RWRS.Support.ShortClock
+public import RWRS.Support.Green
+public import RWRS.Support.LibraryBridge
+
+@[expose] public section
 
 namespace RWRS.Support
 

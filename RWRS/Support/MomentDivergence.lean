@@ -1,3 +1,5 @@
+module
+
 /-
 Step 5 of `lem:moment-sharpness`: an infinite moment makes the weighted tail sum
 diverge.
@@ -9,8 +11,10 @@ thing is done by one pointwise inequality: for `z` above a threshold, every
 Integrating that inequality bounds the moment by the tail sum, so an infinite
 moment forces an infinite sum.
 -/
-import RWRS.Support.LocalTimeCount
-import RWRS.Scenery
+public import RWRS.Support.LocalTimeCount
+public import RWRS.Scenery
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,15 +1,19 @@
+module
+
 /-
 The two explosion halves of `thm:OS`, in the form the theorem applies them.
 -/
-import RWRS.Support.DTVariance
-import RWRS.Support.ClockRatio
-import RWRS.Support.DTTrapBall
-import RWRS.Frozen.DoublyTransient
-import RWRS.Frozen.Critical
-import RWRS.Frozen.Supercritical
-import RWRS.Support.ErgProp
-import RWRS.Support.Convexity
-import RWRS.Support.HeatBasic
+public import RWRS.Support.DTVariance
+public import RWRS.Support.ClockRatio
+public import RWRS.Support.DTTrapBall
+public import RWRS.Frozen.DoublyTransient
+public import RWRS.Frozen.Critical
+public import RWRS.Frozen.Supercritical
+public import RWRS.Support.ErgProp
+public import RWRS.Support.Convexity
+public import RWRS.Support.HeatBasic
+
+@[expose] public section
 
 namespace RWRS.Support
 

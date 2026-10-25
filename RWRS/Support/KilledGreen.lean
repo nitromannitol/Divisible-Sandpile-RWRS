@@ -1,3 +1,5 @@
+module
+
 /-
 The killed Green function as a voltage, on a graph that need not be connected.
 
@@ -16,8 +18,10 @@ isolated.  Both hold on the tree of pipes.  The two hypotheses
 replace connectivity here, and the library's own lemmas that do not mention it
 carry the proofs.
 -/
-import RWRS.Basic
-import LatticeProb.Network.KilledGreen
+public import RWRS.Basic
+public import LatticeProb.Network.KilledGreen
+
+@[expose] public section
 
 namespace RWRS.Support
 

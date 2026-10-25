@@ -1,3 +1,5 @@
+module
+
 /-
 The node law at the branching vertices of the tree of pipes.
 
@@ -11,7 +13,9 @@ there is what turns `eq:gC-PDE` into Kirchhoff's node law.
 Throughout, `2 ≤ L j` for every `j ≥ 1`, which under `eq:comb-B-cond` holds for
 `L_j = ⌊B^{αj}⌋` because `B^α ≥ 4`.
 -/
-import RWRS.Support.PipeNbr
+public import RWRS.Support.PipeNbr
+
+@[expose] public section
 
 namespace RWRS.Support
 

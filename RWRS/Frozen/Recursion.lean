@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 3.1 of `rwrs.tex`, frozen.  `rwrs.tex:377-382` (label `lem:recursion`):
 
@@ -10,7 +12,9 @@ $\sigma\colon V\to\R$"), and `[Infinite V]` is the standing assumption of
 `ssec:notation` ("Throughout, $G=(V,E)$ denotes an infinite, locally finite,
 connected graph").  The positive part `(\cdot)^+` is `max \cdot 0`.
 -/
-import RWRS.Support.Odometer
+public import RWRS.Support.Odometer
+
+@[expose] public section
 
 open RWRS RWRS.Support
 

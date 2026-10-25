@@ -1,3 +1,5 @@
+module
+
 /-
 The potential of a scenery killed outside a finite set, and the optional
 stopping identity it produces.
@@ -15,12 +17,14 @@ the finite-horizon walk average then gives `E_o[S_τ] = h_D(o) - E_o[h_D(X_τ)]`
 for every stopping rule bounded by a horizon whose ball is inside `D`, with no
 measure theory at all: both sides are finite averages.
 -/
-import RWRS.Support.BallWalk
-import RWRS.Support.OptionalStopping
-import RWRS.Support.Swap
-import RWRS.Support.Continuation
-import RWRS.Support.Critical
-import RWRS.Support.Convexity
+public import RWRS.Support.BallWalk
+public import RWRS.Support.OptionalStopping
+public import RWRS.Support.Swap
+public import RWRS.Support.Continuation
+public import RWRS.Support.Critical
+public import RWRS.Support.Convexity
+
+@[expose] public section
 
 namespace RWRS.Support
 

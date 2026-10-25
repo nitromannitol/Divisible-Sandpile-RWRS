@@ -1,3 +1,5 @@
+module
+
 /-
 The tail integration of `prop:subcritical`.
 
@@ -9,12 +11,14 @@ computed here.  The Gaussian remainder of `eq:w-tail` is turned into a tail of
 the same shape by `exp_neg_le_factorial_div_pow`, and the logarithmic factor of
 the critical spectral dimension by `log_le_rpow_div`.
 -/
-import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
-import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
-import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
-import Mathlib.Analysis.SpecialFunctions.Pow.Integral
-import RWRS.Support.LocalTimeMoment
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import Mathlib.Analysis.SpecialFunctions.Pow.Integral
+public import RWRS.Support.LocalTimeMoment
+
+@[expose] public section
 
 namespace RWRS.Support
 

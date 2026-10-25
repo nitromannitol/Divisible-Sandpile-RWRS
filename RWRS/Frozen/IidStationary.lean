@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 2.3 of `rwrs.tex`, frozen.  `rwrs.tex:257-259` (label
 `prop:iid-stationary`):
@@ -10,7 +12,9 @@ Proposition 2.3 of `rwrs.tex`, frozen.  `rwrs.tex:257-259` (label
 A random rooted graph is a law on `Net 0`, the networks with no marks, and
 decorating it with an independent i.i.d. field of common law `ν` is `markIid`.
 -/
-import RWRS.Support.Marking
+public import RWRS.Support.Marking
+
+@[expose] public section
 
 open MeasureTheory
 

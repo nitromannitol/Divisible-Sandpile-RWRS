@@ -1,3 +1,5 @@
+module
+
 /-
 The component of the complement of the non-admissible set that contains the
 stage centre, and the fact that its boundary lies in the non-admissible set.
@@ -7,7 +9,9 @@ stage centre `Y_i` inside the component `D_i` of `V ∖ A_i`; the exit time of
 `D_i` is the next stage time because every neighbour of `D_i` outside `D_i`
 fails to be admissible (`rwrs.tex:900`).
 -/
-import RWRS.Support.DTAdmissible
+public import RWRS.Support.DTAdmissible
+
+@[expose] public section
 
 namespace RWRS.Support
 

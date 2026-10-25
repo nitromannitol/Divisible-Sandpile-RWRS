@@ -1,3 +1,5 @@
+module
+
 /-
 The simple random walk of `rwrs.tex` on a general graph, the walk payoff
 `S_n`, bounded stopping times, and the optimal stopping value `v_n`.
@@ -28,9 +30,11 @@ How the paper's objects are modelled here:
 - `localTime n v X = L_n(v)`, `drift` is `D_n` and `fluctuation` is `W_n` of
   `eq:dn-wn-stuff`.
 -/
-import RWRS.Basic
-import Mathlib.Probability.ProductMeasure
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import RWRS.Basic
+public import Mathlib.Probability.ProductMeasure
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

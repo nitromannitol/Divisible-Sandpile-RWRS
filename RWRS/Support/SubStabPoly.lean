@@ -1,3 +1,5 @@
+module
+
 /-
 Stabilization for subcritical masses under rooted polynomial volume growth.
 
@@ -8,11 +10,13 @@ vertex give a stretched-exponential exit estimate at radii
 moment threshold `max(d_f,1) = d_f`. Volume growth transfers to every other
 vertex with a vertex-dependent constant, giving stabilization everywhere.
 -/
-import RWRS.Support.SubPolyFinal
-import RWRS.Support.SubPolyPrep
-import RWRS.External.HeatKernelBoundedDegree
-import RWRS.External.CarneVaropoulos
-import RWRS.Support.DisplacementAtOrigin
+public import RWRS.Support.SubPolyFinal
+public import RWRS.Support.SubPolyPrep
+public import RWRS.External.HeatKernelBoundedDegree
+public import RWRS.External.CarneVaropoulos
+public import RWRS.Support.DisplacementAtOrigin
+
+@[expose] public section
 
 namespace RWRS.Support
 

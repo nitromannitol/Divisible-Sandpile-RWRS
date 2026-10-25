@@ -1,3 +1,5 @@
+module
+
 /-
 The parameter arithmetic of `prop:poly-growth`.
 
@@ -11,8 +13,10 @@ logarithm of the critical spectral dimension in `prop:subcritical`.  Markov's
 inequality for the positive-part moment and the grouping of a sum over the
 vertices along the fibres of an integer-valued map are what Step 1 needs.
 -/
-import RWRS.Support.SubPolyChain
-import RWRS.Support.SubTail
+public import RWRS.Support.SubPolyChain
+public import RWRS.Support.SubTail
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 2.6 of `rwrs.tex`, frozen.  `rwrs.tex:310-312` (label
 `lem:ergodic-marked-stationary`):
@@ -17,8 +19,10 @@ connected networks, by `RWRS.External.heatKernelVanishing_of_netGood`; the
 almost sure connectedness hypothesis of `Q` supplies `NetGood` at every use
 site, so no hypothesis for it remains here.
 -/
-import RWRS.Support.ErgFinal
-import RWRS.Frozen.IidStationary
+public import RWRS.Support.ErgFinal
+public import RWRS.Frozen.IidStationary
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

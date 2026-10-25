@@ -1,3 +1,5 @@
+module
+
 /-
 The reroot average and its iterates.
 
@@ -9,9 +11,11 @@ time `n`, and the stationarity identity says that the iterate has the same
 integral as the function itself.  On the indicator of a single vertex the
 iterate is the heat kernel, which is how the walk is made to leave a ball.
 -/
-import RWRS.Support.ErgBall
-import RWRS.Support.HeatBasic
-import RWRS.External.HeatKernelVanishing
+public import RWRS.Support.ErgBall
+public import RWRS.Support.HeatBasic
+public import RWRS.External.HeatKernelVanishing
+
+@[expose] public section
 
 namespace RWRS.Support
 

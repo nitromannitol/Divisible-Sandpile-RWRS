@@ -1,3 +1,5 @@
+module
+
 /-
 The dyadic decomposition of the payoff (`lem:dyadic`).
 
@@ -9,7 +11,9 @@ trajectory.  On a graph of degree at most `d` the clock is at least `n/d`, so
 at a negative mean the drift beats any block of times by its left endpoint, and
 the supremum of the payoff over a dyadic block is at most the block's `Y_k`.
 -/
-import RWRS.Support.Critical
+public import RWRS.Support.Critical
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The moments of the local time under the spectral dimension bound.
 
@@ -9,8 +11,10 @@ average at each visit at the cost of the diagonal heat kernel, and the diagonal
 heat kernel sums to the clock.  Below the first integer the bound is Jensen's
 inequality for a concave power.
 -/
-import RWRS.Support.LocalTimeClock
-import RWRS.Support.Sensitivity
+public import RWRS.Support.LocalTimeClock
+public import RWRS.Support.Sensitivity
+
+@[expose] public section
 
 namespace RWRS.Support
 

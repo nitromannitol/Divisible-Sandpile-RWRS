@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 5.16 of `rwrs.tex`, frozen.  `rwrs.tex:1155-1165` (label
 `prop:subcritical`):
@@ -31,7 +33,9 @@ von Bahr--Esseen inequality and the Fuk--Nagaev inequality from outside the
 paper; both are proved outright in `RWRS/External/`, so neither is a
 hypothesis here.
 -/
-import RWRS.Support.SubFinal
+public import RWRS.Support.SubFinal
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

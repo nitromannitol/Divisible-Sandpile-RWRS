@@ -1,8 +1,12 @@
+module
+
 /-
 Auxiliary facts about the exit time of a set along a trajectory: the
 trajectory is outside the set at the (finite) exit time.
 -/
-import LatticeProb.Graph.ExitTime
+public import LatticeProb.Graph.ExitTime
+
+@[expose] public section
 
 open LatticeProb LatticeProb.Graph
 

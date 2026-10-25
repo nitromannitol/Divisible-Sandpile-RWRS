@@ -189,9 +189,9 @@ their proof does not use.  Modelling decisions:
   The workflow
   [`.github/workflows/comparator.yml`](.github/workflows/comparator.yml) runs
   the comparator on relevant changes to `main` or by manual dispatch.  See [`RWRSAudit/README.md`](RWRSAudit/README.md).
-- **Pinned toolchain.**  Lean `v4.32.0` ([`lean-toolchain`](lean-toolchain)),
-  mathlib at revision `81a5d257c8e410db227a6665ed08f64fea08e997`, and
-  Lattice-Probability at commit `9d44b4d4670df393bb86ac5a4e042f215001cddf`,
+- **Pinned toolchain.**  Lean `v4.35.0-rc2` ([`lean-toolchain`](lean-toolchain)),
+  mathlib at revision `065356127b1dc0016f66b7283ce0ce2c4055aa55`, and
+  Lattice-Probability at commit `b5fa741a3b9b7ee5bde8459d6ccdda807e38faf7`,
   recorded in [`lakefile.lean`](lakefile.lean) and
   [`lake-manifest.json`](lake-manifest.json).
 
@@ -325,3 +325,8 @@ Comparator configuration to check. It records the dispatched commit and runs wit
 minimum, source-module, Challenge-closure, licensing and metadata requirements before
 dispatch. A passing preflight is advisory; it is separate from submission, editorial
 review and a public registry record.
+
+The module compatibility revision retains every frozen statement and the original
+mathematical definitions. Its Lattice-Probability source is a compatibility port of
+this project's exact prior snapshot. The existing ergodic-decomposition assumption
+for the supporting stationary-network results is unchanged.

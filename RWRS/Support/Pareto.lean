@@ -1,12 +1,16 @@
+module
+
 /-
 The Pareto law of `sec:transient-nonstab` and `sec:recurrent-nonstab`: the law
 of `U^{-1/q}` for `U` uniform on `(0,1]`.  Its tail is `P(Y ≥ t) = t^{-q}` for
 `t ≥ 1`, it is supported on `[1,∞)`, and it has a finite `p`-th moment exactly
 when `p < q`.
 -/
-import RWRS.Support.Truncation
-import RWRS.Support.PipeTree
-import Mathlib.Analysis.SpecialFunctions.Integrability.Basic
+public import RWRS.Support.Truncation
+public import RWRS.Support.PipeTree
+public import Mathlib.Analysis.SpecialFunctions.Integrability.Basic
+
+@[expose] public section
 
 namespace RWRS.Support
 

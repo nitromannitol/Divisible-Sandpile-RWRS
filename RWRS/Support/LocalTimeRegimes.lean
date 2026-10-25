@@ -1,3 +1,5 @@
+module
+
 /-
 The moments of the local time in the three regimes of the spectral dimension,
 for a vertex set in any universe.
@@ -7,8 +9,10 @@ for a vertex set in any universe.
 so the three regimes are assembled here once and the frozen statement is the
 specialization.
 -/
-import RWRS.Support.LocalTimeSum
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
+public import RWRS.Support.LocalTimeSum
+public import Mathlib.Analysis.SpecialFunctions.Log.Basic
+
+@[expose] public section
 
 open scoped ENNReal
 

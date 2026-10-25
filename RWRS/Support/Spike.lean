@@ -1,3 +1,5 @@
+module
+
 /-
 The probability that some site of a finite set carries a large value in an
 i.i.d. field.
@@ -9,10 +11,12 @@ marginal this gives the uniform lower bound on the good events of
 `lem:rec-good`: the complement is a product of `1 - p` over the sites, which is
 at most `exp(-|S| p)`, and the construction makes `|S| p` bounded below.
 -/
-import RWRS.Support.WeakLaw
-import RWRS.Support.PipeTree
-import RWRS.Support.GadgetBall
-import LatticeProb.Prob.FiniteMarginal
+public import RWRS.Support.WeakLaw
+public import RWRS.Support.PipeTree
+public import RWRS.Support.GadgetBall
+public import LatticeProb.Prob.FiniteMarginal
+
+@[expose] public section
 
 namespace RWRS.Support
 

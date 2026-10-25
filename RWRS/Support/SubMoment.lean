@@ -1,3 +1,5 @@
+module
+
 /-
 `eq:poly-moment`: the local-time moments of a discrete interval.
 
@@ -12,8 +14,10 @@ is at most `|I|`.  The heat kernel is a sub-probability on every finite set of
 targets, so the sum over the vertices costs nothing and the bound is
 `C_p |I| Λ_p(|I|)`, uniformly in the starting vertex.
 -/
-import RWRS.Support.LocalTimeSum
-import RWRS.Support.SubIncrement
+public import RWRS.Support.LocalTimeSum
+public import RWRS.Support.SubIncrement
+
+@[expose] public section
 
 namespace RWRS.Support
 

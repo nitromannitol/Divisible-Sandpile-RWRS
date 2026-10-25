@@ -1,3 +1,5 @@
+module
+
 /-
 `eq:Mk-tail-Ak` of `prop:subcritical` in closed form.
 
@@ -6,7 +8,9 @@ scale `s ≤ k`, at most `2^{k+1-s}` equal contributions, so the tail of `Y_k` o
 the good-walk event is a sum of two shifted polynomial tails whose constants are
 the two sums over the scales recorded here.
 -/
-import RWRS.Support.SubTailAvg
+public import RWRS.Support.SubTailAvg
+
+@[expose] public section
 
 namespace RWRS.Support
 

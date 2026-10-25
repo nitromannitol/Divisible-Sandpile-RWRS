@@ -1,5 +1,9 @@
-import RWRS.Support.Convexity
-import RWRS.External.VoltageFunctionConnected
+module
+
+public import RWRS.Support.Convexity
+public import RWRS.External.VoltageFunctionConnected
+
+@[expose] public section
 
 /-!
 # Proposition 5.10: the convexity reduction

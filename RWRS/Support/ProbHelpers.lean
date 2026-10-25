@@ -1,6 +1,10 @@
-import RWRS.Support.CombOdometer
-import RWRS.Support.Measurability
-import RWRS.Support.WeakLaw
+module
+
+public import RWRS.Support.CombOdometer
+public import RWRS.Support.Measurability
+public import RWRS.Support.WeakLaw
+
+@[expose] public section
 
 /-!
 # Two small probability lemmas

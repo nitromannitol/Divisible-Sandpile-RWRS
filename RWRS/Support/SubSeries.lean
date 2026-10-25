@@ -1,3 +1,5 @@
+module
+
 /-
 Summation over the scales, for `prop:subcritical`.
 
@@ -6,9 +8,11 @@ Summation over the scales, for `prop:subcritical`.
 geometric factors, so the series converges, and `lem:dyadic` turns it into a
 bound on the moment of the running supremum, uniform in the starting vertex.
 -/
-import RWRS.Support.SubBlockMoment
-import RWRS.Frozen.Dyadic
-import RWRS.Frozen.GoodWalk
+public import RWRS.Support.SubBlockMoment
+public import RWRS.Frozen.Dyadic
+public import RWRS.Frozen.GoodWalk
+
+@[expose] public section
 
 namespace RWRS.Support
 

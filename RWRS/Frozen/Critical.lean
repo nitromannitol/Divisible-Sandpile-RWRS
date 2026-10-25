@@ -1,7 +1,11 @@
-import RWRS.Support.Critical
-import RWRS.Support.Countable
-import RWRS.Support.EfronStein
-import RWRS.External.VoltageFunctionConnected
+module
+
+public import RWRS.Support.Critical
+public import RWRS.Support.Countable
+public import RWRS.Support.EfronStein
+public import RWRS.External.VoltageFunctionConnected
+
+@[expose] public section
 
 /-!
 # Proposition 5.6: the critical case

@@ -1,5 +1,9 @@
-import RWRS.Support.DTStageFire
-import RWRS.Support.DTStageIntegral
+module
+
+public import RWRS.Support.DTStageFire
+public import RWRS.Support.DTStageIntegral
+
+@[expose] public section
 
 /-!
 # Pointwise identity of rule and stage time on a hit event

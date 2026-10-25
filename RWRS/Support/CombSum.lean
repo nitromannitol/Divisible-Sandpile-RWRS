@@ -1,3 +1,5 @@
+module
+
 /-
 Part (c) of `prop:comb-estimates`: the total voltage mass on the comb.
 
@@ -8,7 +10,9 @@ every site at level `j` carries voltage at most `V_{j-1}`, because along each
 pipe of the level the voltage decreases from its value at `b_{j-1}`.  With
 part (a) that gives `∑_{u} g(u) ≤ ∑_{j=1}^{n} 4(B+1) I_j L_j^2`.
 -/
-import RWRS.Support.CombEst
+public import RWRS.Support.CombEst
+
+@[expose] public section
 
 namespace RWRS.Support
 

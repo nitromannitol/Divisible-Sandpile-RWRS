@@ -1,7 +1,11 @@
-import Mathlib
-import RWRS.MainTheorems
-import RWRSAudit.OptimalStopping.SolutionBasic
-import RWRSAudit.Support.OptimalStoppingBridge
+module
+
+public import Mathlib
+public import RWRS.MainTheorems
+public import RWRSAudit.OptimalStopping.SolutionBasic
+public import RWRSAudit.Support.OptimalStoppingBridge
+
+@[expose] public section
 
 /-!
 # Solution: OptimalStopping

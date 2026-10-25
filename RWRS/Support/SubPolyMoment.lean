@@ -1,3 +1,5 @@
+module
+
 /-
 Step 5 of `prop:poly-growth`: the `k`-th block moment of the recentred field.
 
@@ -8,7 +10,9 @@ where the block variable is bounded by a deterministic multiple of `N^{1+β}`
 because a walk cannot travel further than its own length, and the walk event has
 the probability of `eq:poly-good-walk`.
 -/
-import RWRS.Support.SubPolyRadius
+public import RWRS.Support.SubPolyRadius
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 Corollary 6.13 of `rwrs.tex`, frozen.  `rwrs.tex:1792-1799` (label
 `cor:rec-loc`), under the setup of `sec:recurrent-nonstab`:
@@ -14,10 +16,12 @@ hypothesis `hC` says that `C_comb` is such a constant, so the corollary is
 stated for the constant the paper feeds it.  The exponent `δ` is
 `log λ / (α log B)`.
 -/
-import RWRS.Support.CombFinal
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
-import Mathlib.Analysis.SpecialFunctions.Log.Base
+public import RWRS.Support.CombFinal
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import Mathlib.Analysis.SpecialFunctions.Log.Basic
+public import Mathlib.Analysis.SpecialFunctions.Log.Base
+
+@[expose] public section
 
 open scoped ENNReal
 

@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 5.12 of `rwrs.tex`, frozen.  `rwrs.tex:1019-1034` (label
 `lem:local-time`):
@@ -17,8 +19,10 @@ divergent sum is `⊤` and not a junk real.  Each expectation `E_x[L_n(v)^p]` is
 a functional of the first `n` positions, so it is the finite-horizon walk
 average `RWRS.walkExp`.
 -/
-import RWRS.Support.LocalTimeRegimes
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
+public import RWRS.Support.LocalTimeRegimes
+public import Mathlib.Analysis.SpecialFunctions.Log.Basic
+
+@[expose] public section
 
 open scoped ENNReal
 

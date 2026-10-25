@@ -1,3 +1,5 @@
+module
+
 /-
 Theorem 3.2 of `rwrs.tex`, frozen.  `rwrs.tex:393-400` (label `thm:RW`):
 
@@ -15,7 +17,9 @@ scenery is the excess mass `ξ = σ - 1`, so the payoff is the paper's
 `S_n = ∑_{k<n} ζ(X_k)`.  `hG` and `[Infinite V]` are the standing assumptions
 of `ssec:notation` and of Section 3.
 -/
-import RWRS.Support.Representation
+public import RWRS.Support.Representation
+
+@[expose] public section
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 

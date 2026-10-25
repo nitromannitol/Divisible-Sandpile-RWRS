@@ -1,3 +1,5 @@
+module
+
 /-
 Which sites belong to the comb `D_{w,n}`.
 
@@ -6,7 +8,9 @@ sites of the `n` trunk pipes, and the interior sites of the sibling pipes hangin
 off each trunk branching vertex.  The far endpoints are excluded: the terminal
 vertex `(w,0)` of the trunk and the far endpoint of every sibling pipe.
 -/
-import RWRS.Support.CombPipe
+public import RWRS.Support.CombPipe
+
+@[expose] public section
 
 namespace RWRS.Support
 

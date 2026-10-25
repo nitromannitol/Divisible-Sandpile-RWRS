@@ -1,3 +1,5 @@
+module
+
 /-
 The lower half of `thm:nested-vol`: every finite set from which the walk escapes
 contributes to the odometer,
@@ -10,9 +12,11 @@ the ones the odometer dominates.  Since the exit time is integrable and the
 payoff moves by at most a fixed step inside `C`, dominated convergence carries
 the bound to the limit.
 -/
-import RWRS.Support.VoltageIdentity
-import RWRS.Support.Representation
-import RWRS.Support.Countable
+public import RWRS.Support.VoltageIdentity
+public import RWRS.Support.Representation
+public import RWRS.Support.Countable
+
+@[expose] public section
 
 namespace RWRS.Support
 

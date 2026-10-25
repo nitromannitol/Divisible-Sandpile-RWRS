@@ -1,3 +1,5 @@
+module
+
 /-
 The identification of the walk objects of this repository with the shared
 library's, and the first-passage facts of the library restated in this
@@ -7,8 +9,10 @@ The two developments define the transition kernel by the same first-step
 recursion, so the identification is an induction on the number of steps; every
 other object is built from the kernel and follows at once.
 -/
-import RWRS.Support.HeatBasic
-import LatticeProb.Network.FirstPassage
+public import RWRS.Support.HeatBasic
+public import LatticeProb.Network.FirstPassage
+
+@[expose] public section
 
 namespace RWRS.Support
 

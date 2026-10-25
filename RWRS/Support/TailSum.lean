@@ -1,3 +1,5 @@
+module
+
 /-
 The tail sum of a `[0,∞]`-valued variable is below its mean.
 
@@ -6,8 +8,10 @@ every earlier one and the partial sum is exactly `n+1`.  Integrating turns a
 divergent tail sum into an infinite mean, which is how `lem:moment-sharpness`
 reads its lower bounds on `P(u_∞(o) > t)`.
 -/
-import RWRS.Support.LocalTimeCount
-import RWRS.Scenery
+public import RWRS.Support.LocalTimeCount
+public import RWRS.Scenery
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,8 +1,12 @@
+module
+
 /-
 Elementary facts about the finite-horizon walk average `walkExp`, the walk
 payoff, and bounded stopping times, used in the proof of `thm:RW`.
 -/
-import RWRS.Support.Odometer
+public import RWRS.Support.Odometer
+
+@[expose] public section
 
 namespace RWRS.Support
 

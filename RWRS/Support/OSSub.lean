@@ -1,11 +1,15 @@
+module
+
 /-
 The stabilization half of `thm:OS` on a bounded-degree graph: the universal heat
 kernel bound gives the spectral dimension `d_s = 1`, at which the subcritical
 moment estimate reads `p > 3` and `q < (p-1)/2`.
 -/
-import RWRS.Frozen.Subcritical
-import RWRS.External.HeatKernelBoundedDegree
-import RWRS.Support.Green
+public import RWRS.Frozen.Subcritical
+public import RWRS.External.HeatKernelBoundedDegree
+public import RWRS.Support.Green
+
+@[expose] public section
 
 namespace RWRS.Support
 

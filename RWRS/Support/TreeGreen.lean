@@ -1,12 +1,16 @@
+module
+
 /-
 The total inverse-degree time of the spherically symmetric tree with `(n+2)^3`
 children at depth `n` is finite: the tail sums of `1/(n+2)^3` form a
 superharmonic function whose Laplacian dominates the inverse degree.
 -/
-import RWRS.Support.Tree
-import RWRS.Support.KernelSum
-import RWRS.Support.HeatBasic
-import Mathlib.Analysis.PSeries
+public import RWRS.Support.Tree
+public import RWRS.Support.KernelSum
+public import RWRS.Support.HeatBasic
+public import Mathlib.Analysis.PSeries
+
+@[expose] public section
 
 open scoped ENNReal
 

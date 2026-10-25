@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 5.2 of `rwrs.tex`, frozen.  `rwrs.tex:554-558` (label
 `prop:supercritical`):
@@ -13,7 +15,9 @@ Proposition 5.2 of `rwrs.tex`, frozen.  `rwrs.tex:554-558` (label
 `E[ξ]∈(0,∞]` is `0 < extMean ν` under the exclusion `hdet` of the
 indeterminate case of `ssec:notation`.
 -/
-import RWRS.Support.Explosion
+public import RWRS.Support.Explosion
+
+@[expose] public section
 
 open MeasureTheory Filter Topology
 

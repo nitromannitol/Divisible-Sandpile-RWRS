@@ -1,3 +1,5 @@
+module
+
 /-
 The voltage along a pipe of the comb.
 
@@ -10,7 +12,9 @@ is the length of the pipe.  Reading the closed form at the terminal pipe of the
 comb, whose far endpoint carries voltage zero, gives `V_{n-1} = I_n L_n`; at a
 sibling pipe it gives the side current `V_j / L_{j+1}`.
 -/
-import RWRS.Support.CombNode
+public import RWRS.Support.CombNode
+
+@[expose] public section
 
 namespace RWRS.Support
 

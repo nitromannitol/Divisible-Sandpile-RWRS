@@ -1,3 +1,5 @@
+module
+
 /-
 Summation over the scales for `prop:poly-growth`, and the two bridges the
 assembly needs.
@@ -10,7 +12,9 @@ constant multiple of `2^{-k}`, so the series converges.  The two bridges are the
 mean of the truncated marginal, which dominates the mean of every level-capped
 coordinate, and the walk average of the payoff on the scenery event.
 -/
-import RWRS.Support.SubPolyExit
+public import RWRS.Support.SubPolyExit
+
+@[expose] public section
 
 namespace RWRS.Support
 

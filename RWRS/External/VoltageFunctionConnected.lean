@@ -1,5 +1,9 @@
-import RWRS.External.VoltageFunction
-import LatticeProb.Network.VoltageConnected
+module
+
+public import RWRS.External.VoltageFunction
+public import LatticeProb.Network.VoltageConnected
+
+@[expose] public section
 
 /-!
 # The voltage function exists on every infinite connected graph

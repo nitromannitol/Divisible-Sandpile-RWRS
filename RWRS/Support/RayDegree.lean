@@ -1,4 +1,8 @@
-import RWRS.Support.RayBuild
+module
+
+public import RWRS.Support.RayBuild
+
+@[expose] public section
 
 /-!
 # Degree bounds on the ray graph

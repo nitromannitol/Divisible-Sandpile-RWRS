@@ -1,3 +1,5 @@
+module
+
 /-
 `lem:tr-good`: almost surely, all but finitely many levels of the tree of pipes
 carry a good pipe.
@@ -11,9 +13,11 @@ geometrically.  The probability that no site is good is at most the exponential
 of minus that quantity, which is summable, so the first Borel-Cantelli lemma
 applies.
 -/
-import RWRS.Support.Spike
-import RWRS.Support.CombArith
-import RWRS.Support.RayGadget
+public import RWRS.Support.Spike
+public import RWRS.Support.CombArith
+public import RWRS.Support.RayGadget
+
+@[expose] public section
 
 namespace RWRS.Support
 

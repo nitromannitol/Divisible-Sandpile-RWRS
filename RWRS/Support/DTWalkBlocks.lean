@@ -1,11 +1,15 @@
+module
+
 /-
 The walk-fixed stage blocks of Step 1: for a fixed trajectory, the blocks of
 distinct usable stages are disjoint, and an earlier block lies in the sites of
 the stages before a later one.
 -/
-import RWRS.Support.DTStageCount
-import RWRS.Support.DTStageEvents
-import RWRS.Support.DTNatConv
+public import RWRS.Support.DTStageCount
+public import RWRS.Support.DTStageEvents
+public import RWRS.Support.DTNatConv
+
+@[expose] public section
 
 open scoped Classical
 

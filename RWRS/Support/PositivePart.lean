@@ -1,3 +1,5 @@
+module
+
 /-
 The positive-part mean bound of `lem:positive-part`, for an index type and a
 sample space in arbitrary universes.
@@ -7,11 +9,13 @@ proof works verbatim for `Type*`, and the applications of the lemma inside this
 development take the index to be the set of vertices carrying positive Green
 weight, which lives in the universe of the ambient vertex type.
 -/
-import RWRS.Setting
-import RWRS.Support.PaleyZygmund
-import LatticeProb.Prob.Moments
-import Mathlib.Probability.Independence.Basic
-import Mathlib.Probability.Moments.Variance
+public import RWRS.Setting
+public import RWRS.Support.PaleyZygmund
+public import LatticeProb.Prob.Moments
+public import Mathlib.Probability.Independence.Basic
+public import Mathlib.Probability.Moments.Variance
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

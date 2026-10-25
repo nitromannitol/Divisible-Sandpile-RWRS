@@ -1,3 +1,5 @@
+module
+
 /-
 The Gaussian half of `eq:w-tail` for `prop:subcritical`.
 
@@ -7,8 +9,10 @@ what the good-walk event supplies.  The passage from one to the other is a case
 split on whether the variance vanishes, and when it does the weighted sum is
 almost surely zero.
 -/
-import RWRS.Support.FukNagaevWeighted
-import RWRS.Support.SubTail
+public import RWRS.Support.FukNagaevWeighted
+public import RWRS.Support.SubTail
+
+@[expose] public section
 
 namespace RWRS.Support
 

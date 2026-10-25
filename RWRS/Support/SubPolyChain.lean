@@ -1,3 +1,5 @@
+module
+
 /-
 The dyadic decomposition of the running supremum of the recentred field, and the
 comparison with the scenery on the scenery event.
@@ -8,8 +10,10 @@ wherever the scenery is below the levels, so the running supremum of the payoff
 of the scenery is dominated there by that of the recentred field, and the
 almost sure finiteness of the latter transfers to the scenery event.
 -/
-import RWRS.Support.SubPolyMoment
-import RWRS.Support.Convexity
+public import RWRS.Support.SubPolyMoment
+public import RWRS.Support.Convexity
+
+@[expose] public section
 
 namespace RWRS.Support
 

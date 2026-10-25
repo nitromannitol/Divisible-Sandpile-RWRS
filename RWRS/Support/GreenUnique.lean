@@ -1,3 +1,5 @@
+module
+
 /-
 The killed Green function is the unique solution of its boundary value problem.
 
@@ -8,8 +10,10 @@ network Laplacian, applied to the difference and to its negative, makes it zero.
 This is the argument of `RWRS.Support.valueExit_eq_exitValue`, with the exit
 payoff replaced by an arbitrary solution.
 -/
-import RWRS.Support.CutCurrent
-import LatticeProb.Network.MaximumPrinciple
+public import RWRS.Support.CutCurrent
+public import LatticeProb.Network.MaximumPrinciple
+
+@[expose] public section
 
 namespace RWRS.Support
 

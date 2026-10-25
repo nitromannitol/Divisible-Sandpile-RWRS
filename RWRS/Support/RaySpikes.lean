@@ -1,3 +1,5 @@
+module
+
 /-
 The sites of the ray graph that can carry a spike, and the good events.
 
@@ -7,9 +9,11 @@ the sites in the first half of every terminal pipe of the `k`-th gadget, read in
 the ray graph.  Two of them are disjoint because two gadgets meet only at their
 roots and these sites are not roots.
 -/
-import RWRS.Support.RayGrowth
-import RWRS.Support.TrGood
-import RWRS.Frozen.RecGoodEvents
+public import RWRS.Support.RayGrowth
+public import RWRS.Support.TrGood
+public import RWRS.Frozen.RecGoodEvents
+
+@[expose] public section
 
 namespace RWRS.Support
 

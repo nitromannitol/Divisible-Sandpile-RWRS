@@ -1,8 +1,12 @@
+module
+
 /-
 The ergodicity of the i.i.d. marking.
 -/
-import RWRS.Support.ErgDecor
-import RWRS.Support.ErgMarking
+public import RWRS.Support.ErgDecor
+public import RWRS.Support.ErgMarking
+
+@[expose] public section
 
 namespace RWRS.Support
 

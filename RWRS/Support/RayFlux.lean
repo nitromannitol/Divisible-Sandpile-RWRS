@@ -1,3 +1,5 @@
+module
+
 /-
 The voltage of `sec:recurrent-nonstab` on the backbone.
 
@@ -12,9 +14,11 @@ every term of the same sign, so the term carried by the edge `r_{s_k} r_{s_k+1}`
 is at most one.  Together with the maximum principle at the source they bound
 the voltage by `s_k + 1` everywhere.
 -/
-import RWRS.Support.RayRecurrent
-import RWRS.Support.GreenUnique
-import RWRS.Support.PipeNbr
+public import RWRS.Support.RayRecurrent
+public import RWRS.Support.GreenUnique
+public import RWRS.Support.PipeNbr
+
+@[expose] public section
 
 namespace RWRS.Support
 

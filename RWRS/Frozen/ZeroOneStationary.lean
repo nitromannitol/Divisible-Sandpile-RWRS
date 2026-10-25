@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 2.7 of `rwrs.tex`, frozen.  `rwrs.tex:329-334` (label
 `lem:01-stationary`):
@@ -27,11 +29,13 @@ rooted graph and the marks are sampled independently of it.  The heat kernel
 decay `lem:ergodic-marked-stationary` needs is proved outright, so it is not a
 hypothesis of this lemma either.
 -/
-import RWRS.External.ErgodicDecomposition
-import RWRS.Frozen.ErgodicMarked
-import RWRS.Support.ErgCondLaw
-import RWRS.Support.ErgStab
-import Mathlib.MeasureTheory.Function.ConditionalExpectation.Basic
+public import RWRS.External.ErgodicDecomposition
+public import RWRS.Frozen.ErgodicMarked
+public import RWRS.Support.ErgCondLaw
+public import RWRS.Support.ErgStab
+public import Mathlib.MeasureTheory.Function.ConditionalExpectation.Basic
+
+@[expose] public section
 
 open MeasureTheory
 

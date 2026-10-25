@@ -1,3 +1,5 @@
+module
+
 /-
 The `ℤ^d` specializations of the random walk representation, in the vocabulary
 of the two dependent formalizations.
@@ -13,8 +15,10 @@ library's walk law on path space and its notion of a stopping time.
 graph theorem `RWRS.Frozen.randomWalkRepresentation` read on the lattice,
 through the identification of the two forms of the walk expectation.
 -/
-import RWRS.Support.ZdBridge
-import RWRS.Frozen.RandomWalkRepresentation
+public import RWRS.Support.ZdBridge
+public import RWRS.Frozen.RandomWalkRepresentation
+
+@[expose] public section
 
 open MeasureTheory LatticeProb
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The tree of pipes of `rwrs.tex`, Sections 6.4 to 6.6: the rooted `B`-ary tree
 with each edge between generations `j-1` and `j` replaced by a path of length
@@ -15,7 +17,9 @@ vertex the comb may carry when it is embedded in a larger network: the flag `e`
 turns it on, and then it is joined to the root by a single edge and to nothing
 else, which is the paper's "extra boundary edge of unit resistance".
 -/
-import RWRS.Setting
+public import RWRS.Setting
+
+@[expose] public section
 
 namespace RWRS
 

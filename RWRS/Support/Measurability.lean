@@ -1,10 +1,14 @@
+module
+
 /-
 The odometer is a measurable function of the initial masses, and stabilization
 is a measurable event.
 -/
-import RWRS.Support.Countable
-import RWRS.Support.Green
-import Mathlib.MeasureTheory.Constructions.Pi
+public import RWRS.Support.Countable
+public import RWRS.Support.Green
+public import Mathlib.MeasureTheory.Constructions.Pi
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

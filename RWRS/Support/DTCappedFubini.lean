@@ -1,6 +1,10 @@
-import RWRS.Support.DTCappedRule
-import RWRS.Support.DTRuleBound
-import RWRS.Support.DTRuleFubini
+module
+
+public import RWRS.Support.DTCappedRule
+public import RWRS.Support.DTRuleBound
+public import RWRS.Support.DTRuleFubini
+
+@[expose] public section
 
 /-!
 # Fubini for the capped rule

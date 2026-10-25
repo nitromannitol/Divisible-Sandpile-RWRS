@@ -1,5 +1,9 @@
-import RWRS.Support.DTStageEvents
-import RWRS.Support.DTTrapFamily
+module
+
+public import RWRS.Support.DTStageEvents
+public import RWRS.Support.DTTrapFamily
+
+@[expose] public section
 
 /-!
 # The stage-union bound of Step 1

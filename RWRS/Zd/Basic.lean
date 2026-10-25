@@ -1,12 +1,16 @@
+module
+
 /-
 The specialization of the general-graph setting to the nearest-neighbour
 lattice `ℤ^d` of the shared library, in the vocabulary the dependent
 formalizations use: the graph is `LatticeProb.lattice d`, every vertex has
 degree `2d`, and the averaging operator is `LatticeProb.walkOp`.
 -/
-import RWRS.Support.HeatBasic
-import RWRS.Support.Green
-import LatticeProb.Site
+public import RWRS.Support.HeatBasic
+public import RWRS.Support.Green
+public import LatticeProb.Site
+
+@[expose] public section
 
 namespace RWRS.Zd
 

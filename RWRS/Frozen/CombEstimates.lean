@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 6.7 of `rwrs.tex`, frozen.  `rwrs.tex:1530-1545` (label
 `prop:comb-estimates`), under the setup of `ssec:comb-estimates`
@@ -27,8 +29,10 @@ The flag `e` is the paper's "at most one extra boundary edge of unit resistance"
 at the root, which is present exactly when `e` is on.  The constant
 `C_comb` depends only on `B` and `α`, so it is bound before `n` and `w`.
 -/
-import RWRS.Support.CombFinal
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import RWRS.Support.CombFinal
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+
+@[expose] public section
 
 open scoped ENNReal
 

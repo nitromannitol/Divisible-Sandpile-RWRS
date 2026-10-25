@@ -1,3 +1,5 @@
+module
+
 /-
 The weak law for a Green-weighted i.i.d. sum, under a first moment only.
 
@@ -8,9 +10,11 @@ applies to it and the second moment of the weights enters.  The hypothesis that
 no single weight carries a positive fraction of the total is used through
 `∑_v w_v^2 / (∑_v w_v)^2 → 0`.
 -/
-import RWRS.Support.ClockRatio
-import LatticeProb.Prob.Moments
-import Mathlib.Probability.Independence.InfinitePi
+public import RWRS.Support.ClockRatio
+public import LatticeProb.Prob.Moments
+public import Mathlib.Probability.Independence.InfinitePi
+
+@[expose] public section
 
 namespace RWRS.Support
 

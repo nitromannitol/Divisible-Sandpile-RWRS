@@ -1,3 +1,5 @@
+module
+
 /-
 The choice of the parameters of `prop:subcritical`, and the truncation.
 
@@ -7,11 +9,13 @@ for large `M` the truncated mean is still negative.  We may therefore assume
 slack `η` in the clock bound, the good-walk exponent `δ`, and the order `2n` of
 the polynomial replacing the Gaussian remainder.
 -/
-import RWRS.Support.SubSeries
-import RWRS.Support.SubTrunc
-import RWRS.Frozen.FukNagaev
-import RWRS.Support.SubStop
-import RWRS.External.Bernstein
+public import RWRS.Support.SubSeries
+public import RWRS.Support.SubTrunc
+public import RWRS.Frozen.FukNagaev
+public import RWRS.Support.SubStop
+public import RWRS.External.Bernstein
+
+@[expose] public section
 
 namespace RWRS.Support
 

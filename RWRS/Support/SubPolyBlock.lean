@@ -1,3 +1,5 @@
+module
+
 /-
 `eq:poly-Bernstein`: the tail of the block variable of the recentred field.
 
@@ -11,7 +13,9 @@ exceeds `u` then one of them exceeds `u/(k+1)`.  Summing the Bernstein tail of
 block variable is positive at all, since on the good-walk event the block
 variable is bounded by a deterministic multiple of `N R_N^β`.
 -/
-import RWRS.Support.SubPolyField
+public import RWRS.Support.SubPolyField
+
+@[expose] public section
 
 namespace RWRS.Support
 

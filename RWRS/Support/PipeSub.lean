@@ -1,4 +1,8 @@
-import RWRS.Support.Comb
+module
+
+public import RWRS.Support.Comb
+
+@[expose] public section
 
 /-!
 # The tree of pipes as an induced subgraph

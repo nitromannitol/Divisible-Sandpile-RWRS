@@ -1,3 +1,5 @@
+module
+
 /-
 Almost every trajectory of the walk is a walk: at time `k` it is within distance
 `k` of its starting vertex.
@@ -9,8 +11,10 @@ instruction in `[0,1)` selects an index below the degree, hence a genuine
 neighbour; the instructions lie in `[0,1)` almost surely because that is where
 their common law is carried.
 -/
-import RWRS.Support.SubPolyBlock
-import RWRS.Support.VoltageIdentity
+public import RWRS.Support.SubPolyBlock
+public import RWRS.Support.VoltageIdentity
+
+@[expose] public section
 
 namespace RWRS.Support
 

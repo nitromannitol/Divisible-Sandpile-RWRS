@@ -1,3 +1,5 @@
+module
+
 /-
 The value of a bounded stopping rule against the walk average of the running
 supremum.
@@ -7,8 +9,10 @@ ball of the same radius, which does not change the walk average of length `n`
 and makes the payoff bounded, so the walk average is a Bochner integral against
 the law of the walk; the payoff at any time is at most `sup_n S_n`.
 -/
-import RWRS.Support.BallWalk
-import RWRS.Support.SubTrunc
+public import RWRS.Support.BallWalk
+public import RWRS.Support.SubTrunc
+
+@[expose] public section
 
 namespace RWRS.Support
 

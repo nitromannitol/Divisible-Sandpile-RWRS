@@ -1,3 +1,5 @@
+module
+
 /-
 Bernstein's inequality for a weighted sum of the scenery read through
 SITE-DEPENDENT maps, for `prop:poly-growth`.
@@ -10,7 +12,9 @@ same transfer is made once more with the map carried by the site.  The
 coordinates of an i.i.d. field remain independent after site-dependent maps are
 applied to them, which is the only property of the field the inequality uses.
 -/
-import RWRS.Support.FukNagaevWeighted
+public import RWRS.Support.FukNagaevWeighted
+
+@[expose] public section
 
 namespace RWRS.Support
 

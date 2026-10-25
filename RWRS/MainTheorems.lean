@@ -1,6 +1,10 @@
-import RWRS.Frozen.OptimalStopping
-import RWRS.Frozen.Explosion
-import RWRS.Frozen.Stabilization
+module
+
+public import RWRS.Frozen.OptimalStopping
+public import RWRS.Frozen.Explosion
+public import RWRS.Frozen.Stabilization
+
+@[expose] public section
 
 /-!
 # Main results

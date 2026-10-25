@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 5.1 of `rwrs.tex`, frozen.  `rwrs.tex:531-536` (label
 `lem:clock-no-dom`):
@@ -16,8 +18,10 @@ conclusion from the escape probability of the walk without using it, and the
 fact is in any case proved outright in `RWRS/External/HeatKernelVanishing.lean`,
 so it is not a hypothesis here.
 -/
-import RWRS.External.HeatKernelVanishing
-import RWRS.Support.ClockRatio
+public import RWRS.External.HeatKernelVanishing
+public import RWRS.Support.ClockRatio
+
+@[expose] public section
 
 open Filter Topology
 

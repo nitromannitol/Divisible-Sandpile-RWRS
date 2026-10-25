@@ -1,3 +1,5 @@
+module
+
 /-
 The arithmetic behind the comb estimates of `prop:comb-estimates`.
 
@@ -7,7 +9,9 @@ Under `eq:comb-B-cond` the pipe lengths satisfy `2 ≤ L_j` for `j ≥ 1` (becau
 part (c) a convergent geometric series.  The growth constant is
 `λ = B^{2α-1}/4 = (B^α)^2/(4B)`.
 -/
-import RWRS.Support.Gadget
+public import RWRS.Support.Gadget
+
+@[expose] public section
 
 namespace RWRS.Support
 

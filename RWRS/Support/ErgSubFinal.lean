@@ -1,3 +1,5 @@
+module
+
 /-
 The subcritical half of `thm:stationary-phase`.
 
@@ -10,8 +12,10 @@ the eventual bound `Y_k ≥ (1 - σ(ρ) ∧ 1)/deg(ρ)` gives
 `(1 - E[σ ∧ 1]) E[1/deg(ρ)] ≤ (E[σ] - E[σ ∧ 1]) E[1/deg(ρ)]`, where the mean
 reciprocal degree is positive.
 -/
-import RWRS.Support.ErgSuperFinal
-import RWRS.Support.ErgProp
+public import RWRS.Support.ErgSuperFinal
+public import RWRS.Support.ErgProp
+
+@[expose] public section
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal
 

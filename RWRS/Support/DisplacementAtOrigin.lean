@@ -1,8 +1,12 @@
+module
+
 /-
 Pointwise Gaussian transition estimates and first exits from a rooted ball.
 -/
-import RWRS.Support.SubPolyExit
-import RWRS.Support.DTExitAux
+public import RWRS.Support.SubPolyExit
+public import RWRS.Support.DTExitAux
+
+@[expose] public section
 
 namespace RWRS.Support
 

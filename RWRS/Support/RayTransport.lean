@@ -1,3 +1,5 @@
+module
+
 /-
 The comb of the `k`-th gadget, read inside the ray graph.
 
@@ -15,8 +17,10 @@ Laplacian of the transported function at the root is `-1`, which is the unit
 source of the comb's own problem.  Uniqueness for the boundary value problem
 finishes it.
 -/
-import RWRS.Support.RayFlux
-import RWRS.Support.CombVolt
+public import RWRS.Support.RayFlux
+public import RWRS.Support.CombVolt
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The two elementary clauses of `prop:finite-vol`.
 
@@ -7,7 +9,9 @@ exit time is integrable; and the value is at least `0`, because stopping at once
 is admissible.  Together these give the finiteness of `v_K` and the vanishing of
 `v_K(o)` off the active set.
 -/
-import RWRS.Support.NestedLower
+public import RWRS.Support.NestedLower
+
+@[expose] public section
 
 namespace RWRS.Support
 

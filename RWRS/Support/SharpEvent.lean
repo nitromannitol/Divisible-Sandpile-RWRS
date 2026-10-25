@@ -1,3 +1,5 @@
+module
+
 /-
 Steps 2 and 4 of `lem:moment-sharpness`, assembled at a fixed horizon.
 
@@ -8,12 +10,14 @@ by independent masses, and the second-moment bound of `SharpCount` turns the
 individual probabilities into a bound for the probability that some site of the
 ball is good.
 -/
-import RWRS.Support.SharpBackground
-import RWRS.Support.SharpBall
-import RWRS.Support.SharpCount
-import RWRS.Support.SharpGreen
-import RWRS.Support.SharpIndep
-import RWRS.Support.SpikeDecomp
+public import RWRS.Support.SharpBackground
+public import RWRS.Support.SharpBall
+public import RWRS.Support.SharpCount
+public import RWRS.Support.SharpGreen
+public import RWRS.Support.SharpIndep
+public import RWRS.Support.SpikeDecomp
+
+@[expose] public section
 
 namespace RWRS.Support
 

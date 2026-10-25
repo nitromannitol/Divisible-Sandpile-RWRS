@@ -1,3 +1,5 @@
+module
+
 /-
 The stage times of the unconstrained trap selection are almost surely finite.
 
@@ -11,10 +13,12 @@ time, which is a stopping time with an almost surely finite value by
 induction), and the bad set is the union over the countably many `F` of null
 sets.
 -/
-import RWRS.Support.DTStagesE
-import RWRS.Support.DTAdmissible
-import LatticeProb.Graph.ExitTime
-import LatticeProb.Graph.MarkovAE
+public import RWRS.Support.DTStagesE
+public import RWRS.Support.DTAdmissible
+public import LatticeProb.Graph.ExitTime
+public import LatticeProb.Graph.MarkovAE
+
+@[expose] public section
 
 namespace RWRS.Support
 

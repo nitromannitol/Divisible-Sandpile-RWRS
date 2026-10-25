@@ -1,3 +1,5 @@
+module
+
 /-
 The admissible set of `prop:doubly-transient-really-general` is co-finite.
 
@@ -9,7 +11,9 @@ transience makes `∑_z g(v,z)^2` finite for every `v`, so only finitely many `z
 carry a Green weight above a positive threshold.  The walk therefore reaches the
 admissible set almost surely.
 -/
-import RWRS.Support.DTPotential
+public import RWRS.Support.DTPotential
+
+@[expose] public section
 
 namespace RWRS.Support
 

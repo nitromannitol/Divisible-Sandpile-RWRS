@@ -1,3 +1,5 @@
+module
+
 /-
 The growth in the scale of the two constants of `eq:Mk-tail-Ak`, for
 `prop:subcritical`.
@@ -8,7 +10,9 @@ is dominated by its largest term."  Here the clock plays the role of `Λ_p`, and
 `clockH_le_rpow` absorbs the logarithm of the critical spectral dimension into an
 arbitrarily small extra exponent.
 -/
-import RWRS.Support.SubMomentK
+public import RWRS.Support.SubMomentK
+
+@[expose] public section
 
 namespace RWRS.Support
 

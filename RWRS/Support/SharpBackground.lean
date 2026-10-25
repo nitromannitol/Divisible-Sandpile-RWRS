@@ -1,3 +1,5 @@
+module
+
 /-
 Step 3 of `lem:moment-sharpness`: the background is above `-t` with probability
 at least three quarters.
@@ -10,10 +12,12 @@ the sum of the squared weights and Chebyshev's inequality controls it.  The
 displacement of the mean caused by the recentring is the mean of the tail part
 again, so it is small as well.
 -/
-import RWRS.Support.Critical
-import RWRS.Support.Background
-import RWRS.Support.MomentIneq
-import Mathlib.MeasureTheory.Function.UniformIntegrable
+public import RWRS.Support.Critical
+public import RWRS.Support.Background
+public import RWRS.Support.MomentIneq
+public import Mathlib.MeasureTheory.Function.UniformIntegrable
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,8 +1,12 @@
-import RWRS.Support.DTPotential
-import RWRS.Support.DTCappedRule
-import RWRS.Support.DTUnconstrained
-import RWRS.Support.DTStageIntegral
-import RWRS.Scenery
+module
+
+public import RWRS.Support.DTPotential
+public import RWRS.Support.DTCappedRule
+public import RWRS.Support.DTUnconstrained
+public import RWRS.Support.DTStageIntegral
+public import RWRS.Scenery
+
+@[expose] public section
 
 /-!
 # Integrability of the trap potential in the scenery

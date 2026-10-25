@@ -1,4 +1,8 @@
-import RWRS.MainTheorems
+module
+
+public import RWRS.MainTheorems
+
+@[expose] public section
 
 /-!
 # Axioms audit

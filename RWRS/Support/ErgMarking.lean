@@ -1,3 +1,5 @@
+module
+
 /-
 The ergodicity half of `lem:ergodic-marked-stationary`.
 
@@ -9,7 +11,9 @@ law of the rooted graph, and isomorphism invariance and rerooting invariance
 transfer along the decoration in both directions.  These are the graph-side
 facts the conditioning argument of the lemma uses.
 -/
-import RWRS.Support.Marking
+public import RWRS.Support.Marking
+
+@[expose] public section
 
 namespace RWRS.Support
 

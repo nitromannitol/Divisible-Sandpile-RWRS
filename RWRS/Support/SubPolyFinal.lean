@@ -1,3 +1,5 @@
+module
+
 /-
 The assembly of `prop:poly-growth`.
 
@@ -10,8 +12,10 @@ chosen large; each is below a constant multiple of `2^{-k}`, so the series
 converges and the running supremum of the payoff of the recentred field has a
 finite joint mean.
 -/
-import RWRS.Support.SubPolyGeom
-import RWRS.Support.GreenUnique
+public import RWRS.Support.SubPolyGeom
+public import RWRS.Support.GreenUnique
+
+@[expose] public section
 
 namespace RWRS.Support
 

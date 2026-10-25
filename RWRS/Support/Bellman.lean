@@ -1,3 +1,5 @@
+module
+
 /-
 The Wald--Bellman equation for the finite-volume value `v_K` of
 `prop:finite-vol`, and the pieces its proof needs: the first-step decomposition
@@ -5,7 +7,9 @@ of an integrable functional, the behaviour of the payoff and of the exit time
 under prepending a step, and the reduction of the supremum defining `v_K` to
 the stopping times that are bounded.
 -/
-import RWRS.Support.FiniteVolume
+public import RWRS.Support.FiniteVolume
+
+@[expose] public section
 
 namespace RWRS.Support
 

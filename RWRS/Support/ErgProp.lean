@@ -1,3 +1,5 @@
+module
+
 /-
 The subcritical half of `thm:stationary-phase`: what non-stabilization forces.
 
@@ -10,7 +12,9 @@ vertex with an infinite odometer reaches mass one, and the toppling update never
 lets the mass drop below one again, which is `liminf_k σ_k(ρ) ≥ 1`
 (`rwrs.tex:364`).
 -/
-import RWRS.Support.Odometer
+public import RWRS.Support.Odometer
+
+@[expose] public section
 
 namespace RWRS.Support
 

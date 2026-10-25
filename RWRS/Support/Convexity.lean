@@ -1,3 +1,5 @@
+module
+
 /-
 The convexity reduction for symmetric sceneries (`prop:convexity-reduction`).
 
@@ -9,7 +11,9 @@ common midpoint is the bounded truncation.  Convexity therefore transfers
 explosion from the truncation to the scenery, on an event of probability at
 least one half, and the zero-one law finishes.
 -/
-import RWRS.Support.Dyadic
+public import RWRS.Support.Dyadic
+
+@[expose] public section
 
 namespace RWRS.Support
 

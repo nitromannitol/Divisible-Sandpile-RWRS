@@ -1,10 +1,14 @@
-import RWRS.External.CarneVaropoulos
-import RWRS.Support.SubPolyWalk
-import RWRS.Support.Transience
-import LatticeProb.Graph.ExitTime
-import LatticeProb.Graph.Nash
-import LatticeProb.Graph.Reach
-import LatticeProb.Walk.SRWTail
+module
+
+public import RWRS.External.CarneVaropoulos
+public import RWRS.Support.SubPolyWalk
+public import RWRS.Support.Transience
+public import LatticeProb.Graph.ExitTime
+public import LatticeProb.Graph.Nash
+public import LatticeProb.Graph.Reach
+public import LatticeProb.Walk.SRWTail
+
+@[expose] public section
 
 set_option linter.unusedSimpArgs false
 

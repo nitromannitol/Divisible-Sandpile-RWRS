@@ -1,3 +1,5 @@
+module
+
 /-
 Choosing the finite set and the horizon of Step 1.
 
@@ -6,9 +8,11 @@ suitable `K`, and for that `K` the walk leaves before a large enough horizon
 with probability as close to one as wanted.  On the intersection every stage is
 usable, so the intersection lies in the walk-good event.
 -/
-import RWRS.Support.DTWalkGood
-import RWRS.Support.DTWalkEvent2
-import RWRS.Support.DTLeave
+public import RWRS.Support.DTWalkGood
+public import RWRS.Support.DTWalkEvent2
+public import RWRS.Support.DTLeave
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The growth exponent as a limsup.
 
@@ -9,7 +11,9 @@ log C / log r + d_f`, whose limit is `d_f`; the lower bound gives
 `log c / log r_k + d_f ≤ log|B(o,r_k)| / log r_k`, whose left side tends to
 `d_f`, so the limsup is at least `d_f - ε` for every `ε`.
 -/
-import RWRS.Support.RayVolume
+public import RWRS.Support.RayVolume
+
+@[expose] public section
 
 namespace RWRS.Support
 

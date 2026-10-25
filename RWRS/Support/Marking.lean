@@ -1,3 +1,5 @@
+module
+
 /-
 Decorating a stationary random rooted graph with an i.i.d. field of marks.
 
@@ -10,8 +12,10 @@ though the individual functions are not: an isomorphism moves the marks by a
 permutation of the vertex set, and the i.i.d. law is invariant under such a
 permutation.
 -/
-import RWRS.Network
-import LatticeProb.Prob.ZeroOne
+public import RWRS.Network
+public import LatticeProb.Prob.ZeroOne
+
+@[expose] public section
 
 namespace RWRS.Support
 

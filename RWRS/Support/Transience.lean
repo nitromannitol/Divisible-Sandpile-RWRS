@@ -1,8 +1,12 @@
-import RWRS.Support.BallWalk
-import LatticeProb.Network.Killed
-import RWRS.Support.Recurrence
-import RWRS.Support.Odometer
-import RWRS.Support.KilledGreen
+module
+
+public import RWRS.Support.BallWalk
+public import LatticeProb.Network.Killed
+public import RWRS.Support.Recurrence
+public import RWRS.Support.Odometer
+public import RWRS.Support.KilledGreen
+
+@[expose] public section
 
 /-!
 # Transience from resistance bounds

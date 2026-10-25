@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 5.13 of `rwrs.tex`, frozen.  `rwrs.tex:1077-1095` (label
 `lem:fuk-nagaev`):
@@ -22,9 +24,11 @@ explicit.  Probabilities are compared in `[0,∞]`.  The paper proves the lemma 
 citation; the three cited results (von Bahr--Esseen, Fuk--Nagaev, Bernstein)
 are each proved outright in `RWRS/External/`, so no hypothesis remains here.
 -/
-import RWRS.External.VonBahrEsseen
-import RWRS.External.FukNagaevTail
-import RWRS.External.Bernstein
+public import RWRS.External.VonBahrEsseen
+public import RWRS.External.FukNagaevTail
+public import RWRS.External.Bernstein
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

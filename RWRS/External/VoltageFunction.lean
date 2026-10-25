@@ -1,4 +1,8 @@
-import RWRS.Setting
+module
+
+public import RWRS.Setting
+
+@[expose] public section
 
 /-!
 # The voltage function, as an external input

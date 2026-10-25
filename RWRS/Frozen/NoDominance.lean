@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 5.4 of `rwrs.tex`, frozen.  `rwrs.tex:629-632` (label
 `lem:no-dominance`):
@@ -19,9 +21,11 @@ conclusion from the escape probability of the walk and the first-visit
 comparison without using it, and the fact is in any case proved outright in
 `RWRS/External/HeatKernelVanishing.lean`, so it is not a hypothesis here.
 -/
-import RWRS.External.HeatKernelVanishing
-import RWRS.Support.ClockRatio
-import RWRS.Support.ShortClock
+public import RWRS.External.HeatKernelVanishing
+public import RWRS.Support.ClockRatio
+public import RWRS.Support.ShortClock
+
+@[expose] public section
 
 open Filter Topology
 

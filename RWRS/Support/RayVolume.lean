@@ -1,3 +1,5 @@
+module
+
 /-
 The volume growth of the ray with the gadgets, and the parameters of
 `sec:recurrent-nonstab`.
@@ -6,9 +8,11 @@ The volume growth of the ray with the gadgets, and the parameters of
 here it is read on the graph that satisfies it, and the base `B` and the
 exponent `α = 1/(d_f-1)` the section fixes are produced.
 -/
-import RWRS.Support.GadgetSeq
-import RWRS.Support.RayRecurrent
-import RWRS.Frozen.RecVolumeGrowth
+public import RWRS.Support.GadgetSeq
+public import RWRS.Support.RayRecurrent
+public import RWRS.Frozen.RecVolumeGrowth
+
+@[expose] public section
 
 namespace RWRS.Support
 

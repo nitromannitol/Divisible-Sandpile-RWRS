@@ -1,3 +1,5 @@
+module
+
 /-
 Step 2 of `prop:poly-growth`: the site-dependent truncation and the recentring.
 
@@ -13,7 +15,9 @@ payoff it produces dominates the payoff of the original scenery there, and its
 coordinates are bounded by `t + M`, independent, and centred at `m`, which is
 exactly what Bernstein's inequality asks for.
 -/
-import RWRS.Support.SubPolyPrep
+public import RWRS.Support.SubPolyPrep
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 6.2 of `rwrs.tex`, frozen.  `rwrs.tex:1385-1398` (label
 `lem:moment-sharpness`):
@@ -19,8 +21,10 @@ indeterminate case of `ssec:notation`.  The ball of real radius `n^{1/d_w}` is
 the closed ball of integer radius `⌊n^{1/d_w}⌋`, which contains the same
 vertices.  Both moments are `[0,∞]`-valued, so `= ∞` is a value.
 -/
-import RWRS.Support.SharpFinal
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import RWRS.Support.SharpFinal
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

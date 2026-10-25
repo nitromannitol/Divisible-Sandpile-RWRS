@@ -1,3 +1,5 @@
+module
+
 /-
 The Efron--Stein inequality of `rwrs.tex:694-699` is a theorem of the shared
 library, not an input.  The library proves it over a countable index set by
@@ -7,9 +9,11 @@ here it is only restated in the vocabulary of this repository, whose `resample`
 is the library's `Function.update` and whose `iidLaw` is the library's
 `Measure.infinitePi`.
 -/
-import RWRS.External.EfronStein
-import RWRS.Support.Countable
-import LatticeProb.Prob.EfronSteinCountable
+public import RWRS.External.EfronStein
+public import RWRS.Support.Countable
+public import LatticeProb.Prob.EfronSteinCountable
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

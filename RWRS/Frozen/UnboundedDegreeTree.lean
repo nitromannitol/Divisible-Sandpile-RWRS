@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 6.1 of `rwrs.tex`, frozen.  `rwrs.tex:1364-1366` (label
 `ex:counterexample`):
@@ -10,10 +12,12 @@ The tree of the proof is infinite, which is what makes the statement about the
 divisible sandpile nontrivial, so infiniteness is part of the assertion.
 `E[|σ|]<∞` is the finiteness of the first absolute moment of the marginal.
 -/
-import RWRS.Support.TreeGreen
-import RWRS.Support.ShortClock
-import RWRS.Frozen.RWInfinite
-import Mathlib.Combinatorics.SimpleGraph.Acyclic
+public import RWRS.Support.TreeGreen
+public import RWRS.Support.ShortClock
+public import RWRS.Frozen.RWInfinite
+public import Mathlib.Combinatorics.SimpleGraph.Acyclic
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

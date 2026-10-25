@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 5.14 of `rwrs.tex`, frozen.  `rwrs.tex:1102-1111` (label `lem:dyadic`):
 
@@ -22,8 +24,10 @@ spaces, and without it the right-hand side is a sum of lower integrals of
 functions that need not be measurable, which is not what the paper's sum of
 expectations means.
 -/
-import RWRS.Support.DyadicSup
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import RWRS.Support.DyadicSup
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

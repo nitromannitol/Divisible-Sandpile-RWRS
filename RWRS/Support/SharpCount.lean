@@ -1,3 +1,5 @@
+module
+
 /-
 Step 4 of `lem:moment-sharpness`: the second-moment method over the ball.
 
@@ -8,8 +10,10 @@ inequality at `θ = 1/2` bounds the probability that the count is at least half
 its mean, and a count is an integer, so half a positive mean already forces it
 to be at least one; the count is at least one exactly on the union.
 -/
-import RWRS.Support.PaleyZygmund
-import RWRS.Support.SecondMoment
+public import RWRS.Support.PaleyZygmund
+public import RWRS.Support.SecondMoment
+
+@[expose] public section
 
 namespace RWRS.Support
 

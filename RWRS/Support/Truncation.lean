@@ -1,3 +1,5 @@
+module
+
 /-
 The marginal of the scenery in the critical regime, and its truncation.
 
@@ -11,9 +13,11 @@ truncation and the centred remainder.  As `M` grows the truncation keeps all of
 the variance and the remainder keeps none of the second moment, which is what
 lets `M` be chosen once, before the vertex and the horizon.
 -/
-import RWRS.Support.WeakLaw
-import RWRS.Support.Explosion
-import RWRS.Support.PositivePart
+public import RWRS.Support.WeakLaw
+public import RWRS.Support.Explosion
+public import RWRS.Support.PositivePart
+
+@[expose] public section
 
 namespace RWRS.Support
 

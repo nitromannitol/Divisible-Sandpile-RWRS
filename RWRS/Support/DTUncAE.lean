@@ -1,6 +1,10 @@
-import RWRS.Support.DTUnconstrained
-import RWRS.Support.DTStagesAE
-import RWRS.Support.DTAdmissibleCap
+module
+
+public import RWRS.Support.DTUnconstrained
+public import RWRS.Support.DTStagesAE
+public import RWRS.Support.DTAdmissibleCap
+
+@[expose] public section
 
 /-!
 # Almost-sure finiteness of the unconstrained stage times

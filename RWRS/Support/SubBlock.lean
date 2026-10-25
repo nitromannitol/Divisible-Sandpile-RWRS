@@ -1,3 +1,5 @@
+module
+
 /-
 The union bound of `eq:Mk-tail-Ak`, for a fixed trajectory.
 
@@ -9,7 +11,9 @@ that finite index set, of the events that one increment exceeds `u/(k+1)`.
 Each of those has the polynomial tail of `lem:fuk-nagaev`, so the block maximum
 does too, with the index set as the multiplicity.
 -/
-import RWRS.Support.SubChain
+public import RWRS.Support.SubChain
+
+@[expose] public section
 
 namespace RWRS.Support
 

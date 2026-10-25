@@ -1,3 +1,5 @@
+module
+
 /-
 Disjoint blocks of the scenery, and the two correlation bounds Step 1 of
 `prop:doubly-transient-really-general` needs.
@@ -11,8 +13,10 @@ coordinate inside an earlier block contributes at most `E|ξ|` times the
 probability of the conditioning, divided by the probability of the block event
 it sits in.
 -/
-import RWRS.Support.DTAdmissible
-import LatticeProb.Prob.Blocks
+public import RWRS.Support.DTAdmissible
+public import LatticeProb.Prob.Blocks
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The arithmetic core of the final combination in Step 1 of
 `prop:doubly-transient-really-general`: the conditional bound
@@ -5,7 +7,9 @@ The arithmetic core of the final combination in Step 1 of
 `-8m(1-e^{-1}) + B₀`, which is what makes the expected payoff grow linearly
 in `m`.
 -/
-import RWRS.Support.DTAdmissible
+public import RWRS.Support.DTAdmissible
+
+@[expose] public section
 
 open scoped ENNReal
 

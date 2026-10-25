@@ -1,3 +1,5 @@
+module
+
 /-
 Cited input: the Efron--Stein inequality, quoted in the proof of
 `prop:critical` (`rwrs.tex:694-699`) from Efron and Stein, *The jackknife
@@ -8,9 +10,11 @@ shared library's finite-product inequality to the partial integral over an
 increasing exhaustion of the index set and passing to the limit with Fatou;
 no hypothesis of any frozen statement carries it any longer.
 -/
-import RWRS.Setting
-import Mathlib.Probability.Moments.Variance
-import LatticeProb.Prob.EfronSteinCountable
+public import RWRS.Setting
+public import Mathlib.Probability.Moments.Variance
+public import LatticeProb.Prob.EfronSteinCountable
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

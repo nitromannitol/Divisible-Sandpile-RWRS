@@ -1,3 +1,5 @@
+module
+
 /-
 The growth exponent of the ray with the gadgets.
 
@@ -6,8 +8,10 @@ which is its cardinality only because the balls are finite; the three lemmas
 here move between that natural number and the `[0,∞]`-valued `encard` the volume
 proposition bounds, and the last theorem reads the exponent off the two bounds.
 -/
-import RWRS.Support.RecData
-import RWRS.Support.RayVolume
+public import RWRS.Support.RecData
+public import RWRS.Support.RayVolume
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The supercritical half of `thm:stationary-phase`.
 
@@ -10,12 +12,14 @@ and the mean reciprocal degree is positive.  The general case follows by
 truncating the marks above at `M`, which preserves stabilization, and letting
 `M` grow, the mark law having a finite first moment.
 -/
-import RWRS.Support.ErgSuper
-import RWRS.Support.ErgDom
-import RWRS.Support.ProbHelpers
-import RWRS.Frozen.StationaryToppling
-import RWRS.Frozen.IidStationary
-import RWRS.Support.ErgStab
+public import RWRS.Support.ErgSuper
+public import RWRS.Support.ErgDom
+public import RWRS.Support.ProbHelpers
+public import RWRS.Frozen.StationaryToppling
+public import RWRS.Frozen.IidStationary
+public import RWRS.Support.ErgStab
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory Filter Topology
 open scoped ENNReal

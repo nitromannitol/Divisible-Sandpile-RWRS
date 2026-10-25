@@ -1,3 +1,5 @@
+module
+
 /-
 Measurability of stopping times and of the shifted trajectory.
 
@@ -6,8 +8,10 @@ measurable (the indicator depends on the trajectory only up to `n`), hence
 `X ↦ (τ X).toNat` is measurable, and so is the shifted trajectory
 `X ↦ shiftPath (τ X).toNat X`.
 -/
-import LatticeProb.Graph.MarkovAE
-import LatticeProb.Graph.PathSpace
+public import LatticeProb.Graph.MarkovAE
+public import LatticeProb.Graph.PathSpace
+
+@[expose] public section
 
 open LatticeProb LatticeProb.Graph MeasureTheory
 open scoped ENNReal

@@ -1,3 +1,5 @@
+module
+
 /-
 The walk average of the local-time power sums of a discrete interval, for
 `prop:subcritical`.
@@ -7,9 +9,11 @@ The bound itself is `sum_walkExp_localTimeOn_rpow_le`; what the chaining needs
 is its `[0,∞]`-valued form, the lower integral against the law of the walk, and
 that is what this file supplies.
 -/
-import RWRS.Support.GoodWalkTail
-import RWRS.Support.SubVar
-import RWRS.Support.SubMoment
+public import RWRS.Support.GoodWalkTail
+public import RWRS.Support.SubVar
+public import RWRS.Support.SubMoment
+
+@[expose] public section
 
 namespace RWRS.Support
 

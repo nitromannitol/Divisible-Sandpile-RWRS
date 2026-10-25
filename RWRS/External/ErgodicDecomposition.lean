@@ -1,3 +1,5 @@
+module
+
 /-
 External input: the ergodic decomposition of a stationary random rooted graph,
 quoted in the proof of `lem:01-stationary` (`rwrs.tex:337-342`) from Benjamini
@@ -21,7 +23,9 @@ above and the product construction of `markIid`.
 Assumed here.  It enters only as an explicit hypothesis of the results whose
 proofs use it.
 -/
-import RWRS.Network
+public import RWRS.Network
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

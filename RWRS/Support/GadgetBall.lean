@@ -1,3 +1,5 @@
+module
+
 /-
 The balls of the gadget `H(m)`.
 
@@ -8,9 +10,11 @@ most one, so the depth is a lower bound for the distance to the root, and a site
 of the ball of radius `t` has depth at most `t`.  That bounds both the length of
 its word and its position inside its pipe, which is what makes the ball small.
 -/
-import RWRS.Support.Gadget
-import Mathlib.Data.Fintype.Vector
-import Mathlib.Data.Fintype.BigOperators
+public import RWRS.Support.Gadget
+public import Mathlib.Data.Fintype.Vector
+public import Mathlib.Data.Fintype.BigOperators
+
+@[expose] public section
 
 namespace RWRS.Support
 

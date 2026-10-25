@@ -1,3 +1,5 @@
+module
+
 /-
 The rooted graph underlying a rooted network, and the σ-algebra of its
 rerooting-invariant events read on the network.
@@ -15,7 +17,9 @@ and commutes with rerooting and with isomorphism, the pullback is a sub-σ-algeb
 of `invariantSigma m`, and the law of the rooted graph underlying an i.i.d.
 marked network is the law of the rooted graph.
 -/
-import RWRS.Support.Marking
+public import RWRS.Support.Marking
+
+@[expose] public section
 
 namespace RWRS.Support
 

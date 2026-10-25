@@ -1,3 +1,5 @@
+module
+
 /-
 The dichotomy at a vertex, and the first-visit comparison behind the two
 no-dominance lemmas of `sec:supercritical` and `sec:critical`.
@@ -12,7 +14,9 @@ when it is unbounded the escape limit vanishes at every vertex, by
 connectedness.  And the defect is at most `J + escapeProb J x · E_o[L_n(o)]`,
 so a vanishing escape limit makes `E_x[L_n(o)]/E_o[L_n(o)] → 1`.
 -/
-import RWRS.Support.LibraryBridge
+public import RWRS.Support.LibraryBridge
+
+@[expose] public section
 
 namespace RWRS.Support
 

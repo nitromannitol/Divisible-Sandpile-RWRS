@@ -1,3 +1,5 @@
+module
+
 /-
 The failure case of Step 1 costs nothing.
 
@@ -5,8 +7,10 @@ If no usable stage carries a good trap and the walk leaves `K` before the
 horizon, then the capped rule stops at a site outside `K`, where the killed
 potential of `K` vanishes.
 -/
-import RWRS.Support.DTStageFire
-import RWRS.Support.DTPotential
+public import RWRS.Support.DTStageFire
+public import RWRS.Support.DTPotential
+
+@[expose] public section
 
 open scoped Classical ENNReal
 

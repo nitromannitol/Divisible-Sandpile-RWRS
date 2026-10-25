@@ -1,3 +1,5 @@
+module
+
 /-
 The stage-block bookkeeping of Step 1 of `prop:doubly-transient-really-general`.
 
@@ -6,7 +8,9 @@ stage centre is part of the used set, the used set grows, and the centre of a
 finite stage is admissible for the sites used before it.  Admissibility caps
 the Green weights of the used set at the centre, so none of them is infinite.
 -/
-import RWRS.Support.DTUnconstrained
+public import RWRS.Support.DTUnconstrained
+
+@[expose] public section
 
 open scoped ENNReal
 

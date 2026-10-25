@@ -1,13 +1,17 @@
+module
+
 /-
 The change of variable between a mass field and its excess, which is what turns
 the optimal stopping theorem into the explosion theorem.
 -/
-import RWRS.Support.OSParts
-import RWRS.Frozen.RWInfinite
-import RWRS.Support.ErgSubFinal
-import RWRS.Support.Explosion
-import RWRS.Support.Truncation
-import RWRS.Support.SubStab
+public import RWRS.Support.OSParts
+public import RWRS.Frozen.RWInfinite
+public import RWRS.Support.ErgSubFinal
+public import RWRS.Support.Explosion
+public import RWRS.Support.Truncation
+public import RWRS.Support.SubStab
+
+@[expose] public section
 
 namespace RWRS.Support
 

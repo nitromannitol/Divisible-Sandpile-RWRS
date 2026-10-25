@@ -1,3 +1,5 @@
+module
+
 /-
 Cited input: the universal heat kernel bound on a bounded-degree graph,
 `sup_x P_x(X_n = x) ≤ C n^{-1/2}`, quoted in `rwrs.tex:144-149` from
@@ -9,9 +11,11 @@ Proved here on every infinite connected graph (`heatKernelBoundedDegree_of_conne
 via the shared library's Nash-inequality machinery); no hypothesis of any
 frozen statement carries it any longer.
 -/
-import RWRS.Setting
-import RWRS.Support.LibraryBridge
-import LatticeProb.Graph.OnDiagonal
+public import RWRS.Setting
+public import RWRS.Support.LibraryBridge
+public import LatticeProb.Graph.OnDiagonal
+
+@[expose] public section
 
 -- FROZEN-STATEMENT-BEGIN
 /-- Example 5.14 of the cited notes, as `rwrs.tex` quotes it: on graphs of

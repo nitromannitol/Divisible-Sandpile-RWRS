@@ -1,10 +1,14 @@
+module
+
 /-
 The Paley--Zygmund inequality, used twice in `rwrs.tex`: in
 `lem:positive-part` and again in `prop:critical`.
 -/
-import RWRS.Setting
-import Mathlib.MeasureTheory.Function.L2Space
-import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import RWRS.Setting
+public import Mathlib.MeasureTheory.Function.L2Space
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+
+@[expose] public section
 
 open MeasureTheory
 

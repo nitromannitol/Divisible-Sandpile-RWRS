@@ -1,3 +1,5 @@
+module
+
 /-
 The spherically symmetric tree in which a vertex at depth `n` has `b n`
 children, built as the words whose entry at position `i` is a child index at
@@ -5,8 +7,10 @@ depth `i`.  Adjacency is appending one letter, so the graph is a tree: a cut
 function separates the two ends of any edge, and every edge is therefore a
 bridge.
 -/
-import RWRS.Support.Countable
-import Mathlib.Combinatorics.SimpleGraph.Acyclic
+public import RWRS.Support.Countable
+public import Mathlib.Combinatorics.SimpleGraph.Acyclic
+
+@[expose] public section
 
 namespace RWRS.Support
 

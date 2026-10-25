@@ -1,3 +1,5 @@
+module
+
 /-
 The clock `H_α(n) = ∑_{k<n} (k ∨ 1)^{-α}` of `eq:local-time-ub`, and its three
 regimes.
@@ -7,8 +9,10 @@ and above it the sum converges.  The first two are telescoping comparisons,
 by Bernoulli's inequality for a concave power and by `log x ≤ x-1`; the third is
 the convergence of the `p`-series.
 -/
-import RWRS.Support.LocalTimeCount
-import Mathlib.Analysis.PSeries
+public import RWRS.Support.LocalTimeCount
+public import Mathlib.Analysis.PSeries
+
+@[expose] public section
 
 namespace RWRS.Support
 

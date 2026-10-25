@@ -1,3 +1,5 @@
+module
+
 /-
 The clock `H_α(n) = ∑_{k<n} (k ∨ 1)^{-α}` of `eq:local-time-ub` is `o(n)`.
 
@@ -7,7 +9,9 @@ at it like `log n`, and above it it converges; in all three regimes it is
 bounded by a constant times a power of `n` with exponent strictly below one,
 and such a power is eventually below any positive multiple of `n`.
 -/
-import RWRS.Support.LocalTimeClock
+public import RWRS.Support.LocalTimeClock
+
+@[expose] public section
 
 namespace RWRS.Support
 

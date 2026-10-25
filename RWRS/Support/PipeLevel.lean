@@ -1,5 +1,9 @@
-import RWRS.Support.PipeEnergy
-import RWRS.Support.TrGood
+module
+
+public import RWRS.Support.PipeEnergy
+public import RWRS.Support.TrGood
+
+@[expose] public section
 
 /-!
 # Level counts and the pipe flow's energy

@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 5.3 of `rwrs.tex`, frozen.  `rwrs.tex:600-605` (label
 `lem:positive-part`):
@@ -12,7 +14,9 @@ The constant is universal, so it is bound before the probability space, the
 index set, and the variables.  `B` is the nonnegative square root of the sum of
 the variances, which is how the paper's `B^2` and `B` are used.
 -/
-import RWRS.Support.PositivePart
+public import RWRS.Support.PositivePart
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

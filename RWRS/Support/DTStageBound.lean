@@ -1,5 +1,9 @@
-import RWRS.Support.DTStageHitRew
-import RWRS.Support.DTBias
+module
+
+public import RWRS.Support.DTStageHitRew
+public import RWRS.Support.DTBias
+
+@[expose] public section
 
 /-!
 # Per-stage conditional bias bound

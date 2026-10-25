@@ -1,6 +1,10 @@
-import RWRS.Support.DTStopMeas
-import LatticeProb.Graph.MarkovAE
-import LatticeProb.Graph.PathSpace
+module
+
+public import RWRS.Support.DTStopMeas
+public import LatticeProb.Graph.MarkovAE
+public import LatticeProb.Graph.PathSpace
+
+@[expose] public section
 
 /-!
 # Strong Markov property for indicators

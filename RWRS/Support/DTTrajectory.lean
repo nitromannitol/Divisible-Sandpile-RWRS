@@ -1,3 +1,5 @@
+module
+
 /-
 The per-trajectory conditional estimate of Step 1.
 
@@ -6,12 +8,14 @@ of the trap potential at the capped rule splits over the hit events of the
 usable stages; each of them contributes at most `-8m` from its own block and the
 bias `B₀` from the earlier ones, and the failure case contributes nothing.
 -/
-import RWRS.Support.DTStageBound
-import RWRS.Support.DTStagePartition
-import RWRS.Support.DTStageHitRew
-import RWRS.Support.DTNoHitZero
-import RWRS.Support.DTStageSites
-import RWRS.Support.DTWalkBlocks
+public import RWRS.Support.DTStageBound
+public import RWRS.Support.DTStagePartition
+public import RWRS.Support.DTStageHitRew
+public import RWRS.Support.DTNoHitZero
+public import RWRS.Support.DTStageSites
+public import RWRS.Support.DTWalkBlocks
+
+@[expose] public section
 
 open scoped Classical
 open MeasureTheory

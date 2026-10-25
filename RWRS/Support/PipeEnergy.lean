@@ -1,4 +1,8 @@
-import RWRS.Support.PipeDiv
+module
+
+public import RWRS.Support.PipeDiv
+
+@[expose] public section
 
 /-!
 # Energy of the unit flow on the tree of pipes

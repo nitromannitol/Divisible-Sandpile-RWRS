@@ -1,3 +1,5 @@
+module
+
 /-
 The background of `lem:moment-sharpness`: a weighted sum of independent centred
 masses is small with high probability.
@@ -8,7 +10,9 @@ bounded part has variance at most `M^2` times the sum of the squared weights, so
 Chebyshev's inequality controls it.  Both halves use the weighted-sum machinery
 of `prop:critical`(a).
 -/
-import RWRS.Support.SecondMoment
+public import RWRS.Support.SecondMoment
+
+@[expose] public section
 
 namespace RWRS.Support
 

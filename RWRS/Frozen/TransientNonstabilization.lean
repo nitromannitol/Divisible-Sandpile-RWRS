@@ -1,3 +1,5 @@
+module
+
 /-
 Theorem 6.8 of `rwrs.tex`, frozen.  `rwrs.tex:1575-1577` (label
 `thm:transient-nonstab`):
@@ -13,12 +15,14 @@ graph" carry in this paper (`ssec:notation`).  Transience is `g(o,o) < ∞`,
 "bounded from below" is an almost sure lower bound for the marginal, and
 `u_∞(o) = ∞` is the `[0,∞]`-value `⊤`.
 -/
-import RWRS.Support.CombOdometer
-import RWRS.Support.ProbHelpers
-import RWRS.Support.Explosion
-import RWRS.Support.Pareto
-import RWRS.Frozen.CombEstimates
-import RWRS.Frozen.TransientGoodPipes
+public import RWRS.Support.CombOdometer
+public import RWRS.Support.ProbHelpers
+public import RWRS.Support.Explosion
+public import RWRS.Support.Pareto
+public import RWRS.Frozen.CombEstimates
+public import RWRS.Frozen.TransientGoodPipes
+
+@[expose] public section
 
 open MeasureTheory Filter RWRS.Support
 open scoped ENNReal

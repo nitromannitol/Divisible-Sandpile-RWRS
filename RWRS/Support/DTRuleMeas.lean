@@ -1,10 +1,14 @@
+module
+
 /-
 Measurability of the Step-1 rule in the scenery: for a fixed trajectory, the
 level sets of the rule are measurable, because membership in the rule set
 is, in the scenery, a single trap event.
 -/
-import RWRS.Support.DTStages
-import RWRS.Support.DTBlocks
+public import RWRS.Support.DTStages
+public import RWRS.Support.DTBlocks
+
+@[expose] public section
 
 open MeasureTheory
 

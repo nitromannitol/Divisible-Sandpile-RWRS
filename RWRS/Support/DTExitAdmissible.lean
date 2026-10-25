@@ -1,5 +1,9 @@
-import RWRS.Support.DTAdmissible
-import LatticeProb.Graph.ExitTime
+module
+
+public import RWRS.Support.DTAdmissible
+public import LatticeProb.Graph.ExitTime
+
+@[expose] public section
 
 /-!
 # Exit from the non-admissible set

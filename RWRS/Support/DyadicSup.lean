@@ -1,3 +1,5 @@
+module
+
 /-
 The block bound of `lem:dyadic`.
 
@@ -14,7 +16,9 @@ singletons: the fluctuation reads the scenery along the trajectory, and
 `(ξ, X) ↦ ξ(X_k)` is measurable on the product exactly because the vertex set
 is countable with measurable singletons.
 -/
-import RWRS.Support.Dyadic
+public import RWRS.Support.Dyadic
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

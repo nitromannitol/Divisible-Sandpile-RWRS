@@ -1,5 +1,9 @@
-import RWRS.Support.DTTrapFamily
-import RWRS.Support.Truncation
+module
+
+public import RWRS.Support.DTTrapFamily
+public import RWRS.Support.Truncation
+
+@[expose] public section
 
 /-!
 # Trap threshold and mass constants

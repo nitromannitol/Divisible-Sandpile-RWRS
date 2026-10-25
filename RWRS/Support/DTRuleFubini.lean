@@ -1,8 +1,12 @@
-import RWRS.Support.DTRuleMeas
-import RWRS.Support.DTRuleBound
-import RWRS.Support.DTFubini
-import RWRS.Support.Critical
-import RWRS.Scenery
+module
+
+public import RWRS.Support.DTRuleMeas
+public import RWRS.Support.DTRuleBound
+public import RWRS.Support.DTFubini
+public import RWRS.Support.Critical
+public import RWRS.Scenery
+
+@[expose] public section
 
 /-!
 # The Fubini exchange for the trap rule

@@ -1,3 +1,5 @@
+module
+
 /-
 Step 1 of `prop:doubly-transient-really-general`: the annealed explosion.
 
@@ -6,9 +8,11 @@ estimate: for every level `m` the mean value at a suitable horizon is at least
 `(9/2)m` minus a constant of the scenery law alone, so the annealed value is
 infinite.
 -/
-import RWRS.Support.DTAnneal
-import RWRS.Support.DTConstants
-import RWRS.Support.DTLeave
+public import RWRS.Support.DTAnneal
+public import RWRS.Support.DTConstants
+public import RWRS.Support.DTLeave
+
+@[expose] public section
 
 open scoped Classical ENNReal
 open MeasureTheory

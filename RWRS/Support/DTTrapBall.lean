@@ -1,3 +1,5 @@
+module
+
 /-
 The uniform local trap condition on a bounded-degree graph.
 
@@ -7,9 +9,11 @@ at most `d`, the ball `B(y,R)` with `R = ceil(L d)` is a trap set for the level
 induces is connected, and the walk started at the centre spends at least `R + 1`
 steps in it, each of inverse-degree weight at least `1/d`.
 -/
-import RWRS.Support.Transience
-import RWRS.Support.BallWalk
-import RWRS.Support.SharpBall
+public import RWRS.Support.Transience
+public import RWRS.Support.BallWalk
+public import RWRS.Support.SharpBall
+
+@[expose] public section
 
 namespace RWRS.Support
 

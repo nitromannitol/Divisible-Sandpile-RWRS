@@ -1,3 +1,5 @@
+module
+
 /-
 Theorem 1.2 of `rwrs.tex`, frozen.  `rwrs.tex:117-127` (label `thm:explosion`):
 
@@ -13,10 +15,12 @@ Theorem 1.2 of `rwrs.tex`, frozen.  `rwrs.tex:117-127` (label `thm:explosion`):
 paper's exclusion of the indeterminate case.  The symmetry of `σ(v)-1` is the
 symmetry of the law of `σ` shifted by `1`.
 -/
-import RWRS.Setting
-import RWRS.Support.OSShift
-import RWRS.Frozen.ConvexityReduction
-import RWRS.Frozen.Supercritical
+public import RWRS.Setting
+public import RWRS.Support.OSShift
+public import RWRS.Frozen.ConvexityReduction
+public import RWRS.Frozen.Supercritical
+
+@[expose] public section
 
 open MeasureTheory
 

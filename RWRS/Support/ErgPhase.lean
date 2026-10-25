@@ -1,3 +1,5 @@
+module
+
 /-
 The conditioning event of the phase transition on a stationary graph.
 
@@ -9,7 +11,9 @@ event `B` has the same probability as `A`, and conditioning on a
 rerooting-invariant event of the rooted GRAPH leaves the marked law an i.i.d.
 marking of a stationary law of rooted graphs, with the same mark law.
 -/
-import RWRS.Support.ErgCondLaw
+public import RWRS.Support.ErgCondLaw
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,12 +1,16 @@
+module
+
 /-
 Domination bounds for the payoff collected by the Step-1 rule and for the
 killed potential, in terms of the scenery on the finite set `K`.
 -/
-import RWRS.Support.DTStages
-import RWRS.Support.NestedLower
-import RWRS.Support.DTPotential
-import RWRS.Support.GreenUnique
-import RWRS.Support.KilledGreen
+public import RWRS.Support.DTStages
+public import RWRS.Support.NestedLower
+public import RWRS.Support.DTPotential
+public import RWRS.Support.GreenUnique
+public import RWRS.Support.KilledGreen
+
+@[expose] public section
 
 open MeasureTheory
 

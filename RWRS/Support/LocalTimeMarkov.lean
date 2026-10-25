@@ -1,3 +1,5 @@
+module
+
 /-
 The Markov property for the finite-horizon walk average, in the form the
 local-time moments of `lem:local-time` need.
@@ -7,8 +9,10 @@ Markov property at a fixed time is an induction on that time: conditioning on
 the position at time `k` costs the heat kernel and restarts the average at that
 position with the remaining horizon.
 -/
-import RWRS.Support.Walk
-import RWRS.Support.Green
+public import RWRS.Support.Walk
+public import RWRS.Support.Green
+
+@[expose] public section
 
 namespace RWRS.Support
 

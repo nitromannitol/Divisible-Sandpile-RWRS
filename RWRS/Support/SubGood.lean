@@ -1,3 +1,5 @@
+module
+
 /-
 `eq:w-tail` of `prop:subcritical` on the good-walk event.
 
@@ -8,8 +10,10 @@ disposal of the chaining, which is all the later tail integration uses; the
 exponent `2n` is chosen at the end large enough that the term is summable in
 the scale.
 -/
-import RWRS.Support.SubGauss
-import RWRS.Support.SubVar
+public import RWRS.Support.SubGauss
+public import RWRS.Support.SubVar
+
+@[expose] public section
 
 namespace RWRS.Support
 

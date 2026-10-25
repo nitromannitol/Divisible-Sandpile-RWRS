@@ -1,3 +1,5 @@
+module
+
 /-
 The boundary value problem on the comb, and Kirchhoff's node law.
 
@@ -11,7 +13,9 @@ identities the comb estimates are read from:
 * the node law `I_j = I_{j+1} + (B-1) V_j / L_{j+1}` at `b_j` for `1 ≤ j < n`,
   and `1 = I_1 + (B-1) V_0 / L_1 + [e] V_0` at the root.
 -/
-import RWRS.Support.CombStruct
+public import RWRS.Support.CombStruct
+
+@[expose] public section
 
 namespace RWRS.Support
 

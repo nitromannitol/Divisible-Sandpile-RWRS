@@ -1,4 +1,8 @@
-import RWRS.Support.DTAgreement
+module
+
+public import RWRS.Support.DTAgreement
+
+@[expose] public section
 
 /-!
 # Converting `ℕ∞` stage-time bounds to `ℕ`

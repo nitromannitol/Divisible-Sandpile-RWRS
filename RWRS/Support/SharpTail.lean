@@ -1,3 +1,5 @@
+module
+
 /-
 Two facts about divergent series in `[0,∞]`, used in Steps 4 and 6 of
 `lem:moment-sharpness`.
@@ -12,7 +14,9 @@ Markov's inequality for series.
 The same inequality gives the second fact: a divergent lower bound valid from
 some index on still forces divergence.
 -/
-import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+public import Mathlib.Topology.Algebra.InfiniteSum.ENNReal
+
+@[expose] public section
 
 open scoped ENNReal
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The Step-1 rule capped at `ℓ` stages, matching the paper's `τ_m = T_{J_m}`
 with `J_m ≤ ℓ`: stop at the first stage among the first `ℓ` whose trap is
@@ -8,9 +10,11 @@ first `ℓ` traps is good the rule stops at the exit from `K` or at the
 horizon, where the trap potential vanishes or the walk is outside `K`, so
 no late-stage term enters the bias estimate.
 -/
-import RWRS.Support.DTStages
-import RWRS.Support.DTBlocks
-import RWRS.Support.DTRuleMeas
+public import RWRS.Support.DTStages
+public import RWRS.Support.DTBlocks
+public import RWRS.Support.DTRuleMeas
+
+@[expose] public section
 
 open MeasureTheory
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The finite-volume values increase to the odometer, and the continuation
 inequality `eq:continuation` of `sec:doubly-transient`.
@@ -7,7 +9,9 @@ limit of its truncations, which are bounded rules, so the finite-volume value is
 below the odometer; and the ball of radius `n` already carries the odometer at
 horizon `n`, so the finite-volume values increase to it.
 -/
-import RWRS.Support.BallWalk
+public import RWRS.Support.BallWalk
+
+@[expose] public section
 
 namespace RWRS.Support
 

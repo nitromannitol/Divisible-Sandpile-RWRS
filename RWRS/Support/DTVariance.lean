@@ -1,3 +1,5 @@
+module
+
 /-
 Step 2 of `prop:doubly-transient-really-general`: on a doubly transient graph an
 infinite annealed value forces an almost surely infinite value.
@@ -12,8 +14,10 @@ tending to one, and `f_K ≤ u_∞`; hence `u_∞` exceeds every level with
 probability one, and the intersection over the integer levels is the event that
 it is infinite.
 -/
-import RWRS.Support.Convexity
-import RWRS.Support.EfronStein
+public import RWRS.Support.Convexity
+public import RWRS.Support.EfronStein
+
+@[expose] public section
 
 namespace RWRS.Support
 

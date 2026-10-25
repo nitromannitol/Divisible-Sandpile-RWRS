@@ -1,3 +1,5 @@
+module
+
 /-
 The second-moment step of `lem:moment-sharpness`.
 
@@ -8,8 +10,10 @@ the probability that some good site occurs, and the elementary inequality
 `min(s,1)/2 ≤ s/(1+s)` turns the resulting ratio into the paper's
 `c min(|B| p, 1)`.
 -/
-import RWRS.Support.PaleyZygmund
-import RWRS.Support.MomentIneq
+public import RWRS.Support.PaleyZygmund
+public import RWRS.Support.MomentIneq
+
+@[expose] public section
 
 namespace RWRS.Support
 

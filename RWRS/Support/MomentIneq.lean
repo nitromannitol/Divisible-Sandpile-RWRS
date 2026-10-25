@@ -1,3 +1,5 @@
+module
+
 /-
 Markov's and Chebyshev's inequalities against a Bochner integral.
 
@@ -6,8 +8,10 @@ level set; `ofReal_integral_eq_lintegral_ofReal` turns that lower integral into
 the Bochner integral, which is the form the background control of
 `lem:moment-sharpness` uses.
 -/
-import RWRS.Support.Critical
-import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
+public import RWRS.Support.Critical
+public import Mathlib.MeasureTheory.Integral.Lebesgue.Basic
+
+@[expose] public section
 
 namespace RWRS.Support
 

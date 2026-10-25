@@ -1,12 +1,16 @@
+module
+
 /-
 The stopping value is bounded by the Green function against the positive part of
 the scenery, which is what makes the mean odometer finite when the total
 inverse-degree time is finite.
 -/
-import RWRS.Support.KernelSum
-import RWRS.Support.Representation
-import RWRS.Support.HeatBasic
-import RWRS.Scenery
+public import RWRS.Support.KernelSum
+public import RWRS.Support.Representation
+public import RWRS.Support.HeatBasic
+public import RWRS.Scenery
+
+@[expose] public section
 
 open scoped ENNReal
 

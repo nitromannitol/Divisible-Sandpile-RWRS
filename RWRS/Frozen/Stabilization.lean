@@ -1,3 +1,5 @@
+module
+
 /-
 Theorem 1.3 of `rwrs.tex`, frozen.  `rwrs.tex:131-140` (label `thm:stab`):
 
@@ -24,9 +26,11 @@ and which part (i) reaches through `prop:subcritical`, and the bounded-degree
 heat kernel bound quoted at `rwrs.tex:144-149`, are all proved outright in
 `RWRS/External/`, so none of the three is a hypothesis here.
 -/
-import RWRS.Support.SubStabPoly
-import RWRS.External.CarneVaropoulosProved
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import RWRS.Support.SubStabPoly
+public import RWRS.External.CarneVaropoulosProved
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

@@ -1,9 +1,13 @@
+module
+
 /-
 Elementary facts about the parallel toppling procedure: the odometer
 recursion in the form `eq:u-update`, monotonicity of the odometer, and the
 identity `σ_n = σ + Δu_n` used throughout Section 3 of `rwrs.tex`.
 -/
-import RWRS.Setting
+public import RWRS.Setting
+
+@[expose] public section
 
 namespace RWRS.Support
 

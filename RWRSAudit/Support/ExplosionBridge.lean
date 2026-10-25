@@ -1,6 +1,10 @@
-import Mathlib
-import RWRS.MainTheorems
-import RWRSAudit.Explosion.SolutionBasic
+module
+
+public import Mathlib
+public import RWRS.MainTheorems
+public import RWRSAudit.Explosion.SolutionBasic
+
+@[expose] public section
 
 /-!
 # Bridge from the `Explosion` vocabulary to the repository

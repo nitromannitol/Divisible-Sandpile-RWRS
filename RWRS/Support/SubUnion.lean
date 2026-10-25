@@ -1,3 +1,5 @@
+module
+
 /-
 The union bound of `eq:Mk-tail-Ak` on the good-walk event, for `prop:subcritical`.
 
@@ -7,8 +9,10 @@ exceeds `u` then one increment exceeds `u/(k+1)`.  Summing `eq:w-tail` over the
 index set of those sub-intervals gives the tail of `Y_k`, for a fixed
 trajectory of the walk.
 -/
-import RWRS.Support.SubGood
-import RWRS.Support.SubBlock
+public import RWRS.Support.SubGood
+public import RWRS.Support.SubBlock
+
+@[expose] public section
 
 namespace RWRS.Support
 

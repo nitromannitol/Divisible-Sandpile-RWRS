@@ -1,3 +1,5 @@
+module
+
 /-
 Explosion in the supercritical regime (`prop:supercritical`).
 
@@ -7,7 +9,9 @@ and the walk-averaged fluctuation `∑_v g_n(x,v)(ξ(v) - E[ξ])`.  The weak law
 once the drift diverges the payoff cannot stay below any fixed level, and the
 event that it does has probability zero for every level.
 -/
-import RWRS.Support.WeakLaw
+public import RWRS.Support.WeakLaw
+
+@[expose] public section
 
 namespace RWRS.Support
 

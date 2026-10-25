@@ -1,5 +1,9 @@
-import RWRS.Support.DTCappedRule
-import RWRS.Support.DTPotential
+module
+
+public import RWRS.Support.DTCappedRule
+public import RWRS.Support.DTPotential
+
+@[expose] public section
 
 /-!
 # The annealed payoff identity for the capped rule

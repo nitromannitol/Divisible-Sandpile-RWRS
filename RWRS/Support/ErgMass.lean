@@ -1,3 +1,5 @@
+module
+
 /-
 The degree-weighted mass of an i.i.d. marked network, and the emission bound
 under a truncated configuration.
@@ -10,10 +12,12 @@ bounded by `M` every emission of every round is at most `M - 1`
 graph, a function of the mark at the root times a function of the rooted graph
 integrates as the product of the two integrals (`rwrs.tex:357`).
 -/
-import RWRS.Support.Toppling
-import RWRS.Support.Odometer
-import RWRS.Support.ErgCondLaw
-import RWRS.Support.Critical
+public import RWRS.Support.Toppling
+public import RWRS.Support.Odometer
+public import RWRS.Support.ErgCondLaw
+public import RWRS.Support.Critical
+
+@[expose] public section
 
 namespace RWRS.Support
 

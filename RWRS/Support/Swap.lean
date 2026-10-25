@@ -1,3 +1,5 @@
+module
+
 /-
 Rearranging the masses by a permutation of finitely many vertices changes the
 odometer by a bounded amount, so stabilization is an exchangeable event.
@@ -7,10 +9,12 @@ The difference of the two sceneries is a finite combination of the coboundaries
 optional stopping the payoff of a coboundary is bounded by twice the sup-norm of
 its potential, uniformly over the bounded stopping times.
 -/
-import RWRS.Support.OptionalStopping
-import RWRS.External.VoltageFunction
-import RWRS.Frozen.RWInfinite
-import RWRS.Support.Measurability
+public import RWRS.Support.OptionalStopping
+public import RWRS.External.VoltageFunction
+public import RWRS.Frozen.RWInfinite
+public import RWRS.Support.Measurability
+
+@[expose] public section
 
 namespace RWRS.Support
 

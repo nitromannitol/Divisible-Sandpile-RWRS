@@ -1,3 +1,5 @@
+module
+
 /-
 The stage sequence of the trap selection, at a horizon and inside a finite set.
 
@@ -11,7 +13,9 @@ what makes the stage times ordinary `ℕ`-valued stopping times: the recursion l
 for the first later time at which the walk is still inside `K` and admissible for
 the sites already used, and takes the horizon when there is none.
 -/
-import RWRS.Support.DTTrapFamily
+public import RWRS.Support.DTTrapFamily
+
+@[expose] public section
 
 namespace RWRS.Support
 

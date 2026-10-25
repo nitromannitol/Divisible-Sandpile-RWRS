@@ -1,3 +1,5 @@
+module
+
 /-
 The two conditional laws of `thm:stationary-phase`.
 
@@ -7,9 +9,11 @@ is again a stationary probability law carried by connected rooted graphs, the
 marked law is its i.i.d. marking by the SAME mark law, and stabilization has
 probability `1` under the first and `0` under the second.
 -/
-import RWRS.Support.ErgPhase
-import RWRS.Support.ErgMass
-import Mathlib.Probability.ConditionalProbability
+public import RWRS.Support.ErgPhase
+public import RWRS.Support.ErgMass
+public import Mathlib.Probability.ConditionalProbability
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The stationary random rooted graphs and networks of `rwrs.tex`, Section 2,
 after `BenjaminiCurien12`.
@@ -29,7 +31,9 @@ How the paper's objects are modelled here:
   (`rwrs.tex:252`).  At `m = 0` there are no marks and the definition is
   `def:ergodic-graph` for rooted graphs.
 -/
-import RWRS.Setting
+public import RWRS.Setting
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

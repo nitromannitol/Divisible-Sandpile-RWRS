@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 3.3 of `rwrs.tex`, frozen.  `rwrs.tex:429-438` (label
 `prop:finite-vol`):
@@ -24,7 +26,9 @@ carries its discrete measurable structure; the vertex set of a locally finite
 connected graph is countable, and the paper's walk on path space is the law of a
 sequence of vertices, which is a measure only for that structure.
 -/
-import RWRS.Support.FiniteVol
+public import RWRS.Support.FiniteVol
+
+@[expose] public section
 
 open MeasureTheory
 

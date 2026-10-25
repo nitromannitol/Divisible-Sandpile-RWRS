@@ -1,7 +1,11 @@
-import RWRS.Support.DTStageIntegrable
-import RWRS.Support.DTStageIntegral
-import RWRS.Support.DTCappedRule
-import RWRS.Support.DTUnconstrained
+module
+
+public import RWRS.Support.DTStageIntegrable
+public import RWRS.Support.DTStageIntegral
+public import RWRS.Support.DTCappedRule
+public import RWRS.Support.DTUnconstrained
+
+@[expose] public section
 
 /-!
 # Partition of the trapped integral over stage hit events

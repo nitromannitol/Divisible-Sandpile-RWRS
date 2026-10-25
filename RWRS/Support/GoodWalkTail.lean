@@ -1,3 +1,5 @@
+module
+
 /-
 Part (a) of `lem:good-walk`: the walk visits no vertex too often.
 
@@ -6,9 +8,11 @@ On the complement of the good-walk event some vertex is visited more than
 `N^{r(α+δ)}`; Markov's inequality against the local-time moments of
 `lem:local-time` then bounds the probability of that complement.
 -/
-import RWRS.Support.LocalTimeSum
-import RWRS.Support.NestedLower
-import RWRS.Support.DyadicSup
+public import RWRS.Support.LocalTimeSum
+public import RWRS.Support.NestedLower
+public import RWRS.Support.DyadicSup
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 6.15 of `rwrs.tex`, frozen.  `rwrs.tex:1919-1922` (label
 `prop:rec-growth`), under the setup of `sec:recurrent-nonstab`
@@ -19,9 +21,11 @@ The exponent `ρ` is the one the section chooses in `eq:rec-rho`
 hypotheses here; the upper half is what makes `s_k = ⌈R_{m_k}^ρ⌉` negligible
 against `R_{m_k}`, which is what the volume lower bound along `r_k` asserts.
 -/
-import RWRS.Support.RayGadget
-import RWRS.Frozen.GadgetGeometry
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import RWRS.Support.RayGadget
+public import RWRS.Frozen.GadgetGeometry
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+
+@[expose] public section
 
 open scoped ENNReal
 

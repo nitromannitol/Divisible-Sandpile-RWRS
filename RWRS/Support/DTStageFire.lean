@@ -1,3 +1,5 @@
+module
+
 /-
 # The capped rule fires at the first usable good stage
 
@@ -6,9 +8,11 @@ event (the first block whose trap fires) with `i` below the count of usable
 stages, the capped rule stops exactly at the stage-`i` time.  This is the
 per-trajectory identification of the rule with the stage selection of Step 1.
 -/
-import RWRS.Support.DTStageCount
-import RWRS.Support.DTStageEvents
-import RWRS.Support.DTNatConv
+public import RWRS.Support.DTStageCount
+public import RWRS.Support.DTStageEvents
+public import RWRS.Support.DTNatConv
+
+@[expose] public section
 
 namespace RWRS.Support
 

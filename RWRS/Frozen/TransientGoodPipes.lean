@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 6.9 of `rwrs.tex`, frozen.  `rwrs.tex:1661-1663` (label `lem:tr-good`),
 under the setup of `sec:transient-nonstab` (`rwrs.tex:1580-1600`):
@@ -11,7 +13,9 @@ of size at least `K L_n`.  The parameters are those the section fixes: `q` with
 `max(p,1) < q < 3`, `α` with `1/2 < α < min(1, 1/(q-1))`, the Pareto tail
 `P(Y ≥ t) = t^{-q}`, and the constant `K` of `prop:comb-estimates`(d).
 -/
-import RWRS.Support.TrGood
+public import RWRS.Support.TrGood
+
+@[expose] public section
 
 open MeasureTheory Filter
 open scoped ENNReal

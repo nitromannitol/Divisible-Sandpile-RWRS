@@ -1,8 +1,12 @@
+module
+
 /-
 The trap family of `def:trap-family` as data, and the geometry that makes the
 trap sets of far-apart centres disjoint.
 -/
-import RWRS.Support.DTBlocks
+public import RWRS.Support.DTBlocks
+
+@[expose] public section
 
 namespace RWRS.Support
 

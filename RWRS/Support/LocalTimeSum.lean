@@ -1,3 +1,5 @@
+module
+
 /-
 The sum over the vertices of the local-time moments.
 
@@ -6,7 +8,9 @@ leaves the moment at `v` itself, which the previous module bounds uniformly; the
 heat kernel from the start is a sub-probability on every finite set of targets,
 so the sum over the vertices costs only the horizon `n`.
 -/
-import RWRS.Support.LocalTimeMoment
+public import RWRS.Support.LocalTimeMoment
+
+@[expose] public section
 
 namespace RWRS.Support
 

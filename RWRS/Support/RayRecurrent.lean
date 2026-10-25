@@ -1,3 +1,5 @@
+module
+
 /-
 The ray with the gadgets is recurrent.
 
@@ -9,8 +11,10 @@ inside the set at level `k`, so the series law bounds the effective resistance
 from the root below by `k/2`, and an unbounded effective resistance is
 recurrence.
 -/
-import RWRS.Support.RayDegree
-import RWRS.Support.SeriesLaw
+public import RWRS.Support.RayDegree
+public import RWRS.Support.SeriesLaw
+
+@[expose] public section
 
 namespace RWRS.Support
 

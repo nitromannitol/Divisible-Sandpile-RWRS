@@ -1,3 +1,5 @@
+module
+
 /-
 The spike decomposition of `lem:moment-sharpness`.
 
@@ -6,8 +8,10 @@ rules, so its mean payoff is below the odometer; and the mean payoff splits into
 the drift, the mass at one distinguished site weighted by the finite-time Green
 function, and the background from every other site.  This is `eq:spike-decomp`.
 -/
-import RWRS.Support.Explosion
-import RWRS.Frozen.RWInfinite
+public import RWRS.Support.Explosion
+public import RWRS.Frozen.RWInfinite
+
+@[expose] public section
 
 namespace RWRS.Support
 

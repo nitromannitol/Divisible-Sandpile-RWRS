@@ -1,3 +1,5 @@
+module
+
 /-
 The moments of the odometer on a bounded-degree graph, for `thm:stab`(i).
 
@@ -8,8 +10,10 @@ The moments of the odometer on a bounded-degree graph, for `thm:stab`(i).
 `E[u_∞(x)^q] < ∞`."  The spectral dimension is `d_s = 1`, which the universal
 heat kernel bound on bounded-degree graphs supplies.
 -/
-import RWRS.Support.SubFinal
-import RWRS.Frozen.RWInfinite
+public import RWRS.Support.SubFinal
+public import RWRS.Frozen.RWInfinite
+
+@[expose] public section
 
 namespace RWRS.Support
 

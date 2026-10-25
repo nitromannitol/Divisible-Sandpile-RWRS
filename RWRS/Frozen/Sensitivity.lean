@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 5.5 of `rwrs.tex`, frozen.  `rwrs.tex:636-653` (label
 `lem:sensitivity`):
@@ -19,7 +21,9 @@ of the optimal stopping problem in the scenery, which `thm:RW` identifies with
 the odometer, and `u_∞(o;ξ)` is its supremum over bounded stopping times, taken
 in `[0,∞]`.  Transience at `o` is `g(o,o) < ∞`.
 -/
-import RWRS.Support.Sensitivity
+public import RWRS.Support.Sensitivity
+
+@[expose] public section
 
 open scoped ENNReal
 

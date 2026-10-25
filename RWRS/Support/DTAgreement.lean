@@ -1,5 +1,9 @@
-import RWRS.Support.DTStages
-import RWRS.Support.DTUnconstrained
+module
+
+public import RWRS.Support.DTStages
+public import RWRS.Support.DTUnconstrained
+
+@[expose] public section
 
 /-!
 # Agreement of the constrained and unconstrained stages

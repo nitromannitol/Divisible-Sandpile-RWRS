@@ -1,3 +1,5 @@
+module
+
 /-
 The voltage function of `prop:01-law` is a theorem, not an assumption, on a
 doubly transient graph.
@@ -14,9 +16,11 @@ the paper nor the reciprocity relation behind it is needed.
 The frozen `Prop` `RWRS.External.VoltageFunction` and every statement carrying it
 remain as stated; this file supplies a witness on transient graphs.
 -/
-import RWRS.External.VoltageFunction
-import RWRS.Support.LibraryBridge
-import LatticeProb.Network.Voltage
+public import RWRS.External.VoltageFunction
+public import RWRS.Support.LibraryBridge
+public import LatticeProb.Network.Voltage
+
+@[expose] public section
 
 namespace RWRS.Support
 

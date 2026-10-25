@@ -1,5 +1,9 @@
-import RWRS.Support.PipeTree
-import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
+module
+
+public import RWRS.Support.PipeTree
+public import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
+
+@[expose] public section
 
 /-!
 # Existence of the combinatorial parameters

@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 5.11 of `rwrs.tex`, frozen.  `rwrs.tex:997-999` (label
 `prop:short-clock`):
@@ -12,7 +14,9 @@ The inner supremum is taken in `[0,∞]` and the outer expectation is its
 `lintegral` against the i.i.d. law, so both finiteness assertions are that a
 value in `[0,∞]` is not `⊤`.
 -/
-import RWRS.Support.ShortClock
+public import RWRS.Support.ShortClock
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

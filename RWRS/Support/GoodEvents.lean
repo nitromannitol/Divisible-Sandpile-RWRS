@@ -1,3 +1,5 @@
+module
+
 /-
 The good events of `sec:recurrent-nonstab`: some site of a gadget carries a
 Pareto value above the threshold `K L_m`.
@@ -11,9 +13,11 @@ Borel-Cantelli lemma: a series bounded below by a positive constant diverges,
 and membership in the `limsup` of a sequence of sets is the infinitude of the
 index set.
 -/
-import RWRS.Support.Spike
-import LatticeProb.Prob.Blocks
-import Mathlib.Probability.BorelCantelli
+public import RWRS.Support.Spike
+public import LatticeProb.Prob.Blocks
+public import Mathlib.Probability.BorelCantelli
+
+@[expose] public section
 
 namespace RWRS.Support
 

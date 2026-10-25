@@ -1,3 +1,5 @@
+module
+
 /-
 Theorem 2.4 of `rwrs.tex`, frozen.  `rwrs.tex:268-274` (label
 `thm:stationary-phase`):
@@ -22,11 +24,13 @@ through `lem:01-stationary`, and through it the marking lemma, on the
 components of the ergodic decomposition, is proved outright, so it is not a
 hypothesis here.
 -/
-import RWRS.External.ErgodicDecomposition
-import RWRS.External.HeatKernelVanishing
-import RWRS.Frozen.ZeroOneStationary
-import RWRS.Support.ErgSubFinal
-import RWRS.Support.ErgCondNet
+public import RWRS.External.ErgodicDecomposition
+public import RWRS.External.HeatKernelVanishing
+public import RWRS.Frozen.ZeroOneStationary
+public import RWRS.Support.ErgSubFinal
+public import RWRS.Support.ErgCondNet
+
+@[expose] public section
 
 open MeasureTheory ProbabilityTheory
 

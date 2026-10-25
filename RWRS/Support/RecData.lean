@@ -1,3 +1,5 @@
+module
+
 /-
 Everything `sec:recurrent-nonstab` fixes before it builds the graph: the base
 `B`, the exponent `α = 1/(d_f-1)`, the exponent `ρ = δ/(2(d_f+1))` of the
@@ -5,10 +7,12 @@ attachment points, the constant `C_comb` of `prop:comb-estimates` and the
 constant `c_loc` of `cor:rec-loc`, and the depths and attachment points of the
 gadgets with the three conditions the section imposes on them.
 -/
-import RWRS.Support.RayVolume
-import RWRS.Support.GrowthExponent
-import RWRS.Frozen.RecLocal
-import RWRS.Frozen.CombEstimates
+public import RWRS.Support.RayVolume
+public import RWRS.Support.GrowthExponent
+public import RWRS.Frozen.RecLocal
+public import RWRS.Frozen.CombEstimates
+
+@[expose] public section
 
 namespace RWRS.Support
 

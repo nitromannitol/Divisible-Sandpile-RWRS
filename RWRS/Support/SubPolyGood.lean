@@ -1,3 +1,5 @@
+module
+
 /-
 The scenery levels and the good-walk event of `prop:poly-growth`.
 
@@ -10,7 +12,9 @@ radius `R_N` up to time `N`, so every level it meets is at most
 because a walk moves one step at a time, so every level it meets is at most
 `M_0 ∨ N^β`.  Those two bounds are the two regimes of Step 5.
 -/
-import RWRS.Support.SubPolyBound
+public import RWRS.Support.SubPolyBound
+
+@[expose] public section
 
 namespace RWRS.Support
 

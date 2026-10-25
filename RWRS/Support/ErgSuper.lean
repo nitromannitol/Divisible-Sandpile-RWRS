@@ -1,3 +1,5 @@
+module
+
 /-
 The conserved mass of an i.i.d. marked network, and the integrability of the
 mark law it forces.
@@ -6,9 +8,11 @@ The paper reads the conserved degree-weighted mass as `E[σ] E[1/deg(ρ)]`, and
 gets `E|σ| < ∞` from `E[|σ(ρ)|/deg(ρ)] < ∞` because the two factors are
 independent and the second is positive (`rwrs.tex:357`).
 -/
-import RWRS.Support.ErgCondNet
-import RWRS.Support.ErgFactor
-import RWRS.Support.ProbHelpers
+public import RWRS.Support.ErgCondNet
+public import RWRS.Support.ErgFactor
+public import RWRS.Support.ProbHelpers
+
+@[expose] public section
 
 namespace RWRS.Support
 

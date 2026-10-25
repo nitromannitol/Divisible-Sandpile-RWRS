@@ -1,7 +1,11 @@
-import Mathlib
-import RWRS.MainTheorems
-import RWRSAudit.Explosion.SolutionBasic
-import RWRSAudit.Support.ExplosionBridge
+module
+
+public import Mathlib
+public import RWRS.MainTheorems
+public import RWRSAudit.Explosion.SolutionBasic
+public import RWRSAudit.Support.ExplosionBridge
+
+@[expose] public section
 
 /-!
 # Solution: Explosion

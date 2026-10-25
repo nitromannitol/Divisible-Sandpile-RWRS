@@ -1,3 +1,5 @@
+module
+
 /-
 The increments of the fluctuation over a discrete interval, and their tail.
 
@@ -9,8 +11,10 @@ weights are the local times divided by the degrees, and in that form the three
 parts of `lem:fuk-nagaev` apply to it site by site, the scenery being
 independent of the walk.
 -/
-import RWRS.Support.FukNagaevWeighted
-import RWRS.Support.GoodWalkMoment
+public import RWRS.Support.FukNagaevWeighted
+public import RWRS.Support.GoodWalkMoment
+
+@[expose] public section
 
 namespace RWRS.Support
 

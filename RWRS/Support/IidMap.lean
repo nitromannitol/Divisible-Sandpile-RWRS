@@ -1,3 +1,5 @@
+module
+
 /-
 One identification of the i.i.d. law of a scenery.
 
@@ -6,7 +8,9 @@ that subset.  This is what carries a statement about the scenery on a graph
 whose vertex set is a subset of a larger index set to the same statement on the
 larger one.
 -/
-import RWRS.Scenery
+public import RWRS.Scenery
+
+@[expose] public section
 
 open MeasureTheory
 

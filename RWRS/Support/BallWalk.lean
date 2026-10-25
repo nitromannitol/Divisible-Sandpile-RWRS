@@ -1,9 +1,13 @@
+module
+
 /-
 The two geometric facts the upper half of `thm:nested-vol` needs: the balls of a
 locally finite graph are finite, and a walk average of length `n` sees only the
 trajectories that stay in the ball of radius `k` at time `k`.
 -/
-import RWRS.Support.FiniteVol
+public import RWRS.Support.FiniteVol
+
+@[expose] public section
 
 namespace RWRS.Support
 

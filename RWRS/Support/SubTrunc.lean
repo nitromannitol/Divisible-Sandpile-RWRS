@@ -1,3 +1,5 @@
+module
+
 /-
 The reduction that opens the proof of `prop:subcritical`: replacing `ξ(v)` by
 `max(ξ(v), -M)`.
@@ -15,9 +17,11 @@ increases to that of `ν`, so some level makes the mean a negative real; and the
 `p`-th absolute moment of the truncated marginal is finite as soon as the
 `p`-th moment of the positive part of `ν` is.
 -/
-import RWRS.Support.DyadicSup
-import RWRS.Support.Explosion
-import RWRS.Support.VoltageIdentity
+public import RWRS.Support.DyadicSup
+public import RWRS.Support.Explosion
+public import RWRS.Support.VoltageIdentity
+
+@[expose] public section
 
 namespace RWRS.Support
 

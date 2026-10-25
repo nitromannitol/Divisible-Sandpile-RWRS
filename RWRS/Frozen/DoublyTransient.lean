@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 5.8 of `rwrs.tex`, frozen.  `rwrs.tex:777-781` (label
 `prop:doubly-transient-really-general`):
@@ -13,8 +15,10 @@ Proposition 5.8 of `rwrs.tex`, frozen.  `rwrs.tex:777-781` (label
 Transience is `g(o,o) < ∞` at every vertex, double transience is
 `RWRS.DoublyTransient`, and the trap condition is `def:trap-family`.
 -/
-import RWRS.Setting
-import RWRS.Support.DTStepOne
+public import RWRS.Setting
+public import RWRS.Support.DTStepOne
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

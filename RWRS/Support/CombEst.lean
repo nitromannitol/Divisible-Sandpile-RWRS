@@ -1,3 +1,5 @@
+module
+
 /-
 Parts (a), (b) and (e) of `prop:comb-estimates`: the continuation resistance,
 the trunk currents and their exponential growth.
@@ -9,7 +11,9 @@ resistance bound `V_j ≤ 2 I_{j+1} L_{j+1}` is the trunk step together with the
 node law at `b_{j+1}`, which says that the `B-1` side currents alone already
 account for `(B-1) V_{j+1} / L_{j+2}` of `I_{j+1}`, and `L_{j+2} ≤ (B-1)L_{j+1}`.
 -/
-import RWRS.Support.CombVolt
+public import RWRS.Support.CombVolt
+
+@[expose] public section
 
 namespace RWRS.Support
 

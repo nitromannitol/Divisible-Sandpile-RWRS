@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 6.3 of `rwrs.tex`, frozen.  `rwrs.tex:1453-1456` (label
 `ex:finite-perturbation`):
@@ -12,7 +14,9 @@ Lemma 6.3 of `rwrs.tex`, frozen.  `rwrs.tex:1453-1456` (label
 `u_∞(x)` and `g(x,o)` are both `[0,∞]`-valued, so the identity is exact and
 carries the case `g(x,o) = ∞`.  Recurrence is `g(o,o) = ∞`.
 -/
-import RWRS.Support.HeatBasic
+public import RWRS.Support.HeatBasic
+
+@[expose] public section
 
 open scoped ENNReal
 

@@ -1,3 +1,5 @@
+module
+
 /-
 Two properties of the voltage that `sec:recurrent-nonstab` uses before the
 construction: Kirchhoff's node law across a separating cut, and the maximum
@@ -10,7 +12,9 @@ The second says that a finite piece of `C` attached to the rest at a single
 vertex and containing neither the source nor a boundary vertex carries the
 constant voltage of its attachment point.
 -/
-import RWRS.Support.KilledGreen
+public import RWRS.Support.KilledGreen
+
+@[expose] public section
 
 namespace RWRS.Support
 

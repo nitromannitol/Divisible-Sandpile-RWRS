@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 5.15 of `rwrs.tex`, frozen.  `rwrs.tex:1124-1142` (label
 `lem:good-walk`):
@@ -23,10 +25,12 @@ before `x` and `k`; the `O(2^{-3k})` of (c) is likewise a constant bound before
 `x` and `k`.  The parameter `r` of (a) is the one the paper's constant `C_r`
 depends on; (c)'s conclusion does not mention `r`, so it is stated without one.
 -/
-import RWRS.Support.GoodWalkHolder
-import RWRS.Support.LocalTimeRegimes
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
+public import RWRS.Support.GoodWalkHolder
+public import RWRS.Support.LocalTimeRegimes
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import Mathlib.Analysis.SpecialFunctions.Log.Basic
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

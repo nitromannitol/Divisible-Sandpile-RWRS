@@ -1,3 +1,5 @@
+module
+
 /-
 Steps 4 and 5 of `prop:poly-growth`, instantiated at the levels of Step 1.
 
@@ -10,7 +12,9 @@ bound `eq:poly-Bernstein`, and with them the `k`-th block moment splits into the
 good-walk part, of size `NR_N^β` times the Bernstein probability, and the
 bad-walk part, of size `N^{1+β}` times the probability of the bad walk.
 -/
-import RWRS.Support.SubPolyScenery
+public import RWRS.Support.SubPolyScenery
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,8 +1,12 @@
+module
+
 /-
 The hit events of the stages and the no-hit event carry the whole scenery mass,
 so the total hit probability is one minus the failure probability.
 -/
-import RWRS.Support.DTStageIntegral
+public import RWRS.Support.DTStageIntegral
+
+@[expose] public section
 
 open scoped Classical
 open MeasureTheory

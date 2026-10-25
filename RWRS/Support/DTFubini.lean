@@ -1,3 +1,5 @@
+module
+
 /-
 The walk average commutes with an integral over the scenery.
 
@@ -8,7 +10,9 @@ as integrating the integrand first.  This is what lets Step 1 of
 `E_o[S_τ | ξ] = h_K(o) - E_o[h_K(X_τ) | ξ]`, which holds for each fixed scenery,
 to its mean over the scenery.
 -/
-import RWRS.Support.DTStages
+public import RWRS.Support.DTStages
+
+@[expose] public section
 
 namespace RWRS.Support
 

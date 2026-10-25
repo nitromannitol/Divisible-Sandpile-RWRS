@@ -1,3 +1,5 @@
+module
+
 /-
 Cited input: on an infinite locally finite connected graph the `n`-step
 return probability tends to zero, quoted in `rwrs.tex:319-322` and again in the
@@ -8,10 +10,12 @@ Proved here on every infinite connected graph (`heatKernelVanishing_of_connected
 and hence on every good rooted network (`heatKernelVanishing_of_netGood`); no
 hypothesis of any frozen statement carries it any longer.
 -/
-import RWRS.Setting
-import RWRS.Network
-import RWRS.Support.LibraryBridge
-import LatticeProb.Graph.HeatVanishing
+public import RWRS.Setting
+public import RWRS.Network
+public import RWRS.Support.LibraryBridge
+public import LatticeProb.Graph.HeatVanishing
+
+@[expose] public section
 
 open Filter Topology
 

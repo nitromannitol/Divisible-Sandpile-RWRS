@@ -1,15 +1,19 @@
+module
+
 /-
 The two per-trajectory bounds of Step 1: on the walk-good event the conditional
 estimate gains `-8m` on a set of scenery of mass at least three quarters, and on
 every trajectory that leaves `K` before the horizon it is at most zero.  On the
 remaining trajectories the estimate is bounded by a constant of `K`.
 -/
-import RWRS.Support.DTTrajectory
-import RWRS.Support.DTHitSum
-import RWRS.Support.DTNoHit
-import RWRS.Support.DTWalkGood
-import RWRS.Support.DTRuleBound
-import RWRS.Support.WeakLaw
+public import RWRS.Support.DTTrajectory
+public import RWRS.Support.DTHitSum
+public import RWRS.Support.DTNoHit
+public import RWRS.Support.DTWalkGood
+public import RWRS.Support.DTRuleBound
+public import RWRS.Support.WeakLaw
+
+@[expose] public section
 
 open scoped Classical ENNReal
 open MeasureTheory

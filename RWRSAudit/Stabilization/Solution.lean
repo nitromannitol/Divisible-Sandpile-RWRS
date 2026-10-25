@@ -1,7 +1,11 @@
-import Mathlib
-import RWRS.MainTheorems
-import RWRSAudit.Stabilization.SolutionBasic
-import RWRSAudit.Support.StabilizationBridge
+module
+
+public import Mathlib
+public import RWRS.MainTheorems
+public import RWRSAudit.Stabilization.SolutionBasic
+public import RWRSAudit.Support.StabilizationBridge
+
+@[expose] public section
 
 /-!
 # Solution: Stabilization

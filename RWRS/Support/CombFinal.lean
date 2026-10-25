@@ -1,3 +1,5 @@
+module
+
 /-
 `prop:comb-estimates` for the pipe lengths `L_j = ⌊B^{αj}⌋` of
 `ssec:comb-estimates`.
@@ -7,8 +9,10 @@ and `L_{j+1} ≤ (B-1)L_j` come from `B^α ≥ 4` and `2B^α ≤ B-1`, and the l
 terms `I_j L_j^2` are dominated by `4 (2B^{1-2α})^{n-j} I_n L_n^2`, a geometric
 series because `2B^{1-2α} < 1`.  The growth constant is `λ = B^{2α-1}/4`.
 -/
-import RWRS.Support.CombSum
-import RWRS.Support.CombArith
+public import RWRS.Support.CombSum
+public import RWRS.Support.CombArith
+
+@[expose] public section
 
 namespace RWRS.Support
 

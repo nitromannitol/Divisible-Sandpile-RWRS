@@ -1,3 +1,5 @@
+module
+
 /-
 The finite-horizon walk average on the lattice is the integral against the law
 of the trajectory.
@@ -8,9 +10,11 @@ integral over the first increment is the averaging operator.  The only thing
 that needs care is integrability, and it comes for free from the same induction
 run first in `[0,∞]`, where no integrability hypothesis is needed.
 -/
-import RWRS.Zd.Basic
-import LatticeProb.Walk.Markov
-import LatticeProb.Prob.InfinitePiSplit
+public import RWRS.Zd.Basic
+public import LatticeProb.Walk.Markov
+public import LatticeProb.Prob.InfinitePiSplit
+
+@[expose] public section
 
 open MeasureTheory LatticeProb
 open scoped ENNReal

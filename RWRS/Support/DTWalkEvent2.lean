@@ -1,4 +1,8 @@
-import RWRS.Support.DTWalkGood
+module
+
+public import RWRS.Support.DTWalkGood
+
+@[expose] public section
 
 /-!
 # The exit-based walk event of Step 1

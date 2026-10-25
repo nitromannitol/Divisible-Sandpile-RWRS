@@ -1,3 +1,5 @@
+module
+
 /-
 The Bochner form of the independence of the mark at the root from the rooted
 graph.
@@ -9,7 +11,9 @@ integrals.  This is what the paper uses to read the conserved mass as
 (`rwrs.tex:357`).  Integrability on the product comes from the non-negative form
 of the same identity.
 -/
-import RWRS.Support.ErgMass
+public import RWRS.Support.ErgMass
+
+@[expose] public section
 
 namespace RWRS.Support
 

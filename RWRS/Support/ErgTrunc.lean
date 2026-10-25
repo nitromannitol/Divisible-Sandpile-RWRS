@@ -1,3 +1,5 @@
+module
+
 /-
 Truncating the marks from above, for part (i) of `thm:stationary-phase`.
 
@@ -7,9 +9,11 @@ configuration, and its emissions are bounded by `M - 1`, which is what makes
 dominated convergence available.  The truncated marked network is the i.i.d.
 marking of the same rooted graph by the truncated mark law.
 -/
-import RWRS.Frozen.Recursion
-import RWRS.Support.ErgPhase
-import RWRS.Support.Explosion
+public import RWRS.Frozen.Recursion
+public import RWRS.Support.ErgPhase
+public import RWRS.Support.Explosion
+
+@[expose] public section
 
 namespace RWRS.Support
 

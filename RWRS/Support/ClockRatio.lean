@@ -1,3 +1,5 @@
+module
+
 /-
 The two ratios of `lem:clock-no-dom` and `lem:no-dominance`.
 
@@ -10,9 +12,11 @@ In the recurrent case each fixed vertex carries asymptotically the whole
 diagonal value, by `eventually_meanLocalTime_ge`, so any `m` vertices already
 carry `m` times half of it.
 -/
-import RWRS.Support.Recurrence
-import RWRS.Support.ShortClock
-import RWRS.Support.KernelSum
+public import RWRS.Support.Recurrence
+public import RWRS.Support.ShortClock
+public import RWRS.Support.KernelSum
+
+@[expose] public section
 
 namespace RWRS.Support
 

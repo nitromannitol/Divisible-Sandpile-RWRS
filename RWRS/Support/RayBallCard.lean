@@ -1,3 +1,5 @@
+module
+
 /-
 The part of `C_k` outside the comb is small.
 
@@ -6,8 +8,10 @@ point of the `k`-th gadget, and the gadgets are radially disjoint, so it lies in
 the ball of radius `s_k` around the root.  The volume upper bound of
 `prop:rec-growth` then bounds its number by `C_G s_k^{d_f}`.
 -/
-import RWRS.Support.RayTransport
-import RWRS.Support.RayGadget
+public import RWRS.Support.RayTransport
+public import RWRS.Support.RayGadget
+
+@[expose] public section
 
 namespace RWRS.Support
 

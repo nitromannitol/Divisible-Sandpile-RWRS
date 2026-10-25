@@ -1,3 +1,5 @@
+module
+
 /-
 Step 1 of `prop:poly-growth`: the scenery event has positive probability.
 
@@ -11,7 +13,9 @@ most `C_vol 2^{(i+1)d_f}` such vertices, so the shell contributes
 radius keeps the whole series geometric while leaving a factor `M_0^{-p(1-λ)}`
 in front, which is then made small.
 -/
-import RWRS.Support.SubPolyExp
+public import RWRS.Support.SubPolyExp
+
+@[expose] public section
 
 namespace RWRS.Support
 

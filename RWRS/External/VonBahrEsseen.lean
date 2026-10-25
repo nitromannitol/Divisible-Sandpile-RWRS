@@ -1,12 +1,16 @@
+module
+
 /-
 Cited input: the von Bahr--Esseen inequality, cited in the proof of
 `lem:fuk-nagaev` (`rwrs.tex:1096-1098`) as the source of part (a) of that lemma.
 Proved outright by the shared library (`LatticeProb.vonBahrEsseen`); no
 hypothesis of any frozen statement carries it any longer.
 -/
-import RWRS.Setting
-import Mathlib.Probability.Independence.Basic
-import LatticeProb.Prob.VonBahrEsseenSum
+public import RWRS.Setting
+public import Mathlib.Probability.Independence.Basic
+public import LatticeProb.Prob.VonBahrEsseenSum
+
+@[expose] public section
 
 open MeasureTheory
 

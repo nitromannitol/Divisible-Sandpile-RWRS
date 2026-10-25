@@ -1,3 +1,5 @@
+module
+
 /-
 Part (c) of `lem:good-walk`: Hölder combines the two previous parts.
 
@@ -8,7 +10,9 @@ the `(p-q)/p`-th power of the probability of the bad event.  Both factors are
 powers of `N = 2^{k+1}`, and the exponent of the second one is as negative as
 one likes once `r` is large, so the product decays faster than `2^{-3k}`.
 -/
-import RWRS.Support.GoodWalkMoment
+public import RWRS.Support.GoodWalkMoment
+
+@[expose] public section
 
 namespace RWRS.Support
 

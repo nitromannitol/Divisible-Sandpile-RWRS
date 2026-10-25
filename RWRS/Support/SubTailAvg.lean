@@ -1,3 +1,5 @@
+module
+
 /-
 The walk average of `eq:Mk-tail-Ak`, for `prop:subcritical`.
 
@@ -7,8 +9,10 @@ power sum of the local times of that interval and a term of order `2n` carrying
 only the length of the interval and the good-walk bound.  Averaging over the
 walk replaces the first by `eq:poly-moment` and leaves the second untouched.
 -/
-import RWRS.Support.SubUnion
-import RWRS.Support.SubAvg
+public import RWRS.Support.SubUnion
+public import RWRS.Support.SubAvg
+
+@[expose] public section
 
 namespace RWRS.Support
 

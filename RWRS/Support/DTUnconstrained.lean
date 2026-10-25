@@ -1,8 +1,12 @@
-import RWRS.Support.DTAdmissible
-import RWRS.Support.DTTrapFamily
-import RWRS.Support.DTExitAux
-import LatticeProb.Graph.MarkovAE
-import LatticeProb.Graph.ExitTime
+module
+
+public import RWRS.Support.DTAdmissible
+public import RWRS.Support.DTTrapFamily
+public import RWRS.Support.DTExitAux
+public import LatticeProb.Graph.MarkovAE
+public import LatticeProb.Graph.ExitTime
+
+@[expose] public section
 
 /-!
 # Unconstrained stage recursion

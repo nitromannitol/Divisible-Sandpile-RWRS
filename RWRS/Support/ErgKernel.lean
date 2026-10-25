@@ -1,3 +1,5 @@
+module
+
 /-
 The conditional law of the rooted graph given the rerooting-invariant events,
 integrated against a general non-negative function.
@@ -9,7 +11,9 @@ from indicators to every non-negative measurable function by the monotone class
 argument, carrying the measurability of `N ↦ ∫⁻ f dK N` for the σ-algebra of
 rerooting-invariant events along with it.
 -/
-import RWRS.Support.ErgGraph
+public import RWRS.Support.ErgGraph
+
+@[expose] public section
 
 namespace RWRS.Support
 

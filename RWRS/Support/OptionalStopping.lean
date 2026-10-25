@@ -1,3 +1,5 @@
+module
+
 /-
 Optional stopping for the finite-horizon walk average: for a nonnegative
 potential `f`, the payoff of the scenery `-Δf` stopped at a bounded stopping
@@ -5,7 +7,9 @@ time is `f(x) - E_x[f(X_τ)]`.  This is what makes the odometer insensitive to a
 coboundary, and it is the mechanism behind the transposition bound of the
 zero-one law.
 -/
-import RWRS.Support.Representation
+public import RWRS.Support.Representation
+
+@[expose] public section
 
 namespace RWRS.Support
 

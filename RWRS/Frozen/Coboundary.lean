@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 6.5 of `rwrs.tex`, frozen.  `rwrs.tex:1478-1480` (label
 `ex:coboundary`):
@@ -9,7 +11,9 @@ Lemma 6.5 of `rwrs.tex`, frozen.  `rwrs.tex:1478-1480` (label
 `u_∞(x)` lives in `[0,∞]` and is compared with `f(x)` pushed there by
 `ENNReal.ofReal`, which is the value of `f(x)` since `f ≥ 0`.
 -/
-import RWRS.Support.Representation
+public import RWRS.Support.Representation
+
+@[expose] public section
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 

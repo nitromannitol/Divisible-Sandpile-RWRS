@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 4.1 of `rwrs.tex`, frozen.  `rwrs.tex:491-495` (label
 `prop:01-law`):
@@ -13,9 +15,11 @@ read in `[0,∞]`, so `= ∞` is a value and not the junk of an unbounded real
 supremum; the scenery is the excess mass `ξ = σ - 1`, which is i.i.d. exactly
 when `σ` is.
 -/
-import RWRS.Support.Swap
-import LatticeProb.Prob.HewittSavage
-import RWRS.External.VoltageFunctionConnected
+public import RWRS.Support.Swap
+public import LatticeProb.Prob.HewittSavage
+public import RWRS.External.VoltageFunctionConnected
+
+@[expose] public section
 
 open MeasureTheory
 

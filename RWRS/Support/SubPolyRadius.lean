@@ -1,3 +1,5 @@
+module
+
 /-
 The displacement exponent of Step 3 of `prop:poly-growth`.
 
@@ -7,7 +9,9 @@ the radius is exactly that this exponent be at least a prescribed quantity, and
 that is what solving `R \geq (N(a+1)^{d_w-1})^{1/d_w}` for the exponent gives.
 The radius itself is chosen in `SubPolyExit`.
 -/
-import RWRS.Support.SubPolyGood
+public import RWRS.Support.SubPolyGood
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The stage events of Step 1 of `prop:doubly-transient-really-general`, and the
 bound on the potential the walk collects at the stage where the rule fires.
@@ -17,7 +19,9 @@ earlier blocks, where the bias of a coordinate is at most `E|ξ|` and the total
 weight is at most one by admissibility; and the rest, which the event does not
 read and which is centred, so contributes nothing.
 -/
-import RWRS.Support.DTBlocks
+public import RWRS.Support.DTBlocks
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The variance of an increment on the good-walk event, for `prop:subcritical`.
 
@@ -5,7 +7,9 @@ The variance of an increment on the good-walk event, for `prop:subcritical`.
 the variance bound `∑_v L_I(v)^2 ≤ N^{α+δ} m` holds."  That is the pathwise
 input to part (b) of `lem:fuk-nagaev`.
 -/
-import RWRS.Support.SubIncrement
+public import RWRS.Support.SubIncrement
+
+@[expose] public section
 
 namespace RWRS.Support
 

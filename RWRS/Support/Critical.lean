@@ -1,3 +1,5 @@
+module
+
 /-
 The critical regime of `rwrs.tex`: the variance bound and the explosion bound
 of `prop:critical`.
@@ -20,17 +22,19 @@ steps.  Three ingredients are assembled here.
   upper bound into a probability bound, once for the value and once for the
   mean payoff itself.
 -/
-import RWRS.Support.Sensitivity
-import RWRS.Support.ClockRatio
-import RWRS.Support.Measurability
-import RWRS.Support.WeakLaw
-import RWRS.Support.PaleyZygmund
-import RWRS.Support.Explosion
-import RWRS.Support.PositivePart
-import RWRS.Support.Truncation
-import RWRS.External.EfronStein
-import RWRS.Support.Swap
-import LatticeProb.Prob.HewittSavage
+public import RWRS.Support.Sensitivity
+public import RWRS.Support.ClockRatio
+public import RWRS.Support.Measurability
+public import RWRS.Support.WeakLaw
+public import RWRS.Support.PaleyZygmund
+public import RWRS.Support.Explosion
+public import RWRS.Support.PositivePart
+public import RWRS.Support.Truncation
+public import RWRS.External.EfronStein
+public import RWRS.Support.Swap
+public import LatticeProb.Prob.HewittSavage
+
+@[expose] public section
 
 namespace RWRS.Support
 

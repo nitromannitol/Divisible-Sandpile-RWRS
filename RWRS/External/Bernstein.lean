@@ -1,3 +1,5 @@
+module
+
 /-
 Cited input: Bernstein's inequality, cited in the proof of `lem:fuk-nagaev`
 (`rwrs.tex:1096-1098`) as the source of part (c) of that lemma.  Proved
@@ -11,9 +13,11 @@ through `k! ≥ 2·3^{k-2}`.  Independence then turns the moment generating func
 of the sum into a product, and Chernoff's bound at `λ = t/(B² + Mt/3)`, where
 `1 - λM/3 = B²/(B² + Mt/3)`, collapses the exponent to `-t²/(2(B² + Mt/3))`.
 -/
-import RWRS.Setting
-import Mathlib.Probability.Independence.Basic
-import LatticeProb.Prob.Bernstein
+public import RWRS.Setting
+public import Mathlib.Probability.Independence.Basic
+public import LatticeProb.Prob.Bernstein
+
+@[expose] public section
 
 open MeasureTheory
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The failure probability of Step 1 of `prop:doubly-transient-really-general`
 (`rwrs.tex:926`): conditionally on the walk, the trap events of the selected
@@ -5,7 +7,9 @@ centres read disjoint blocks of scenery coordinates, so they are independent,
 and the probability that none of the first `ℓ` fires is at most
 `(1 - p₀ ^ M) ^ ℓ`, where `p₀ = ν(ξ ≤ -ε)` and `M` bounds the block size.
 -/
-import RWRS.Support.DTStageEvents
+public import RWRS.Support.DTStageEvents
+
+@[expose] public section
 
 namespace RWRS.Support
 

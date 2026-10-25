@@ -1,3 +1,5 @@
+module
+
 /-
 The arithmetic of the tree of pipes (`ssec:comb-estimates` and
 `sec:recurrent-nonstab`).
@@ -8,8 +10,10 @@ under the standing conditions on `B` and `α`.  Both the radius
 whose last term dominates, so `R_m ≍ L_m ≍ B^{αm}` and `N_m ≍ B^m L_m`, and
 since `α(1 + 1/α) = α + 1` this makes `N_m ≍ R_m^{d_f}` with `d_f = 1 + 1/α`.
 -/
-import RWRS.Support.PipeTree
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import RWRS.Support.PipeTree
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+
+@[expose] public section
 
 open scoped ENNReal
 

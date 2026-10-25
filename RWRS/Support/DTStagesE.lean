@@ -1,3 +1,5 @@
+module
+
 /-
 The unconstrained stage sequence of Step 1 of
 `prop:doubly-transient-really-general`.
@@ -14,8 +16,10 @@ reduced to an `ℕ`-`sInf` through the two cast lemmas below, which is what make
 the prefix and stopping-time arguments ordinary `ℕ` arguments, exactly as in
 `DTStages.lean` for the truncated sequence.
 -/
-import RWRS.Support.DTAdmissible
-import LatticeProb.Graph.MarkovAE
+public import RWRS.Support.DTAdmissible
+public import LatticeProb.Graph.MarkovAE
+
+@[expose] public section
 
 namespace RWRS.Support
 

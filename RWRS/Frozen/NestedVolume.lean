@@ -1,3 +1,5 @@
+module
+
 /-
 Theorem 3.4 of `rwrs.tex`, frozen.  `rwrs.tex:448-453` (label
 `thm:nested-vol`):
@@ -12,7 +14,9 @@ paper is carried by the target type and needs no separate term.  Each `C` is a
 `Finset`, which is the paper's finiteness; since `G` is infinite, `V ∖ C` is
 automatically nonempty.  `hG` is the standing assumption of `ssec:notation`.
 -/
-import RWRS.Support.BallWalk
+public import RWRS.Support.BallWalk
+
+@[expose] public section
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 

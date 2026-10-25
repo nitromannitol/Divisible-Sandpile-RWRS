@@ -1,3 +1,5 @@
+module
+
 /-
 Parallel toppling on a random rooted network: it is equivariant under
 isomorphism, and it is a measurable function of the network.
@@ -9,8 +11,10 @@ fixed is therefore measurable.  That is `measurable_of_countable_partition`,
 and it is what carries the recursion of the toppling through the sum over the
 neighbours of a vertex.
 -/
-import RWRS.Support.Marking
-import RWRS.Support.Odometer
+public import RWRS.Support.Marking
+public import RWRS.Support.Odometer
+
+@[expose] public section
 
 namespace RWRS.Support
 

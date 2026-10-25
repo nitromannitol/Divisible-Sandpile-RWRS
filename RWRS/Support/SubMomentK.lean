@@ -1,3 +1,5 @@
+module
+
 /-
 The `q`-th moment of `Y_k` on the good-walk event, for `prop:subcritical`.
 
@@ -5,8 +7,10 @@ The `q`-th moment of `Y_k` on the good-walk event, for `prop:subcritical`.
 polynomial tails, of orders `p` and `2n`, and each contributes
 `q K a^{q-s}(1/q + 1/(s-q))` with `a = |E[ξ]| 2^k / d` the shift.
 -/
-import RWRS.Support.SubTail
-import RWRS.Support.SubConst
+public import RWRS.Support.SubTail
+public import RWRS.Support.SubConst
+
+@[expose] public section
 
 namespace RWRS.Support
 

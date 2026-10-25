@@ -1,3 +1,5 @@
+module
+
 /-
 The radius of Step 3 of `prop:poly-growth`.
 
@@ -11,7 +13,9 @@ polynomial at once, and removes the logarithm from the level the trajectory
 meets: `R_N^β ≤ 2^βN^{β(1/d_w+s)}`.  The extra `βs` in the exponent is absorbed
 by the strict inequality `β/d_w < d_s/2-δ`.
 -/
-import RWRS.Support.SubPolyStep
+public import RWRS.Support.SubPolyStep
+
+@[expose] public section
 
 namespace RWRS.Support
 

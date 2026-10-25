@@ -1,3 +1,5 @@
+module
+
 /-
 The block-wise bias bounds of Step 1 of
 `prop:doubly-transient-really-general` (`rwrs.tex:918-921`): conditionally on
@@ -13,10 +15,12 @@ this file carries the integrated earlier-block bound, where the stage event
 the rest event, and the rest-event probability is controlled by the
 stage-event probability through `measure_restEvent_le`.
 -/
-import RWRS.Support.DTStageEvents
-import RWRS.Support.DTAdmissibleCap
-import RWRS.Support.DTPotential
-import LatticeProb.Network.KilledGreenEscape
+public import RWRS.Support.DTStageEvents
+public import RWRS.Support.DTAdmissibleCap
+public import RWRS.Support.DTPotential
+public import LatticeProb.Network.KilledGreenEscape
+
+@[expose] public section
 
 namespace RWRS.Support
 

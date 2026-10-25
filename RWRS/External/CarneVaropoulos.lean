@@ -1,3 +1,5 @@
+module
+
 /-
 The pointwise Carne--Varopoulos transition bound for simple random walk.
 Sources: Carne (1985), Varopoulos (1985), and Lyons and Peres, *Probability
@@ -5,7 +7,9 @@ on Trees and Networks*, Theorem 13.4 (the citation at `rwrs.tex:143-149`). On a 
 nontrivial, locally finite graph with the discrete measurable structure,
 `P_x(X_n = y) ≤ 2 sqrt(deg(y)/deg(x)) exp(-dist(x,y)^2/(2n))` for `n ≥ 1`.
 -/
-import RWRS.Setting
+public import RWRS.Setting
+
+@[expose] public section
 
 -- Proved outright by `RWRS.External.carneVaropoulos` in
 -- `RWRS/External/CarneVaropoulosProved.lean` (node `X-005`); no longer a

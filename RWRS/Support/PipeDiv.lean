@@ -1,4 +1,8 @@
-import RWRS.Support.PipeFlowBase
+module
+
+public import RWRS.Support.PipeFlowBase
+
+@[expose] public section
 
 /-!
 # Divergence of the unit pipe flow

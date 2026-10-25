@@ -1,3 +1,5 @@
+module
+
 /-
 The ray with the tree-of-pipes gadgets attached, the graph of
 `sec:recurrent-nonstab`.  A vertex is either a position on the ray or a non-root
@@ -8,7 +10,9 @@ is connected and infinite, and that it is locally finite, the gadgets attached
 at a given ray vertex being at most one because the attachment points are
 strictly increasing.
 -/
-import RWRS.Support.PipeSub
+public import RWRS.Support.PipeSub
+
+@[expose] public section
 
 namespace RWRS.Support
 

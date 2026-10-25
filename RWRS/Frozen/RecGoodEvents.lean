@@ -1,3 +1,5 @@
+module
+
 /-
 Lemma 6.16 of `rwrs.tex`, frozen.  `rwrs.tex:1946-1948` (label `lem:rec-good`),
 under the setup of `sec:recurrent-nonstab` (`rwrs.tex:1928-1944`):
@@ -14,8 +16,10 @@ gadgets have disjoint vertex sets, and that
 with those two properties, and `E_k` is the event that some vertex of `A_k`
 carries a Pareto variable of size at least `K L_{m_k}`.
 -/
-import RWRS.Support.GoodEvents
-import Mathlib.Probability.Independence.Basic
+public import RWRS.Support.GoodEvents
+public import Mathlib.Probability.Independence.Basic
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

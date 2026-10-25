@@ -1,8 +1,12 @@
-import RWRS.Support.CombExists
-import RWRS.Support.PipeTransient
-import RWRS.Support.NestedLower
-import RWRS.Support.IidMap
-import RWRS.Frozen.CombEstimates
+module
+
+public import RWRS.Support.CombExists
+public import RWRS.Support.PipeTransient
+public import RWRS.Support.NestedLower
+public import RWRS.Support.IidMap
+public import RWRS.Frozen.CombEstimates
+
+@[expose] public section
 
 /-!
 # Comb sums and odometer divergence

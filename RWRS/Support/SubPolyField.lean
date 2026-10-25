@@ -1,3 +1,5 @@
+module
+
 /-
 The recentred field of Step 2 of `prop:poly-growth`, and the Bernstein tail of
 one of its increments.
@@ -12,8 +14,10 @@ an interval is a weighted sum of the recentred coordinates over the sites the
 interval visits, and part (c) of `lem:fuk-nagaev` applies to it with the
 weights of the interval.
 -/
-import RWRS.Support.SubPolyBern
-import RWRS.Support.SubPolySite
+public import RWRS.Support.SubPolyBern
+public import RWRS.Support.SubPolySite
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 Reading a scenery on an arbitrary vertex set through a finite index set.
 
@@ -9,8 +11,10 @@ to the scenery directly.  They can be applied to the scenery indexed by
 bijection `Fin n ≃ S` is the i.i.d. field indexed by `Fin n`, so every event of
 the finite field has the same probability under either law.
 -/
-import RWRS.Support.IidMap
-import Mathlib.Probability.ProductMeasure
+public import RWRS.Support.IidMap
+public import Mathlib.Probability.ProductMeasure
+
+@[expose] public section
 
 open MeasureTheory
 

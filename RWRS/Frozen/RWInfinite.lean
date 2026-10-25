@@ -1,3 +1,5 @@
+module
+
 /-
 Corollary 3.5 of `rwrs.tex`, frozen.  `rwrs.tex:473-478` (label
 `cor:RW-infinite`):
@@ -12,7 +14,9 @@ values `E_x[S_τ]` of the stopping rules bounded by `n`, each pushed into
 values that `ENNReal.ofReal` sends to `0` do not change the supremum.  `hG` is
 the standing assumption of Section 3.
 -/
-import RWRS.Support.Representation
+public import RWRS.Support.Representation
+
+@[expose] public section
 
 variable {V : Type*} {G : SimpleGraph V} [G.LocallyFinite]
 

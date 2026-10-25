@@ -1,3 +1,5 @@
+module
+
 /-
 The voltage identity `eq:voltage-identity`: for a finite set `C` from which the
 walk escapes,
@@ -11,9 +13,11 @@ identity that Section 3 reads the finite-volume value through, and the one that
 Sections 5 and 6 use to bound the odometer from below by an electrical
 computation.
 -/
-import RWRS.Support.KilledGreen
-import RWRS.Setting
-import LatticeProb.Graph.ExitTime
+public import RWRS.Support.KilledGreen
+public import RWRS.Setting
+public import LatticeProb.Graph.ExitTime
+
+@[expose] public section
 
 namespace RWRS.Support
 

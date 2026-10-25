@@ -1,3 +1,5 @@
+module
+
 /-
 Proposition 5.17 of `rwrs.tex`, frozen.  `rwrs.tex:1229-1241` (label
 `prop:poly-growth`):
@@ -27,7 +29,9 @@ supplies it in substance and as `lem:dyadic`, `lem:good-walk` and
 trajectory, and `(ξ,X) ↦ ξ(X_j)` is measurable exactly when the singletons of
 the vertex set are.
 -/
-import RWRS.Support.SubPolyFinal
+public import RWRS.Support.SubPolyFinal
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

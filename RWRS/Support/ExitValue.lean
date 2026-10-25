@@ -1,3 +1,5 @@
+module
+
 /-
 The exit payoff `x ↦ E_x[S_{τ_C}]` of `prop:finite-vol`, and the identification
 of the finite-volume value with it on the active component.
@@ -8,8 +10,10 @@ vanishes when `C` is a connected component of the active set.  The difference
 is therefore harmonic on `C` and vanishes off it, so the maximum principle for
 a network Laplacian makes it zero.
 -/
-import RWRS.Support.Bellman
-import LatticeProb.Network.MaximumPrinciple
+public import RWRS.Support.Bellman
+public import LatticeProb.Network.MaximumPrinciple
+
+@[expose] public section
 
 namespace RWRS.Support
 

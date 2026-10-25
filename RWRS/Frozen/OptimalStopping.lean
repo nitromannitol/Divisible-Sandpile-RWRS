@@ -1,3 +1,5 @@
+module
+
 /-
 Theorem 1.1 of `rwrs.tex`, frozen.  `rwrs.tex:94-101` (label `thm:OS`):
 
@@ -24,11 +26,13 @@ scenery and the walk, as `ssec:notation` fixes, and `sup_n S_n` is taken in
 `[0,∞]`; it is at least `S_0 = 0`, so nothing is lost.  The independence of the
 walk and the scenery is the product structure of `jointLaw`.
 -/
-import RWRS.Setting
-import RWRS.Support.OSParts
-import RWRS.Support.OSSub
-import RWRS.Frozen.ConvexityReduction
-import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+public import RWRS.Setting
+public import RWRS.Support.OSParts
+public import RWRS.Support.OSSub
+public import RWRS.Frozen.ConvexityReduction
+public import Mathlib.Analysis.SpecialFunctions.Pow.NNReal
+
+@[expose] public section
 
 open MeasureTheory
 open scoped ENNReal

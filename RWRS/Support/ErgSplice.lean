@@ -1,3 +1,5 @@
+module
+
 /-
 Averaging a function of a marked network over the marks outside a ball.
 
@@ -10,8 +12,10 @@ field law, so the splice average has the same integral as the function itself,
 and it reads the marks only inside the ball, which is what makes two such
 averages at distant roots independent.
 -/
-import RWRS.Support.ErgReroot
-import LatticeProb.Prob.Splice
+public import RWRS.Support.ErgReroot
+public import LatticeProb.Prob.Splice
+
+@[expose] public section
 
 namespace RWRS.Support
 

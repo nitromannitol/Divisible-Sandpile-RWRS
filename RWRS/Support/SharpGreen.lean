@@ -1,3 +1,5 @@
+module
+
 /-
 Step 1 of `lem:moment-sharpness`: the local-time bounds.
 
@@ -11,9 +13,11 @@ same bound by Cauchy--Schwarz in `ℓ²(deg)`.
 
 The clock itself is at most the horizon, the inverse degree being at most one.
 -/
-import RWRS.Support.SharpClock
-import RWRS.Support.ClockRatio
-import RWRS.Support.Recurrence
+public import RWRS.Support.SharpClock
+public import RWRS.Support.ClockRatio
+public import RWRS.Support.Recurrence
+
+@[expose] public section
 
 namespace RWRS.Support
 

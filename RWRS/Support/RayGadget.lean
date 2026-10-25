@@ -1,3 +1,5 @@
+module
+
 /-
 The graph of `sec:recurrent-nonstab`: a ray from the root carrying a copy of the
 gadget `H(m_k)` at the ray vertex `r_{s_k}`.
@@ -10,8 +12,10 @@ vertex `r_i` and as `s_k + ` the depth in the gadget on a gadget site, moves by
 at most one along an edge, so it is a lower bound for the distance to the root
 and the ball of radius `r` meets no gadget whose attachment point is beyond `r`.
 -/
-import RWRS.Support.GadgetBall
-import Mathlib.Data.Set.Card.Arithmetic
+public import RWRS.Support.GadgetBall
+public import Mathlib.Data.Set.Card.Arithmetic
+
+@[expose] public section
 
 namespace RWRS.Support
 

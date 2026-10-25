@@ -1,3 +1,5 @@
+module
+
 /-
 The admissibility cap of Step 1 of `prop:doubly-transient-really-general`:
 the total killed-Green interaction of the earlier trap blocks with the stage
@@ -6,12 +8,14 @@ Supporting lemmas: the `toReal` of a finite ENNReal sum, the domination of
 the killed Green function by the free Green function at the level of real
 numbers, and the double-sum bound over disjoint blocks.
 -/
-import LatticeProb.Network.KilledGreenEscape
-import RWRS.Basic
-import RWRS.Support.SeriesLaw
-import RWRS.Support.DTAdmissible
-import RWRS.Support.DTStageEvents
-import RWRS.Support.KilledGreen
+public import LatticeProb.Network.KilledGreenEscape
+public import RWRS.Basic
+public import RWRS.Support.SeriesLaw
+public import RWRS.Support.DTAdmissible
+public import RWRS.Support.DTStageEvents
+public import RWRS.Support.KilledGreen
+
+@[expose] public section
 
 open LatticeProb RWRS
 

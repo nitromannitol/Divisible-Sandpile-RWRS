@@ -1,6 +1,10 @@
-import Mathlib
-import RWRS.MainTheorems
-import RWRSAudit.OptimalStopping.SolutionBasic
+module
+
+public import Mathlib
+public import RWRS.MainTheorems
+public import RWRSAudit.OptimalStopping.SolutionBasic
+
+@[expose] public section
 
 /-!
 # Bridge from the `OptimalStopping` vocabulary to the repository

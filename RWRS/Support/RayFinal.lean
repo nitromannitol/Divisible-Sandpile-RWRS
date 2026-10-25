@@ -1,3 +1,5 @@
+module
+
 /-
 The final display of `thm:recurrent-nonstab`.
 
@@ -8,10 +10,12 @@ is at most `s_k + 1` and the mass at least `-b`, so it costs at most
 `b C_G (s_k+1)^{d_f+1}`.  Condition `eq:rec-cond-div` makes the first term at
 least `k` times the second scale, and the sum diverges along the good gadgets.
 -/
-import RWRS.Support.RayBallCard
-import RWRS.Support.NestedLower
-import RWRS.Support.TrGood
-import RWRS.Support.CombOdometer
+public import RWRS.Support.RayBallCard
+public import RWRS.Support.NestedLower
+public import RWRS.Support.TrGood
+public import RWRS.Support.CombOdometer
+
+@[expose] public section
 
 namespace RWRS.Support
 

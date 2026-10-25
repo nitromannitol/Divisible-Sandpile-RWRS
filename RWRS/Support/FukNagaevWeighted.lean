@@ -1,3 +1,5 @@
+module
+
 /-
 `lem:fuk-nagaev` applied to a weighted sum of the scenery over a finite set of
 vertices.
@@ -7,8 +9,10 @@ in the lowest universe.  The scenery lives on the vertex set of a graph, at an
 arbitrary universe, so the inequalities are applied to the i.i.d. field indexed
 by `Fin n` and the answer is carried back by `FinsetTransfer`.
 -/
-import RWRS.Support.FinsetTransfer
-import RWRS.Support.SharpIndep
+public import RWRS.Support.FinsetTransfer
+public import RWRS.Support.SharpIndep
+
+@[expose] public section
 
 namespace RWRS.Support
 

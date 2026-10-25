@@ -1,9 +1,13 @@
+module
+
 /-
 An infinite locally finite connected graph has a countable vertex set.  This is
 what lets an event of the sandpile, which is a condition at every vertex, be
 measurable for the product sigma algebra of the masses.
 -/
-import RWRS.Support.Odometer
+public import RWRS.Support.Odometer
+
+@[expose] public section
 
 namespace RWRS.Support
 

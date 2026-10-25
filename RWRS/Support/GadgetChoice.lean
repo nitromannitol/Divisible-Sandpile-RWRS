@@ -1,6 +1,10 @@
-import RWRS.Support.CombExists
-import RWRS.Support.GadgetBall
-import RWRS.Support.CombArith
+module
+
+public import RWRS.Support.CombExists
+public import RWRS.Support.GadgetBall
+public import RWRS.Support.CombArith
+
+@[expose] public section
 
 /-!
 # Choosing the next gadget depth

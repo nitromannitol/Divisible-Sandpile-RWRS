@@ -1,3 +1,5 @@
+module
+
 /-
 Dominated convergence for the emission at the root.
 
@@ -5,8 +7,10 @@ Part (i) of `thm:stationary-phase` needs `E[e_k(ρ)] → 0` from `e_k(ρ) → 0`
 almost surely and the uniform bound `e_k(v) ≤ M - 1` of the truncated dynamics
 (`rwrs.tex:353`).
 -/
-import RWRS.Support.ErgTrunc
-import RWRS.Support.ErgMass
+public import RWRS.Support.ErgTrunc
+public import RWRS.Support.ErgMass
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The dyadic decomposition of a time interval, and the chaining decomposition of
 the fluctuation.
@@ -10,7 +12,9 @@ dyadic interval `[i·2^{k-j-1}, (i+1)·2^{k-j-1})` with `i < 2^{j+2}`.  So the
 fluctuation at every time of the block is a sum of at most `k+1` increments over
 dyadic intervals, which is what the union bound of `eq:Mk-tail-Ak` counts.
 -/
-import RWRS.Support.SubIncrement
+public import RWRS.Support.SubIncrement
+
+@[expose] public section
 
 namespace RWRS.Support
 

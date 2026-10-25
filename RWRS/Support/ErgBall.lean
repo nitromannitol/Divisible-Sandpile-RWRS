@@ -1,3 +1,5 @@
+module
+
 /-
 The balls of a rooted network, built one neighbour shell at a time.
 
@@ -10,8 +12,10 @@ on the radius.  The two facts the proof needs are that the shells exhaust a
 connected graph and that two shells of radius `r` around vertices at distance
 more than `2r` are disjoint.
 -/
-import RWRS.Support.Marking
-import RWRS.Support.BallWalk
+public import RWRS.Support.Marking
+public import RWRS.Support.BallWalk
+
+@[expose] public section
 
 namespace RWRS.Support
 

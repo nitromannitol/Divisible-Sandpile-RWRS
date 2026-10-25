@@ -1,4 +1,8 @@
-import RWRS.Support.DTNoHit
+module
+
+public import RWRS.Support.DTNoHit
+
+@[expose] public section
 
 /-!
 # The integral partition over the stage hit events

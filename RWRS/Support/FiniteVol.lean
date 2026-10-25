@@ -1,3 +1,5 @@
+module
+
 /-
 The four clauses of `prop:finite-vol`.
 
@@ -6,8 +8,10 @@ source contributes its electrical sum to `v_K(o)`, and on the active component
 of `o` the value is the exit payoff.  Together these say that `v_K(o)` is the
 largest of `0` and the electrical sums.
 -/
-import RWRS.Support.ExitValue
-import RWRS.Support.Component
+public import RWRS.Support.ExitValue
+public import RWRS.Support.Component
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 The conditional law of an i.i.d. marked network given the rerooting-invariant
 events of the underlying rooted graph.
@@ -9,9 +11,11 @@ here, not assumed: the law of the marked network is the image of a product, the
 conditioning reads the first factor only, so the conditional law is the i.i.d.
 marking of the conditional law of the rooted graph.
 -/
-import RWRS.Support.ErgKernel
-import RWRS.Support.ErgMarking
-import Mathlib.MeasureTheory.Function.ConditionalExpectation.Basic
+public import RWRS.Support.ErgKernel
+public import RWRS.Support.ErgMarking
+public import Mathlib.MeasureTheory.Function.ConditionalExpectation.Basic
+
+@[expose] public section
 
 namespace RWRS.Support
 

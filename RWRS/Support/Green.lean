@@ -1,10 +1,14 @@
+module
+
 /-
 The walk average of the full payoff as a sum of iterates of the averaging
 operator, and the value of such an iterate on a scenery supported at one
 vertex.  These are the facts that turn `thm:RW` into a Green-function identity
 when the scenery is nonnegative.
 -/
-import RWRS.Support.Representation
+public import RWRS.Support.Representation
+
+@[expose] public section
 
 namespace RWRS.Support
 

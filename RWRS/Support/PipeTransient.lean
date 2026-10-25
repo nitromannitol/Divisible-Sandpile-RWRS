@@ -1,5 +1,9 @@
-import RWRS.Support.PipeLevel
-import RWRS.Support.Transience
+module
+
+public import RWRS.Support.PipeLevel
+public import RWRS.Support.Transience
+
+@[expose] public section
 
 /-!
 # Transience of the tree of pipes

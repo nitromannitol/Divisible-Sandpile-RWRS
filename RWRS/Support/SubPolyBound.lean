@@ -1,3 +1,5 @@
+module
+
 /-
 The deterministic bounds of Steps 4 and 5 of `prop:poly-growth`.
 
@@ -10,7 +12,9 @@ two is in force depends only on how far the trajectory has travelled.  The
 weights of an increment and their squares are controlled on the good-walk event
 by `lem:good-walk`, exactly as in `prop:subcritical`.
 -/
-import RWRS.Support.SubPolyWalk
+public import RWRS.Support.SubPolyWalk
+
+@[expose] public section
 
 namespace RWRS.Support
 

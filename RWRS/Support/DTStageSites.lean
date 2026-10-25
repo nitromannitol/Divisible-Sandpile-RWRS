@@ -1,10 +1,14 @@
+module
+
 /-
 The sites used by the unconstrained stages are the union of the stage blocks,
 and the centre of a usable stage is admissible for the sites of the stages
 before it.
 -/
-import RWRS.Support.DTStageAdm
-import RWRS.Support.DTStageEvents
+public import RWRS.Support.DTStageAdm
+public import RWRS.Support.DTStageEvents
+
+@[expose] public section
 
 open scoped Classical ENNReal
 

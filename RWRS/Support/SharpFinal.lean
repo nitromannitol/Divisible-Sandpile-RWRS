@@ -1,3 +1,5 @@
+module
+
 /-
 `lem:moment-sharpness`: the assembly.
 
@@ -6,11 +8,13 @@ is worth `(σ(o)-1)/deg(o)`, so an infinite mean of the positive part already
 makes the mean odometer infinite.  Off that case the marginal is integrable, and
 the mean `μ` is a real number.
 -/
-import RWRS.Support.SharpEvent
-import RWRS.Support.SharpTail
-import RWRS.Support.MomentDivergence
-import RWRS.Support.TailSum
-import RWRS.Support.Explosion
+public import RWRS.Support.SharpEvent
+public import RWRS.Support.SharpTail
+public import RWRS.Support.MomentDivergence
+public import RWRS.Support.TailSum
+public import RWRS.Support.Explosion
+
+@[expose] public section
 
 namespace RWRS.Support
 

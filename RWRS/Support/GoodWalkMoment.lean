@@ -1,3 +1,5 @@
+module
+
 /-
 Part (b) of `lem:good-walk`: the `p`-th moment of the dyadic block variable.
 
@@ -7,9 +9,11 @@ that total.  Convexity turns the `p`-th power of a sum of `N` terms into `N`
 times the average of their `p`-th powers, and each term has mean the centred
 `p`-th moment of the marginal, so the block moment is at most `N^p` times it.
 -/
-import RWRS.Support.GoodWalkTail
-import RWRS.Support.WeakLaw
-import Mathlib.Analysis.MeanInequalitiesPow
+public import RWRS.Support.GoodWalkTail
+public import RWRS.Support.WeakLaw
+public import Mathlib.Analysis.MeanInequalitiesPow
+
+@[expose] public section
 
 namespace RWRS.Support
 

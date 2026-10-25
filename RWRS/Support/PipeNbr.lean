@@ -1,3 +1,5 @@
+module
+
 /-
 The neighbours of a site of the tree of pipes.
 
@@ -6,7 +8,9 @@ kind of site, so what they need first is the neighbour set at each kind of site:
 two neighbours at an interior site of a pipe, the step towards the root and the
 step away from it.
 -/
-import RWRS.Support.Comb
+public import RWRS.Support.Comb
+
+@[expose] public section
 
 namespace RWRS.Support
 

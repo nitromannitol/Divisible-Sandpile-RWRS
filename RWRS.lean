@@ -1,282 +1,286 @@
-import RWRS.Basic
-import RWRS.Walk
-import RWRS.Scenery
-import RWRS.Setting
-import RWRS.Network
-import RWRS.Support.Odometer
-import RWRS.Support.PipeTree
-import RWRS.Support.Walk
-import RWRS.Support.Representation
-import RWRS.Support.Pareto
-import RWRS.Support.IidMap
-import RWRS.Support.Continuation
-import RWRS.Support.SubTrunc
-import RWRS.Support.SubIncrement
-import RWRS.Support.SubChain
-import RWRS.Support.SubBlock
-import RWRS.Support.SubMoment
-import RWRS.Support.SubTail
-import RWRS.Support.SubVar
-import RWRS.Support.SubGauss
-import RWRS.Support.SubAvg
-import RWRS.Support.SubGood
-import RWRS.Support.SubUnion
-import RWRS.Support.SubTailAvg
-import RWRS.Support.SubConst
-import RWRS.Support.SubMomentK
-import RWRS.Support.SubGeom
-import RWRS.Support.SubBlockMoment
-import RWRS.Support.SubSeries
-import RWRS.Support.SubStop
-import RWRS.Support.SubFinal
-import RWRS.Support.SubStab
-import RWRS.Support.ErgMarking
-import RWRS.External.Bernstein
-import RWRS.External.CarneVaropoulos
-import RWRS.External.CarneVaropoulosProved
-import RWRS.External.EfronStein
-import RWRS.External.ErgodicDecomposition
-import RWRS.External.FukNagaevTail
-import RWRS.External.HeatKernelBoundedDegree
-import RWRS.External.HeatKernelVanishing
-import RWRS.External.VoltageFunction
-import RWRS.External.VoltageFunctionConnected
-import RWRS.External.VoltageFunctionProved
-import RWRS.External.VonBahrEsseen
-import RWRS.Frozen.ClockNoDominance
-import RWRS.Frozen.Coboundary
-import RWRS.Frozen.CombEstimates
-import RWRS.Frozen.ConvexityReduction
-import RWRS.Frozen.Critical
-import RWRS.Frozen.DoublyTransient
-import RWRS.Frozen.Dyadic
-import RWRS.Frozen.ErgodicMarked
-import RWRS.Frozen.Explosion
-import RWRS.Frozen.FinitePerturbation
-import RWRS.Frozen.FiniteVolume
-import RWRS.Frozen.FukNagaev
-import RWRS.Frozen.GadgetGeometry
-import RWRS.Frozen.GoodWalk
-import RWRS.Frozen.IidStationary
-import RWRS.Frozen.LocalTime
-import RWRS.Frozen.MomentSharpness
-import RWRS.Frozen.NestedVolume
-import RWRS.Frozen.NoDominance
-import RWRS.Frozen.OptimalStopping
-import RWRS.Frozen.PolyGrowth
-import RWRS.Frozen.PositivePart
-import RWRS.Frozen.RandomWalkRepresentation
-import RWRS.Frozen.RecGoodEvents
-import RWRS.Frozen.RecLocal
-import RWRS.Frozen.RecurrentNonstabilization
-import RWRS.Frozen.Recursion
-import RWRS.Frozen.RecVolumeGrowth
-import RWRS.Frozen.RWInfinite
-import RWRS.Frozen.Sensitivity
-import RWRS.Frozen.ShortClock
-import RWRS.Frozen.Stabilization
-import RWRS.Frozen.StationaryPhase
-import RWRS.Frozen.StationaryToppling
-import RWRS.Frozen.Subcritical
-import RWRS.Frozen.Supercritical
-import RWRS.Frozen.TransientGoodPipes
-import RWRS.Frozen.TransientNonstabilization
-import RWRS.Frozen.UnboundedDegreeTree
-import RWRS.Frozen.ZeroOneLaw
-import RWRS.Frozen.ZeroOneStationary
-import RWRS.Support.Green
-import RWRS.Support.HeatBasic
-import RWRS.Zd.Basic
-import RWRS.Zd.Representation
-import RWRS.Support.Countable
-import RWRS.Support.Measurability
-import RWRS.Support.OptionalStopping
-import RWRS.Support.Swap
-import RWRS.Support.KernelSum
-import RWRS.Support.ShortClock
-import RWRS.Support.Tree
-import RWRS.Support.TreeGreen
-import RWRS.Support.PaleyZygmund
-import RWRS.Support.PositivePart
-import RWRS.Support.LibraryBridge
-import RWRS.Support.Recurrence
-import RWRS.Support.ClockRatio
-import RWRS.Support.ErgBall
-import RWRS.Support.ErgReroot
-import RWRS.Support.ErgSplice
-import RWRS.Support.ErgDecor
-import RWRS.Support.ErgGraph
-import RWRS.Support.ErgKernel
-import RWRS.Support.ErgCondLaw
-import RWRS.Support.ErgPhase
-import RWRS.Support.ErgTrunc
-import RWRS.Support.ErgMass
-import RWRS.Support.ErgProp
-import RWRS.Support.ErgFactor
-import RWRS.Support.ErgDom
-import RWRS.Support.ErgCondNet
-import RWRS.Support.ErgSuper
-import RWRS.Support.ErgSuperFinal
-import RWRS.Support.ErgSubFinal
-import RWRS.Support.ErgFinal
-import RWRS.Support.ErgStab
-import RWRS.Support.Marking
-import RWRS.Support.WeakLaw
-import RWRS.Support.Explosion
-import RWRS.Support.Sensitivity
-import RWRS.Support.Toppling
-import RWRS.Support.Truncation
-import RWRS.Support.Critical
-import RWRS.Support.Dyadic
-import RWRS.Support.Convexity
-import RWRS.Support.EfronStein
-import RWRS.Support.DyadicSup
-import RWRS.Support.Gadget
-import RWRS.Support.GadgetBall
-import RWRS.Support.Spike
-import RWRS.Support.GoodEvents
-import RWRS.Support.RayGadget
-import RWRS.Support.KilledGreen
-import RWRS.Support.Comb
-import RWRS.Support.PipeSub
-import RWRS.Support.PipeFlowBase
-import RWRS.Support.PipeDiv
-import RWRS.Support.PipeEnergy
-import RWRS.Support.PipeLevel
-import RWRS.Support.Transience
-import RWRS.Support.CombExists
-import RWRS.Support.CombOdometer
-import RWRS.Support.ProbHelpers
-import RWRS.Support.RayBuild
-import RWRS.Support.RayDegree
-import RWRS.Support.SeriesLaw
-import RWRS.Support.RayRecurrent
-import RWRS.Support.GadgetChoice
-import RWRS.Support.GadgetSeq
-import RWRS.Support.RayVolume
-import RWRS.Support.GrowthExponent
-import RWRS.Support.RecData
-import RWRS.Support.RayGrowth
-import RWRS.Support.RaySpikes
-import RWRS.Support.PipeTransient
-import RWRS.Support.PipeNbr
-import RWRS.Support.CombNode
-import RWRS.Support.CombPipe
-import RWRS.Support.CombStruct
-import RWRS.Support.CombArith
-import RWRS.Support.CombVolt
-import RWRS.Support.CombEst
-import RWRS.Support.CombSum
-import RWRS.Support.CombFinal
-import RWRS.Support.TrGood
-import RWRS.Support.VoltageIdentity
-import RWRS.Support.CutCurrent
-import RWRS.Support.NestedLower
-import RWRS.Support.FiniteVolume
-import RWRS.Support.GreenUnique
-import RWRS.Support.RayFlux
-import RWRS.Support.RayTransport
-import RWRS.Support.RayBallCard
-import RWRS.Support.RayFinal
-import RWRS.Support.LocalTimeMarkov
-import RWRS.Support.LocalTimeCount
-import RWRS.Support.LocalTimeClock
-import RWRS.Support.SharpClock
-import RWRS.Support.SharpGreen
-import RWRS.Support.SharpTail
-import RWRS.Support.SharpBackground
-import RWRS.Support.SharpCount
-import RWRS.Support.SharpBall
-import RWRS.Support.SharpIndep
-import RWRS.Support.SharpEvent
-import RWRS.Support.SharpFinal
-import RWRS.Support.FinsetTransfer
-import RWRS.Support.FukNagaevWeighted
-import RWRS.Support.LocalTimeMoment
-import RWRS.Support.LocalTimeSum
-import RWRS.Support.GoodWalkTail
-import RWRS.Support.GoodWalkMoment
-import RWRS.Support.LocalTimeRegimes
-import RWRS.Support.GoodWalkHolder
-import RWRS.Support.SpikeDecomp
-import RWRS.Support.MomentDivergence
-import RWRS.Support.TailSum
-import RWRS.Support.MomentIneq
-import RWRS.Support.SecondMoment
-import RWRS.Support.Background
-import RWRS.Support.DTVariance
-import RWRS.Support.DTPotential
-import RWRS.Support.DTAdmissible
-import RWRS.Support.DTBlocks
-import RWRS.Support.DTTrapFamily
-import RWRS.Support.DTStageEvents
-import RWRS.Support.DTStages
-import RWRS.Support.DTStagesE
-import RWRS.Support.DTStagesAE
-import RWRS.Support.DTUncAE
-import RWRS.Support.DTWalkGood
-import RWRS.Support.DTWalkEvent2
-import RWRS.Support.DTReassoc
-import RWRS.Support.GreenSymm
-import RWRS.Support.DTCombination
-import RWRS.Support.DTBoundary
-import RWRS.Support.DTExitAdmissible
-import RWRS.Support.DTNoHit
-import RWRS.Support.DTBias
-import RWRS.Support.DTUnconstrained
-import RWRS.Support.DTAgreement
-import RWRS.Support.DTExitAux
-import RWRS.Support.DTStopMeas
-import RWRS.Support.DTAdmissibleCap
-import RWRS.Support.DTFubini
-import RWRS.Support.DTMarkov
-import RWRS.Support.DTRuleMeas
-import RWRS.Support.DTRuleBound
-import RWRS.Support.DTRuleFubini
-import RWRS.Support.DTCappedRule
-import RWRS.Support.DTCappedFubini
-import RWRS.Support.DTStageUnion
-import RWRS.Support.DTAnnealed
-import RWRS.Support.DTNatConv
-import RWRS.Support.DTStageFire
-import RWRS.Support.DTStageIntegral
-import RWRS.Support.DTStageIdent
-import RWRS.Support.DTStageIntegrable
-import RWRS.Support.DTStagePartition
-import RWRS.Support.DTStageHitRew
-import RWRS.Support.DTStageBound
-import RWRS.Support.DTTrajectory
-import RWRS.Support.DTWalkBlocks
-import RWRS.Support.DTStageAdm
-import RWRS.Support.DTStageCount
-import RWRS.Support.DTStageSites
-import RWRS.Support.DTNoHitZero
-import RWRS.Support.DTHitSum
-import RWRS.Support.DTWalkProb
-import RWRS.Support.DTPerTraj
-import RWRS.Support.DTLeave
-import RWRS.Support.DTAnneal
-import RWRS.Support.DTStepOne
-import RWRS.Support.DTTrapBall
-import RWRS.Support.OSParts
-import RWRS.Support.OSShift
-import RWRS.Support.OSSub
-import RWRS.Support.SubPolyPrep
-import RWRS.Support.SubPolySite
-import RWRS.Support.SubPolyBern
-import RWRS.Support.SubPolyField
-import RWRS.Support.SubPolyBlock
-import RWRS.Support.SubPolyWalk
-import RWRS.Support.SubPolyBound
-import RWRS.Support.SubPolyGood
-import RWRS.Support.SubPolyRadius
-import RWRS.Support.SubPolyMoment
-import RWRS.Support.SubPolyChain
-import RWRS.Support.SubPolyExp
-import RWRS.Support.SubPolyScenery
-import RWRS.Support.SubPolyStep
-import RWRS.Support.SubPolyExit
-import RWRS.Support.SubPolyGeom
-import RWRS.Support.SubPolyFinal
-import RWRS.Support.SubStabPoly
-import RWRS.MainTheorems
+module
+
+public import RWRS.Basic
+public import RWRS.Walk
+public import RWRS.Scenery
+public import RWRS.Setting
+public import RWRS.Network
+public import RWRS.Support.Odometer
+public import RWRS.Support.PipeTree
+public import RWRS.Support.Walk
+public import RWRS.Support.Representation
+public import RWRS.Support.Pareto
+public import RWRS.Support.IidMap
+public import RWRS.Support.Continuation
+public import RWRS.Support.SubTrunc
+public import RWRS.Support.SubIncrement
+public import RWRS.Support.SubChain
+public import RWRS.Support.SubBlock
+public import RWRS.Support.SubMoment
+public import RWRS.Support.SubTail
+public import RWRS.Support.SubVar
+public import RWRS.Support.SubGauss
+public import RWRS.Support.SubAvg
+public import RWRS.Support.SubGood
+public import RWRS.Support.SubUnion
+public import RWRS.Support.SubTailAvg
+public import RWRS.Support.SubConst
+public import RWRS.Support.SubMomentK
+public import RWRS.Support.SubGeom
+public import RWRS.Support.SubBlockMoment
+public import RWRS.Support.SubSeries
+public import RWRS.Support.SubStop
+public import RWRS.Support.SubFinal
+public import RWRS.Support.SubStab
+public import RWRS.Support.ErgMarking
+public import RWRS.External.Bernstein
+public import RWRS.External.CarneVaropoulos
+public import RWRS.External.CarneVaropoulosProved
+public import RWRS.External.EfronStein
+public import RWRS.External.ErgodicDecomposition
+public import RWRS.External.FukNagaevTail
+public import RWRS.External.HeatKernelBoundedDegree
+public import RWRS.External.HeatKernelVanishing
+public import RWRS.External.VoltageFunction
+public import RWRS.External.VoltageFunctionConnected
+public import RWRS.External.VoltageFunctionProved
+public import RWRS.External.VonBahrEsseen
+public import RWRS.Frozen.ClockNoDominance
+public import RWRS.Frozen.Coboundary
+public import RWRS.Frozen.CombEstimates
+public import RWRS.Frozen.ConvexityReduction
+public import RWRS.Frozen.Critical
+public import RWRS.Frozen.DoublyTransient
+public import RWRS.Frozen.Dyadic
+public import RWRS.Frozen.ErgodicMarked
+public import RWRS.Frozen.Explosion
+public import RWRS.Frozen.FinitePerturbation
+public import RWRS.Frozen.FiniteVolume
+public import RWRS.Frozen.FukNagaev
+public import RWRS.Frozen.GadgetGeometry
+public import RWRS.Frozen.GoodWalk
+public import RWRS.Frozen.IidStationary
+public import RWRS.Frozen.LocalTime
+public import RWRS.Frozen.MomentSharpness
+public import RWRS.Frozen.NestedVolume
+public import RWRS.Frozen.NoDominance
+public import RWRS.Frozen.OptimalStopping
+public import RWRS.Frozen.PolyGrowth
+public import RWRS.Frozen.PositivePart
+public import RWRS.Frozen.RandomWalkRepresentation
+public import RWRS.Frozen.RecGoodEvents
+public import RWRS.Frozen.RecLocal
+public import RWRS.Frozen.RecurrentNonstabilization
+public import RWRS.Frozen.Recursion
+public import RWRS.Frozen.RecVolumeGrowth
+public import RWRS.Frozen.RWInfinite
+public import RWRS.Frozen.Sensitivity
+public import RWRS.Frozen.ShortClock
+public import RWRS.Frozen.Stabilization
+public import RWRS.Frozen.StationaryPhase
+public import RWRS.Frozen.StationaryToppling
+public import RWRS.Frozen.Subcritical
+public import RWRS.Frozen.Supercritical
+public import RWRS.Frozen.TransientGoodPipes
+public import RWRS.Frozen.TransientNonstabilization
+public import RWRS.Frozen.UnboundedDegreeTree
+public import RWRS.Frozen.ZeroOneLaw
+public import RWRS.Frozen.ZeroOneStationary
+public import RWRS.Support.Green
+public import RWRS.Support.HeatBasic
+public import RWRS.Zd.Basic
+public import RWRS.Zd.Representation
+public import RWRS.Support.Countable
+public import RWRS.Support.Measurability
+public import RWRS.Support.OptionalStopping
+public import RWRS.Support.Swap
+public import RWRS.Support.KernelSum
+public import RWRS.Support.ShortClock
+public import RWRS.Support.Tree
+public import RWRS.Support.TreeGreen
+public import RWRS.Support.PaleyZygmund
+public import RWRS.Support.PositivePart
+public import RWRS.Support.LibraryBridge
+public import RWRS.Support.Recurrence
+public import RWRS.Support.ClockRatio
+public import RWRS.Support.ErgBall
+public import RWRS.Support.ErgReroot
+public import RWRS.Support.ErgSplice
+public import RWRS.Support.ErgDecor
+public import RWRS.Support.ErgGraph
+public import RWRS.Support.ErgKernel
+public import RWRS.Support.ErgCondLaw
+public import RWRS.Support.ErgPhase
+public import RWRS.Support.ErgTrunc
+public import RWRS.Support.ErgMass
+public import RWRS.Support.ErgProp
+public import RWRS.Support.ErgFactor
+public import RWRS.Support.ErgDom
+public import RWRS.Support.ErgCondNet
+public import RWRS.Support.ErgSuper
+public import RWRS.Support.ErgSuperFinal
+public import RWRS.Support.ErgSubFinal
+public import RWRS.Support.ErgFinal
+public import RWRS.Support.ErgStab
+public import RWRS.Support.Marking
+public import RWRS.Support.WeakLaw
+public import RWRS.Support.Explosion
+public import RWRS.Support.Sensitivity
+public import RWRS.Support.Toppling
+public import RWRS.Support.Truncation
+public import RWRS.Support.Critical
+public import RWRS.Support.Dyadic
+public import RWRS.Support.Convexity
+public import RWRS.Support.EfronStein
+public import RWRS.Support.DyadicSup
+public import RWRS.Support.Gadget
+public import RWRS.Support.GadgetBall
+public import RWRS.Support.Spike
+public import RWRS.Support.GoodEvents
+public import RWRS.Support.RayGadget
+public import RWRS.Support.KilledGreen
+public import RWRS.Support.Comb
+public import RWRS.Support.PipeSub
+public import RWRS.Support.PipeFlowBase
+public import RWRS.Support.PipeDiv
+public import RWRS.Support.PipeEnergy
+public import RWRS.Support.PipeLevel
+public import RWRS.Support.Transience
+public import RWRS.Support.CombExists
+public import RWRS.Support.CombOdometer
+public import RWRS.Support.ProbHelpers
+public import RWRS.Support.RayBuild
+public import RWRS.Support.RayDegree
+public import RWRS.Support.SeriesLaw
+public import RWRS.Support.RayRecurrent
+public import RWRS.Support.GadgetChoice
+public import RWRS.Support.GadgetSeq
+public import RWRS.Support.RayVolume
+public import RWRS.Support.GrowthExponent
+public import RWRS.Support.RecData
+public import RWRS.Support.RayGrowth
+public import RWRS.Support.RaySpikes
+public import RWRS.Support.PipeTransient
+public import RWRS.Support.PipeNbr
+public import RWRS.Support.CombNode
+public import RWRS.Support.CombPipe
+public import RWRS.Support.CombStruct
+public import RWRS.Support.CombArith
+public import RWRS.Support.CombVolt
+public import RWRS.Support.CombEst
+public import RWRS.Support.CombSum
+public import RWRS.Support.CombFinal
+public import RWRS.Support.TrGood
+public import RWRS.Support.VoltageIdentity
+public import RWRS.Support.CutCurrent
+public import RWRS.Support.NestedLower
+public import RWRS.Support.FiniteVolume
+public import RWRS.Support.GreenUnique
+public import RWRS.Support.RayFlux
+public import RWRS.Support.RayTransport
+public import RWRS.Support.RayBallCard
+public import RWRS.Support.RayFinal
+public import RWRS.Support.LocalTimeMarkov
+public import RWRS.Support.LocalTimeCount
+public import RWRS.Support.LocalTimeClock
+public import RWRS.Support.SharpClock
+public import RWRS.Support.SharpGreen
+public import RWRS.Support.SharpTail
+public import RWRS.Support.SharpBackground
+public import RWRS.Support.SharpCount
+public import RWRS.Support.SharpBall
+public import RWRS.Support.SharpIndep
+public import RWRS.Support.SharpEvent
+public import RWRS.Support.SharpFinal
+public import RWRS.Support.FinsetTransfer
+public import RWRS.Support.FukNagaevWeighted
+public import RWRS.Support.LocalTimeMoment
+public import RWRS.Support.LocalTimeSum
+public import RWRS.Support.GoodWalkTail
+public import RWRS.Support.GoodWalkMoment
+public import RWRS.Support.LocalTimeRegimes
+public import RWRS.Support.GoodWalkHolder
+public import RWRS.Support.SpikeDecomp
+public import RWRS.Support.MomentDivergence
+public import RWRS.Support.TailSum
+public import RWRS.Support.MomentIneq
+public import RWRS.Support.SecondMoment
+public import RWRS.Support.Background
+public import RWRS.Support.DTVariance
+public import RWRS.Support.DTPotential
+public import RWRS.Support.DTAdmissible
+public import RWRS.Support.DTBlocks
+public import RWRS.Support.DTTrapFamily
+public import RWRS.Support.DTStageEvents
+public import RWRS.Support.DTStages
+public import RWRS.Support.DTStagesE
+public import RWRS.Support.DTStagesAE
+public import RWRS.Support.DTUncAE
+public import RWRS.Support.DTWalkGood
+public import RWRS.Support.DTWalkEvent2
+public import RWRS.Support.DTReassoc
+public import RWRS.Support.GreenSymm
+public import RWRS.Support.DTCombination
+public import RWRS.Support.DTBoundary
+public import RWRS.Support.DTExitAdmissible
+public import RWRS.Support.DTNoHit
+public import RWRS.Support.DTBias
+public import RWRS.Support.DTUnconstrained
+public import RWRS.Support.DTAgreement
+public import RWRS.Support.DTExitAux
+public import RWRS.Support.DTStopMeas
+public import RWRS.Support.DTAdmissibleCap
+public import RWRS.Support.DTFubini
+public import RWRS.Support.DTMarkov
+public import RWRS.Support.DTRuleMeas
+public import RWRS.Support.DTRuleBound
+public import RWRS.Support.DTRuleFubini
+public import RWRS.Support.DTCappedRule
+public import RWRS.Support.DTCappedFubini
+public import RWRS.Support.DTStageUnion
+public import RWRS.Support.DTAnnealed
+public import RWRS.Support.DTNatConv
+public import RWRS.Support.DTStageFire
+public import RWRS.Support.DTStageIntegral
+public import RWRS.Support.DTStageIdent
+public import RWRS.Support.DTStageIntegrable
+public import RWRS.Support.DTStagePartition
+public import RWRS.Support.DTStageHitRew
+public import RWRS.Support.DTStageBound
+public import RWRS.Support.DTTrajectory
+public import RWRS.Support.DTWalkBlocks
+public import RWRS.Support.DTStageAdm
+public import RWRS.Support.DTStageCount
+public import RWRS.Support.DTStageSites
+public import RWRS.Support.DTNoHitZero
+public import RWRS.Support.DTHitSum
+public import RWRS.Support.DTWalkProb
+public import RWRS.Support.DTPerTraj
+public import RWRS.Support.DTLeave
+public import RWRS.Support.DTAnneal
+public import RWRS.Support.DTStepOne
+public import RWRS.Support.DTTrapBall
+public import RWRS.Support.OSParts
+public import RWRS.Support.OSShift
+public import RWRS.Support.OSSub
+public import RWRS.Support.SubPolyPrep
+public import RWRS.Support.SubPolySite
+public import RWRS.Support.SubPolyBern
+public import RWRS.Support.SubPolyField
+public import RWRS.Support.SubPolyBlock
+public import RWRS.Support.SubPolyWalk
+public import RWRS.Support.SubPolyBound
+public import RWRS.Support.SubPolyGood
+public import RWRS.Support.SubPolyRadius
+public import RWRS.Support.SubPolyMoment
+public import RWRS.Support.SubPolyChain
+public import RWRS.Support.SubPolyExp
+public import RWRS.Support.SubPolyScenery
+public import RWRS.Support.SubPolyStep
+public import RWRS.Support.SubPolyExit
+public import RWRS.Support.SubPolyGeom
+public import RWRS.Support.SubPolyFinal
+public import RWRS.Support.SubStabPoly
+public import RWRS.MainTheorems
+
+@[expose] public section

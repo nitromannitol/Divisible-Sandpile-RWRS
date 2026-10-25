@@ -1,3 +1,5 @@
+module
+
 /-
 # The walk-good event for the trap rule
 
@@ -11,11 +13,13 @@ The event is decided by the trajectory up to the horizon, and it contains the
 exit-based event of `DTWalkEvent2` intersected with `{τ_K < N}`, which is how
 its probability is bounded below.
 -/
-import RWRS.Support.DTStageCount
-import RWRS.Support.DTStagesAE
-import RWRS.Support.DTUncAE
-import RWRS.Support.DTStopMeas
-import RWRS.Support.DTNatConv
+public import RWRS.Support.DTStageCount
+public import RWRS.Support.DTStagesAE
+public import RWRS.Support.DTUncAE
+public import RWRS.Support.DTStopMeas
+public import RWRS.Support.DTNatConv
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,3 +1,5 @@
+module
+
 /-
 Symmetry of the Green function.
 
@@ -7,7 +9,9 @@ symmetric: `g(x,y) = g(y,x)`.  This follows from reversibility of the kernel
 the zero-degree corners handled through the fact that an isolated vertex is
 never reached from a different one.
 -/
-import RWRS.Support.LibraryBridge
+public import RWRS.Support.LibraryBridge
+
+@[expose] public section
 
 open scoped ENNReal
 

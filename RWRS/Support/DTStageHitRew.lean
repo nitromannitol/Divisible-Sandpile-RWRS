@@ -1,5 +1,9 @@
-import RWRS.Support.DTStagePartition
-import RWRS.Support.DTStageIdent
+module
+
+public import RWRS.Support.DTStagePartition
+public import RWRS.Support.DTStageIdent
+
+@[expose] public section
 
 /-!
 # Hit-integral rewrite at the stage time

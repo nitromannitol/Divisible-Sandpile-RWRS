@@ -1,3 +1,5 @@
+module
+
 /-
 The annealed assembly of Step 1.
 
@@ -7,14 +9,16 @@ trajectories, of probability at least three quarters, each carry the gain
 `K` before the horizon carry no loss at all, and the remaining ones are
 controlled by the size of the killed potential on `K` times their probability.
 -/
-import RWRS.Support.DTPerTraj
-import RWRS.Support.DTWalkProb
-import RWRS.Support.NestedLower
-import RWRS.Support.VoltageIdentity
-import RWRS.Support.Representation
-import RWRS.Support.DTVariance
-import RWRS.Support.DTCappedFubini
-import RWRS.Support.DTAnnealed
+public import RWRS.Support.DTPerTraj
+public import RWRS.Support.DTWalkProb
+public import RWRS.Support.NestedLower
+public import RWRS.Support.VoltageIdentity
+public import RWRS.Support.Representation
+public import RWRS.Support.DTVariance
+public import RWRS.Support.DTCappedFubini
+public import RWRS.Support.DTAnnealed
+
+@[expose] public section
 
 open scoped Classical ENNReal
 open MeasureTheory

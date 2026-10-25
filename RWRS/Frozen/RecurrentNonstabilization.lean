@@ -1,3 +1,5 @@
+module
+
 /-
 Theorem 6.11 of `rwrs.tex`, frozen.  `rwrs.tex:1700-1708` (label
 `thm:recurrent-nonstab`):
@@ -17,13 +19,15 @@ of the ball is read as a natural number; that this is its cardinality and not
 the junk value of an infinite set is the separate assertion that every ball is
 finite, which the local finiteness of the constructed graph supplies.
 -/
-import RWRS.Support.RayFinal
-import RWRS.Support.RayGrowth
-import RWRS.Support.RaySpikes
-import RWRS.Support.ProbHelpers
-import RWRS.Support.Pareto
-import RWRS.Support.Explosion
-import Mathlib.Analysis.SpecialFunctions.Log.Basic
+public import RWRS.Support.RayFinal
+public import RWRS.Support.RayGrowth
+public import RWRS.Support.RaySpikes
+public import RWRS.Support.ProbHelpers
+public import RWRS.Support.Pareto
+public import RWRS.Support.Explosion
+public import Mathlib.Analysis.SpecialFunctions.Log.Basic
+
+@[expose] public section
 
 open MeasureTheory Filter
 open scoped ENNReal

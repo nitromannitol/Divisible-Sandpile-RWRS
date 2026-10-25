@@ -1,3 +1,5 @@
+module
+
 /-
 Theorem 2.5 of `rwrs.tex`, frozen.  `rwrs.tex:278-284` (label
 `thm:stationary-toppling`):
@@ -15,7 +17,9 @@ its law, the image of `P` under that map.  Integrability of the degree-weighted
 mass is the hypothesis, and part (b) asserts in particular that the toppled mass
 is integrable, since the two integrals are equal and the second is finite.
 -/
-import RWRS.Support.Toppling
+public import RWRS.Support.Toppling
+
+@[expose] public section
 
 open MeasureTheory
 

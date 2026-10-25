@@ -1,3 +1,5 @@
+module
+
 /-
 The decorrelation of two splice averages at distant roots.
 
@@ -8,7 +10,9 @@ independence of `rwrs.tex:319`.  The walk average of the product is then handled
 by the exchange of the mark average with the iterated reroot average, which is a
 finite sum divided by a constant at every step.
 -/
-import RWRS.Support.ErgSplice
+public import RWRS.Support.ErgSplice
+
+@[expose] public section
 
 namespace RWRS.Support
 

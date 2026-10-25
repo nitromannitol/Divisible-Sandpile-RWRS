@@ -1,3 +1,5 @@
+module
+
 /-
 Four preliminaries for `prop:poly-growth` and for `thm:stab`.
 
@@ -12,7 +14,9 @@ hypothesis `H1` from the vertex it is stated at to every other vertex, at the
 cost of a larger constant, which is what turns the conclusion at one vertex into
 stabilization everywhere.
 -/
-import RWRS.Support.SubStab
+public import RWRS.Support.SubStab
+
+@[expose] public section
 
 namespace RWRS.Support
 

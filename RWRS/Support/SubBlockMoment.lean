@@ -1,3 +1,5 @@
+module
+
 /-
 The geometric decay in the scale of the block moments, for `prop:subcritical`.
 
@@ -6,7 +8,9 @@ The two tails of `eq:Mk-tail-Ak` integrate to `poly(k) 2^{k(q-(p-1)(θ-η))}` an
 `poly(k) 2^{k(1+q-n(θ-δ))}`, and both exponents are negative for `η` small and
 `n` large.
 -/
-import RWRS.Support.SubGeom
+public import RWRS.Support.SubGeom
+
+@[expose] public section
 
 namespace RWRS.Support
 

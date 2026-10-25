@@ -1,9 +1,13 @@
+module
+
 /-
 The independence used in Step 4 of `lem:moment-sharpness`: the mass at a site is
 independent of the background, which reads only the other sites, and the masses
 at two distinct sites are independent of each other.
 -/
-import RWRS.Support.Critical
+public import RWRS.Support.Critical
+
+@[expose] public section
 
 namespace RWRS.Support
 

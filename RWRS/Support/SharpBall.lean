@@ -1,10 +1,14 @@
+module
+
 /-
 The ball of `lem:moment-sharpness`: it is reached within its radius, and
 hypothesis (A3) reads on its cardinality.
 -/
-import RWRS.Support.BallWalk
-import RWRS.Support.Countable
-import RWRS.Setting
+public import RWRS.Support.BallWalk
+public import RWRS.Support.Countable
+public import RWRS.Setting
+
+@[expose] public section
 
 namespace RWRS.Support
 

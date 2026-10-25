@@ -1,3 +1,5 @@
+module
+
 /-
 The depths of the gadgets of `sec:recurrent-nonstab`, chosen inductively.
 
@@ -8,7 +10,9 @@ holds for all large depths.  The state carried along the recursion is the last
 depth together with the running total of the gadget sizes, which is what
 `eq:rec-cond-vol` reads.
 -/
-import RWRS.Support.GadgetChoice
+public import RWRS.Support.GadgetChoice
+
+@[expose] public section
 
 namespace RWRS.Support
 

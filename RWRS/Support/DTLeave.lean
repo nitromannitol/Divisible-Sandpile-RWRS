@@ -1,10 +1,14 @@
+module
+
 /-
 Two elementary facts behind the constants of Step 1: a centred law puts less
 than full mass below any negative level, and the walk leaves a finite set so
 soon that staying in it up to a large time has small probability.
 -/
-import RWRS.Support.DTWalkGood
-import RWRS.Support.Truncation
+public import RWRS.Support.DTWalkGood
+public import RWRS.Support.Truncation
+
+@[expose] public section
 
 namespace RWRS.Support
 

@@ -1,5 +1,9 @@
-import RWRS.Support.Transience
-import LatticeProb.Network.Series
+module
+
+public import RWRS.Support.Transience
+public import LatticeProb.Network.Series
+
+@[expose] public section
 
 /-!
 # Killed Green function bounds

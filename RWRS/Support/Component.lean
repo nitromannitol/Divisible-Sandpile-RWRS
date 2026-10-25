@@ -1,8 +1,12 @@
+module
+
 /-
 The connected component `D_K(o)` of `prop:finite-vol`: its elementary
 properties, and the connectedness of the graph it induces.
 -/
-import RWRS.Setting
+public import RWRS.Setting
+
+@[expose] public section
 
 namespace RWRS.Support
 

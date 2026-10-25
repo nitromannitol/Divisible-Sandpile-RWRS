@@ -1,3 +1,5 @@
+module
+
 /-
 Stabilization is a measurable, isomorphism-invariant, rerooting-invariant event.
 
@@ -7,7 +9,9 @@ proof uses that the event does not depend on the labelling of the vertices or on
 the choice of root.  The toppling machinery of `Toppling.lean` already carries
 the odometer through both, so only the passage to the limiting odometer is left.
 -/
-import RWRS.Support.Toppling
+public import RWRS.Support.Toppling
+
+@[expose] public section
 
 namespace RWRS.Support
 

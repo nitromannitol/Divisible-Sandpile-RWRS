@@ -1,6 +1,10 @@
-import RWRS.Support.PipeSub
-import RWRS.Support.CombNode
-import LatticeProb.Network.Flow
+module
+
+public import RWRS.Support.PipeSub
+public import RWRS.Support.CombNode
+public import LatticeProb.Network.Flow
+
+@[expose] public section
 
 /-!
 # The unit flow on the pipe tree

@@ -1,10 +1,14 @@
+module
+
 /-
 The optimal stopping representation of the odometer: the two halves of
 `thm:RW`, that the odometer is an upper bound for every bounded stopping rule
 and that it is the value of one of them.
 -/
-import RWRS.Support.Walk
-import RWRS.Frozen.Recursion
+public import RWRS.Support.Walk
+public import RWRS.Frozen.Recursion
+
+@[expose] public section
 
 namespace RWRS.Support
 

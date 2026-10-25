@@ -1,3 +1,5 @@
+module
+
 /-
 The pathwise inequality behind the local-time moments.
 
@@ -8,9 +10,11 @@ into the bound the induction on `p` uses: the `p`-th moment of the local time is
 at most `p` times the sum, over the visits, of the `(p-1)`-st power of the
 number of remaining visits.
 -/
-import RWRS.Support.LocalTimeMarkov
-import Mathlib.Analysis.MeanInequalities
-import Mathlib.Analysis.Convex.SpecificFunctions.Basic
+public import RWRS.Support.LocalTimeMarkov
+public import Mathlib.Analysis.MeanInequalities
+public import Mathlib.Analysis.Convex.SpecificFunctions.Basic
+
+@[expose] public section
 
 namespace RWRS.Support
 

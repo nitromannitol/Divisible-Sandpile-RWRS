@@ -1,3 +1,5 @@
+module
+
 /-
 How many stages the capped rule can use on a given trajectory.
 
@@ -8,9 +10,11 @@ length is `stageCnt`.  Below `stageCnt` the constrained stage recursion of the
 rule agrees with the unconstrained one; at or above it the rule can never fire,
 because a firing stage would make the next stage usable as well.
 -/
-import RWRS.Support.DTAgreement
-import RWRS.Support.DTCappedRule
-import RWRS.Support.DTStageAdm
+public import RWRS.Support.DTAgreement
+public import RWRS.Support.DTCappedRule
+public import RWRS.Support.DTStageAdm
+
+@[expose] public section
 
 open scoped Classical ENNReal
 
