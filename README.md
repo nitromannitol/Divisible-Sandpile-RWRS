@@ -104,8 +104,9 @@ every change against the arXiv version.
 1. **Every theorem is about every graph and every law that satisfies its hypotheses.** The
    three main theorems hold for every `SimpleGraph V` that is `LocallyFinite`, `Infinite` and
    connected, with `RWRS.BoundedDegree G d` for some `d`, and for every probability measure
-   `ν` on `ℝ` with `RWRS.HasExtMean ν`, in the stated regimes of the mean `RWRS.extMean ν`
-   (`> 1`, `= 1`, `< 1`). The statements also assume `[MeasurableSpace V]`, and
+   `ν` on `ℝ` with `RWRS.HasExtMean ν`, in the stated regimes of the mean
+   `RWRS.extMean ν`: `> 0`, `= 0` and `< 0` in Theorem 1.1, `> 1` and `= 1` in Theorem 1.2,
+   `< 1` in Theorem 1.3. The statements also assume `[MeasurableSpace V]`, and
    `[MeasurableSingletonClass V]` in Theorems 1.1 and 1.3.
 2. **Axioms and incomplete proofs.** The library contains no `sorry`, no `admit`, no
    `native_decide` and no new `axiom`. The axiom report of each main theorem consists of
