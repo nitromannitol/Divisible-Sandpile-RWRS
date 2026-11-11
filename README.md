@@ -92,6 +92,13 @@ integrable law stabilizes), and the lemmas of the later sections. The sharpness 
 the registered statements `thm:transient-nonstab`, `thm:recurrent-nonstab`,
 `lem:moment-sharpness` and `ex:counterexample`.
 
+## Corrections to the published version
+
+The formalization follows `paper/rwrs.tex`, a corrected text of the paper: it is
+[arXiv:2604.13968v1](https://arxiv.org/abs/2604.13968v1) with two mathematical corrections and
+some typographical changes. [`paper/CHANGES_FROM_ARXIV.md`](paper/CHANGES_FROM_ARXIV.md) lists
+every change against the arXiv version.
+
 ## Standing assumptions and scope
 
 1. **Every theorem is about every graph and every law that satisfies its hypotheses.** The
@@ -186,9 +193,7 @@ the manifest, a registered statement is `PROVED` when it is proved with an axiom
 exactly the three standard axioms and has passed an independent refute-first audit, `SEALED`
 when it is proved but not yet audit-promoted, and `FROZEN` when it is a cited result assumed
 rather than proved. Each statement file under `RWRS/Frozen/` cites the paper's TeX source
-`paper/rwrs.tex` by `\label` and line range, which `tools/paper_anchors.py` checks. The paper
-in `paper/rwrs.tex` is arXiv:2604.13968v1 with the corrections listed in
-[`paper/CHANGES_FROM_ARXIV.md`](paper/CHANGES_FROM_ARXIV.md).
+`paper/rwrs.tex` by `\label` and line range, which `tools/paper_anchors.py` checks.
 
 ## Guarantees
 
