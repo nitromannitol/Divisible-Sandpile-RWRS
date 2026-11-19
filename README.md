@@ -118,6 +118,8 @@ every change against the arXiv version.
    `RWRS.Frozen.stationaryPhase` and `RWRS.Frozen.zeroOneStationary` retain their explicit
    decomposition hypothesis; `RWRS.stationaryPhase` and `RWRS.zeroOneStationary` discharge it.
    [`ASSUMPTIONS.md`](ASSUMPTIONS.md) records the cited proposition and its proof.
+   The proof supplies a simultaneous conditional-component argument omitted by the
+   source; the deviation is described in [`CORRESPONDENCE.md`](CORRESPONDENCE.md#proof-deviations).
 4. **What is not formalized.** The open questions of Section 9, the proof ideas and related
    work of Sections 1.1 and 1.2, the `example` and `remark` environments, and the figures.
 5. **Conventions that matter for reading the statements.**
