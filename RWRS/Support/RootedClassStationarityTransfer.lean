@@ -55,7 +55,6 @@ theorem isStationaryNet_of_goodNetClassLaw (Q : Measure (Net 0))
     congr 1
     apply Finset.sum_congr rfl
     intro y hy
-    change F (netReroot N y) = h (netReroot N y)
     rw [show F (netReroot N y) = f (goodNetClass ⟨netReroot N y, netGood_netReroot hN y⟩) from
       goodNetExtend_of_good _ _ (netGood_netReroot hN y)]
     exact hfac ⟨netReroot N y, netGood_netReroot hN y⟩

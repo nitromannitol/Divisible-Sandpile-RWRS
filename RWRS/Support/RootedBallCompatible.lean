@@ -10,7 +10,7 @@ ball types agree.
 
 namespace RWRS.Support
 
-/-- Equal rooted-ball types at every radius admit compatible ball isomorphisms. -/
+/-- Equal rooted-ball types at every radius have compatible ball isomorphisms. -/
 theorem exists_compatible_rootedBallIso {m : ℕ} {N N' : Net m}
     (h : ∀ r, netBallType N r = netBallType N' r) :
     ∃ f : ∀ r, RootedBallIso N N' r,
