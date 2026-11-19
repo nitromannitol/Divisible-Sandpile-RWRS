@@ -13,8 +13,9 @@ namespace RWRS.Support
 open MeasureTheory ProbabilityTheory
 
 /-- Invariant class observables are almost surely constant at time zero in conditional class paths. -/
-theorem ae_conditional_classPath_initial_values (Q : Measure (Net 0)) [IsProbabilityMeasure Q]
-    (hgood : ∀ᵐ N ∂Q, NetGood N) (f : ℕ → RootedBallClass → ℝ)
+theorem ae_conditional_classPath_initial_values {ι : Type*} [Countable ι]
+    (Q : Measure (Net 0)) [IsProbabilityMeasure Q]
+    (hgood : ∀ᵐ N ∂Q, NetGood N) (f : ι → RootedBallClass → ℝ)
     (hf : ∀ j, Measurable[rootedClassInvariantSigma] (f j)) :
     ∀ᵐ N ∂Q, ∀ j, ∀ᵐ x ∂rootedClassPathLaw
       (goodNetClassLaw (condExpKernel Q (invariantSigma 0) N)),

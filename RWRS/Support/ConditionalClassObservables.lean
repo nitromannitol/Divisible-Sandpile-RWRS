@@ -68,8 +68,9 @@ theorem measurable_invariantClassObservable {f : RootedBallClass → ℝ}
         invariantClassObservable_of_not_good f (netReroot N y) hNr]
 
 /-- A countable family of invariant class observables is constant in almost every conditional fiber. -/
-theorem ae_ae_invariantClassObservable (Q : Measure (Net 0)) [IsProbabilityMeasure Q]
-    (f : ℕ → RootedBallClass → ℝ)
+theorem ae_ae_invariantClassObservable {ι : Type*} [Countable ι]
+    (Q : Measure (Net 0)) [IsProbabilityMeasure Q]
+    (f : ι → RootedBallClass → ℝ)
     (hf : ∀ j, Measurable[rootedClassInvariantSigma] (f j)) :
     ∀ᵐ N ∂Q, ∀ j, ∀ᵐ M ∂condExpKernel Q (invariantSigma 0) N,
       invariantClassObservable (f j) M = invariantClassObservable (f j) N := by
