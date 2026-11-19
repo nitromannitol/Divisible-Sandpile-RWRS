@@ -113,13 +113,11 @@ every change against the arXiv version.
    exactly `propext`, `Classical.choice` and `Quot.sound`. The main theorems rely on no
    unproved result: everything they use, including the facts the paper cites from the
    literature, is available in mathlib or Lattice-Probability or is proved in this repository.
-3. **One cited result is assumed, outside the main theorems.** The ergodic decomposition of
-   stationary random networks, one of the nine results the paper quotes from the literature, is
-   **not proved here**. It is stated in Lean as a proposition in `RWRS/External/` and enters as
-   an explicit hypothesis of the two statements whose proofs use it, `RWRS.Frozen.stationaryPhase`
-   (`thm:stationary-phase`) and `RWRS.Frozen.zeroOneStationary` (`lem:01-stationary`); none of
-   the three main theorems uses it. [`ASSUMPTIONS.md`](ASSUMPTIONS.md) gives its verbatim Lean
-   statement.
+3. **The cited inputs are proved.** The ergodic decomposition of stationary random networks
+   is proved by `RWRS.External.ergodicDecomposition`. The frozen statements
+   `RWRS.Frozen.stationaryPhase` and `RWRS.Frozen.zeroOneStationary` retain their explicit
+   decomposition hypothesis; `RWRS.stationaryPhase` and `RWRS.zeroOneStationary` discharge it.
+   [`ASSUMPTIONS.md`](ASSUMPTIONS.md) records the cited proposition and its proof.
 4. **What is not formalized.** The open questions of Section 9, the proof ideas and related
    work of Sections 1.1 and 1.2, the `example` and `remark` environments, and the figures.
 5. **Conventions that matter for reading the statements.**
@@ -151,9 +149,9 @@ every change against the arXiv version.
 
 ## Results cited from the literature
 
-The paper quotes nine results from the literature without proof. Eight of them are proved
-outright in this repository, most of them through Lattice-Probability, in the generality every
-use site needs: the von Bahr–Esseen, Fuk–Nagaev and Bernstein inequalities unconditionally, the
+The paper quotes nine results from the literature without proof. All are proved
+in this repository or its dependencies in the generality every use site needs. Eight are
+registered as ordinary theorem nodes: the von Bahr–Esseen, Fuk–Nagaev and Bernstein inequalities unconditionally, the
 bounded-degree heat kernel bound and heat kernel vanishing on every infinite connected graph,
 the Efron–Stein inequality for a countable index set, the pointwise Carne–Varopoulos bound on
 every connected, nontrivial, locally finite graph, and the bounded voltage function on every
@@ -162,8 +160,8 @@ infinite connected graph, recurrent or transient
 proof together, as a single `PROVED` theorem node in `RWRS/External/` (see
 `tools/check_manifest.py`), and no statement carries it as a hypothesis; the theorems that need
 the voltage function discharge it inside their proofs. The ninth, the ergodic decomposition of
-stationary random networks, is stated in `RWRS/External/` in state `FROZEN`; see item 3 of
-[Standing assumptions and scope](#standing-assumptions-and-scope).
+stationary random networks, is stated as a frozen proposition in `RWRS/External/` and proved by
+`RWRS.External.ergodicDecomposition` in `RWRS/Support/ErgodicDecomposition.lean`.
 
 ## Registered statements
 
@@ -192,8 +190,8 @@ SHA-256 of those bytes in [`ledger/manifest.yaml`](ledger/manifest.yaml), togeth
 paper `\label` and line range it transcribes; the proof after the end marker is not pinned. In
 the manifest, a registered statement is `PROVED` when it is proved with an axiom closure of
 exactly the three standard axioms and has passed an independent refute-first audit, `SEALED`
-when it is proved but not yet audit-promoted, and `FROZEN` when it is a cited result assumed
-rather than proved. Each statement file under `RWRS/Frozen/` cites the paper's TeX source
+when it is proved but not yet audit-promoted, and `FROZEN` for a pinned cited proposition.
+A frozen proposition may have a separate proof, as recorded in `ASSUMPTIONS.md`. Each statement file under `RWRS/Frozen/` cites the paper's TeX source
 `paper/rwrs.tex` by `\label` and line range, which `tools/paper_anchors.py` checks.
 
 ## Guarantees
@@ -320,9 +318,9 @@ Both run on pushes to `main` that change Lean files, `tools/`, `paper/`, `ledger
 RWRS.lean                 the root module, importing the whole library
 RWRS/
   MainTheorems.lean       the main theorems, stated in full
+  StationaryTheorems.lean the stationary conclusions without a decomposition hypothesis
   Frozen/                 the certified statement surface, one frozen statement per file
-  External/               the nine cited results as propositions, with the proofs of the eight
-                          that are proved; ErgodicDecomposition.lean states the one assumed
+  External/               the cited propositions and their theorem statements
   Support/                the lemmas and constructions the frozen statements are proved from,
                           including LibraryBridge.lean (the identification with
                           Lattice-Probability)
