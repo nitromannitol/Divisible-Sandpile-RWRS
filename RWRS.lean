@@ -84,6 +84,7 @@ import RWRS.Frozen.TransientNonstabilization
 import RWRS.Frozen.UnboundedDegreeTree
 import RWRS.Frozen.ZeroOneLaw
 import RWRS.Frozen.ZeroOneStationary
+import RWRS.StationaryTheorems
 import RWRS.Support.Green
 import RWRS.Support.HeatBasic
 import RWRS.Zd.Basic
