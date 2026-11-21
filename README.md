@@ -239,7 +239,7 @@ A frozen proposition may have a separate proof, as recorded in `ASSUMPTIONS.md`.
 
 ## Size
 
-The library contains 292 Lean files with 48,331 physical lines, on top of mathlib and
+The library contains 358 Lean files with 52,204 physical lines, on top of mathlib and
 Lattice-Probability. The comparator sources (12 files, 1,813 lines) are counted separately.
 
 ## Building
