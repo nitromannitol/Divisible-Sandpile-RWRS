@@ -49,7 +49,6 @@ theorem one_le_rpow_of_one_le {x e : ℝ} (hx : 1 ≤ x) (he : 0 ≤ e) : (1:ℝ
 
 variable [MeasurableSpace V] [MeasurableSingletonClass V] [Countable V]
 
-set_option maxHeartbeats 1600000 in
 /-- **The `k`-th block moment of the recentred field is geometrically small in
 the scale.** -/
 theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
@@ -84,7 +83,7 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
     have hpos : (0:ℝ) < 4 * (β + 1) := by positivity
     have hrw : β * s = β * δ / (4 * (β + 1)) := by rw [hs]; ring
     rw [hrw, div_le_div_iff₀ hpos (by norm_num : (0:ℝ) < 4)]
-    nlinarith [hβ0, hδ0]
+    linarith only [hδ0]
   have hkey : δ / 2 ≤ 2 - 2 * σ - 1 - α - δ - γ := by
     rw [hαval, hγ, hσ]
     have hd2 : d_s / 2 - β / d_w = 2 * δ := by rw [hδ]; ring
@@ -93,12 +92,12 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
     rw [hexp]
     linarith [hβs, hd2]
   have hδ1 : δ < min (d_s / 2) 1 := by
+    have hβdw0 : (0:ℝ) < β / d_w := div_pos hβ0 hdw0
     refine lt_min ?_ ?_
     · rw [hδ]
-      have : (0:ℝ) < β / d_w := by positivity
-      linarith
+      linarith only [hβdw0, hds0]
     · rw [hδ]
-      linarith
+      linarith only [hβdw0, hds2]
   obtain ⟨Cσ, hCσ0, hCσ⟩ := succ_le_rpow hσ0
   set CL : ℝ := M0 + M + (2:ℝ) ^ β with hCL
   have hCL1 : (1:ℝ) ≤ CL := by
@@ -119,21 +118,28 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
     have h1 : ((r0 : ℕ) : ℝ) ≤ ((r : ℕ) : ℝ) := by exact_mod_cast le_max_left r0 1
     have h2 : (2 + β + d_s / 2) / δ ≤ ((r : ℕ) : ℝ) := le_trans hr0 h1
     rw [div_le_iff₀ hδ0] at h2
-    linarith
+    linarith only [h2]
   obtain ⟨Cr, hCr0, hCrb⟩ := (RWRS.Frozen.goodWalkBounds hG d hbd d_s A hds0 hH2 ρ
     inferInstance m hmeq hm p hp1 habs α δ hα hδ0 hδ1).1 r hr1
   -- the two geometric bounds
   set cw : ℝ := |m| / (2 * (d : ℝ) * Cσ) with hcw
   have hcw0 : (0:ℝ) < cw := by rw [hcw]; positivity
   set Cden : ℝ := CL * Cm + CL * |m| / 3 + 1 with hCden
-  have hCden0 : (0:ℝ) < Cden := by rw [hCden]; positivity
+  have hCden0 : (0:ℝ) < Cden := by
+    rw [hCden]
+    exact add_pos_of_nonneg_of_pos (add_nonneg (mul_nonneg hCL0.le hCm)
+      (div_nonneg (mul_nonneg hCL0.le (abs_nonneg m)) zero_le_three)) one_pos
   set cE : ℝ := cw ^ 2 / (2 * Cden) with hcE
-  have hcE0 : (0:ℝ) < cE := by rw [hcE]; positivity
+  have hcE0 : (0:ℝ) < cE := by
+    rw [hcE]
+    exact div_pos (pow_pos hcw0 2) (mul_pos two_pos hCden0)
   obtain ⟨C1, hC10, hC1⟩ := exists_geom_bound (A := 3 + γ) (CB := 2 * CL) (c := cE)
-    (θ := δ / 2) (by positivity) hcE0 (by positivity)
+    (θ := δ / 2) (mul_nonneg zero_le_two hCL0.le) hcE0 (half_pos hδ0)
   obtain ⟨C2, hC20, hC2⟩ := exists_geom_bound (A := 1 + β) (CB := CB * C_disp) (c := c_disp)
-    (θ := s * d_w / (d_w - 1)) (by positivity) hcd (div_pos (by positivity) hdw1)
-  refine ⟨C1 + CB * Cr + C2, by positivity, fun k => ?_⟩
+    (θ := s * d_w / (d_w - 1)) (mul_nonneg hCB0.le hCd.le) hcd (div_pos (mul_pos hs0 hdw0) hdw1)
+  refine ⟨C1 + CB * Cr + C2, add_nonneg (add_nonneg hC10 (mul_nonneg hCB0.le hCr0.le)) hC20,
+    fun k => ?_⟩
+  have h12 : (0:ℝ) ≤ (1 / 2 : ℝ) ^ k := pow_nonneg (by norm_num) k
   set N : ℝ := (2 ^ (k + 1) : ℝ) with hN
   have hN1 : (1:ℝ) ≤ N := one_le_pow₀ (by norm_num)
   have hN0 : (0:ℝ) < N := lt_of_lt_of_le zero_lt_one hN1
@@ -142,7 +148,7 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
   have hNcast : ((Nn : ℕ) : ℝ) = N := by rw [hNn, hN]; push_cast; ring
   set Rk : ℕ := polyR d_w s Nn with hRk
   have hblock := lintegral_dyadicY_polyLevel_le (G := G) (ρ := ρ) RWRS.External.bernstein hdeg
-    hM hM0 hβ0.le hm hCm (by linarith : (0:ℝ) ≤ 2 - p2) hvarbd (k := k) (R := Rk) (α := α)
+    hM hM0 hβ0.le hm hCm (by linarith only [hp2b] : (0:ℝ) ≤ 2 - p2) hvarbd (k := k) (R := Rk) (α := α)
     (δ := δ) hd
   refine le_trans hblock ?_
   rw [← hN]
@@ -166,7 +172,7 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
     have hRβ0 : (0:ℝ) ≤ (((Rk : ℕ) : ℝ)) ^ β := Real.rpow_nonneg (Nat.cast_nonneg _) β
     have h2β : (0:ℝ) < (2:ℝ) ^ β := Real.rpow_pos_of_pos (by norm_num) β
     have hmax : max M0 (((Rk : ℕ) : ℝ) ^ β) ≤ M0 + (((Rk : ℕ) : ℝ)) ^ β :=
-      max_le (by linarith) (by linarith)
+      max_le (by linarith only [hRβ0]) (by linarith only [hM0])
     have hstep : polyCap M0 β M Rk ≤ M0 + M + (2:ℝ) ^ β * N ^ γ := by
       rw [polyCap]
       linarith only [hRβ, hmax]
@@ -254,7 +260,7 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
   set B : ℝ := Db + Mb * w / 3 with hBdef
   have hB0 : (0:ℝ) < B := by
     rw [hBdef]
-    have h1 : (0:ℝ) < Mb * w / 3 := by positivity
+    have h1 : (0:ℝ) < Mb * w / 3 := div_pos (mul_pos hMb0 hw0) zero_lt_three
     linarith only [hDb0, h1]
   have hBub : B ≤ Cden * N ^ (1 + (α + δ + γ)) := by
     have hMw : Mb * w ≤ (CL * N ^ (α + δ + γ)) * (|m| * N) :=
@@ -283,7 +289,7 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
     linarith only [h1]
   have hE : cE * N ^ (δ / 2) ≤ w ^ 2 / 2 / B := by
     have hstep : (cw ^ 2 / 2 * N ^ (2 - 2 * σ)) / (Cden * N ^ (1 + (α + δ + γ)))
-        ≤ w ^ 2 / 2 / B := div_le_div₀ (by positivity) hAlb hB0 hBub
+        ≤ w ^ 2 / 2 / B := div_le_div₀ (div_nonneg (sq_nonneg w) zero_le_two) hAlb hB0 hBub
     have heq : (cw ^ 2 / 2 * N ^ (2 - 2 * σ)) / (Cden * N ^ (1 + (α + δ + γ)))
         = cE * N ^ (2 - 2 * σ - (1 + (α + δ + γ))) := by
       rw [hcE, Real.rpow_sub hN0 (2 - 2 * σ) (1 + (α + δ + γ))]
@@ -360,7 +366,7 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
         ≤ CB * Cr * (1 / 2 : ℝ) ^ k := by
       have h1 : (N * polyCap M0 β M Nn) * (Cr * N ^ (d_s / 2 - (r : ℝ) * δ))
           ≤ (CB * N ^ (1 + β)) * (Cr * N ^ (d_s / 2 - (r : ℝ) * δ)) :=
-        mul_le_mul_of_nonneg_right hBbub (by positivity)
+        mul_le_mul_of_nonneg_right hBbub (mul_nonneg hCr0.le (Real.rpow_nonneg hN0.le _))
       have h2 : (CB * N ^ (1 + β)) * (Cr * N ^ (d_s / 2 - (r : ℝ) * δ))
           = CB * Cr * N ^ ((1 + β) + (d_s / 2 - (r : ℝ) * δ)) := by
         rw [Real.rpow_add hN0 (1 + β) (d_s / 2 - (r : ℝ) * δ)]
@@ -369,7 +375,7 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
       refine le_trans h1 ?_
       have h3 : N ^ ((1 + β) + (d_s / 2 - (r : ℝ) * δ)) ≤ (1 / 2 : ℝ) ^ k :=
         rpow_le_geom (by linarith only [hrδ]) k
-      exact mul_le_mul_of_nonneg_left h3 (by positivity)
+      exact mul_le_mul_of_nonneg_left h3 (mul_nonneg hCB0.le hCr0.le)
     have hBg : (N * polyCap M0 β M Nn)
           * (C_disp * Real.exp (-(c_disp * N ^ (s * d_w / (d_w - 1)))))
         ≤ C2 * (1 / 2 : ℝ) ^ k := by
@@ -379,7 +385,7 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
             * (C_disp * Real.exp (-(c_disp * N ^ (s * d_w / (d_w - 1)))))
           ≤ (CB * N ^ (1 + β))
             * (C_disp * Real.exp (-(c_disp * N ^ (s * d_w / (d_w - 1))))) :=
-        mul_le_mul_of_nonneg_right hBbub (by positivity)
+        mul_le_mul_of_nonneg_right hBbub (mul_nonneg hCd.le (Real.exp_nonneg _))
       refine le_trans h1 (le_of_eq ?_)
       ring
     calc ENNReal.ofReal (N * polyCap M0 β M Nn)
@@ -397,7 +403,8 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
             + ENNReal.ofReal (C2 * (1 / 2 : ℝ) ^ k) :=
           add_le_add (ENNReal.ofReal_le_ofReal hA) (ENNReal.ofReal_le_ofReal hBg)
       _ = ENNReal.ofReal ((CB * Cr + C2) * (1 / 2 : ℝ) ^ k) := by
-          rw [← ENNReal.ofReal_add (by positivity) (by positivity)]
+          rw [← ENNReal.ofReal_add (mul_nonneg (mul_nonneg hCB0.le hCr0.le) h12)
+            (mul_nonneg hC20 h12)]
           congr 1
           ring
   calc ENNReal.ofReal (N * polyCap M0 β M Rk * polyBern m d k Mb Db)
@@ -407,7 +414,8 @@ theorem exists_block_bound_poly [Infinite V] (hG : G.Connected)
           + ENNReal.ofReal ((CB * Cr + C2) * (1 / 2 : ℝ) ^ k) :=
         add_le_add (ENNReal.ofReal_le_ofReal hterm1) hterm2
     _ = ENNReal.ofReal ((C1 + CB * Cr + C2) * (1 / 2 : ℝ) ^ k) := by
-        rw [← ENNReal.ofReal_add (by positivity) (by positivity)]
+        rw [← ENNReal.ofReal_add (mul_nonneg hC10 h12)
+          (mul_nonneg (add_nonneg (mul_nonneg hCB0.le hCr0.le) hC20) h12)]
         congr 1
         ring
 
