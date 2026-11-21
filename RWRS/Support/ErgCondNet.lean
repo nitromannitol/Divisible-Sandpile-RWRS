@@ -24,7 +24,6 @@ noncomputable def degWeight (N : RWRS.Net 0) : ℝ :=
 noncomputable def degWeightAt (N : RWRS.Net 0) (r : ℕ) : ℝ :=
   (((RWRS.netGraph N).degree r : ℝ))⁻¹
 
-set_option maxHeartbeats 1000000 in
 /-- `degWeight` is measurable, factoring it through the countable-left product
 measurability of the named-vertex degree weight `degWeightAt`. -/
 theorem measurable_degWeight : Measurable degWeight := by
