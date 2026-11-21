@@ -164,7 +164,6 @@ noncomputable def rerootPair {m : ℕ} (h : Net m → ℝ≥0∞) (q : Net m × 
   (∑ y ∈ (netGraph q.1).neighborFinset q.2, h (netReroot q.1 y))
     / ((netGraph q.1).degree q.2 : ℝ≥0∞)
 
-set_option maxHeartbeats 1000000 in
 /-- `rerootAvg h` is measurable: the numerator and denominator are rewritten as
 the `tsum` forms of `sum_neighborFinset_eq_tsum` and `degree_eq_tsum`, then
 the quotient is factored through the pair function `rerootPair`. -/
