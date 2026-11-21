@@ -25,9 +25,9 @@ into an ordinary proved theorem node, so no statement carries a hypothesis for t
 | Lean toolchain | `leanprover/lean4:v4.32.0` |
 | Mathlib revision | `81a5d257c8e410db227a6665ed08f64fea08e997` |
 | Paper (`paper/rwrs.tex`) SHA-256 | `809373589ee57976f2eb57cd62a1cb1d94d8e66ac576632be65385e9a06ded6c` |
-| Build | succeeded, 9006 jobs |
+| Build | succeeded, 9077 jobs |
 | Build warnings | 0 |
-| Generated | 2026-10-04 |
+| Generated | 2026-11-21 |
 
 ## Reproducing it
 
