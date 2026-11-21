@@ -297,7 +297,6 @@ noncomputable def netInflowAt (N : Net 1) (j : ℕ) (r : ℕ) : ℝ :=
       emission (netGraph N) (config (netGraph N) (netConfig N) j) y)
     / ((netGraph N).degree r : ℝ)
 
-set_option maxHeartbeats 1000000 in
 /-- The emission at the (varying) root after round `j` is a measurable function of the network,
 read off the measurable two-variable function `netEmissionAt` at the measurable root. -/
 theorem measurable_netEmission (j : ℕ) : Measurable fun N : Net 1 => netEmission N j := by
@@ -311,7 +310,6 @@ theorem measurable_netEmission (j : ℕ) : Measurable fun N : Net 1 => netEmissi
   rw [hsplit]
   exact hpair.comp (measurable_id.prodMk measurable_netRoot)
 
-set_option maxHeartbeats 1000000 in
 /-- The inflow at the (varying) root after round `j` is a measurable function of the network,
 read off `netInflowAt` at the measurable root. -/
 theorem measurable_netInflow (j : ℕ) : Measurable fun N : Net 1 => netInflow N j := by
@@ -366,7 +364,6 @@ theorem rerootAvg_netEmission (N : Net 1) (j : ℕ) (hdeg : 0 < (netGraph N).deg
 noncomputable def netMassAt (N : Net 1) (j r : ℕ) : ℝ :=
   config (netGraph N) (netConfig N) j r / ((netGraph N).degree r : ℝ)
 
-set_option maxHeartbeats 1000000 in
 /-- The degree-weighted mass at the (varying) root after round `j` is a measurable function of
 the network. -/
 theorem measurable_netWeightedMassAt (j : ℕ) :
