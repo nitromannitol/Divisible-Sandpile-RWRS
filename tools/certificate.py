@@ -17,7 +17,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from sync_docs import (PROVED_STATES, external_inputs_block, proved_citations,
+from sync_docs import (bridge_proofs, PROVED_STATES, external_inputs_block, proved_citations,
                        proved_companions, proved_state_label, unconditional_names)
 
 try:
@@ -92,6 +92,7 @@ def build() -> str:
     corollaries = unconditional_names()
     exports = [n["export"] for n in nodes] + corollaries
     companions = proved_companions(nodes)
+    bridges = bridge_proofs(nodes)
     proved_cited = proved_citations(nodes)
     theorems = [n for n in nodes if n["kind"] == "theorem"]
     externals = [n for n in nodes if n["kind"] == "definition"]
@@ -149,6 +150,10 @@ def build() -> str:
     A(f"{len(companions)} of the {len(externals)} cited inputs not proved outright have registered proved")
     A(f"companions. {len(proved_cited)} further cited inputs are proved outright and merged")
     A("into an ordinary proved theorem node, so no statement carries a hypothesis for them.")
+    if bridges:
+        A(f"{len(bridges)} of the {len(externals)} cited inputs not proved outright "
+          + ("is" if len(bridges) == 1 else "are") + " proved by a separate theorem,")
+        A("named in the table below.")
     A("")
     A("## Environment")
     A("")
@@ -195,8 +200,11 @@ def build() -> str:
         verdict = "classical only" if not extra else "**" + ", ".join(sorted(extra)) + "**"
         if n.get("kind") == "definition":
             companion = companions.get(n["id"])
+            bridge = bridges.get(n["id"])
             verdict = (f"proved (companion {companion['id']}, from the Lattice-Probability library)"
-                       if companion else "assumed (a cited theorem, stated as a proposition)")
+                       if companion else
+                       f"proved (by `{bridge['export']}` in `{bridge['file']}`)" if bridge else
+                       "assumed (a cited theorem, stated as a proposition)")
         elif not extra:
             clean += 1
         src = n["source"]
@@ -289,9 +297,10 @@ def build() -> str:
     A("")
     A("## What is not claimed")
     A("")
-    A("- The cited theorems in `RWRS/External/` (the rows marked *assumed* above) are")
-    A("  not proved here; each statement that uses one carries it as an explicit")
-    A("  hypothesis. Companion proofs apply under the hypotheses listed above.")
+    if any(n["id"] not in companions and n["id"] not in bridges for n in externals):
+        A("- The cited theorems in `RWRS/External/` (the rows marked *assumed* above) are")
+        A("  not proved here; each statement that uses one carries it as an explicit")
+        A("  hypothesis. Companion proofs apply under the hypotheses listed above.")
     A("- The paper's open questions (Section 9) are questions; nothing there is")
     A("  formalized, and nothing here bears on them.")
     A("- The proof ideas and the related work of Sections 1.1 and 1.2 are")

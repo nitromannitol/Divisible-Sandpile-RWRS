@@ -142,7 +142,7 @@ theorem proves the input under the witness's stated hypotheses.
 
 | input | proposition | source | proved witness |
 |---|---|---|---|
-| `X-009` | `RWRS.External.ErgodicDecomposition` | rwrs.tex:337-342 (cited in lem:01-stationary) | — |
+| `X-009` | `RWRS.External.ErgodicDecomposition` | rwrs.tex:337-342 (cited in lem:01-stationary) | `RWRS.External.ergodicDecomposition` (`RWRS/Support/ErgodicDecomposition.lean`) |
 
 Proved outright (`kind: theorem`, `state: PROVED`):
 

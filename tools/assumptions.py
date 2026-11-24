@@ -78,7 +78,7 @@ def render():
     man = yaml.safe_load((ROOT / "ledger" / "manifest.yaml").read_text(encoding="utf-8"))
     assumed = [n for n in man["nodes"] if n.get("state") == "FROZEN"]
     comp = companions(man["nodes"])
-    out = ["# What this development assumes", ""]
+    out = ["# Cited inputs", ""]
     if not assumed:
         out += ["Nothing.  Every registered statement in this repository is proved here,",
                 "from Mathlib and the libraries named in the README; no result is carried",
@@ -105,7 +105,13 @@ def render():
             if b:
                 comp[stem] = b
     withproof = [n for n in assumed if pathlib.Path(n["file"]).stem in comp]
-    if withproof:
+    if len(withproof) == len(assumed) and not any(
+            conditional(comp[pathlib.Path(n["file"]).stem]) for n in withproof):
+        out += [("**It is proved in this repository**, with no hypothesis; the entry names the "
+                 "theorem." if len(assumed) == 1 else
+                 f"**All {len(assumed)} are proved in this repository**, with no hypothesis; each "
+                 "entry names the theorem."), ""]
+    elif withproof:
         out += [(f"Of these, **{len(withproof)} are also proved in this repository** and so need not "
                  "be taken on trust; each is marked below with the theorem that proves it. "
                  if len(withproof) > 1 else
@@ -127,8 +133,7 @@ def render():
                     "whose statement is shown after the assumed one; where those hypotheses "
                     "hold, this hypothesis can be discharged, and elsewhere it is assumed")
         elif c:
-            line = (f"* **Also proved here** by `{c['id']}` in `{c['file']}`, so this hypothesis "
-                    "can be discharged rather than assumed")
+            line = f"* **Proved** by `{c['id']}` in `{c['file']}`"
         else:
             line = "* **Not proved here**: this one is assumed outright"
         out += [f"## `{n['id']}`", "",

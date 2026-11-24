@@ -17,6 +17,8 @@ listed below; `CORRESPONDENCE.md` records the correspondence with the paper.
 0 of the 1 cited inputs not proved outright have registered proved
 companions. 8 further cited inputs are proved outright and merged
 into an ordinary proved theorem node, so no statement carries a hypothesis for them.
+1 of the 1 cited inputs not proved outright is proved by a separate theorem,
+named in the table below.
 
 ## Environment
 
@@ -93,7 +95,7 @@ nowhere below.
 | 37 | `N-028` | `RWRS.Frozen.subcritical` | `PROVED` | `prop:subcritical` | classical only |
 | 38 | `N-029` | `RWRS.Frozen.polyGrowth` | `PROVED` | `prop:poly-growth` | classical only |
 | 39 | `N-007` | `RWRS.Frozen.ergodicMarked` | `PROVED` | `lem:ergodic-marked-stationary` | classical only |
-| 40 | `X-009` | `RWRS.External.ErgodicDecomposition` | `FROZEN` | — | assumed (a cited theorem, stated as a proposition) |
+| 40 | `X-009` | `RWRS.External.ErgodicDecomposition` | `FROZEN` | — | proved (by `RWRS.External.ergodicDecomposition` in `RWRS/Support/ErgodicDecomposition.lean`) |
 | 41 | `N-008` | `RWRS.Frozen.zeroOneStationary` | `PROVED` | `lem:01-stationary` | classical only |
 | 42 | `N-005` | `RWRS.Frozen.stationaryPhase` | `PROVED` | `thm:stationary-phase` | classical only |
 | 43 | `N-021` | `RWRS.Frozen.doublyTransient` | `PROVED` | `prop:doubly-transient-really-general` | classical only |
@@ -149,7 +151,7 @@ theorem proves the input under the witness's stated hypotheses.
 
 | input | proposition | source | proved witness |
 |---|---|---|---|
-| `X-009` | `RWRS.External.ErgodicDecomposition` | rwrs.tex:337-342 (cited in lem:01-stationary) | — |
+| `X-009` | `RWRS.External.ErgodicDecomposition` | rwrs.tex:337-342 (cited in lem:01-stationary) | `RWRS.External.ergodicDecomposition` (`RWRS/Support/ErgodicDecomposition.lean`) |
 
 Proved outright (`kind: theorem`, `state: PROVED`):
 
@@ -234,9 +236,6 @@ verifies these; the recipe is in `CORRESPONDENCE.md`.
 
 ## What is not claimed
 
-- The cited theorems in `RWRS/External/` (the rows marked *assumed* above) are
-  not proved here; each statement that uses one carries it as an explicit
-  hypothesis. Companion proofs apply under the hypotheses listed above.
 - The paper's open questions (Section 9) are questions; nothing there is
   formalized, and nothing here bears on them.
 - The proof ideas and the related work of Sections 1.1 and 1.2 are

@@ -72,10 +72,14 @@ status:
     graph, recurrent or transient
     (RWRS.External.voltageFunction_of_connected); each lives as a single
     PROVED theorem node together with its proof, and no statement carries it as
-    a hypothesis.  One is not proved here: the ergodic decomposition of
-    stationary random networks.  The statements whose proofs use it
-    (RWRS.Frozen.stationaryPhase and RWRS.Frozen.zeroOneStationary) take it as
-    an explicit hypothesis; ASSUMPTIONS.md lists it with its Lean statement.
+    a hypothesis.  The ninth, the ergodic decomposition of stationary random
+    networks, is proved as RWRS.External.ergodicDecomposition
+    (RWRS/Support/ErgodicDecomposition.lean).  The frozen statements whose
+    proofs use it (RWRS.Frozen.stationaryPhase and
+    RWRS.Frozen.zeroOneStationary) take it as an explicit hypothesis, and
+    RWRS.stationaryPhase and RWRS.zeroOneStationary
+    (RWRS/StationaryTheorems.lean) restate them without it; ASSUMPTIONS.md
+    lists it with its Lean statement and proof.
     Not formalized: the open questions of Section 9, the proof ideas and
     related work of Sections 1.1 and 1.2, the example and remark environments,
     and the figures.  The main theorems are stated in full in
@@ -218,8 +222,8 @@ alignment:
     - source: "Cited result: ergodic decomposition of stationary random networks"
       lean: "RWRS.External.ErgodicDecomposition"
       module: "RWRS.External.ErgodicDecomposition"
-      status: "assumed"
-      note: "An explicit hypothesis of the statements that use it (RWRS.Frozen.stationaryPhase and RWRS.Frozen.zeroOneStationary); listed in ASSUMPTIONS.md."
+      status: "proved"
+      note: "Proved as RWRS.External.ergodicDecomposition (RWRS/Support/ErgodicDecomposition.lean). An explicit hypothesis of the frozen statements that use it (RWRS.Frozen.stationaryPhase and RWRS.Frozen.zeroOneStationary); RWRS.stationaryPhase and RWRS.zeroOneStationary (RWRS/StationaryTheorems.lean) discharge it."
 
 acknowledgements: >-
   The paper is joint work with Yuval Peres and Ecaterina Sava-Huss.  Built on

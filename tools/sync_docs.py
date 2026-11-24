@@ -75,6 +75,32 @@ def proved_companions(nodes: list[dict]) -> dict[str, dict]:
             if n["kind"] == "definition" and n["id"] + "P" in sealed}
 
 
+def bridge_proofs(nodes: list[dict]) -> dict[str, dict]:
+    """A theorem proving a `FROZEN` cited input that has no companion node.
+
+    For each such input, the first theorem outside `External/` and `Frozen/` whose type is
+    exactly the input's proposition, with the file that declares it.
+    """
+    companions = proved_companions(nodes)
+    out: dict[str, dict] = {}
+    for n in nodes:
+        if n["kind"] != "definition" or n["id"] in companions:
+            continue
+        export = n["export"]
+        short = export.split(".")[-1]
+        pat = re.compile(r"^theorem\s+(\S+)\s*:\s*(?:" + re.escape(export) + r"|External\."
+                         + re.escape(short) + r")\s*:=", re.M)
+        for f in sorted((ROOT / "RWRS").rglob("*.lean")):
+            rel = f.relative_to(ROOT)
+            if "External" in rel.parts or "Frozen" in rel.parts:
+                continue
+            m = pat.search(f.read_text(encoding="utf-8"))
+            if m:
+                out[n["id"]] = {"export": m.group(1), "file": rel.as_posix()}
+                break
+    return out
+
+
 def unconditional_names() -> list[str]:
     """The corollaries that discharge every cited input at their use sites."""
     path = ROOT / "RWRS" / "Support" / "Unconditional.lean"
@@ -101,6 +127,7 @@ def proved_citations(nodes: list[dict]) -> list[dict]:
 def status_block(nodes: list[dict]) -> str:
     counts = Counter(n["state"] for n in nodes)
     companions = proved_companions(nodes)
+    bridges = bridge_proofs(nodes)
     proved_cited = proved_citations(nodes)
     draft = [n["id"] for n in nodes if n["state"] == "DRAFT_SORRY"]
     proved = sum(counts.get(s, 0) for s in PROVED_STATES)
@@ -112,7 +139,8 @@ def status_block(nodes: list[dict]) -> str:
         f"{' and independently audited' if audited else ''}), "
         f"{counts['FROZEN']} FROZEN "
         f"(cited external inputs, stated as hypotheses; {len(companions)} "
-        "of them with a proved companion)")
+        "of them with a proved companion"
+        + (f", {len(bridges)} proved by a separate theorem" if bridges else "") + ")")
     other = [f"{count} {state}" for state, count in sorted(counts.items())
              if state not in {*PROVED_STATES, "FROZEN"}]
     if other:
@@ -133,6 +161,11 @@ def status_block(nodes: list[dict]) -> str:
             f"`{nid}` → `{companion['id']}`" for nid, companion in sorted(companions.items())) + ".",
             "Companions discharge a cited input under their own hypotheses;",
             "see [the certificate](CERTIFICATE.md) for their scope."]
+    if bridges:
+        body += ["", "Cited inputs proved by a separate theorem: " + ", ".join(
+            f"`{nid}` (`{b['export']}` in `{b['file']}`)" for nid, b in sorted(bridges.items())) + ".",
+            "The frozen statements that carry them are restated without them by applying",
+            "that theorem."]
     if proved_cited:
         body += ["", "Cited inputs proved outright, as ordinary proved theorem nodes: " + ", ".join(
             f"`{n['id']}` (`{n['export']}`)" for n in proved_cited) + ".",
@@ -163,9 +196,12 @@ def external_inputs_block(nodes: list[dict]) -> str:
         "|---|---|---|---|",
     ]
     companions = proved_companions(nodes)
+    bridges = bridge_proofs(nodes)
     for n in inputs:
         companion = companions.get(n["id"])
-        witness = (f"`{companion['export']}` (`{companion['id']}`)" if companion else "—")
+        bridge = bridges.get(n["id"])
+        witness = (f"`{companion['export']}` (`{companion['id']}`)" if companion
+                   else f"`{bridge['export']}` (`{bridge['file']}`)" if bridge else "—")
         rows.append(f"| `{n['id']}` | `{n['export']}` | {n['source']} | {witness} |")
     if proved_cited:
         rows.extend(["", f"Proved outright (`kind: theorem`, `state: {state_label}`):", ""])
