@@ -1,174 +1,214 @@
 # Divisible sandpiles via random walks in random scenery
 
-A machine-checked **Lean 4** formalization of the paper
-
-> Ahmed Bou-Rabee, Yuval Peres and Ecaterina Sava-Huss,
-> *Divisible sandpiles via random walks in random scenery*,
-> [arXiv:2604.13968](https://arxiv.org/abs/2604.13968).
-
-The paper's source is included under [`paper/`](paper/). The 3 main theorems of the paper are
-proved, in the form in which its introduction states them, **for every infinite, connected,
-locally finite graph of bounded degree and every law of the initial masses that satisfies the
-hypotheses of the theorem**. Every other labelled theorem, lemma, proposition and corollary of
-the paper is formalized as well; two of them take a cited result as a hypothesis (see
-[Standing assumptions and scope](#standing-assumptions-and-scope)).
-
-The development is built on [mathlib](https://github.com/leanprover-community/mathlib4) and on
-the shared library [Lattice-Probability](https://github.com/nitromannitol/Lattice-Probability)
-(`LatticeProb`), a library of lattice probability and potential theory.
-
 [![CI](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/build.yml)
 [![Comparator audit](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/comparator.yml/badge.svg?branch=main)](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions/workflows/comparator.yml)
 
-## What is proved
+A Lean 4 formalization of the paper
 
-On a connected, locally finite graph, a divisible sandpile gives each vertex a real mass. A
-vertex with mass above 1 topples by keeping mass 1 and sending the excess equally to its
-neighbours; toppling all unstable vertices in parallel yields odometers `u_n(v)` that increase
-to `u_∞(v) ∈ [0,∞]`, where `deg(v) · u_∞(v)` is the total mass emitted by `v`. The
-configuration stabilizes if `u_∞(v) < ∞` for every `v`, and explodes otherwise. Let the graph
-be infinite, connected and of bounded degree, with i.i.d. initial masses `σ(v)` of mean `μ`.
-Theorem 1.2 of the paper says that the sandpile explodes almost surely if `μ > 1`, and if
-`μ = 1` with positive finite variance or with `σ − 1` symmetric and `σ ≢ 1`. Theorem 1.3 says
-that if `μ < 1` and `E[(σ⁺)^p] < ∞` for some `p > 3`, it stabilizes almost surely and
-`sup_v E[u_∞(v)^q] < ∞` for every `q ∈ [1, (p−1)/2)`, and that under polynomial volume growth
-of degree `d_f` a moment of order `p > d_f` suffices. Both are deduced from Theorem 1.1, an
-optimal stopping result for random walk in random scenery, through a representation of the
-odometer as an optimal stopping value. The model is stated precisely in
-[Standing assumptions and scope](#standing-assumptions-and-scope).
+> Ahmed Bou-Rabee, Yuval Peres and Ecaterina Sava-Huss,
+> [*Divisible sandpiles via random walks in random scenery*](https://arxiv.org/abs/2604.13968),
+> arXiv:2604.13968.
 
-The 3 main results, formalized as stated in the introduction of the paper, are collected in
-[`RWRS/MainTheorems.lean`](RWRS/MainTheorems.lean). Each is proved by direct application of its
-certified counterpart in `RWRS/Frozen/`, so the statements displayed there are exactly the
-certified ones. None of them carries a result cited from the literature as a hypothesis.
+Every labelled theorem, lemma, proposition and corollary of the paper is stated in Lean and proved,
+with no `sorry` and only the standard axioms. The results that the paper quotes from other works
+are proved in Lean as well. The three main theorems therefore hold for every infinite, connected,
+locally finite graph of bounded degree and every law of the masses that satisfies their
+hypotheses, with no further assumption.
+
+## The paper
+
+On a connected, locally finite graph, a *divisible sandpile* gives each vertex `v` a real mass
+`σ(v)`. A vertex with mass above `1` is unstable; it *topples* by keeping mass `1` and sending the
+excess equally to its neighbours. Toppling all unstable vertices at once, again and again, gives
+the *odometer* `u_n(v)`: `deg(v) u_n(v)` is the total mass emitted by `v` in the first `n` steps.
+The odometer increases to `u_∞(v) ∈ [0, ∞]`. The configuration *stabilizes* if `u_∞(v) < ∞` at
+every vertex, and *explodes* otherwise.
+
+On vertex-transitive graphs such as `ℤᵈ`, Levine, Murugan, Peres and Ugurcan showed that i.i.d.
+masses of mean `μ` stabilize if `μ < 1` and explode if `μ > 1`, and also at `μ = 1` with positive
+finite variance. The paper extends this phase transition to every graph of bounded degree. On such
+graphs, a heavy-tailed mass can make the sandpile explode even when `μ < 1`, so a moment condition
+is needed below mean one.
+
+The proofs rest on a representation of the odometer as an optimal-stopping value. Let `X` be simple
+random walk on the graph and `S_n = Σ_{k<n} ξ(X_k)/deg(X_k)` with `ξ = σ − 1`. Then
+`u_∞(x) = sup_τ E_x[S_τ | σ]`, over bounded stopping times `τ` (Corollary 3.5). So the three
+regimes of the sandpile become three regimes of a random walk in random scenery.
+
+**Theorem 1.1 (explosion and stabilization for random walk).** Let `G` be an infinite, locally
+finite, connected graph with degree at most `d`, let `ξ(v)` be i.i.d. and independent of the walk,
+and let `S_n` be as above.
+
+1. If `E[ξ] ∈ (0, ∞]`, then `sup_n E_x[S_n | ξ] = ∞` almost surely, for every `x`.
+2. If `E[ξ] = 0` and either `Var(ξ) ∈ (0, ∞)`, or `ξ ≢ 0` is symmetric, then
+   `sup_τ E_x[S_τ | ξ] = ∞` almost surely, over bounded stopping times. If `G` is not doubly
+   transient, then also `sup_n E_x[S_n | ξ] = ∞` almost surely.
+3. If `E[ξ] ∈ [−∞, 0)` and `E[(ξ⁺)^p] < ∞` for some `p > 3`, then `E_x[(sup_n S_n)^q] < ∞` for every
+   `q ∈ [1, (p − 1)/2)`.
+
+Here `G` is *doubly transient* if its Green function satisfies `Σ_v g(o, v)² < ∞`; for example `ℤᵈ`
+is doubly transient if and only if `d ≥ 5`.
+
+**Theorem 1.2 (explosion).** On such a graph, let the masses `σ(v)` be i.i.d. with mean `μ`.
+
+1. If `μ ∈ (1, ∞]`, then `P(σ stabilizes) = 0`.
+2. If `μ = 1` and either `Var(σ(v)) ∈ (0, ∞)`, or `σ(v) ≢ 1` and `σ(v) − 1` is symmetric, then
+   `P(σ stabilizes) = 0`.
+
+**Theorem 1.3 (stabilization).** On such a graph, let the masses be i.i.d. with mean
+`μ ∈ [−∞, 1)`.
+
+1. If `E[(σ⁺)^p] < ∞` for some `p > 3`, then `sup_v E[u_∞(v)^q] < ∞` for every `q ∈ [1, (p − 1)/2)`;
+   in particular `σ` stabilizes almost surely.
+2. If `|B(o, r)| ≤ C r^(d_f)` for some vertex `o`, some `C > 0`, some `d_f ≥ 1` and all `r ≥ 1`, and
+   `E[(σ⁺)^p] < ∞` for some `p > d_f`, then `σ` stabilizes almost surely.
+
+Section 8 shows that the conditions are nearly sharp. For every `p < 3` there are transient and
+recurrent graphs of bounded degree on which masses of mean below one with a finite `p`-th moment
+explode (Theorems 8.9 and 8.12). Bounded degree cannot be dropped: on some locally finite tree,
+every integrable i.i.d. law stabilizes (Lemma 8.1).
+
+## The main theorems in Lean
+
+The main theorems are in [`RWRS/MainTheorems.lean`](RWRS/MainTheorems.lean). Their only
+hypotheses are those of the paper.
+
+| Paper | Lean declaration |
+| --- | --- |
+| Theorem 1.1 | `RWRS.optimalStopping` |
+| Theorem 1.2 | `RWRS.explosion` |
+| Theorem 1.3 | `RWRS.stabilization` |
+
+How to read the statements:
+
+- The graph is a mathlib `SimpleGraph V` with `LocallyFinite`, together with `Infinite V`,
+  `G.Connected` and a degree bound `RWRS.BoundedDegree G d`. The statements also assume
+  `[MeasurableSpace V]`, and `[MeasurableSingletonClass V]` in Theorems 1.1 and 1.3.
+- The i.i.d. field with one-site law `ν` is `RWRS.iidLaw V ν`. `RWRS.HasExtMean ν` says that the
+  mean exists in `[−∞, ∞]`, excluding the case `E[σ⁺] = E[σ⁻] = ∞` as the paper does, and the mean
+  is `RWRS.extMean ν`.
+- Quantities that may be infinite live in `ℝ≥0∞`: the limiting odometer `RWRS.odometerLimit G σ v`,
+  the suprema `RWRS.supMeanPayoff` and `RWRS.supStopValue`, and the moments, written as integrals
+  `∫⁻`. A finite moment is stated as `≠ ⊤`, and `E[(σ⁺)^p] < ∞` as `RWRS.posMoment ν p ≠ ⊤`.
+- Theorem 1.2 states that the set `{σ | RWRS.Stabilizes G σ}` has measure `0`. In Theorem 1.3, the
+  growth hypothesis is `RWRS.VolumeGrowthUpper G o C d_f`.
+
+## All numbered results
+
+The table lists each numbered theorem, lemma, proposition and corollary of the paper with the Lean
+declaration that proves it. The statements of the declarations in `RWRS.Frozen` are in
+[`RWRS/Frozen/`](RWRS/Frozen/), one per file.
 
 | Paper | Lean declaration | Content |
 | --- | --- | --- |
-| Theorem 1.1 (label `thm:OS`) | `RWRS.optimalStopping` | explosion and stabilization of the optimal stopping values of random walk in random scenery |
-| Theorem 1.2 (label `thm:explosion`) | `RWRS.explosion` | the divisible sandpile with i.i.d. masses explodes almost surely at mean above 1 and, under a variance or symmetry condition, at mean 1 |
-| Theorem 1.3 (label `thm:stab`) | `RWRS.stabilization` | below mean 1, moment bounds on the odometer and almost sure stabilization |
+| Theorem 1.1 | `RWRS.optimalStopping` | Explosion and stabilization of optimal stopping for random walk in random scenery. |
+| Theorem 1.2 | `RWRS.explosion` | Explosion for mean above one, and at mean one under a variance or symmetry condition. |
+| Theorem 1.3 | `RWRS.stabilization` | Below mean one, moment bounds on the odometer and almost sure stabilization. |
+| Proposition 2.3 | `RWRS.Frozen.iidStationary` | i.i.d. marks on a stationary random rooted graph give a stationary random rooted network. |
+| Theorem 2.4 | `RWRS.stationaryPhase` | On stationary random graphs, i.i.d. masses explode if `μ > 1` and stabilize if `μ < 1`. |
+| Theorem 2.5 | `RWRS.Frozen.stationaryToppling` | On stationary networks, toppling preserves stationarity and the degree-weighted mass. |
+| Lemma 2.6 | `RWRS.Frozen.ergodicMarked` | i.i.d. marking preserves ergodicity. |
+| Lemma 2.7 | `RWRS.zeroOneStationary` | On stationary graphs, stabilization has conditional probability `0` or `1` given the invariant σ-field. |
+| Lemma 3.1 | `RWRS.Frozen.recursion` | The recursion `u_{n+1}(x) = (average of u_n over the neighbours + ζ(x))⁺`. |
+| Theorem 3.2 | `RWRS.Frozen.randomWalkRepresentation` | `u_n(x)` is the optimal-stopping value `sup_{τ ≤ n} E_x[S_τ]`, attained at an explicit time. |
+| Proposition 3.3 | `RWRS.Frozen.finiteVolume` | Finite-volume reduction of the stopping problem. |
+| Theorem 3.4 | `RWRS.Frozen.nestedVolume` | `u_∞(o)` as a supremum over finite connected sets of killed Green function sums. |
+| Corollary 3.5 | `RWRS.Frozen.rwInfinite` | `u_∞(x) = sup_τ E_x[S_τ \| σ]` over bounded stopping times. |
+| Proposition 4.1 | `RWRS.Frozen.zeroOneLaw` | Zero-one laws for stabilization and for explosion of the walk payoff. |
+| Lemma 5.1 | `RWRS.Frozen.clockNoDominance` | No single vertex dominates the inverse-degree clock. |
+| Proposition 5.2 | `RWRS.Frozen.supercritical` | Explosion when `E[ξ] > 0` and the inverse-degree clock diverges. |
+| Lemma 6.1 | `RWRS.Frozen.positivePart` | `E[(Σ Z_i)⁺] ≥ c B` for bounded independent centred variables. |
+| Lemma 6.2 | `RWRS.Frozen.noDominance` | No single vertex dominates the fluctuation scale `Σ_n(o)`. |
+| Lemma 6.3 | `RWRS.Frozen.sensitivity` | Resampling one site changes `u_n(o)` by at most `g_n(o, v) \|ξ(v) − ξ′(v)\|`. |
+| Proposition 6.4 | `RWRS.Frozen.critical` | Variance bound and explosion at mean zero when the fluctuation scale diverges. |
+| Proposition 6.6 | `RWRS.Frozen.doublyTransient` | Explosion at mean zero on doubly transient graphs with a uniform local trap condition. |
+| Proposition 6.7 | `RWRS.Frozen.convexityReduction` | For symmetric sceneries, explosion follows from the finite-variance case. |
+| Proposition 7.1 | `RWRS.Frozen.shortClock` | If `Σ_v g(o, v) < ∞`, the stopping value has finite mean. |
+| Lemma 7.2 | `RWRS.Frozen.localTimeMoments` | Moment bounds on local times under a spectral dimension bound. |
+| Lemma 7.3 | `RWRS.Frozen.fukNagaev` | Tail inequalities for finite sums of independent centred variables. |
+| Lemma 7.4 | `RWRS.Frozen.dyadic` | Dyadic reduction of the moments of `sup_n S_n`. |
+| Lemma 7.5 | `RWRS.Frozen.goodWalkBounds` | The event `max_v L_N(v) ≤ N^(α+δ)` is likely, and moment bounds on the blocks `Y_k`. |
+| Proposition 7.6 | `RWRS.Frozen.subcritical` | Moment bounds below mean one under a spectral dimension bound. |
+| Proposition 7.8 | `RWRS.Frozen.polyGrowth` | Stabilization on graphs with polynomial growth and sub-Gaussian displacement. |
+| Lemma 8.1 | `RWRS.Frozen.unboundedDegreeTree` | A locally finite tree on which every integrable i.i.d. law stabilizes. |
+| Lemma 8.2 | `RWRS.Frozen.momentSharpness` | Under heat kernel bounds, violating the moment condition makes `E[u_∞(o)]` infinite. |
+| Lemma 8.3 | `RWRS.Frozen.finitePerturbation` | A single extra mass stabilizes if and only if the walk is transient. |
+| Lemma 8.5 | `RWRS.Frozen.coboundary` | `σ = 1 − Δf` with `f ≥ 0` gives `u_∞ ≤ f`. |
+| Proposition 8.8 | `RWRS.Frozen.combEstimates` | Electrical estimates on tree-of-pipes combs. |
+| Theorem 8.9 | `RWRS.Frozen.transientNonstabilization` | For `p < 3`, a transient graph on which masses of mean below one with finite `p`-th moment explode. |
+| Lemma 8.10 | `RWRS.Frozen.transientGoodPipes` | Almost surely, some pipe of every large level is good. |
+| Theorem 8.12 | `RWRS.Frozen.recurrentNonstabilization` | The same for recurrent graphs of growth `d_f ∈ (max(p, 2), 3)`. |
+| Lemma 8.13 | `RWRS.Frozen.gadgetGeometry` | The geometry of the gadgets of Theorem 8.12. |
+| Corollary 8.14 | `RWRS.Frozen.recLocal` | Exponential growth of the local contribution. |
+| Proposition 8.15 | `RWRS.Frozen.recVolumeGrowth` | Volume growth of the graph of Theorem 8.12. |
+| Lemma 8.16 | `RWRS.Frozen.recGoodEvents` | The good events `E_k` are independent with probability at least `η`. |
 
-**Theorem 1.1 (explosion and stabilization for random walk, `thm:OS`).** On an infinite
-connected graph of degree at most `d`, let `ξ` be an i.i.d. scenery of law `ν` independent of
-simple random walk, and `S_n = ∑_{k<n} ξ(X_k)/deg(X_k)`.
+[`CORRESPONDENCE.md`](CORRESPONDENCE.md) maps each label of the paper to its Lean declaration and
+records the transcription conventions.
 
-1. *Explosion.* If `E[ξ] > 0`, then `sup_n E_x[S_n | ξ] = ∞` almost surely.
-2. *Critical explosion.* If `E[ξ] = 0` with positive finite variance, or with `ξ ≢ 0`
-   symmetric, then `sup_τ E_x[S_τ | ξ] = ∞` almost surely over bounded stopping times, and
-   `sup_n E_x[S_n | ξ] = ∞` if the graph is not doubly transient.
-3. *Stabilization.* If `E[ξ] < 0` and `E[(ξ⁺)^p] < ∞` for some `p > 3`, then
-   `E_x[(sup_n S_n)^q] < ∞` for every `q ∈ [1, (p−1)/2)`.
+## Corrections
 
-In Lean, `RWRS.optimalStopping` takes a Mathlib `SimpleGraph` with `LocallyFinite`, `Infinite`
-and `Connected` hypotheses and a degree bound `RWRS.BoundedDegree G d`. The scenery has the
-law `RWRS.iidLaw V ν`, the suprema (`RWRS.supMeanPayoff`, `RWRS.supStopValue`) take values in
-`ℝ≥0∞`, and the finiteness of the moment in part 3 is stated as `∫⁻ … ≠ ⊤`.
+The Lean statements follow [`paper/rwrs.tex`](paper/rwrs.tex), the text of
+[arXiv:2604.13968v1](https://arxiv.org/abs/2604.13968v1) with two mathematical corrections and some
+typographical changes. [`paper/CHANGES_FROM_ARXIV.md`](paper/CHANGES_FROM_ARXIV.md) lists every
+change with its reason.
 
-**Theorem 1.2 (explosion, `thm:explosion`).** For i.i.d. masses of mean `μ`:
+- Both mathematical corrections concern the deduction of Theorem 1.3(ii), after Theorem 1.3 and
+  after Proposition 7.8. The arXiv text says that hypothesis (H3) of Proposition 7.8 holds on every
+  graph of bounded degree, which is false; the corrected text derives, from the Carne–Varopoulos
+  bound, the one consequence of (H3) at `o` that the proof uses.
+- Neither changes the statement of a theorem, proposition or lemma.
 
-1. *Supercritical.* If `μ > 1`, the sandpile stabilizes with probability zero.
-2. *Critical.* If `μ = 1` with positive finite variance, or with `σ − 1` symmetric and
-   `σ ≢ 1`, the sandpile stabilizes with probability zero.
+The unmodified arXiv source is [`paper/rwrs-arxiv.tex`](paper/rwrs-arxiv.tex), with its other files
+in [`paper/arxiv/`](paper/arxiv/).
 
-In Lean, `RWRS.explosion` states that the set of stabilizing configurations
-`{σ | RWRS.Stabilizes G σ}` has `RWRS.iidLaw V ν`-measure `0`.
+## Scope
 
-**Theorem 1.3 (stabilization, `thm:stab`).** For i.i.d. masses of mean `μ < 1`:
+- **Stationary graphs.** The statements of Theorem 2.4 and Lemma 2.7 in `RWRS/Frozen/` take the
+  ergodic decomposition of stationary random networks as a hypothesis. It is proved, as
+  `RWRS.External.ergodicDecomposition`, and the table gives the forms without it. The proof adds a
+  step that the source omits;
+  [`CORRESPONDENCE.md`](CORRESPONDENCE.md#proof-deviations) describes it.
+- **The model.** The parallel toppling procedure is iterated in closed form. The i.i.d. field is
+  the product law `Measure.infinitePi` on `V → ℝ`. The walk is the law of a trajectory driven by
+  i.i.d. uniform choices, and the independence of walk and scenery is the product structure of
+  their joint law.
+- **Stopping times.** Expectations at a bounded horizon are written with the first-step recursion of
+  the walk. A stopping time is a function of the trajectory whose value at `k` is decided by its
+  first `k + 1` positions.
+- **Unused hypotheses.** A few statements keep a hypothesis of the paper that their proofs do not
+  use; [`CORRESPONDENCE.md`](CORRESPONDENCE.md#statements-whose-hypotheses-the-proof-does-not-use)
+  lists them.
+- **Not formalized.** The open questions of Section 9, the proof ideas and related work of
+  Sections 1.1 and 1.2, the examples and remarks, and the figures.
 
-1. *Moment bound.* If `E[(σ⁺)^p] < ∞` for some `p > 3`, then `sup_v E[u_∞(v)^q] < ∞` for every
-   `q ∈ [1, (p−1)/2)`, and the configuration stabilizes almost surely.
-2. *Polynomial growth.* If `|B(o,r)| ≤ C r^{d_f}` for all `r ≥ 1`, then `E[(σ⁺)^p] < ∞` for
-   some `p > d_f` suffices for almost sure stabilization.
+## Checking the proofs
 
-In Lean, `RWRS.stabilization` takes `RWRS.extMean ν < 1`; the moments of the limiting odometer
-`RWRS.odometerLimit G σ v` are integrals `∫⁻` in `ℝ≥0∞`, and the growth hypothesis is
-`RWRS.VolumeGrowthUpper G o C d_f`.
-
-The repository formalizes every labelled theorem, lemma, proposition and corollary of the
-paper: Theorems 1.1 to 1.3, the random walk representation, the stationary and critical cases,
-the sharpness constructions (the tree of pipes and the recurrent graphs on which masses with
-`p < 3` explode, the moment sharpness lemma, and the locally finite tree on which every
-integrable law stabilizes), and the lemmas of the later sections. The sharpness results are
-the registered statements `thm:transient-nonstab`, `thm:recurrent-nonstab`,
-`lem:moment-sharpness` and `ex:counterexample`.
-
-## Corrections to the published version
-
-The formalization follows `paper/rwrs.tex`, a corrected text of the paper: it is
-[arXiv:2604.13968v1](https://arxiv.org/abs/2604.13968v1) with two mathematical corrections and
-some typographical changes. [`paper/CHANGES_FROM_ARXIV.md`](paper/CHANGES_FROM_ARXIV.md) lists
-every change against the arXiv version.
-
-## Standing assumptions and scope
-
-1. **Every theorem is about every graph and every law that satisfies its hypotheses.** The
-   three main theorems hold for every `SimpleGraph V` that is `LocallyFinite`, `Infinite` and
-   connected, with `RWRS.BoundedDegree G d` for some `d`, and for every probability measure
-   `ν` on `ℝ` with `RWRS.HasExtMean ν`, in the stated regimes of the mean
-   `RWRS.extMean ν`: `> 0`, `= 0` and `< 0` in Theorem 1.1, `> 1` and `= 1` in Theorem 1.2,
-   `< 1` in Theorem 1.3. The statements also assume `[MeasurableSpace V]`, and
-   `[MeasurableSingletonClass V]` in Theorems 1.1 and 1.3.
-2. **Axioms and incomplete proofs.** The library contains no `sorry`, no `admit`, no
-   `native_decide` and no new `axiom`. The axiom report of each main theorem consists of
-   exactly `propext`, `Classical.choice` and `Quot.sound`. The main theorems rely on no
-   unproved result: everything they use, including the facts the paper cites from the
-   literature, is available in mathlib or Lattice-Probability or is proved in this repository.
-3. **The cited inputs are proved.** The ergodic decomposition of stationary random networks
-   is proved by `RWRS.External.ergodicDecomposition`. The frozen statements
-   `RWRS.Frozen.stationaryPhase` and `RWRS.Frozen.zeroOneStationary` retain their explicit
-   decomposition hypothesis; `RWRS.stationaryPhase` and `RWRS.zeroOneStationary` discharge it.
-   [`ASSUMPTIONS.md`](ASSUMPTIONS.md) records the cited proposition and its proof.
-   The proof supplies a simultaneous conditional-component argument omitted by the
-   source; the deviation is described in [`CORRESPONDENCE.md`](CORRESPONDENCE.md#proof-deviations).
-4. **What is not formalized.** The open questions of Section 9, the proof ideas and related
-   work of Sections 1.1 and 1.2, the `example` and `remark` environments, and the figures.
-5. **Conventions that matter for reading the statements.**
-   - A graph is a Mathlib `SimpleGraph` with `LocallyFinite`; infiniteness, connectedness and a
-     degree bound are hypotheses of the statements that use them, as in the paper
-     (`RWRS/Basic.lean`).
-   - The parallel toppling procedure is iterated in closed form, and the limiting odometer
-     `u_∞` is valued in `[0,∞]`, so an exploding vertex has the value `⊤` and not a junk real
-     number. Quantities the paper allows to be infinite (the Green function, `sup_n S_n`, the
-     two optimal stopping suprema, every moment) live in `ℝ≥0∞`, and the extended mean in
-     `EReal`, with `HasExtMean` excluding the indeterminate case `E[σ⁺] = E[σ⁻] = ∞`.
-   - The i.i.d. field is the product law `Measure.infinitePi` on `V → ℝ`, and the walk is the
-     law of a trajectory driven by i.i.d. uniform instructions (`RWRS/Walk.lean`,
-     `RWRS/Scenery.lean`); independence of walk and scenery is the product structure of their
-     joint law.
-   - Expectations at a bounded horizon are written with the first-step recursion of the walk,
-     a finite average needing no measure; a stopping time is a function of the trajectory whose
-     value at `k` is decided by its first `k+1` positions.
-   - Uniform constants are bound before the quantities they must not depend on, and
-     `tools/check_constants.py` checks it mechanically.
-6. **Explicit versus implicit.** The Lean statements spell out what the paper leaves implicit:
-   the measurable structure on the vertex set, and `RWRS.HasExtMean ν`, which says that the
-   mean of the law exists in `[−∞, ∞]` (the paper writes `E[σ(v)] = μ`).
-7. **Statements without a formal counterpart.** The correspondence table in
-   [`CORRESPONDENCE.md`](CORRESPONDENCE.md) maps the registered statements to Lean declarations
-   node by node, records the transcription conventions, and lists the frozen statements that
-   carry a hypothesis of the paper their proof does not use. The passages without a formal
-   counterpart are those listed in item 4.
-
-## Results cited from the literature
-
-The paper quotes nine results from the literature without proof. All are proved
-in this repository or its dependencies in the generality every use site needs. Eight are
-registered as ordinary theorem nodes: the von Bahr–Esseen, Fuk–Nagaev and Bernstein inequalities unconditionally, the
-bounded-degree heat kernel bound and heat kernel vanishing on every infinite connected graph,
-the Efron–Stein inequality for a countable index set, the pointwise Carne–Varopoulos bound on
-every connected, nontrivial, locally finite graph, and the bounded voltage function on every
-infinite connected graph, recurrent or transient
-(`RWRS.External.voltageFunction_of_connected`, node `X-008`). Each lives, proposition and
-proof together, as a single `PROVED` theorem node in `RWRS/External/` (see
-`tools/check_manifest.py`), and no statement carries it as a hypothesis; the theorems that need
-the voltage function discharge it inside their proofs. The ninth, the ergodic decomposition of
-stationary random networks, is stated as a frozen proposition in `RWRS/External/` and proved by
-`RWRS.External.ergodicDecomposition` in `RWRS/Support/ErgodicDecomposition.lean`.
-
-## Registered statements
-
-Every statement and every cited input is registered in
-[`ledger/manifest.yaml`](ledger/manifest.yaml); the following summary is generated from it.
+- **No `sorry`.** The library has none, and `tools/check_manifest.py` rejects any `sorry`, `admit`,
+  `axiom` or `sorryAx` in `RWRS/`. Each of the three comparator challenges under
+  [`RWRSAudit/`](RWRSAudit/) contains one intentional `sorry` at the statement, which the matching
+  solution proves.
+- **Standard axioms only.** [`RWRS/Meta/AxiomsAudit.lean`](RWRS/Meta/AxiomsAudit.lean) prints the
+  axioms of the main theorems and of Theorem 2.4 and Lemma 2.7, and `python3 tools/check_axioms.py`
+  checks the axiom closure of every registered declaration: exactly `propext`,
+  `Classical.choice` and `Quot.sound`.
+- **Pinned statements.** Each statement of the paper is registered in
+  [`ledger/manifest.yaml`](ledger/manifest.yaml), with the SHA-256 of its Lean text and the label
+  and line range it transcribes; `tools/check_manifest.py` checks the hashes.
+  [`CERTIFICATE.md`](CERTIFICATE.md) records the build and the axiom closure of each statement.
+- **Independent check of the statements.** Each main theorem has a comparator pair in
+  [`RWRSAudit/`](RWRSAudit/). Each `Challenge.lean` imports mathlib alone and rebuilds the model it
+  uses, from the graph Laplacian and parallel toppling to the law of the walk and the i.i.d.
+  scenery. [leanprover/comparator](https://github.com/leanprover/comparator) checks that the
+  solution proves it with only the three standard axioms, through the Lean kernel and the
+  independent nanoda kernel. See [`RWRSAudit/README.md`](RWRSAudit/README.md) and
+  [`RWRSAudit/COMPARATOR_RUNS.md`](RWRSAudit/COMPARATOR_RUNS.md).
+- **Continuous integration.** The **CI** workflow ([`build.yml`](.github/workflows/build.yml))
+  builds the library, rejecting any warning, builds the axiom audit and checks the statement
+  hashes. The **Comparator audit** workflow ([`comparator.yml`](.github/workflows/comparator.yml))
+  runs the three pairs. Both run on pushes to `main` that change Lean files, `tools/`, `paper/`,
+  `ledger/`, `formalization.yaml` or the build configuration, and can be started manually from the
+  [Actions page](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions).
 
 <!-- STATUS-BEGIN (generated by tools/sync_docs.py) -->
 
@@ -189,62 +229,8 @@ This section is generated by `python3 tools/sync_docs.py --write`.
 
 <!-- STATUS-END -->
 
-The summary counts registered companion nodes. The separate proof
-`RWRS.External.ergodicDecomposition` discharges `X-009` without adding a companion node.
-
-Every labelled statement of the paper is registered: one Lean declaration per theorem, lemma,
-proposition and corollary, and one proposition per cited result. A registered statement's text
-between the lines `-- FROZEN-STATEMENT-BEGIN` and `-- FROZEN-STATEMENT-END` is pinned by the
-SHA-256 of those bytes in [`ledger/manifest.yaml`](ledger/manifest.yaml), together with the
-paper `\label` and line range it transcribes; the proof after the end marker is not pinned. In
-the manifest, a registered statement is `PROVED` when it is proved with an axiom closure of
-exactly the three standard axioms and has passed an independent refute-first audit, `SEALED`
-when it is proved but not yet audit-promoted, and `FROZEN` for a pinned cited proposition.
-A frozen proposition may have a separate proof, as recorded in `ASSUMPTIONS.md`. Each statement file under `RWRS/Frozen/` cites the paper's TeX source
-`paper/rwrs.tex` by `\label` and line range, which `tools/paper_anchors.py` checks.
-
-## Guarantees
-
-- **No `sorry`.** The library has none, and `tools/check_manifest.py` rejects any other than a
-  registered `DRAFT_SORRY` node, of which there is none. The 3 comparator challenges under
-  [`RWRSAudit/`](RWRSAudit/) each contain one intentional statement-level `sorry`, which the
-  corresponding solution proves.
-- **Standard axioms only.** The axiom report of each of the 3 main theorems lists exactly
-  `propext`, `Classical.choice` and `Quot.sound`.
-  [`RWRS/Meta/AxiomsAudit.lean`](RWRS/Meta/AxiomsAudit.lean) prints the reports, the
-  continuous-integration build of that module fails on any warning, including a `sorry`
-  warning, and `python3 tools/check_axioms.py` checks the axiom closure of every registered
-  declaration.
-- **Builds from a clean checkout.** In continuous integration, `lake build RWRS` of a fresh
-  checkout completes 9,006 jobs without error, and the build fails on any warning or
-  `sorry` warning.
-- **Independent check of the statements.** The 3 main theorems are restated in
-  [`RWRSAudit/`](RWRSAudit/) using mathlib alone, one challenge file per theorem
-  ([`OptimalStopping`](RWRSAudit/OptimalStopping/Challenge.lean),
-  [`Explosion`](RWRSAudit/Explosion/Challenge.lean) and
-  [`Stabilization`](RWRSAudit/Stabilization/Challenge.lean)). Each challenge rebuilds the model
-  from mathlib primitives (the averaging operator and Laplacian of a locally finite graph,
-  parallel toppling and its odometer, the heat kernel and Green function, the walk payoff,
-  bounded stopping times, the law of simple random walk on path space, the i.i.d. scenery and
-  its moments, the optimal stopping suprema, double transience, volume growth). The solution
-  file proves each restatement from the library through the identifications in
-  `RWRSAudit/Support/`, one bridge per challenge, and
-  [leanprover/comparator](https://github.com/leanprover/comparator) checks that the statement
-  is proved, with only the three standard axioms, through independent implementations of the
-  Lean kernel. See [`RWRSAudit/README.md`](RWRSAudit/README.md) and
-  [`RWRSAudit/COMPARATOR_RUNS.md`](RWRSAudit/COMPARATOR_RUNS.md).
-- **Pinned toolchain and dependencies.** Lean `v4.32.0`; mathlib at revision
-  `81a5d257c8e410db227a6665ed08f64fea08e997` and Lattice-Probability at commit
-  `9d44b4d4670df393bb86ac5a4e042f215001cddf`, recorded in [`lakefile.lean`](lakefile.lean) and
-  [`lake-manifest.json`](lake-manifest.json) (see [Building](#building)).
-- **The paper is part of the repository.** The statement map refers to the version in
-  [`paper/`](paper/), pinned to the SHA-256
-  `809373589ee57976f2eb57cd62a1cb1d94d8e66ac576632be65385e9a06ded6c` of `paper/rwrs.tex`.
-
-## Size
-
-The library contains 358 Lean files with 52,204 physical lines, on top of mathlib and
-Lattice-Probability. The comparator sources (12 files, 1,813 lines) are counted separately.
+`RWRS.lean` and `RWRS/` contain 358 Lean files with 52,210 lines, built on mathlib and
+Lattice-Probability. The comparator sources are 12 files with 1,813 lines.
 
 ## Building
 
@@ -258,108 +244,68 @@ lake build RWRS         # compile the library
 
 Lattice-Probability has no prebuilt cache, so the first build compiles it as well as the
 library. `import RWRS` loads the whole development, and `import RWRS.MainTheorems` loads the
-main theorems and what they use.
-
-The dependencies are public repositories, pinned to exact commits in
-[`lake-manifest.json`](lake-manifest.json):
+main theorems and what they use. The dependencies are public repositories, pinned to exact commits
+in [`lake-manifest.json`](lake-manifest.json):
 
 - mathlib: `https://github.com/leanprover-community/mathlib4` at
-  `81a5d257c8e410db227a6665ed08f64fea08e997`.
+  `81a5d257c8e410db227a6665ed08f64fea08e997`;
 - Lattice-Probability: `https://github.com/nitromannitol/Lattice-Probability` at
   `9d44b4d4670df393bb86ac5a4e042f215001cddf`.
 
-To reproduce the axiom reports and build the comparator libraries:
+To reproduce the axiom reports, build the comparator pairs and run the checkers (Python 3 and
+PyYAML, `pip install pyyaml`):
 
 ```bash
-lake build RWRS.Meta.AxiomsAudit   # print the axioms of the three main theorems
+lake build RWRS.Meta.AxiomsAudit   # the axioms of the main theorems
 lake build RWRSAudit               # the comparator challenges and solutions
+python3 tools/check_manifest.py    # statement hashes; no sorry, admit or axiom
+python3 tools/check_axioms.py      # the axiom closure of every registered declaration
+python3 tools/check_warnings.py    # the build emits no warning
+python3 tools/check_constants.py   # existential constants are not bound after the parameters
+python3 tools/check_coverage.py    # every labelled result of the paper is registered
 ```
 
-The checkers in `tools/` need Python 3 and PyYAML (`pip install pyyaml`).
-
-| command | what it guarantees |
-| --- | --- |
-| `python3 tools/check_manifest.py` | every frozen block's SHA-256 matches the manifest, every file in `RWRS/Frozen/` belongs to one node, and `RWRS/` and `RWRS.lean` contain no `axiom`, `admit` or `sorryAx`, and `sorry` only in `DRAFT_SORRY` nodes (there are none) |
-| `python3 tools/check_axioms.py` | Lean's `#print axioms` for every registered declaration shows no `sorryAx` and nothing beyond `propext`, `Classical.choice`, `Quot.sound` |
-| `python3 tools/check_warnings.py` | `lake build RWRS` succeeds and emits no warning other than one `sorry` warning per `DRAFT_SORRY` node |
-| `python3 tools/check_constants.py` | in a frozen statement with a real-valued existential constant, none of a fixed list of parameter names is bound before it, so the constant cannot depend on them; the exceptions are listed in the script with their reasons |
-| `python3 tools/check_coverage.py` | every labelled theorem, lemma, proposition and corollary of `paper/rwrs.tex` is claimed by a manifest node |
-
-Also in `tools/`: `paper_anchors.py` and `paper_citations.py` check line anchors against the
-paper; `sync_docs.py` regenerates the marked blocks of this file and of `CORRESPONDENCE.md`
-from the manifest (`--write` applies, the bare command checks); `assumptions.py` regenerates
-`ASSUMPTIONS.md` (`--check` compares); `certificate.py` regenerates `CERTIFICATE.md`
-(`--check` compares); `freeze.py` registers or refreshes a node in the manifest. See
-[`CONTRIBUTING.md`](CONTRIBUTING.md) for further building notes.
+`tools/` also holds `paper_anchors.py` and `paper_citations.py`, which check the line anchors
+against the paper, and the generators `sync_docs.py`, `assumptions.py`, `certificate.py` and
+`freeze.py`. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for further notes.
 
 ## Running the comparators
 
-Each comparator pair has a configuration `RWRSAudit/<Pair>/comparator.json`, for `<Pair>` one
-of `OptimalStopping`, `Explosion` and `Stabilization`, that permits exactly `propext`,
-`Classical.choice` and `Quot.sound` and enables the independent nanoda kernel. The comparator
-checks that the solution proves the challenge statement, compares their dependency closures,
-and replays the proof with the Lean and NanoDa kernels.
-
-To run one pair locally, build `leanprover/comparator`, `lean4export`, `landrun` and
-`nanoda_lib` at the revisions pinned in
-[`.github/workflows/comparator.yml`](.github/workflows/comparator.yml) (also recorded in
-[`RWRSAudit/COMPARATOR_RUNS.md`](RWRSAudit/COMPARATOR_RUNS.md)), and from the repository root
-run:
+Each pair has a configuration `RWRSAudit/<Pair>/comparator.json`, for `<Pair>` one of
+`OptimalStopping`, `Explosion` and `Stabilization`, that permits exactly `propext`,
+`Classical.choice` and `Quot.sound` and enables the nanoda kernel. Build `leanprover/comparator`,
+`lean4export`, `landrun` and `nanoda_lib` at the revisions pinned in
+[`.github/workflows/comparator.yml`](.github/workflows/comparator.yml), then run from the repository
+root
 
 ```bash
 COMPARATOR_LANDRUN=<landrun> COMPARATOR_LEAN4EXPORT=<lean4export> COMPARATOR_NANODA=<nanoda_bin> \
   lake env <comparator>/.lake/build/bin/comparator RWRSAudit/<Pair>/comparator.json
 ```
 
-A pair passes when the comparator prints `Your solution is okay!`. The comparator workflow
-runs the three pairs one after the other in a single job on GitHub-hosted runners.
-
-There are two continuous-integration workflows: **CI** builds the library and checks the axiom
-audit and the frozen statements; **Comparator audit** checks all 3 challenge/solution pairs.
-Both run on pushes to `main` that change Lean files, `tools/`, `paper/`, `ledger/`,
-`formalization.yaml` or the build configuration, and can be started manually from the
-[Actions page](https://github.com/nitromannitol/Divisible-Sandpile-RWRS/actions). See
-[`CONTRIBUTING.md`](CONTRIBUTING.md) for build conventions.
+A pair passes when the comparator prints `Your solution is okay!`.
 
 ## Repository layout
 
 ```text
-RWRS.lean                 the root module, importing the whole library
+RWRS.lean                 the root module
 RWRS/
   MainTheorems.lean       the main theorems, stated in full
-  StationaryTheorems.lean the stationary conclusions without a decomposition hypothesis
-  Frozen/                 the certified statement surface, one frozen statement per file
-  External/               the cited propositions and their theorem statements
-  Support/                the lemmas and constructions the frozen statements are proved from,
-                          including LibraryBridge.lean (the identification with
-                          Lattice-Probability)
-  Meta/AxiomsAudit.lean   the axiom report, compiled by `lake build`, not imported by the root
-  Zd/                     the specialization to ℤ^d
-  Basic.lean              the graph operators, the divisible sandpile, the heat kernel
-  Walk.lean               the walk, its payoff, stopping times, the walk on path space
-  Scenery.lean            the i.i.d. scenery and its moments
-  Setting.lean            the optimal stopping suprema, double transience, growth bounds
-  Network.lean            stationary rooted networks
-RWRSAudit/                the mathlib-only restatements and their solutions
-  OptimalStopping/        Challenge.lean, SolutionBasic.lean, Solution.lean, comparator.json
-  Explosion/              the same for Theorem 1.2
-  Stabilization/          the same for Theorem 1.3
-  Support/                OptimalStoppingBridge.lean, ExplosionBridge.lean, StabilizationBridge.lean
-  README.md, DESIGN.md, COMPARATOR_RUNS.md, check_standalone.sh
-ASSUMPTIONS.md            the cited input, with its Lean statement and proof (generated)
-CORRESPONDENCE.md         paper to Lean, node by node
-CERTIFICATE.md            generated record of the toolchain, each node's axiom closure and the
-                          scope of the cited inputs proved outright
+  StationaryTheorems.lean Theorem 2.4 and Lemma 2.7 without the decomposition hypothesis
+  Frozen/                 the statements of the paper, one per file
+  External/               the results quoted from other works, with their proofs
+  Support/                the lemmas and constructions used by the proofs
+  Meta/AxiomsAudit.lean   the axiom reports
+  Zd/                     the specialization to ℤᵈ
+  Basic.lean, Walk.lean, Scenery.lean, Setting.lean, Network.lean
+                          the sandpile, the walk, the scenery, the stopping problems, networks
+RWRSAudit/                the mathlib-only comparator pairs, with README.md and COMPARATOR_RUNS.md
 ledger/manifest.yaml      one row per registered statement: hash, paper label, state
-paper/                    the paper: rwrs.tex, pinned by the SHA-256 in ledger/manifest.yaml;
-                          rwrs-arxiv.tex, the unmodified arXiv source, with arxiv/ for its
-                          other files; CHANGES_FROM_ARXIV.md, every difference between them
+paper/                    rwrs.tex (corrected), rwrs-arxiv.tex, CHANGES_FROM_ARXIV.md
 tools/                    the checkers and generators listed under Building
-.github/workflows/        build.yml (CI) and comparator.yml (the comparator audit)
-formalization.yaml        machine-readable disclosure (models, tooling, cost, status, review)
-CITATION.cff              citation metadata
-CONTRIBUTING.md           building notes and the elaboration policy for new files
-lakefile.lean, lake-manifest.json, lean-toolchain   the pinned build
+CORRESPONDENCE.md         paper and Lean, statement by statement
+CERTIFICATE.md            generated record of the build and each statement's axiom closure
+formalization.yaml        the disclosure of models, tooling, cost, status and review
 ```
 
 ## How this was built
